@@ -6,9 +6,25 @@
 
 <body>
     <h1>{{ message }}</h1>
-    <il>
 
-    </il>
+   	{% if tle_list %}
+   		<table style="width:100%">
+   			<tr>
+   				<th>Satellite Name</th>
+   				<th>Line 1</th>
+   				<th>Line 2</th>
+   			</tr>
+   			{% for tle in tle_list %}
+   				<tr>
+   					<th>{{tle.name}}</th>
+   					<th>{{tle.line1}}</th>
+   					<th>{{tle.line2}}</th>
+   				</tr>
+   			{% endfor %}
+   		</table>
+   	{% else %}
+   		<p>No TLE data available, db is empty</p>
+   	{% endif %}
 
     <div>
         <a href="/scheduler/about/">About</a><br/>
