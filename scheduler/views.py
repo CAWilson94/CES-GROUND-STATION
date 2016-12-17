@@ -6,15 +6,18 @@ import requests
 
 def index(request):
 
+	#secure way
 	#sessionObject = requests.Sessions()
 	#sessionObject.mount('https://celestrak.com',myAdapter())
 	#sessionObject.get...
+
+	#updates on refresh cause buttons require something extra like js...
 	tle_list = services.updateTLE()
-	
-	#tle_list = TLE.objects.all()
 	print (tle_list)
-	string = "Display satellites"
-	context_dict = {'message':tle_list,
+	#gets all db entries
+	tle_list1 = TLE.objects.all()
+	
+	context_dict = {'tle_list':tle_list1,
 				}
 
 	return render(request, 'scheduler/index.html', context_dict)

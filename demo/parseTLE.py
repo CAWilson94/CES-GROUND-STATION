@@ -23,21 +23,34 @@ def updateTLE():
 	#split by \r\n
 	splitrnTLE = ['EYESAT-1 (AO-27)        ', '1 22825U 93061C   16349.12125796 -.00000001  00000-0  17078-4 0  9993', '2 22825  98.7858 306.7055 0008926 145.9026 214.2730 14.29979804210953', 'CUTE-1 (CO-55)          ', '1 27844U 03031E   16349.02274461  .00000066  00000-0  49751-4 0  9993', '2 27844  98.6914 354.7200 0010123 157.5879 202.5743 14.22001456698005', 'CUBESAT XI-IV (CO-57)   ', '1 27848U 03031J   16349.74685895  .00000047  00000-0  41546-4 0  9996', '2 27848  98.7009 355.6110 0009909 164.0510 196.0981 14.21621353697991', 'CUBESAT XI 5            ', '1 28895U 05043F   16349.69213614  .00000172  00000-0  41979-4 0  9993', '2 28895  97.8437 154.7222 0017055  12.0624 348.0984 14.63313390593509', 'CUTE-1.7+APD II (CO-65) ', '1 32785U 08021C   16349.22704152  .00000264  00000-0  34594-4 0  9993', '2 32785  97.5846  15.7815 0014512  64.3578 295.9136 14.87752809467394', 'COMPASS-1               ', '1 32787U 08021E   16349.17367177  .00000635  00000-0  67320-4 0  9996', '2 32787  97.5824  23.4161 0013543  41.3908 318.8335 14.92349536467905', 'AAUSAT-II               ', '1 32788U 08021F   16349.68189769  .00000428  00000-0  45736-4 0  9999', '2 32788  97.5823  26.4141 0012808  33.9167 326.2870 14.93595647468133']
 
-	newsplits = []
+	splitbyboth = []
 	for x in splitrnTLE:
 		#temp = 
-		newsplits.append(x.split(" "))
-	
-	#print (newsplits)
+		splitbyboth.append(x.split(" "))
+	i=0
+	#print (splitbyboth)
+	print (len(splitbyboth[0]))
 
-	for element in newsplits:
-		for x in element:
-			print(x)
-			if (x == '') or (x==" "):
-				print ("true")
-				element.remove(x)
+	newele=[]
+	final=[]
+	for element in splitbyboth:
+		#for x in element:
+		newele = [x for x in element if x!='']
+		final.append(adder(newele))
 
-	print (newsplits)
+	# for element in newsplits:
+	# 	i=0
+	# 	for x in element:
+
+	# 		print ("eleL: ",x)
+	# 		i=i+1
+	# 		print (i)
+	# 		if (x == '') or (x==" "):
+	# 			print ("true")
+	# 			element.remove(x)
+
+
+	print (final)
 
 
 
