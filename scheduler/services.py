@@ -29,7 +29,7 @@ class services():
 				tleentry.line2 = final[i+2]
 			i+=3
 
-		return (splitrnTLEList)
+		return (final)
 
 	#add up name or line array to single space delimited string
 	def adder(stringsep):  #nicer way?
