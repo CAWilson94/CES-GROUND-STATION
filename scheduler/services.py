@@ -32,8 +32,9 @@ class services():
 				#update existing
 				tleentry.line1 = final[i+1]
 				tleentry.line2 = final[i+2]
+				tleentry.save()
 			i+=3
-		return (final)
+		
 		
 
 	#add up name or line array to single space delimited string

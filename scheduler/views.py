@@ -12,12 +12,12 @@ def index(request):
 	#sessionObject.get...
 
 	#updates on refresh cause buttons require something extra like js...
-	tle_list = services.updateTLE()
-	print (tle_list)
-	#gets all db entries
-	tle_list1 = TLE.objects.all()
+	services.updateTLE()
 	
-	context_dict = {'tle_list':tle_list1,
+	#gets all db entries
+	tle_list = TLE.objects.all()
+	
+	context_dict = {'tle_list':tle_list,
 				}
 
 	return render(request, 'scheduler/index.html', context_dict)
