@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Scheduler</title>
-    </head>
+<head>
+  <title>Scheduler</title>
+</head>
 
 <body>
-    <h1>Satellite TLE data</h1>
+  <h1>Satellite TLE data</h1>
+  <form action="{% url 'scheduler:updateTLE1' %}" method="GET">
+    <input type="submit" value="Update TLE1" />
+  </form>
+  <form action="{% url 'scheduler:updateTLE1' %}" method="GET">
+    <input id="submit" type="button" value="Update TLE" />
+  </form>
+  <script>
+  $(function(){
+   $('form').on('submit', function(e){
+     e.preventDefault();
+     $.ajax({
+       url: $(this).attr('action'),
+       method: $(this).attr('method'),
+       success: function(data){ $('#target').html(data) }
+     });
+   });
+ });</script>
+ <h2>{{epoch}}</h2>>
 
-    <h2>{{epoch}}</h2>>
-   	{% if tle_list %}
-   		<table style="width:100%">
-   			<tr>
-   				<th>Satellite Name</th>
-   				<th>Line 1</th>
-   				<th>Line 2</th>
-   			</tr>
-   			{% for tle in tle_list %}
-   				<tr>
-   					<th>{{tle.name}}</th>
-   					<th>{{tle.line1}}</th>
-   					<th>{{tle.line2}}</th>
-   				</tr>
-   			{% endfor %}
-   		</table>
-   	{% else %}
-   		<p>No TLE data available, db is empty</p>
-   	{% endif %}
+ {% if tle_list %}
+ <table style="width:100%">
+  <tr>
+   <th>Satellite Name</th>
+   <th>Line 1</th>
+   <th>Line 2</th>
+ </tr>
+ {% for tle in tle_list %}
+ <tr>
+  <th>{{tle.name}}</th>
+  <th>{{tle.line1}}</th>
+  <th>{{tle.line2}}</th>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No TLE data available, db is empty</p>
+{% endif %}
 
-    <div>
-        <a href="/scheduler/about/">About</a><br/>
-    </div>
+<div>
+  <a href="/scheduler/about/">About</a><br/>
+</div>
 </body>
 
 </html>
+

@@ -21,5 +21,5 @@ from scheduler import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
-    url(r'^scheduler', include('scheduler.urls')),
+    url(r'^scheduler/', include('scheduler.urls')),
 ]
