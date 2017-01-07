@@ -1,10 +1,22 @@
 # Open port at “9600,8,N,1”, no timeout:
 
 import serial
-ser = serial.Serial('COM1')  # open serial port: windows "COMN" linux "/dev/ttyUSBn" where n is a number
+
+ser = serial.Serial('COM1')  # open serial port: windows "COMN" linux "/dev/ttyUSBn" where n is a numbe
+ser.write(str(10128).encode())
 ser.portstr
-ser
 print(ser)
+
+
+print("yer maw")
+
+line = ser.read(10) 
+print(line)
+
+print("done")
+
+ser.close()
+
 
 
 """
