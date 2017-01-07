@@ -20,8 +20,8 @@ def index(request):
 	#gets all db entries
 	tle_list1 = TLE.objects.all()
 	#print (tle_list[0],tle_list1[1],tle_list1[2])
-	epoch = services.predictFirst()
-	print (epoch)
+	epoch = services.ephem()
+	print ("%s ", epoch)
 
 	context_dict = {'epoch':epoch,
 					'tle_list':tle_list1,
