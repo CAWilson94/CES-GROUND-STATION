@@ -1,6 +1,11 @@
 """
 Pyephem basic examples 
 
+To run from python shell: 
+	from exampleCW import * 
+
+	then call functions as needed
+
 """
 
 import ephem
@@ -26,3 +31,5 @@ def az_alt_mars():
 	gatech.date = '1984/5/30 16:22:56'
 	v = ephem.Mars(gatech)
 	print('%s %s' % (v.alt, v.az))
+
+# Expected output: -71:51:57.3 25:28:20.0
