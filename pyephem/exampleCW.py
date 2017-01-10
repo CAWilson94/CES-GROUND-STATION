@@ -42,17 +42,23 @@ def az_alt_mars():
 
 # Expected output: -71:51:57.3 25:28:20.0
 
+# need observer and thing looking at
 def tle():
-	line1 = "ISS (ZARYA)"
-	line2 = "1 25544U 98067A   03097.78853147  .00021906  00000-0  28403-3 0  8652"
-	line3 = "2 25544  51.6361  13.7980 0004256  35.6671  59.2566 15.58778559250029"
+	gatech = ephem.Observer()
+	gatech.lon = '-84.39733'
+	gatech.lat = '33.775867'
+	gatech.elevation = 320
+	gatech.date = '2017/01/10 16:22:56'
+	line1 = "ISS"
+	line2 = "1 25544U 98067A   17006.57365116  .00016717  00000-0  10270-3 0  9005"
+	line3 = "2 25544  51.6418 123.9690 0007015  56.3626 303.8195 15.54006317 36615"
 	iss = ephem.readtle(line1, line2, line3)
-	iss.compute('2003/3/23')
-	print('%s %s' % (iss.sublong, iss.sublat))
-	lat = iss.sublat
-	longiss = iss.sublong
-	print('%s' % (iss.az))
+	iss.compute(gatech)
+	print('%s' % (iss.alt))
+	# Expected output: -83:23:17.7
 
+
+tle();
 
 # Expected output: -76:24:18.3 13:05:31.1
 
