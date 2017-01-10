@@ -64,7 +64,7 @@ def tle():
 # need observer and thing looking at
 def glasgow():
 	glasgow = ephem.Observer()
-	glasgow.lon = '4.4333'  # + EAST ( gpredict defaults at WEST)
+	glasgow.lon = '-4.4333'  # + EAST ( gpredict defaults at WEST)
 	glasgow.lat = '55.8667' # + NORTH
 	glasgow.elevation = 0 # From elevationmap.net
 	glasgow.date = datetime.datetime.now()
