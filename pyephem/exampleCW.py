@@ -56,6 +56,8 @@ def tle():
 	iss.compute(gatech)
 	print('%s' % (iss.alt))
 	# Expected output: -83:23:17.7
+	print('%s' % (iss.az))
+	# Expected output: 67:19:50.8
 
 
 tle();
