@@ -17,6 +17,7 @@ To run from python shell:
 """
 
 import ephem
+import datetime
 
 
 def az_alt_venus():
@@ -60,9 +61,31 @@ def tle():
 	# Expected output: 67:19:50.8
 
 
-tle();
+# need observer and thing looking at
+def glasgow():
+	glasgow = ephem.Observer()
+	glasgow.lon = '4.4333'  # + EAST ( gpredict defaults at WEST)
+	glasgow.lat = '55.8667' # + NORTH
+	glasgow.elevation = 0 # From elevationmap.net
+	glasgow.date = datetime.datetime.now()
+	line1 = "CANX-2"
+	line2 = "1 32790U 08021H   17009.81203317  .00000243  00000-0  32442-4 0  9992"
+	line3 = "2 32790  97.5788  39.6856 0013256 340.5856  19.4854 14.87512065471295"
+	iss = ephem.readtle(line1, line2, line3)
+	iss.compute(glasgow)
+	print('%s' % (iss.az))
+	print('%s' % (iss.alt))
 
+	"""
+	-39:35:44.1
+	140:13:12.1
+
+	"""
+
+glasgow();
 # Expected output: -76:24:18.3 13:05:31.1
+
+
 
 """
 
