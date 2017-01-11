@@ -18,6 +18,7 @@ class services():
 		if final[len(final)-1]=='':
 		 	del final[len(final)-1] 
 
+		#call post in here
 		i=0
 		while i != (len(final)-3):
 			name = services.adder(final[i]).strip()
@@ -33,9 +34,7 @@ class services():
 				tleentry.line1 = final[i+1]
 				tleentry.line2 = final[i+2]
 				tleentry.save()
-			i+=3
-		
-		
+			i+=3	
 
 	#add up name or line array to single space delimited string
 	def adder(stringsep):  #nicer way?

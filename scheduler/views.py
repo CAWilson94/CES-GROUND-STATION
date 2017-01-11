@@ -3,28 +3,54 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE
 from scheduler.services import services
-from scheduler.serializers import CubeSatSerializer
+from scheduler.serializers import TLESerializer
 from django.http import Http404
 from rest_framework.views import APIView
-from rest_framework import status
-from django.shortcuts import get_list_or_404
+from rest_framework import status, generics
+from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework.decorators import api_view
 
 
-class TLEList(APIView):
+class TLEList(generics.ListCreateAPIView):
+	services.updateTLE()
+	queryset = get_list_or_404(TLE)
+	serializer_class = TLESerializer
+
+class TLEDetail(APIView):
 	"""
-    List all TLE, or create a new TLE.
-    """
-	def get(self, request, format=None):
+	Retrieve, update or delete a snippet instance.
+	"""
+	def get_object(self, pk):
+		try:
+			return TLE.objects.get(pk=pk)
+		except TLE.DoesNotExist:
+			raise Http404
 
-		services.updateTLE()
-		TLEList = TLE.objects.all()
-		serializer = CubeSatSerializer(TLEList, many=True)#, many=True
+	def get(self, request, pk, format=None):
+		tle = self.get_object(pk)		
+		print(tle)
+		serializer = TLESerializer(tle)
 		return Response(serializer.data)
 
-
-	def post(self, request, format=None):
-		serializer = SubeSatSerializer(data=request.data)
+	def put(self, request, pk, format=None):
+		tle = self.get_object(pk)	
+		serializer = TLESerializer(tle, data=request.data)
 		if serializer.is_valid():
 			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
+			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, pk, format=None):
+		tle = self.get_object(pk)	
+		tle.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
+
+# class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
+# 	queryset = get_list_or_404(TLE)
+# 	serializer_class = TLESerializer   
+#This should work but it doesn't
+#viewset
+
+ 
+
+
