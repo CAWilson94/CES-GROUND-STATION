@@ -3,6 +3,9 @@ import math
 from scheduler.models import TLE
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
+import ephem
+import datetime
+
 class services():
 
 	#Retrieving TLE data from external source and placing in the db 
@@ -46,12 +49,59 @@ class services():
 			string = string+x
 		return (string)
 
+	def ephem():
+		glasgow = ephem.Observer()
+		glasgow.lat = math.radians(55.8)
+		glasgow.long = math.radians(-4.43)
+		#glasgow.date = ephem.Date('2017/01/09 22:33:40.12')
+		dt = datetime.datetime.now()
+		glasgow.date = ephem.Date(dt)
+		
 
+		n1="EYESAT-1 (AO-27)"
+		n2="CANX-2"
+		n3="COMPASS-1"
+		n4="CUTE-1.7+APD II (CO-65)"
+		n5="DELFI-C3 (DO-64)"
+		n6="AAUSAT-II"
+		try:
+			satTLE = TLE.objects.get(name=n2)
+			pass
+		except TLE.DoesNotExist as e:
+			raise e
+		
+		if(satTLE==None):
+			return "null"
+		
+		#wgs72 seems to be the mostly commonly used gravtiy model
+		#sat = twoline2rv(satTLE.line1,satTLE.line2, wgs72)
+		try:
+			canx = ephem.readtle(satTLE.name,satTLE.line1, satTLE.line2)
+			pass
+			#, TLE.DoesNotExist
+		except ValueError as e:
+			return "format of db is in correct TLE"
+
+		canx.compute(glasgow)	
+		sat_alt, sat_az = [], []
+		#angles are in degrees:minutes:seconds
+		#215°45'12.3"=215:45:12.3
+
+		#All angles returned by PyEphem are actually measured in radians
+		info = glasgow.next_pass(canx)
+		
+		return canx.alt
+
+		
 	#predict passes of first sat
 	def predictFirst():
-		gx = 3582.54659375369
-		gy = -277.548936198169
-		gz = 5251.95793245245
+		gsx = 3582.54659375369
+		gsy = -277.548936198169
+		gsz = 5251.95793245245
+		# z (north) z=Re sin (phi (latitude))
+		# R (x?) z = Re cos (phi)   
+		# Re is earth's equatorial radius
+		#brawhalah
 		n1="EYESAT-1 (AO-27)"
 		n2="CANX-2"
 		n3="COMPASS-1"
@@ -76,9 +126,65 @@ class services():
 		except ValueError as e:
 			return "format of db is in correct TLE"
 
-		p, v = sat.propagate(2016, 12, 24, 20, 41, 0)
 
-		#azimuth = math.degrees(math.atan2((gx-p[0]),(gy-p[1])))
-		azimuth = math.degrees(math.atan2((p[0]-gx),(p[1]-gy)))
+		# 	top_e = -sin_theta * range.x
+		# + cos_theta * range.y;
+		#https://sourceforge.net/p/gpredict/code/ci/master/tree/src/sgpsdp/sgp_obs.c
 
-		return sat.satnum
+		#azim = atan(-top_e/top_s);
+
+		p, v = sat.propagate(2016, 12, 29, 19, 41, 0)
+		#zyx	p[0]=z, p[1]=y, p[2]=x
+
+
+		rangex = p[2] - gsx
+		rangey = p[1] - gsy
+
+		#sin_theta
+
+		#tope = 
+
+		az = ()
+
+		# azimuth = [None] * 32
+		# azimuth[0] = math.degrees(math.atan2((gsx-p[0]),(gsy-p[1])))
+		# azimuth[1] = 360 - math.degrees(math.atan2((gsx-p[0]),(gsy-p[1])))
+		# azimuth[2] = math.degrees(math.atan2((p[0]-gsx),(p[1]-gsy)))
+		# azimuth[3] = 360 - math.degrees(math.atan2((p[0]-gsx),(p[1]-gsy)))
+		# azimuth[4] = math.radians(math.atan2((gsx-p[0]),(gsy-p[1])))
+		# azimuth[5] = 360 - math.radians(math.atan2((gsx-p[0]),(gsy-p[1])))
+		# azimuth[6] = math.radians(math.atan2((p[0]-gsx),(p[1]-gsy)))
+		# azimuth[7] = 360 - math.radians(math.atan2((p[0]-gsx),(p[1]-gsy)))
+
+		# azimuth[8] = math.degrees(math.atan2((gsx-p[2]),(gsy-p[1])))
+		# azimuth[9] = 360 - math.degrees(math.atan2((gsx-p[2]),(gsy-p[1])))
+		# azimuth[10] = math.degrees(math.atan2((p[2]-gsx),(p[1]-gsy)))
+		# azimuth[11] = 360 - math.degrees(math.atan2((p[2]-gsx),(p[1]-gsy)))
+		# azimuth[12] = math.radians(math.atan2((gsx-p[2]),(gsy-p[1])))
+		# azimuth[13] = 360 - math.radians(math.atan2((gsx-p[2]),(gsy-p[1])))
+		# azimuth[14] = math.radians(math.atan2((p[2]-gsx),(p[1]-gsy)))
+		# azimuth[15] = 360 - math.radians(math.atan2((p[2]-gsx),(p[1]-gsy)))
+
+		# azimuth[16] = math.atan2((gsx-p[2]),(gsy-p[1]))
+		# azimuth[17] = 360 - math.atan2((gsx-p[2]),(gsy-p[1]))
+		# azimuth[18] = math.atan2((p[2]-gsx),(p[1]-gsy))
+		# azimuth[19] = 360 - math.atan2((p[2]-gsx),(p[1]-gsy))
+		# azimuth[20] = math.atan2((gsx-p[2]),(gsy-p[1]))
+		# azimuth[21] = 360 - math.atan2((gsx-p[2]),(gsy-p[1]))
+		# azimuth[22] = math.atan2((p[2]-gsx),(p[1]-gsy))
+		# azimuth[23] = 360 - math.atan2((p[2]-gsx),(p[1]-gsy))
+
+		# azimuth[24] = math.atan2((gsx-p[0]),(gsy-p[1]))
+		# azimuth[25] = 360 - math.atan2((gsx-p[0]),(gsy-p[1]))
+		# azimuth[26] = math.atan2((p[0]-gsx),(p[1]-gsy))
+		# azimuth[27] = 360 - math.atan2((p[0]-gsx),(p[1]-gsy))
+		# azimuth[28] = math.atan2((gsx-p[0]),(gsy-p[1]))
+		# azimuth[29] = 360 - math.atan2((gsx-p[0]),(gsy-p[1]))
+		# azimuth[30] = math.atan2((p[0]-gsx),(p[1]-gsy))
+		# azimuth[31] = 360 - math.atan2((p[0]-gsx),(p[1]-gsy))
+
+		u = ephem.Uranus()
+		u.compute('1781/3/13')
+		#sat.__dict__
+
+		return ephem.constellation(u)

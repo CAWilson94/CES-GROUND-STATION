@@ -2,27 +2,49 @@
 <html>
 <head>
   <title>Scheduler</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+  $(function(){
+   $('form').on('submit', function(e){
+    alert("thing")
+     e.preventDefault();
+     $.ajax({
+      alert("thing1")
+       url: $(this).attr('action'),
+       method: $(this).attr('method'),
+       success: function(){ $('#target').html() }
+     });
+   });
+ });</script>
+  <script>
+  $(document).ready(function(){
+    $("button").click(function(){
+        $.ajax({
+       url: $(this).attr('action'),
+       method: $(this).attr('method'),
+       success: function(){ $('#target').html() }
+     });
+    });
+  });
+  </script>
 </head>
 
 <body>
   <h1>Satellite TLE data</h1>
-  <form action="{% url 'scheduler:updateTLE1' %}" method="GET">
-    <input type="submit" value="Update TLE1" />
-  </form>
+  
   <form action="{% url 'scheduler:updateTLE1' %}" method="GET">
     <input id="submit" type="button" value="Update TLE" />
   </form>
-  <script>
-  $(function(){
-   $('form').on('submit', function(e){
-     e.preventDefault();
-     $.ajax({
-       url: $(this).attr('action'),
-       method: $(this).attr('method'),
-       success: function(data){ $('#target').html(data) }
-     });
-   });
- });</script>
+
+  <form action="{% url 'scheduler:updateTLE1' %}" method="GET">
+    <input type="submit" value="Update TLE1" />
+  </form>
+
+  <button>
+       Click Me - I run Javascript
+</button>
+
+  
  <h2>{{epoch}}</h2>>
 
  {% if tle_list %}

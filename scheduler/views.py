@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from scheduler.services import services
 from scheduler.models import TLE
 import requests
-
+from django.views import generic
+from django.shortcuts import render, redirect
 
 
 
@@ -15,17 +16,13 @@ def index(request):
 	#sessionObject.get...
 
 	#updates on refresh cause buttons require something extra like js...
-	tle_list = services.updateTLE()
-	#print (tle_list[0],tle_list[1],tle_list[2])
-	#print (tle_list)
-
+	#tle_list = services.updateTLE()
 
 	#gets all db entries
-	tle_list1 = get_list_or_404(TLE) 
-	#question = get_object_or_404(Question, pk=question_id)
-	#print (tle_list[0],tle_list1[1],tle_list1[2])
-	epoch = services.predictFirst()
-	print (epoch)
+	tle_list1 = get_list_or_404(TLE)
+	
+	epoch = services.ephem()
+	#print (epoch)
 
 	context_dict = {'epoch':epoch,
 					'tle_list':tle_list1,
@@ -33,19 +30,22 @@ def index(request):
 
 	return render(request, 'scheduler/index.html', context_dict)
 
+# class IndexView(generic.ListView):
+# 	template_name = 'scheduler/index.html'
+# 	context_object_name =  'tle_list'
+
+# 	def get_queryset(self):
+# 		return get_list_or_404(TLE)
+
 def updateTLE1(request):
 	print("blah2.0")
 	tle_list = services.updateTLE()
 	
-	# try: 
-		
-	# 	pass
-	# except (TLE.DoesNotExist):
-				
-	# else:
-	context_dict = {'epoch':epoch,
+	context_dict = {'epoch':"none",
 	 				'tle_list':tle_list,
 	 			}
-	return render(request, 'scheduler/index.html', context_dict)
+	
+	return redirect('/scheduler/')
+	#return render(request, 'scheduler/index.html', context_dict)
 
 # Create your views here.
