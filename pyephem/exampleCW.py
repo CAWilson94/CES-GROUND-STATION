@@ -26,3 +26,7 @@ def az_alt_mars():
 	gatech.date = '1984/5/30 16:22:56'
 	v = ephem.Mars(gatech)
 	print('%s %s' % (v.alt, v.az))
+
+az_alt_mars()
+
+az_alt_venus()
