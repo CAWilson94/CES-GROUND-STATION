@@ -53,7 +53,6 @@ class services():
 		glasgow = ephem.Observer()
 		glasgow.lat = math.radians(55.8)
 		glasgow.long = math.radians(-4.43)
-		#glasgow.date = ephem.Date('2017/01/09 22:33:40.12')
 		dt = datetime.datetime.now()
 		glasgow.date = ephem.Date(dt)
 		
@@ -89,7 +88,7 @@ class services():
 
 		#All angles returned by PyEphem are actually measured in radians
 		info = glasgow.next_pass(canx)
-		
+		#info[0]
 		return canx.alt
 
 		
