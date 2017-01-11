@@ -1,6 +1,6 @@
 import requests
 from scheduler.models import TLE
-
+import ephem
 class services():
 
 	#Retrieving TLE data from external source and placing in the db 
