@@ -76,16 +76,7 @@ def glasgow():
 	print('%s' % (iss.az))
 	print('%s' % (iss.alt))
 
-	"""
-	-39:35:44.1
-	140:13:12.1
-
-	"""
-
 glasgow();
-# Expected output: -76:24:18.3 13:05:31.1
-
-
 
 """
 
