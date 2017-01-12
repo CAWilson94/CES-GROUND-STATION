@@ -51,6 +51,9 @@ class TLEDetail(APIView):
 #This should work but it doesn't
 #viewset
 
- 
+# class TLEUpdate(APIView):
+# 	def post(self, request, format=None):
+# 		print("bob")
+# 		services.updateTLE()
 
 
