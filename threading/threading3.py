@@ -1,20 +1,12 @@
 """
-Pyephem basic examples 
+Description of code:
 
-Output format: 
----------------
-degrees, minutes of arc, and seconds of arc
-----------------
-
-
-To run from python shell: 
--------------------------
-	from exampleCW import * 
-
-	then call functions as needed
--------------------------
-
+Starts main thread and starts 3 differet threads from this.
+Exits main thread and runs other threads.
+Subclass prints current time and depending on the thread name
+calls glasgow() if 1, venus if 2, and mars if 3
 """
+
 import ephem
 import datetime
 import threading
@@ -39,7 +31,12 @@ def print_time(threadName, delay, counter):
             threadName.exit()
         time.sleep(delay)
         print ("%s: %s" % (threadName, time.ctime(time.time())))
-        glasgow()
+        if (threadName == "Thread-1"):
+            glasgow()
+        elif (threadName == "Thread-2"):
+            az_alt_venus()
+        else:
+            az_alt_mars()
         counter -= 1
 
 def glasgow():
@@ -55,22 +52,6 @@ def glasgow():
 	iss.compute(glasgow)
 	print('%s' % (iss.az))
 	print('%s' % (iss.alt))
-
-#glasgow();
-
-# Create new threads
-thread1 = myThread(1, "Thread-1", 1)
-thread2 = myThread(2, "Thread-2", 2)
-thread3 = myThread(3, "Thread-3", 3)
-
-# Start new Threads
-thread1.start()
-thread2.start()
-thread3.start()
-#thread1.join()
-#thread2.join()
-print ("Exiting Main Thread")
-"""
 
 def az_alt_venus():
 	gatech = ephem.Observer()
@@ -112,21 +93,15 @@ def tle():
 	print('%s' % (iss.az))
 	# Expected output: 67:19:50.8
 
+# Create new threads
+thread1 = myThread(1, "Thread-1", 1)
+thread2 = myThread(2, "Thread-2", 2)
+thread3 = myThread(3, "Thread-3", 3)
 
-# need observer and thing looking at
-
-
-"""
-"""
-
-Figures out alt and az through lat and long. Both of which 
-seem to have direct conversions: 
-
-Latitude: 1 deg = 110.574 km
-Longitude: 1 deg = 111.320*cos(latitude) km
-
-could use these for the conversion for alt?
-
-This doesn't fully correct for the Earth's polar flattening 
-- for that you'd probably want a more complicated formula using the WGS84 reference ellipsoid (the model used for GPS)
-"""
+# Start new Threads
+thread1.start()
+thread2.start()
+thread3.start()
+#thread1.join()
+#thread2.join()
+print ("Exiting Main Thread")
