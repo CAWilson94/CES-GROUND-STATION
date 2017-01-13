@@ -1,4 +1,4 @@
-"""cesgroundstation URL Configuration
+"""cesGroundStation URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
@@ -12,14 +12,11 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-     #url(r'^$', views.index, name='index'),
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from scheduler import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-
-    url(r'^scheduler', include('scheduler.urls')),
+    url(r'^api/', include('scheduler.urls')),
 ]
