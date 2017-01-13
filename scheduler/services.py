@@ -67,9 +67,6 @@ class services():
 				badEntriesArray.append(tleArray[i])
 				badEntriesArray.append(tleArray[i+1])
 				badEntriesArray.append(tleArray[i+2])
-				print(tleArray[i])
-				print(tleArray[i+1])
-				print(tleArray[i+2])
 			i+=3
 
 		goodEntriesArray = [entry for entry in tleArray if entry not in badEntriesArray]

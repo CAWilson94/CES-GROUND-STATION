@@ -11,7 +11,7 @@ class updateTLETest(TestCase):
 
 	def test_data_from_celestrak_is_valid(self):
 
-		tleArray1 = [
+		tleArray = [
 		'EYESAT-1 (AO-27)',
 		'1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991', 
 		'2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061', 
@@ -53,7 +53,7 @@ class updateTLETest(TestCase):
 		'2 41895  51.6434  4.4040 0005661  96.0874 264.0617 15.55009568  3716',
 ]
 
-		checkedArray = services.checkTLEFormat(tleArray1)
+		checkedArray = services.checkTLEFormat(tleArray)
 		#print(checkedArray)
 		shouldBe = [
 		'EYESAT-1 (AO-27)',
