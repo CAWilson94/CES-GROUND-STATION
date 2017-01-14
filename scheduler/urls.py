@@ -7,6 +7,7 @@ urlpatterns = [
 	url(r'^$', views.TLEList.as_view()),
 	url(r'^scheduler/?$', views.TLEList.as_view()),
 	url(r'^scheduler/(?P<pk>[0-9]+)/?$', views.TLEDetail.as_view()),
+	url(r'^scheduler/(?P<pk>[0-9]+)/azel/?$',views.GetAzEl.as_view()),
 ]#this order matters
 
 urlpatterns = format_suffix_patterns(urlpatterns)

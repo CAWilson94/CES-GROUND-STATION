@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE
-from scheduler.services import services
-from scheduler.serializers import TLESerializer
+from scheduler.services import Services
+from scheduler.serializers import TLESerializer, AZELSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics
@@ -12,7 +12,8 @@ from rest_framework.decorators import api_view
 
 
 class TLEList(generics.ListCreateAPIView):
-	services.updateTLE()
+
+	Services.updateTLE()
 	queryset = get_list_or_404(TLE)
 	serializer_class = TLESerializer
 
@@ -24,6 +25,25 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 # class TLEUpdate(APIView):
 # 	def post(self, request, format=None):
 # 		print("bob")
-# 		services.updateTLE()
+# 		Services.updateTLE()
+
+class GetAzEl(APIView):
+
+	def get_object(self, pk):
+		try:
+			return TLE.objects.get(pk=pk)
+		except Snippet.DoesNotExist:
+			raise Http404
+
+	def get(self, request, pk, format=None):
+		tle = self.get_object(pk)
+		azel = Services.getAzElTLENow(tle)#pass in object?
+		print(repr(azel.elevation))
+		serializer = AZELSerializer(azel)
+		return Response(serializer.data)
 
 
+#where is observer stored
+#when requesting satellite info, do we use id or name
+
+#how does get get the 
