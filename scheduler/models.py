@@ -11,17 +11,17 @@ class TLE(models.Model):
 #     objects = models.TLEManager()
 
 
-class AzEl(models.Model)
+class AzEl(models.Model):
 	azimuth = models.CharField(max_length =15)
 	elevation = models.CharField(max_length=15)
 
-class AzEl(object):
-	azimuth = ""
-	elevation = ""
+# class AzEl(object):
+# 	azimuth = ""
+# 	elevation = ""
 
-	def __init__(self,azimuth,elevation):
-		self.azimuth = azimuth
-		self.elevation = elevation
+# 	def __init__(self,azimuth,elevation):
+# 		self.azimuth = azimuth
+# 		self.elevation = elevation
 
 
 # class TLEManager(models.Manager):

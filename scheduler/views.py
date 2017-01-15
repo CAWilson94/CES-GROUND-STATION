@@ -37,7 +37,7 @@ class GetAzEl(APIView):
 
 	def get(self, request, pk, format=None):
 		tle = self.get_object(pk)
-		azel = Services.getAzElTLENow(tle)#pass in object?
+		azel = Services.getAzElTLENow(self, tle)#pass in object?
 		print(repr(azel.elevation))
 		serializer = AZELSerializer(azel)
 		return Response(serializer.data)

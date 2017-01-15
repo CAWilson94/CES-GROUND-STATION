@@ -44,7 +44,7 @@ class Services():
 	def getAzElTLENow(self, tleEntry):
 
 		#getObserver from where?
-		observer = self.getObserver(datetime.datetime.now());
+		observer = _Helper.getObserver(self,datetime.datetime.now());
 
 		# try: 
 		# 	tleEntry = TLE.objects.get(name=tleName)
