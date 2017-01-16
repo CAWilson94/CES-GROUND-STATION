@@ -39,3 +39,4 @@ class AzEl(models.Model):
 # azimuth =
 # elevation =
 # #range? footprint?
+
