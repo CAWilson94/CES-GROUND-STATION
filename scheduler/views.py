@@ -35,10 +35,17 @@ class GetAzEl(APIView):
 		except Snippet.DoesNotExist:
 			raise Http404
 
+		
 	def get(self, request, pk, format=None):
 		tle = self.get_object(pk)
-		azel = Services.getAzElTLENow(tle)#pass in object?
-		print(repr(azel.elevation))
+		#azel = Services.getAzElTLENow(self, tle)#pass in object?
+		#print(repr(azel.elevation))
+		#azel.is_valid()
+
+		list = Services.getNextPass(self)
+		#for x in list:
+			#print(x.azimuth)
+
 		serializer = AZELSerializer(azel)
 		return Response(serializer.data)
 

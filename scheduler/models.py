@@ -11,21 +11,31 @@ class TLE(models.Model):
 #     objects = models.TLEManager()
 
 
-class AzEl(models.Model)
+class AzEl(models.Model):
 	azimuth = models.CharField(max_length =15)
 	elevation = models.CharField(max_length=15)
 
-class AzEl(object):
-	azimuth = ""
-	elevation = ""
+# class Observer(models.Model):
+# latitude = models.CharField(max_length=15)
+# longtitude = models.CharField(max_length=15)
+# elevation = models.IntegerField(max_length=15)
 
-	def __init__(self,azimuth,elevation):
-		self.azimuth = azimuth
-		self.elevation = elevation
+# class NextPasses(models.Model)
+# tle = models.ForeignKey(TLE.name)
+# #AOS
+# riseTime = models.DateField(auto) #maybe datetime but that means rounding errors, maybe that's only really for time stamps
+# #LOS
+# setTime = models.
+# duration = models.DurationField()#still that's python datetime
+# maxElevation = models.CharField(max_length=5)
+# #AOS Az
+# riseAzimuth = models.CharField(max_length =15)
+# #LOS Az
+# setAzimuth = models.CharField(max_length =15)
 
-
-# class TLEManager(models.Manager):
-    
-#     def create_TLE(self, name, line1, line2):
-#         TLEObject = self.create(name=name, line1=line1, line2=line2)
-#         return TLEObjectook
+# class PassDetails(models.Model)
+# nextpasses = models.ForeignKey(NextPasses)
+# time = models.
+# azimuth =
+# elevation =
+# #range? footprint?
