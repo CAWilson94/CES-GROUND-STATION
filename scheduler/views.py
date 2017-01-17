@@ -27,7 +27,7 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 # 		print("bob")
 # 		Services.updateTLE()
 
-class GetAzEl(APIView):
+class PyephemData(APIView):
 
 	def get_object(self, pk):
 		try:

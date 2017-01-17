@@ -1,6 +1,6 @@
 import requests
 from scheduler.models import TLE, AzEl
-import math, ephem, datetime
+import math, ephem
 from datetime import date, datetime, timedelta
 
 class Services():
@@ -43,44 +43,29 @@ class Services():
 			i+=3	
 
 	def getAzElTLENow(self, tleEntry):
+		return getAzElTLE(self, tleEntry, datetime.now())
 
-		#getObserver from where?
-		observer = _Helper.getObserver(self, datetime.now());
 
-		# try: 
-		# 	tleEntry = TLE.objects.get(name=tleName)
-		# except TLE.DoesNotExist:
-		# 	return "Error" 
-
-		try:
-			sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2) #necessary?
-		except ValueError as e:
-			return "format of db is incorrect TLE"
-
-		sat.compute(observer)
-		#AzEl = [sat.az,sat.alt]
-		#return sat object?
-		return	AzEl(0, sat.az,sat.alt)
-
-	def getAzElTLE(self, tleEntry,dateTime):
+	def getAzElTLE(self, tleEntry, dateTime):
 
 		#getObserver from where?
 		observer = _Helper.getObserver(self, dateTime);
 
 		try:
 			sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2) #necessary?
-		except ValueError as e:
-			return "format of db is incorrect TLE"
+		except ValueError:
+			return "Format of TLEEntry is incorrect (getAzElTLE)"
 
 		sat.compute(observer)
 		#AzEl = [sat.az,sat.alt]
 		#return sat object?
 		return	AzEl(0, sat.az,sat.alt)
 
-	def getAzElForPeriod(self, riseTime, setTime, period):
+	def getAzElForPeriod(self, tleEntry, riseTime, setTime, period):
+		azelProgress = []
 		i=0
-		for timestamp in _Helper.datespan(riseTime,setTime, delta=timedelta(seconds=period)):
-			azel = getAzElTLE(self,tleEntry,timestamp)
+		for timestamp in _Helper.timeSpan(riseTime,setTime, delta=timedelta(seconds=period)):
+			azel = Services.getAzElTLE(self,tleEntry,timestamp)
 			i+=1
 			#change azel id?
 			azelProgress.append(azel)
@@ -100,8 +85,8 @@ class Services():
 		azelProgress = []
 
 		i=0
-		for timestamp in _Helper.datespan(nextPassObject.riseTime, nextPassObject.setTime, delta=timedelta(seconds=increments)):
-			azel = getAzElTLE(self, tleEntry,timestamp)
+		for timestamp in _Helper.timeSpan(nextPassObject.riseTime, nextPassObject.setTime, delta=timedelta(seconds=increments)):
+			azel = Services.getAzElTLE(self, tleEntry,timestamp)
 			i+=1
 			azelProgress.append(azel)
 			print(timestamp)
@@ -169,7 +154,8 @@ class _Helper():
 		while i <= (len(tleArray)-3):
 			try: 
 				ephem.readtle(tleArray[i],tleArray[i+1],tleArray[i+2])
-			except ValueError as e:
+			except ValueError:
+				print ("Bad entry ",tleArray[i]) #put in log
 				badEntriesArray.append(tleArray[i])
 				badEntriesArray.append(tleArray[i+1])
 				badEntriesArray.append(tleArray[i+2])
@@ -186,11 +172,12 @@ class _Helper():
 		observer.date = ephem.Date(datetime)
 		return observer
 	
-	def datespan(startDate, endDate, delta=timedelta(days=1)):
-		currentDate = startDate
-		while currentDate < endDate:
-			yield currentDate
-			currentDate += delta
+	def timeSpan(startTime, endTime, delta): #timedelta(days=1)):
+		#returns iterator of timestamps in from start to end 
+		currentTime = startTime
+		while currentTime < endTime:
+			yield currentTime
+			currentTime += delta
 #from stackoverflow
 
 	def roundMicrosecond(ephemDate):

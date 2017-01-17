@@ -4,10 +4,11 @@ from django.db import models
 
 
 class TLE(models.Model):
-    name = models.CharField(max_length=30,unique=True,default="NAME")
-    line1 = models.CharField(max_length=70)#can't be null
-    line2 = models.CharField(max_length=70)
-
+	name = models.CharField(max_length=30,unique=True,default="NAME")
+	line1 = models.CharField(max_length=70)#can't be null
+	line2 = models.CharField(max_length=70)
+	def __str__(self):
+		return str(self.__dict__)
 #     objects = models.TLEManager()
 
 
@@ -15,6 +16,8 @@ class AzEl(models.Model):
 	azimuth = models.CharField(max_length =15)
 	elevation = models.CharField(max_length=15)
 
+	def __str__(self):
+		return str(self.__dict__)
 # class Observer(models.Model):
 # latitude = models.CharField(max_length=15)
 # longtitude = models.CharField(max_length=15)
