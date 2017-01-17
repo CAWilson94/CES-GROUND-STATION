@@ -20,7 +20,7 @@ class AzEl(models.Model):
 # longtitude = models.CharField(max_length=15)
 # elevation = models.IntegerField(max_length=15)
 
-# class NextPasses(models.Model)
+# class NextPasses(models.Model, cascade)
 # tle = models.ForeignKey(TLE.name)
 # #AOS
 # riseTime = models.DateField(auto) #maybe datetime but that means rounding errors, maybe that's only really for time stamps

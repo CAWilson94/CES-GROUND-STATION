@@ -62,71 +62,86 @@ class Services():
 		#return sat object?
 		return	AzEl(0, sat.az,sat.alt)
 
-	def makeNextPassDetails(self,tleEntry):
-		#get future passes of satellite
-		#List.
-		#tleEntry = TLE.objects.get(name="CANX-2")
-		#make list of   Az El & range, footprint, where do we have that value?   in range of rise time to set time with 35 increments
-		observer = _Helper.getObserver(self, datetime.now());
+	def getAzElTLE(self, tleEntry,dateTime):
+
+		#getObserver from where?
+		observer = _Helper.getObserver(self, dateTime);
 
 		try:
-			sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2) #is the try necessary?
+			sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2) #necessary?
 		except ValueError as e:
 			return "format of db is incorrect TLE"
 
-		info = observer.next_pass(sat)
-		#from rise time info[0]
-		azelProgress = []
-		#until set time info[4]
-		#info object?
-		#calc initial rise/set time
-		#info1 = info[0].__dict__
+		sat.compute(observer)
+		#AzEl = [sat.az,sat.alt]
+		#return sat object?
+		return	AzEl(0, sat.az,sat.alt)
+
+	def getAzElForPeriod(self, riseTime, setTime, period):
 		i=0
-		print (info[0].datetime(), info[4].datetime())
-		print(info[0])#round up
-		print(info[4])
-		#print(info[0].tuple())
-		for timestamp in _Helper.datespan(info[0].datetime(),info[4].datetime() , delta=timedelta(seconds=30)):
-			observer = _Helper.getObserver(self, timestamp)
-			sat.compute(observer)
+		for timestamp in _Helper.datespan(riseTime,setTime, delta=timedelta(seconds=period)):
+			azel = getAzElTLE(self,tleEntry,timestamp)
 			i+=1
-			azel = AzEl(i,sat.az,sat.alt)
+			#change azel id?
+			azelProgress.append(azel)
+		return azelProgress #return object to go in db that's related to list of next passes
+
+
+	def makeNextPassDetails(self,tleEntry,increments,dateTime):
+		#ask for hours increments,seconds increments etc or make it only seconds
+		#get future passes of satellite
+		
+		#make list of Az El & range, footprint, where do we have that value?  
+		#in range of rise time to set time with 30 increments
+
+		nextPassObject = getNextPass(self,tleEntry,dateTime)   #object/model
+		#from rise time info[0]
+		#until set time info[4]
+		azelProgress = []
+
+		i=0
+		for timestamp in _Helper.datespan(nextPassObject.riseTime, nextPassObject.setTime, delta=timedelta(seconds=increments)):
+			azel = getAzElTLE(self, tleEntry,timestamp)
+			i+=1
 			azelProgress.append(azel)
 			print(timestamp)
 			#new progresssion object?
 			#how important is accuracy? can it be ten secs out
+			#return list of foreign key related models?
 		return azelProgress #return object to go in db that's related to list of next passes
 	
-	def getNextPass(self, tleEntry)
-		observer = __Helper.getObserver(datetime.now());
+	def getNextPass(self, tleEntry, dateTime):
+		observer = __Helper.getObserver(dateTime);
 		sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2)
-		info = observer.next_pass(sat)
-					#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-		return NextPass(0,)
+		details = observer.next_pass(sat)
+					
+		riseTime = _Helper.roundMicrosecond(details[0])
+		setTime = _Helper.roundMicrosecond(details[4])
+		duration  = setTime - riseTime
+				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+		#return NextPass(0,riseTime, settime, duration, details[3],details[1],details[5],tleEntry)
 		
-	def makeListOfNextPasses(tleEntry, number):
+	# def makeListOfNextPasses(self, tleEntry, number):
 
-		observer = __Helper.getObserver(datetime.now());
-		sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2)
-		#info[4]# settime
-		listOfNextPasses = []
+	# 	observer = __Helper.getObserver(datetime.now());
+	# 	sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2)
+	# 	listOfNextPasses = []
 
-		i=0
-		while i<number:
-			info = observer.next_pass(sat)
-			listOfNextPasses.extend(info)
-			#make object and add to db?
+	# 	nextPass = self.getNextPass(self, tleEntry,datetime.now())
 
-			duration = satPass[0]-satPass[4]
+	# 	i=0
+	# 	while i<number:
+	# 		for nextPassDetails in listOfNextPasses
+	# 									#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+	# 			np = nextPass(tleEntry,nextPassDetails[0],nextPassDetails[4],duration,nextPassDetails[3],nextPassDetails[1],nextPassDetails[5])#.save()
+	# 			listOfNextPasses.extend(np)
 
-			for satPass in listOfNextPasses
-										#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-				nextPasses(tleEntry,satPass[0],satPass[4],duration,setPass[3],satPass[1],satPass[5])#.save()
+	# 		observer = self.getObserver(info[4].datetime());
 
-			observer = self.getObserver(info[4].datetime());
-			i+=1
+	# 		nextPass = self.getNextPass(self,tleEntry,setTime)
+	# 		i+=1
 
-		makeNextPassDetails(self,tleEntry)
+	# 	makeNextPassDetails(self,tleEntry)
 
 	# def getListOfNextPasses(tleObject)
 		#limit to ten
@@ -177,6 +192,13 @@ class _Helper():
 			yield currentDate
 			currentDate += delta
 #from stackoverflow
+
+	def roundMicrosecond(ephemDate):
+		dateTime = ephemDate.datetime()
+		ms = dateTime.microsecond/1000000
+		msRound = int(round(ms,0))
+		dateTime = dateTime + timedelta(seconds = msRound) - timedelta(microseconds = dateTime.microsecond)
+		return dateTime
 		
 
 
