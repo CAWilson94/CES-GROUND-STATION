@@ -3,7 +3,7 @@ from .services import services
 from django.test import TestCase
 # Create your tests here. 
 
-class updateTLETest(TestCase): 	
+class UpdateTLETest(TestCase): 	
 #data gets pulled in from website, check first few entries are sane? requests job? 	
 #gets parsed 	
 #put in db 	#gets taken out 	
