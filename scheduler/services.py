@@ -8,17 +8,19 @@ class Services():
 	def findById(id):
 		try:
 			tleEntryFi = TLE.objects.get(id = id)
+			print ("got it") 
 			pass
 		except TLE.DoesNotExist as e:
-			print ("major error") #TODO: raisemassive error
+			print ("major error") 
 		return tleEntryFi
 
 	def findByName(name):
 		try:
 			tleEntryF = TLE.objects.get(name = name)
+			print ("got it")
 			pass
 		except TLE.DoesNotExist as e:
-			print ("major error") #TODO: raisemassive error
+			print ("major error")
 		return tleEntryF
 
 	def save(TLEw):
@@ -55,8 +57,9 @@ class Services():
 
 	def remove(id):
 		try:
-			tleEntryR = TLE.objects.get(id = id)
-			tleEntryR.delete()
+			TLE.objects.get(id = id).delete()
+			#tleEntryR.delete()
+			print ("got it")
 			pass
 		except TLE.DoesNotExist as e:
 			print ("major error") #TODO: raisemassive error
@@ -153,14 +156,14 @@ class Services():
 			#how important is accuracy? can it be ten secs out
 		return azelProgress #return object to go in db that's related to list of next passes
 	
-	def getNextPass(self, tleEntry)
+	def getNextPass(self, tleEntry):
 		observer = __Helper.getObserver(datetime.now());
 		sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2)
 		info = observer.next_pass(sat)
 					#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0,)
 		
-	def makeListOfNextPasses(tleEntry, number):
+	"""def makeListOfNextPasses(tleEntry, number):
 
 		observer = __Helper.getObserver(datetime.now());
 		sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2)
@@ -182,7 +185,7 @@ class Services():
 			observer = self.getObserver(info[4].datetime());
 			i+=1
 
-		makeNextPassDetails(self,tleEntry)
+		makeNextPassDetails(self,tleEntry)"""
 
 	# def getListOfNextPasses(tleObject)
 		#limit to ten

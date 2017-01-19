@@ -14,6 +14,11 @@ from rest_framework.decorators import api_view
 class TLEList(generics.ListCreateAPIView):
 
 	Services.updateTLE()
+	Services.remove(1)
+	#Services.updateTLE()
+	#Services.findByName("CANX-2") #works
+	#Services.findById(1) #works
+
 	queryset = get_list_or_404(TLE)
 	serializer_class = TLESerializer
 
