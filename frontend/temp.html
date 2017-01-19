@@ -21,11 +21,7 @@
        <script src =  https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css </script>
        <script src = https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css </script>
 
-       <script src= //maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css </script>
-
-      
-
-
+    
 </head>
 
 
@@ -41,9 +37,14 @@
     <option value="sat6">SAT-SIX</option>
   </select>
 
-  <h2>Active Missions!</h2>
+  <div class = "active_mission_div" = "row">
+    <div class = "col-sm-12">
+      <h2>Active Missions!</h2>
+      <button type="button" class="btn btn-primary">Example ADD</button>
+    </div>
+  </div>
 
-<table id="active_missions" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+<table id="active_missions_table" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
 <thead>
   <tr>
     <th>Name</th>
@@ -69,7 +70,7 @@
 <script type="text/javascript">
    $(document).ready(function(e) {
   $('.selectpicker').selectpicker();
-   $('#active_missions').DataTable();
+   $('#active_missions_table').DataTable();
 });
 </script>
 
