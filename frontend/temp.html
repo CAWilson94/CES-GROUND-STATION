@@ -17,6 +17,13 @@
         <!-- (Optional) Latest compiled and minified JavaScript translation files -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js"></script>
 
+        <!-- From datatables plugin site -->
+       <script src =  https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css </script>
+       <script src = https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css </script>
+
+       <script src= //maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css </script>
+
+      
 
 
 </head>
@@ -36,12 +43,15 @@
 
   <h2>Active Missions!</h2>
 
-<table style="width:100%">
+<table id="active_missions" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+<thead>
   <tr>
     <th>Name</th>
     <th>Status</th> 
     <th>Progress</th>
   </tr>
+</thead>
+<tbody>
   <tr>
     <td>CANX-2</td>
     <td>TRACKING</td> 
@@ -52,16 +62,15 @@
     <td>WAITING</td> 
     <td>0%</td>
   </tr>
+  </tbody>
 </table>
- 
+  </body>
+
 <script type="text/javascript">
    $(document).ready(function(e) {
   $('.selectpicker').selectpicker();
+   $('#active_missions').DataTable();
 });
 </script>
-
-
-
-  </body>
 
 </html>
