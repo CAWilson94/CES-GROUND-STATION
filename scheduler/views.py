@@ -24,7 +24,7 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 
 # class TLEUpdate(APIView):
 # 	def post(self, request, format=None):
-# 		print("bob")
+# 		print("bob") AK
 # 		Services.updateTLE()
 
 class PyephemData(APIView):
@@ -40,7 +40,7 @@ class PyephemData(APIView):
 		tle = self.get_object(pk)
 		azel = Services.getAzElTLENow(self, tle)#pass in object?
 		#print(repr(azel.elevation))
-		#azel.is_valid()
+		#azel.is_valid() AK
 
 		#Services.makeNextPassDetails(self,tle,30)
 		#for x in list:
@@ -50,7 +50,5 @@ class PyephemData(APIView):
 		return Response(serializer.data)
 
 
-#where is observer stored
+#where is observer stored AK
 #when requesting satellite info, do we use id or name
-
-#how does get get the 

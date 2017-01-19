@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime
 # Create your models here.
 
 
@@ -18,23 +18,57 @@ class AzEl(models.Model):
 
 	def __str__(self):
 		return str(self.__dict__)
-# class Observer(models.Model):
-# latitude = models.CharField(max_length=15)
-# longtitude = models.CharField(max_length=15)
-# elevation = models.IntegerField(max_length=15)
 
-# class NextPasses(models.Model, cascade)
-# tle = models.ForeignKey(TLE.name)
-# #AOS
-# riseTime = models.DateField(auto) #maybe datetime but that means rounding errors, maybe that's only really for time stamps
-# #LOS
-# setTime = models.
-# duration = models.DurationField()#still that's python datetime
-# maxElevation = models.CharField(max_length=5)
-# #AOS Az
-# riseAzimuth = models.CharField(max_length =15)
-# #LOS Az
-# setAzimuth = models.CharField(max_length =15)
+	def __eq__(self, other): 
+		azBool=0
+		altBool=0
+		try: 
+			azBool = self.azimuth == other.azimuth
+			altBool = self.elevation == other.elevation
+		except AttributeError:
+			return False
+		return azBool and altBool
+		#can haz this just for testing? AK
+
+	# def __eq__(self, other):
+	# 	return self.__dict__ == other.__dict__
+
+
+class NextPass(models.Model):
+	#leaves an empty table :(
+	#tle = models.ForeignKey(TLE.name, on_delete=models.CASCADE)
+	#AOS
+	riseTime = models.DateField() 
+	#LOS
+	setTime = models.DateField()
+	duration = models.DurationField()#still that's python datetime
+	maxElevation = models.CharField(max_length=15)
+	#AOS Az
+	riseAzimuth = models.CharField(max_length =15)
+	#LOS Az
+	setAzimuth = models.CharField(max_length =15)
+
+	def __str__(self):
+		return str(self.__dict__)
+
+	def __eq__(self, other): 
+		riseTime=datetime(17,1,19,12,0,0)
+		setTime=datetime(17,1,19,12,0,0)
+		duration=0
+		maxElevation=0
+		riseAzimuth=0
+		setAzimuth=0
+		try: 
+			#Surely there is a better way but i dunno AK
+			riseTime = self.riseTime == other.riseTime
+			setTime = self.setTime == other.setTime
+			duration = self.duration == other.duration
+			maxElevation = self.maxElevation == other.maxElevation
+			riseAzimuth = self.riseAzimuth == other.riseAzimuth
+			setAzimuth = self.setAzimuth == other.setAzimuth
+		except AttributeError:
+			return False
+		return riseTime and setTime and duration and maxElevation and riseAzimuth and setAzimuth
 
 # class PassDetails(models.Model)
 # nextpasses = models.ForeignKey(NextPasses)
@@ -42,4 +76,9 @@ class AzEl(models.Model):
 # azimuth =
 # elevation =
 # #range? footprint?
+
+# class Observer(models.Model):
+# latitude = models.CharField(max_length=15)
+# longtitude = models.CharField(max_length=15)
+# elevation = models.IntegerField(max_length=15)
 
