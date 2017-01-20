@@ -1,20 +1,34 @@
 # Open port at “9600,8,N,1”, no timeout:
 
 import serial
+import time
 
-ser = serial.Serial('COM1')  # open serial port: windows "COMN" linux "/dev/ttyUSBn" where n is a numbe
-ser.write(str(10128).encode())
-ser.portstr
+
+ser = serial.Serial("COM2", 9600, timeout=10)  # open serial port: windows "COMN" linux "/dev/ttyUSBn" where n is a number
+ser.flushInput()
+ser.flushOutput()
 print(ser)
 
+print("writing to COM2")
 
-print("yer maw")
+cmd = "2AG30\r\n".encode('ascii')
+print("command: ", cmd)
 
-line = ser.read(10) 
+ser.write(cmd)
+
+
+ser.portstr
+print("Done writing")
+
+
+print("Reading response")
+
+line = ser.read() 
+#line.portstr
 print(line)
 
 print("done")
-
+time.sleep(10)
 ser.close()
 
 
