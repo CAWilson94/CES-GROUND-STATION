@@ -21,3 +21,17 @@ class rotator_services():
 		""" Set position of ground station, 
 			given azimuth and elevation
 		"""
+
+		print(ser)
+		print("writing to COM2")
+		# Change elevation first
+		cmdE = "2BG60\n".encode('ascii')
+		# Change azimuth second
+		cmdA = "2AG60\n".encode('ascii')
+		ser.flush()
+		"""
+		Need each part of the command in an array so 
+		it can be written one section at a time: 
+		pySerial doesn't seem to work with one string command
+
+		"""
