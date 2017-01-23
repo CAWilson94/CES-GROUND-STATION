@@ -3,12 +3,57 @@ import serial
 import time
 
 """
+Created: 23/01/2017
+Last modified: 23/01/2017
+-------------------------
+
  Set and set the position of the ground station rotators: azimuth and elevation
 
+ set_position: 
+		The only difference between both commands is using 
+		position 1 or 2 in the array for A and B and changing
+		the az and el param input. 
+
+		This could be broken down more to create less repeated code
+		TODO: extract code more.
+	
+	***	May also not need this in a class format: seems like modules and functions are good enough here. ***
 """
 
 class rotator_services():
 
+	"""
+	Command format: 
+		Elevation: 	"2BG<degrees>\r"  
+		Azimuth: 	"2AG<degrees>\r"
+	"""
+	cmdArr = ["\x02","B","A","G","\r"]
+
+	def write_elevation(el, ser):
+		"""
+		Write elevation commands for combi track
+		using command Array, given elevation and serial port
+
+		Not sure if serial port will work in this way: 
+		If not, rebase to last commmit
+		"""
+		ser.write(cmdArr[0].encode())
+		ser.write(cmdArr[1].encode())
+		ser.write((cmdArr[-2] + el).encode())
+		ser.write(cmdArr[-1].encode())
+
+	def write_azimuth(az, ser):
+		"""
+		Write azimuth commands for combi track
+		using command Array, given azimuth and serial port
+
+		Not sure if serial port will work in this way: 
+		If not, rebase to last commmit
+		"""
+		ser.write(cmdArr[0].encode())
+		ser.write(cmdArr[2].encode())
+		ser.write((cmdArr[-2] + az).encode())
+		ser.write(cmdArr[-1].encode())
 	
 	
 	def get_position():
@@ -36,32 +81,14 @@ class rotator_services():
 		print(ser) # Baud rate info etc: for testing 
 		print("writing to COM2")
 		ser.flush()
-		"""
-		Command format: 
-				Elevation: 	"2BG<degrees>\r"  
-				Azimuth: 	"2AG<degrees>\r"
-		"""
-		cmdArr = ["\x02","B","A","G","\r"]
 		# Change elevation first
-		ser.write(cmdArr[0].encode())
-		ser.write(cmdArr[1].encode())
-		ser.write((cmdArr[-2] + el).encode())
-		ser.write(cmdArr[-1].encode())
+		rotator_services.write_elevation(el, ser)
 		# Change azimuth
-		ser.write(cmdArr[0].encode())
-		ser.write(cmdArr[2].encode())
-		ser.write((cmdArr[-2] + az).encode())
-		ser.write(cmdArr[-1].encode())
-
+		rotator_services.write_azimuth(az, ser)
 		print("done")
 		ser.close()
 
-		"""
-		The only difference between both commands is using 
-		position 1 or 2 in the array for A and B and changing
-		the az and el param input. 
+	
 
-		This could be broken down more to create less repeated code
-		TODO: extract code more.
 
-		"""
+
