@@ -9,18 +9,21 @@ import time
 
 class rotator_services():
 
-	ser = serial.Serial("COM2", 9600, timeout=2)  # open serial port: windows "COMN" 
-												  # linux "/dev/ttyUSBn" where n is a number
+	
 	
 	def get_position():
 		""" Get position of ground station: 
 			azimuth and elevation
 		"""
+		ser = serial.Serial("COM2", 9600, timeout=2)  # open serial port: windows "COMN" 
+												  # linux "/dev/ttyUSBn" where n is a number
 
 	def set_position(az, el):
 		""" Set position of ground station, 
 			given azimuth and elevation
 		"""
+		ser = serial.Serial("COM2", 9600, timeout=2)  # open serial port: windows "COMN" 
+												  # linux "/dev/ttyUSBn" where n is a number
 		print(ser) # Baud rate info etc: for testing 
 		print("writing to COM2")
 		ser.flush()
