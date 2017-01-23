@@ -1,7 +1,4 @@
-import requests
 import serial
-import time
-
 """
 Created: 23/01/2017
 Last modified: 23/01/2017
