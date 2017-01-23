@@ -24,6 +24,12 @@ class rotator_services():
 
 		print(ser)
 		print("writing to COM2")
+		"""
+		Command format: 
+				Elevation: 	"2BG<degrees>\r"  
+				Azimuth: 	"2AG<degrees>\r"
+		"""
+		cmdArr = ["\x02","B","A","G","\r"]
 		# Change elevation first
 		cmdE = "2BG60\n".encode('ascii')
 		# Change azimuth second
@@ -33,5 +39,4 @@ class rotator_services():
 		Need each part of the command in an array so 
 		it can be written one section at a time: 
 		pySerial doesn't seem to work with one string command
-
 		"""
