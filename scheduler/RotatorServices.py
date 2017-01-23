@@ -27,7 +27,9 @@ class rotator_services():
 		Elevation: 	"2BG<degrees>\r"  
 		Azimuth: 	"2AG<degrees>\r"
 	"""
-	cmdArr = ["\x02","B","A","G","\r"]
+	cmdArr = ["B","A","G"]
+	cmdStart = "\x02"
+	cmdEnd = "\r"
 
 	def write_elevation(el, ser):
 		"""
@@ -37,10 +39,10 @@ class rotator_services():
 		Not sure if serial port will work in this way: 
 		If not, rebase to last commmit
 		"""
+		ser.write(cmdStart.encode())
 		ser.write(cmdArr[0].encode())
-		ser.write(cmdArr[1].encode())
-		ser.write((cmdArr[-2] + el).encode())
-		ser.write(cmdArr[-1].encode())
+		ser.write((cmdArr[-1] + el).encode())
+		ser.write(cmdEnd.encode())
 
 	def write_azimuth(az, ser):
 		"""
@@ -50,10 +52,10 @@ class rotator_services():
 		Not sure if serial port will work in this way: 
 		If not, rebase to last commmit
 		"""
-		ser.write(cmdArr[0].encode())
-		ser.write(cmdArr[2].encode())
-		ser.write((cmdArr[-2] + az).encode())
-		ser.write(cmdArr[-1].encode())
+		ser.write(cmdStart.encode())
+		ser.write(cmdArr[1].encode())
+		ser.write((cmdArr[-1] + az).encode())
+		ser.write(cmdEnd.encode())
 	
 	
 	def get_position():
