@@ -1,13 +1,157 @@
-
-from .services import services 
+from .services import Services, _Helper
+from .models import TLE, AzEl, NextPass
 from django.test import TestCase
+from datetime import date, datetime, timedelta
+import ephem
 # Create your tests here. 
 
-class UpdateTLETest(TestCase): 	
+
+class pyephemTests(TestCase):
+
+	def test_getazeldata_is_correct1(self):
+		#test needs to be updated in roughly early 2018 to a newer time if datetime 
+		#is too far from the epoch of the satellite: 11/01/17
+		tleEntry = TLE('0','EYESAT-1 (AO-27)',
+		'1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991',
+		'2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061',)
+		#azel = Services.getAzElTLE(self, tleEntry ,datetime(2017,1,1,12,0,0))
+		azel = Services.getAzElTLE(self, tleEntry ,datetime(2017,1,1,12,0,0))
+		#degrees minutes seconds -> decimal degrees -> radians
+		shouldBe = AzEl(0,4.355794429779053,-1.4003942012786865)
+		self.assertIs(shouldBe == (azel),True)
+		#self.assertIs(shouldBe.elevation == azel.elevation,True)
+
+	def test_getazeldata_is_correct2(self):
+		#test needs to be updated in roughly early 2018 to a newer time if datetime 
+		#is too far from the epoch of the satellite: 17/01/17
+		tleEntry = TLE('0', 'PROMETHEUS 2-3',     
+		'1 41855U 16067H   17017.17439223 -.00000035  00000-0  22910-5 0  9998',
+		'2 41855  97.9660  92.6242 0012070  83.3470 276.9124 14.95885483  9917',)
+		azel = Services.getAzElTLE(self, tleEntry ,datetime(2017,6,6,12,0,0))
+		shouldBe = AzEl(0,3.1872448921203613,-1.5055859088897705)
+		self.assertIs(shouldBe == (azel),True)
+		#self.assertIs(shouldBe.elevation == azel.elevation,True)
+
+	def test_getazeldata_is_correct3(self):
+		#test needs to be updated in roughly early 2018 to a newer time if datetime 
+		#is too far from the epoch of the satellite: 17/01/17
+		tleEntry = TLE('0', 'PROMETHEUS 2-3',     
+		'1 41855U 16067H   17017.17439223 -.00000035  00000-0  22910-5 0  9998',
+		'2 41855  97.9660  92.6242 0012070  83.3470 276.9124 14.95885483  9917',)
+		azel = Services.getAzElTLE(self, tleEntry ,datetime(2017,6,6,12,0,0))
+		shouldBe = AzEl(0,3.18724345421203613,-1.5055834588897705)
+		self.assertIs(shouldBe == azel,False)
+
+	def test_getAzElForPeriod_is_correct(self):
+		tleEntry = TLE('0', 'PROMETHEUS 2-3',     
+		'1 41855U 16067H   17017.17439223 -.00000035  00000-0  22910-5 0  9998',
+		'2 41855  97.9660  92.6242 0012070  83.3470 276.9124 14.95885483  9917',)
+				#tleEntry, riseTime, setTime, period in seconds
+		azelList = Services.getAzElForPeriod(self, tleEntry ,datetime(2017,6,6,12,2,42),datetime(2017,6,6,12,9,2),30)
+		shouldBe = []
+		shouldBe.append(AzEl(0,0.8919017910957336,-1.534958004951477))
+		shouldBe.append(AzEl(0,0.7173821926116943,-1.5194507837295532))
+		shouldBe.append(AzEl(0,0.6259355545043945,-1.5030969381332397))
+		shouldBe.append(AzEl(0,0.570842981338501,-1.4863852262496948))
+		shouldBe.append(AzEl(0,0.5344333648681641,-1.4694904088974))
+		shouldBe.append(AzEl(0,0.5087897181510925,-1.4524891376495361))
+		shouldBe.append(AzEl(0,0.4898819625377655,-1.4354195594787598))
+		shouldBe.append(AzEl(0,0.4754546880722046,-1.4183026552200317))
+		shouldBe.append(AzEl(0,0.46415090560913086,-1.4011510610580444))
+		shouldBe.append(AzEl(0,0.4551066756248474,-1.383972406387329))
+		shouldBe.append(AzEl(0,0.4477463364601135,-1.3667718172073364))
+		shouldBe.append(AzEl(0,0.4416716694831848,-1.3495526313781738))
+		shouldBe.append(AzEl(0,0.43659859895706177,-1.3323169946670532))
+		self.assertIs(len(shouldBe) == len(azelList), True)
+
+		for val in shouldBe:
+			self.assertIs(val in azelList, True)
+
+	def test_getAzElForPeriod_is_incorrect(self):
+		tleEntry = TLE('0', 'PROMETHEUS 2-3',     
+		'1 41855U 16067H   17017.17439223 -.00000035  00000-0  22910-5 0  9998',
+		'2 41855  97.9660  92.6242 0012070  83.3470 276.9124 14.95885483  9917',)
+				#tleEntry, riseTime, setTime, period in seconds
+		azelList = Services.getAzElForPeriod(self, tleEntry ,datetime(2017,6,6,12,2,42),datetime(2017,6,6,12,9,2),30)
+		shouldBe = []
+		shouldBe.append(AzEl(0,0.8919017913454357336,-1.534958004951477))
+		shouldBe.append(AzEl(0,0.71738214353116943,-1.5194507837295532))
+		shouldBe.append(AzEl(0,0.6259355545043945,-1.5030969381332397))
+		shouldBe.append(AzEl(0,0.570842981338501,-1.4863852262496948))
+		shouldBe.append(AzEl(0,0.53443336486341641,-1.4694904088974))
+		shouldBe.append(AzEl(0,0.5087897181510925,-1.4524891376495361))
+		shouldBe.append(AzEl(0,0.48988196253745655,-1.4354195594787598))
+		shouldBe.append(AzEl(0,0.4754546880722046,-1.4183026552200317))
+		shouldBe.append(AzEl(0,0.46415090560913086,-1.4011510610580444))
+		shouldBe.append(AzEl(0,0.4551066756248474,-1.383972406387329))
+		shouldBe.append(AzEl(0,0.4477463364601135,-1.3667718172073364))
+		shouldBe.append(AzEl(0,0.4416716694831848,-1.3495526313781738))
+		shouldBe.append(AzEl(0,0.4365985989570617,-1.3323169946670532))
+		
+		self.assertIs(len(shouldBe) == len(azelList), True)
+
+		badEntry = False
+		for val in shouldBe:
+			if val not in azelList:
+				badEntry = True
+		self.assertIs(badEntry, True)
+
+
+	def test_makeNextPassDetails_is_correct(self):
+		tleEntry = TLE('0','TIANWANG 1A (TW-1A)',     
+		'1 40928U 15051D   17012.78841078  .00002327  00000-0  71003-4 0  9998',
+		'2 40928  97.2476  51.3649 0014522  42.3053  46.5607 15.34836540 72858',)
+		dateTime = datetime(2017,6,6,12,0,0)
+		nextPass = Services.getNextPass(self, tleEntry, dateTime)
+
+		#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+		riseTime = datetime(2017, 6, 6, 16, 21, 24)
+		setTime = datetime(2017, 6, 6, 16, 24, 22)
+		duration = timedelta(0, 178)
+		maxElevation = 0.01104038581252098
+		riseAzimuth = 0.8570818901062012
+		setAzimuth = 0.3221415579319
+
+		shouldBe = NextPass(0,riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth)
+
+		self.assertIs(shouldBe == nextPass, True)
+
+
+	def passtest_makeNextPassDetails_is_incorrect(self):
+		tleEntry = TLE('0','TIANWANG 1A (TW-1A)',     
+		'1 40928U 15051D   17012.78841078  .00002327  00000-0  71003-4 0  9998',
+		'2 40928  97.2476  51.3649 0014522  42.3053  46.5607 15.34836540 72858',)
+		dateTime = datetime(2017,6,6,12,0,0)
+		nextPass = Services.getNextPass(self, tleEntry, dateTime)
+
+		#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+		riseTime = datetime(2017, 6, 6, 16, 21, 24)
+		setTime = datetime(2017, 8, 6, 16, 24, 22)
+		duration = timedelta(0, 178)
+		maxElevation = 0.05104038581252098
+		riseAzimuth = 0.8570818901062012
+		setAzimuth = 0.3221415579319
+
+		shouldBe = NextPass(0,riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth)
+
+		self.assertIs(shouldBe.riseAzimuth == nextPass.riseAzimuth, False)
+
+class HelperMethodsTests(TestCase):
+
+	def test_datespan_is_correct(self):
+		timestamp = _Helper.timeSpan(datetime(2017,6,6,12,2,42), datetime(2017,6,6,12,9,42), 31)
+		#look further into testing   get a mocker involved?
+
+	def test_roundMicrosecond_is_correct(self):
+		dt = ephem.Date('2017/6/6 12:02:42.345345')
+		roundedMicrosecond = _Helper.roundMicrosecond(dt)
+		shouldBe = datetime(2017,6,6,12,2,42)
+		self.assertIs(shouldBe == roundedMicrosecond, True) 
+
+class UpdateTLETests(TestCase): 	
 #data gets pulled in from website, check first few entries are sane? requests job? 	
 #gets parsed 	
 #put in db 	#gets taken out 	
-
 
 	def test_data_from_celestrak_is_valid(self):
 
@@ -50,10 +194,9 @@ class UpdateTLETest(TestCase):
 		'2 41895  51.6434  04.4040 0005661  96.0874 264.0617 15.55009568  3716',
 		'madeupsat5',
 		'1 41895U 98067KR     2.47827931  .00011364  00000-0  17301-3 0  9999',
-		'2 41895  51.6434  4.4040 0005661  96.0874 264.0617 15.55009568  3716',
-]
+		'2 41895  51.6434  4.4040 0005661  96.0874 264.0617 15.55009568  3716',]
 
-		checkedArray = services.checkTLEFormat(tleArray)
+		checkedArray = _Helper.checkTLEFormat(tleArray)
 		#print(checkedArray)
 		shouldBe = [
 		'EYESAT-1 (AO-27)',
@@ -78,29 +221,3 @@ class UpdateTLETest(TestCase):
 
 		self.assertIs(shouldBe==checkedArray,True)
 
-	# def test_data_is_parsed_correctly(self): 				
-
-	# 	# tle = """UKUBE-1                 		
-	# 	# 1 40074U 14037F   16351.15797132  .00000492  00000-0  67259-4 0  9999 		
-	# 	# 2 40074  98.3383  92.0430 0003526 288.8632  71.2189 14.83319284132043 		
-	# 	# BRITE-PL 2              		
-	# 	# 1 40119U 14049B   16351.23028354  .00000124  00000-0  21435-4 0  9992 		
-	# 	# 2 40119  97.9494  72.0120 0016800 330.2015  29.8241 14.84047733126028 		
-	# 	# FIREBIRD 4              		
-	# 	# 1 40378U 15003C   16351.15866620  .00002775  00000-0  12463-3 0  9991 		
-	# 	# 2 40378  99.1055 132.9919 0138968 248.1041 110.5361 15.14135937103305""" 		
-
-	# 	shoudBe = ['UKUBE-1 ',
-	# 	'1 40074U 14037F 16351.15797132 .00000492 00000-0 67259-4 0 9999 ', 
-	# 	'2 40074 98.3383 92.0430 0003526 288.8632 71.2189 14.83319284132043 ', 
-	# 	'BRITE-PL 2 ', 
-	# 	'1 40119U 14049B 16351.23028354 .00000124 00000-0 21435-4 0 9992 ',
-	# 	'2 40119 97.9494 72.0120 0016800 330.2015 29.8241 14.84047733126028 ', 
-	# 	'FIREBIRD 4 ', 	
-	# 	'1 40378U 15003C 16351.15866620 .00002775 00000-0 12463-3 0 9991 ', 	
-	# 	'2 40378 99.1055 132.9919 0138968 248.1041 110.5361 15.14135937103305 ',] 	
-	# 	tle1 ="""UKUBE-1                 \r\n1 40074U 14037F   16351.15797132  .00000492  00000-0  67259-4 0  9999\r\n2 40074  98.3383  92.0430 0003526 288.8632  71.2189 14.83319284132043\r\nBRITE-PL 2              \r\n1 40119U 14049B   16351.23028354  .00000124  00000-0  21435-4 0  9992\r\n2 40119  97.9494  72.0120 0016800 330.2015  29.8241 14.84047733126028\r\nFIREBIRD 4              \r\n1 40378U 15003C   16351.15866620  .00002775  00000-0  12463-3 0  9991\r\n2 40378  99.1055 132.9919 0138968 248.1041 110.5361 15.14135937103305""" 		
-
-	# 	final = services.filterTLE(services.splitTLE(tle1)) 		
-	# 	print(endresult) 		
-	# 	self.assertIs(shoudBe==final, True)

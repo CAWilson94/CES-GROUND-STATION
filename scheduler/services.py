@@ -1,9 +1,10 @@
 import requests
-from scheduler.models import TLE, AzEl
-import math, ephem, datetime
+from scheduler.models import TLE, AzEl, NextPass
+import math, ephem
 from datetime import date, datetime, timedelta
 
 class Services():
+<<<<<<< HEAD
 	
 	def findById(id):
 		try:
@@ -41,6 +42,52 @@ class Services():
 			pass
 		except TLE.DoesNotExist as e:
 			print ("major error") #TODO: raisemassive error
+=======
+
+	def getAzElTLE(self, tleEntry, dateTime):
+
+		#getObserver preferences file AK
+		observer = _Helper.getObserver(self, dateTime);
+
+		try:
+			sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2) #necessary?
+		except ValueError:
+			return "Format of TLEEntry is incorrect (getAzElTLE)"
+
+		sat.compute(observer)
+		return	AzEl(0, sat.az,sat.alt)
+
+
+	def getAzElTLENow(self, tleEntry):
+		return Services.getAzElTLE(self, tleEntry, datetime.now())
+
+
+	def getAzElForPeriod(self, tleEntry, riseTime, setTime, period):
+		azelProgress = []
+		i=0
+		for timestamp in _Helper.timeSpan(riseTime,setTime, delta=timedelta(seconds=period)):
+			azel = Services.getAzElTLE(self,tleEntry,timestamp)
+			i+=1 #change azel id? AK
+			azelProgress.append(azel)
+		return azelProgress
+
+
+	def getNextPass(self, tleEntry, dateTime):
+		observer = _Helper.getObserver(self, dateTime);
+		try:
+			sat = ephem.readtle(tleEntry.name,tleEntry.line1, tleEntry.line2)
+		except ValueError:
+			return "Format of TLEEntry is incorrect (getNextPass)"
+
+		details = observer.next_pass(sat)
+					
+		riseTime = _Helper.roundMicrosecond(details[0])
+		setTime = _Helper.roundMicrosecond(details[4])
+		duration  = setTime - riseTime
+				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+		return NextPass(0,riseTime, setTime, duration, details[3],details[1],details[5])
+
+>>>>>>> d21a13f85edb4cb8c3966e619f5fc62f21ca137c
 
 	def updateTLE():
 		"""
@@ -49,7 +96,7 @@ class Services():
 		requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt")
 		tle=requestsObject.text
 	
-		#splits text into one list with format:
+		#splits text into one list with format:  AK
 		#name, line1, line2, name, line1, line2
 		tleArray = tle.split('\r\n')
 
@@ -57,8 +104,7 @@ class Services():
 		if tleArray[len(tleArray)-1]=='':
 		 	del tleArray[len(tleArray)-1]
 		if len(tleArray)%3 !=0:
-			print ("major error") #TODO: raisemassive error
-
+			print ("major error") #TODO: raisemassive error AK
 
 		checkedTLEArray = _Helper.checkTLEFormat(tleArray)
 
@@ -79,6 +125,7 @@ class Services():
 				tleEntry.save()
 			i+=3	
 
+<<<<<<< HEAD
 	def getAzElTLENow(self, tleEntry):
 
 		#getObserver from where?
@@ -170,9 +217,11 @@ class Services():
 
 	#def getAzElTLEOnDate(tleName, date)
 
+=======
+>>>>>>> d21a13f85edb4cb8c3966e619f5fc62f21ca137c
 class _Helper():
 	#Helper Functions
-	def adder(stringsep):  #nicer way?
+	def adder(stringsep):  #nicer way? AK
 		"""
 		Adds up the split strings of the satellite name
 		"""
@@ -191,7 +240,8 @@ class _Helper():
 		while i <= (len(tleArray)-3):
 			try: 
 				ephem.readtle(tleArray[i],tleArray[i+1],tleArray[i+2])
-			except ValueError as e:
+			except ValueError:
+				#print ("Bad entry ",tleArray[i]) #put in log
 				badEntriesArray.append(tleArray[i])
 				badEntriesArray.append(tleArray[i+1])
 				badEntriesArray.append(tleArray[i+2])
@@ -208,12 +258,20 @@ class _Helper():
 		observer.date = ephem.Date(datetime)
 		return observer
 	
-	def datespan(startDate, endDate, delta=timedelta(days=1)):
-		currentDate = startDate
-		while currentDate < endDate:
-			yield currentDate
-			currentDate += delta
+	def timeSpan(startTime, endTime, delta): #timedelta(days=1)):
+		#returns iterator of timestamps in from start to end AK
+		currentTime = startTime
+		while currentTime < endTime:
+			yield currentTime
+			currentTime += delta
 #from stackoverflow
+
+	def roundMicrosecond(ephemDate):
+		dateTime = ephemDate.datetime()
+		ms = dateTime.microsecond/1000000
+		msRound = int(round(ms,0))
+		dateTime = dateTime + timedelta(seconds = msRound) - timedelta(microseconds = dateTime.microsecond)
+		return dateTime
 		
 
 

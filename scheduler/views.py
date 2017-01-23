@@ -27,10 +27,10 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 
 # class TLEUpdate(APIView):
 # 	def post(self, request, format=None):
-# 		print("bob")
+# 		print("bob") AK
 # 		Services.updateTLE()
 
-class GetAzEl(APIView):
+class PyephemData(APIView):
 
 	def get_object(self, pk):
 		try:
@@ -41,11 +41,11 @@ class GetAzEl(APIView):
 		
 	def get(self, request, pk, format=None):
 		tle = self.get_object(pk)
-		#azel = Services.getAzElTLENow(self, tle)#pass in object?
+		azel = Services.getAzElTLENow(self, tle)#pass in object?
 		#print(repr(azel.elevation))
-		#azel.is_valid()
+		#azel.is_valid() AK
 
-		list = Services.getNextPass(self)
+		#Services.makeNextPassDetails(self,tle,30)
 		#for x in list:
 			#print(x.azimuth)
 
@@ -53,7 +53,5 @@ class GetAzEl(APIView):
 		return Response(serializer.data)
 
 
-#where is observer stored
+#where is observer stored AK
 #when requesting satellite info, do we use id or name
-
-#how does get get the 
