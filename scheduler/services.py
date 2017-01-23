@@ -35,7 +35,7 @@ class Services():
 
 	def remove(id):
 		try:
-			TLE.objects.filter(id = id).delete()
+			TLE.objects.get(id = id).delete()
 			#tleEntryR.delete()
 			print ("got it")
 			pass
