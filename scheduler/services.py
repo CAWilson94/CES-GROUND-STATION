@@ -24,40 +24,18 @@ class Services():
 		return tleEntryF
 
 	def save(TLEw):
-	
-		#splits text into one list with format:
-		#name, line1, line2, name, line1, line2
-		#tleArray = TLEw.split('\r\n')
-
-		#remove errant empty entry
-		#if tleArray[len(tleArray)-1]=='':
-		# 	del tleArray[len(tleArray)-1]
-		#if len(tleArray)%3 !=0:
-		#	print ("major error") #TODO: raisemassive error
-
-
-		#checkedTLEArray = _Helper.checkTLEFormat(tleArray)
-
-		#i=0
-		#while i <= (len(checkedTLEArray)-3):
-		#	name = _Helper.adder(checkedTLEArray[i]).strip()
 		try: 
 			tleEntry = TLE.objects.get(name=name)
 			pass #what does pass do?
 		except TLE.DoesNotExist as e:
-			#create new entry in db
-			newTLE = TLE(name=name, line1=checkedTLEArray[i+1], line2=checkedTLEArray[i+2])
+			print("Already exists")			
+		else:
+			newTLE = TLE(name=name, line1=line1, line2=line2)
 			newTLE.save()
-		"""else:
-			#update existing
-			tleEntry.line1 = checkedTLEArray[i+1]
-			tleEntry.line2 = checkedTLEArray[i+2]
-			tleEntry.save()
-			i+=3"""	
 
 	def remove(id):
 		try:
-			TLE.objects.get(id = id).delete()
+			TLE.objects.filter(id = id).delete()
 			#tleEntryR.delete()
 			print ("got it")
 			pass
