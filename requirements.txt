@@ -1,5 +1,1 @@
-Django==1.10.4
-djangorestframework==3.5.3
-pyephem==3.7.6.0
-requests==2.12.3
-sgp4==1.4
+Django==1.10.3
