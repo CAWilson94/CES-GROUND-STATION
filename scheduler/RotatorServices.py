@@ -17,6 +17,15 @@ class rotator_services():
 		"""
 		ser = serial.Serial("COM2", 9600, timeout=2)  # open serial port: windows "COMN" 
 												  # linux "/dev/ttyUSBn" where n is a number
+		ser.portstr										  
+		line = ser.read() 
+
+		while(line != b''):
+			print(line)
+			line=ser.read()
+
+		print("done")
+		ser.close()
 
 	def set_position(az, el):
 		""" Set position of ground station, 
