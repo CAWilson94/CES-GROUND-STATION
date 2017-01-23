@@ -41,6 +41,9 @@ class rotator_services():
 		ser.write((cmdArr[-2] + az).encode())
 		ser.write(cmdArr[-1].encode())
 
+		print("done")
+		ser.close()
+
 		"""
 		The only difference between both commands is using 
 		position 1 or 2 in the array for A and B and changing
