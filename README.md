@@ -1,1 +1,1 @@
-Ground Station software to track and communicate cube satellites.
+Ground Station software to track and communicate with cube satellites.

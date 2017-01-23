@@ -1,24 +1,54 @@
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from scheduler.services import services
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
 from scheduler.models import TLE
-import requests
+from scheduler.services import Services
+from scheduler.serializers import TLESerializer, AZELSerializer
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework import status, generics
+from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework.decorators import api_view
 
-def index(request):
 
-	#secure way
-	#sessionObject = requests.Sessions()
-	#sessionObject.mount('https://celestrak.com',myAdapter())
-	#sessionObject.get...
+class TLEList(generics.ListCreateAPIView):
 
-	#updates on refresh cause buttons require something extra like js...
-	services.updateTLE()
-	
-	#gets all db entries
-	tle_list = TLE.objects.all()
-	
-	context_dict = {'tle_list':tle_list,
-				}
+	Services.updateTLE()
+	queryset = get_list_or_404(TLE)
+	serializer_class = TLESerializer
 
-	return render(request, 'scheduler/index.html', context_dict)
-# Create your views here.
+class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = TLE.objects.all()
+	serializer_class = TLESerializer   
+# viewset
+
+# class TLEUpdate(APIView):
+# 	def post(self, request, format=None):
+# 		print("bob") AK
+# 		Services.updateTLE()
+
+class PyephemData(APIView):
+
+	def get_object(self, pk):
+		try:
+			return TLE.objects.get(pk=pk)
+		except Snippet.DoesNotExist:
+			raise Http404
+
+		
+	def get(self, request, pk, format=None):
+		tle = self.get_object(pk)
+		azel = Services.getAzElTLENow(self, tle)#pass in object?
+		#print(repr(azel.elevation))
+		#azel.is_valid() AK
+
+		#Services.makeNextPassDetails(self,tle,30)
+		#for x in list:
+			#print(x.azimuth)
+
+		serializer = AZELSerializer(azel)
+		return Response(serializer.data)
+
+
+#where is observer stored AK
+#when requesting satellite info, do we use id or name
