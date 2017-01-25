@@ -1,10 +1,24 @@
 import requests
+from scheduler.RotatorServices import rotator_services as rs
 from scheduler.models import TLE, AzEl, NextPass
-import math, ephem
+import math, ephem, threading
 from datetime import date, datetime, timedelta
 
+class myThread (threading.Thread):
+	def __init__(self, threadID, name, counter):
+		threading.Thread.__init__(self)
+		self.threadID = threadID
+		self.name = name
+		self.couner = counter
+	def run(self):
+		print ("Starting " + self.name) 
+		#rs.hi()
+		rs.get_position()
+		#print(result)
+		print("Exiting "+ self.name)
+
+
 class Services():
-<<<<<<< HEAD
 	
 	def findById(id):
 		try:
@@ -42,7 +56,6 @@ class Services():
 			pass
 		except TLE.DoesNotExist as e:
 			print ("major error") #TODO: raisemassive error
-=======
 
 	def getAzElTLE(self, tleEntry, dateTime):
 
@@ -87,8 +100,6 @@ class Services():
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0,riseTime, setTime, duration, details[3],details[1],details[5])
 
->>>>>>> d21a13f85edb4cb8c3966e619f5fc62f21ca137c
-
 	def updateTLE():
 		"""
 		Retrieves TLE data from external source, checks format and places in db 
@@ -125,7 +136,6 @@ class Services():
 				tleEntry.save()
 			i+=3	
 
-<<<<<<< HEAD
 	def getAzElTLENow(self, tleEntry):
 
 		#getObserver from where?
@@ -217,8 +227,6 @@ class Services():
 
 	#def getAzElTLEOnDate(tleName, date)
 
-=======
->>>>>>> d21a13f85edb4cb8c3966e619f5fc62f21ca137c
 class _Helper():
 	#Helper Functions
 	def adder(stringsep):  #nicer way? AK
@@ -273,5 +281,8 @@ class _Helper():
 		dateTime = dateTime + timedelta(seconds = msRound) - timedelta(microseconds = dateTime.microsecond)
 		return dateTime
 		
+thread1 = myThread(1, "Rotator Thread", 1)
 
+thread1.start()
+print ("Got too here")
 
