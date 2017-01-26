@@ -6,6 +6,10 @@ from datetime import date, datetime, timedelta
 
 class Services():
     def getAzElTLE(self, tleEntry, dateTime):
+        """
+        Returns an AzEl object calculated with one satellite and one instanteous measure
+        of time 
+        """
 
         # getObserver preferences file AK
         observer = _Helper.getObserver(self, dateTime);
@@ -24,6 +28,10 @@ class Services():
 
 
     def getAzElForPeriod(self, tleEntry, riseTime, setTime, period):
+        """
+        Returns a list of AzEl objects calculated during the period of timestamp
+        with one satellite 
+        """
         azelProgress = []
         i = 0
         for timestamp in _Helper.timeSpan(riseTime, setTime, delta=timedelta(seconds=period)):
@@ -34,6 +42,9 @@ class Services():
 
 
     def getNextPass(self, tleEntry, dateTime):
+        """
+        Returns a next pass object of the satellite after the date given
+        """
         observer = _Helper.getObserver(self, dateTime);
         try:
             sat = ephem.readtle(tleEntry.name, tleEntry.line1, tleEntry.line2)
@@ -184,6 +195,9 @@ class _Helper():
         return goodEntriesArray
 
     def getObserver(self, datetime):
+        """
+        Returns glasgow observer
+        """
         observer = ephem.Observer();
         observer.lat = math.radians(55.8667)
         observer.long = math.radians(-4.4333)
@@ -191,7 +205,10 @@ class _Helper():
         return observer
 
     def timeSpan(startTime, endTime, delta):  # timedelta(days=1)):
-        # returns iterator of timestamps in from start to end AK
+        """
+        Returns (yields) an iterator of timestamps in from start to end 
+        in delta increments
+        """
         currentTime = startTime
         while currentTime < endTime:
             yield currentTime
@@ -199,6 +216,10 @@ class _Helper():
             # from stackoverflow
 
     def roundMicrosecond(ephemDate):
+        """
+        Takes in an ephemDate object, rounds down or up the microseconds to 
+        an integer and returns a python datetime object
+        """
         dateTime = ephemDate.datetime()
         ms = dateTime.microsecond / 1000000
         msRound = int(round(ms, 0))

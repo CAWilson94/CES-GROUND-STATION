@@ -12,12 +12,21 @@ from rest_framework.decorators import api_view
 
 
 class TLEList(generics.ListCreateAPIView):
-
+	"""
+	With behind the scenes magic, this returns the list of 
+	TLEs in the db by serializering the query results, convertng 
+	to json and returning it to the place that send the http request
+	"""
 	Services.updateTLE()
 	queryset = get_list_or_404(TLE)
 	serializer_class = TLESerializer
 
 class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
+	"""
+	With behind the scenes magic, this returns the details of the
+	request TLE from the db by serializering the query result, converting 
+	to json and returning it to the place that send the http request
+	"""
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer   
 # viewset
@@ -28,7 +37,10 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 # 		Services.updateTLE()
 
 class PyephemData(APIView):
-
+	"""
+	A slighlty more exposed verions of TLEList and TLEDetail, performs
+	custom behaviour when a get request is sent
+	"""
 	def get_object(self, pk):
 		try:
 			return TLE.objects.get(pk=pk)
@@ -37,6 +49,11 @@ class PyephemData(APIView):
 
 		
 	def get(self, request, pk, format=None):
+		"""
+		Retrieves the tle data from db, then passes that to other
+		functions to get the AzEl object then convers the model
+		data into json and returns to http request maker
+		"""
 		tle = self.get_object(pk)
 		azel = Services.getAzElTLENow(self, tle)#pass in object?
 		#print(repr(azel.elevation))
@@ -46,7 +63,7 @@ class PyephemData(APIView):
 		#for x in list:
 			#print(x.azimuth)
 
-		serializer = AZELSerializer(azel)
+		serializer = AZELSerializer(azel) 
 		return Response(serializer.data)
 
 
