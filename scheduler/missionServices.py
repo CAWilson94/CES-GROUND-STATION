@@ -1,6 +1,6 @@
 import requests
 from scheduler.RotatorServices import rotator_services as rs
-from scheduler.models import TLE, AzEl, NextPass
+from scheduler.models import TLE, AzEl, NextPass, Mission
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
@@ -33,11 +33,12 @@ class mission_services():
 		return mission_list   
 	
 	def findMissionsByStatus(status):
-	  	try:
-	  		mission_list = Mission.objects.filter(status=status)
-	  	except Mission.DoesNotExist:
-	  		mission_list = None
-	  	return mission_list
+		try:
+			mission_list = Mission.objects.filter(status=status)
+		except Mission.DoesNotExist as e:
+			print("missio didnt work")
+			mission_list = None
+		return mission_list
 
 	def findMissionsByPriority(priority):
 		try:

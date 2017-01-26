@@ -6,7 +6,33 @@ from scheduler.models import TLE, AzEl, NextPass
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
+class rotatorThread (threading.Thread):
+	def __init__(self, threadID, name, counter):
+		threading.Thread.__init__(self)
+		self.threadID = threadID
+		self.name = name
+		self.couner = counter
+	def run(self):
+		print ("Starting " + self.name) 
+		#rs.hi()
+		Services.polling()
+		#rs.get_position()
+		print("Exiting "+ self.name)
+
 class Services():
+
+	def polling():
+		count = 0
+		while (count < 10):
+			try:
+				mission_list = ms.findMissionsByStatus("Ready")
+				for i in mission_list:
+					i.status = ("Tracked")
+				print("Count = %r" %count)
+				count+=1
+				pass
+			except TLE.DoesNotExist as e:
+				print("Already exists")	 
 
 	def updateTLE():
 		"""
@@ -230,25 +256,8 @@ class _Helper():
 		dateTime = dateTime + timedelta(seconds = msRound) - timedelta(microseconds = dateTime.microsecond)
 		return dateTime
 
-
-class rotatorThread (threading.Thread):
-	def __init__(self, threadID, name, counter):
-		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
-		self.couner = counter
-	def run(self):
-		print ("Starting " + self.name) 
-		#rs.hi()
-		#rs.get_position()
-		#print(result)
-		print("Exiting "+ self.name)
-
-
-
-
 #main tread executes as standard and other  threads are started here
+#might need to move this depending on how many times this module is used
 thread1 = rotatorThread(1, "Rotator Thread", 1)
 thread1.start()
 print ("Got too here")
-
