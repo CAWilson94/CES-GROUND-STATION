@@ -1,125 +1,47 @@
 import requests
 from scheduler.RotatorServices import rotator_services as rs
+from scheduler.TLEServices import TLE_Services as ts
+from scheduler.missionServices import mission_services as ms
 from scheduler.models import TLE, AzEl, NextPass
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
-class myThread (threading.Thread):
-	def __init__(self, threadID, name, counter):
-		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
-		self.couner = counter
-	def run(self):
-		print ("Starting " + self.name) 
-		#rs.hi()
-		rs.get_position()
-		#print(result)
-		print("Exiting "+ self.name)
-
-
 class Services():
 
-	def findMissionById(index):
-		try:
-			mission = Mission.objects.get(id=index)
-		except Mission.DoesNotExist:
-			mission = None
-		return mission
+	def updateTLE():
+		"""
+		Retrieves TLE data from external source, checks format and places in db 
+		"""
+		requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt")
+		tle=requestsObject.text
+		
+		#splits text into one list with format:  AK
+		#name, line1, line2, name, line1, line2
+		tleArray = tle.split('\r\n')
 
-	def findMissionByName(name):
-		try:
-			mission = Mission.objects.get(name=name) 
-		except Mission.DoesNotExist:  
-			mission = None
-		return mission
+		#remove errant empty entry
+		if tleArray[len(tleArray)-1]=='':
+			del tleArray[len(tleArray)-1]
+		if len(tleArray)%3 !=0:
+			print ("major error") #TODO: raisemassive error AK
+		checkedTLEArray = _Helper.checkTLEFormat(tleArray)
 
-	def findMissionsByTLE(TLE):
-		try:
-			mission_list = Mission.objects.filter(TLE=TLE)
-		except Mission.DoesNotExist:
-			mission_list = None
-		return mission_list   
-	
-	def findMissionsByStatus(status):
-	  	try:
-	  		mission_list = Mission.objects.filter(status=status)
-	  	except Mission.DoesNotExist:
-	  		mission_list = None
-	  	return mission_list     
-
-	def findMissionsByPriority(priority):
-		try:
-			mission_list = Mission.objects.filter(priority=priority)
-		except Mission.DoesNotExist:
-			mission_list = None
-		return mission_list    
-	 
-	def findMissionsByCurrentNumberOfPasses(current_num_passes):
-		try:
-			mission_list = Mission.objects.filter(current_num_passes=current_num_passes)
-		except Mission.DoesNotExist:
-			mission_list = None
-		return mission_list
-
-	def findMissionsByMaxNumberOfPasses(max_num_passes):
-		try:
-			mission_list = Mission.objects.filter(max_num_passes=max_num_passes)
-		except Mission.DoesNotExist:
-			mission_list = None
-		return mission_list
-
-	def saveOrUpdate(mission):
-	 	try:
-	 		Mission.objects.update_or_create(mission)
-	 		return True
-	 	except Mission.DoesNotExist:
-	 		return False 
-
-	def removeMissionByName(name):  
-		try:
-			Mission.objects.filter(name=name).delete()
-			return True
-		except Mission.DoesNotExist:
-			return False
-	
-
-	def findById(id):
-		try:
-			tleEntryFi = TLE.objects.get(id = id)
-			print ("got it") 
-			pass
-		except TLE.DoesNotExist as e:
-			print ("major error") 
-		return tleEntryFi
-
-	def findByName(name):
-		try:
-			tleEntryF = TLE.objects.get(name = name)
-			print ("got it")
-			pass
-		except TLE.DoesNotExist as e:
-			print ("major error")
-		return tleEntryF
-
-	def save(TLEw):
-		try: 
-			tleEntry = TLE.objects.get(name=name)
-			pass #what does pass do?
-		except TLE.DoesNotExist as e:
-			print("Already exists")			
-		else:
-			newTLE = TLE(name=name, line1=line1, line2=line2)
-			newTLE.save()
-
-	def remove(id):
-		try:
-			TLE.objects.get(id = id).delete()
-			#tleEntryR.delete()
-			print ("got it")
-			pass
-		except TLE.DoesNotExist as e:
-			print ("major error") #TODO: raisemassive error
+		i=0
+		while i <= (len(checkedTLEArray)-3):
+			name = _Helper.adder(checkedTLEArray[i]).strip()
+			try: 
+				tleEntry = TLE.objects.get(name=name)
+				pass #what does pass do?
+			except TLE.DoesNotExist as e:
+				#create new entry in db
+				newTLE = TLE(name=name, line1=checkedTLEArray[i+1], line2=checkedTLEArray[i+2])
+				newTLE.save()
+			else:
+				#update existing
+				tleEntry.line1 = checkedTLEArray[i+1]
+				tleEntry.line2 = checkedTLEArray[i+2]
+				tleEntry.save()
+			i+=3	
 
 	def getAzElTLE(self, tleEntry, dateTime):
 
@@ -133,7 +55,6 @@ class Services():
 
 		sat.compute(observer)
 		return	AzEl(0, sat.az,sat.alt)
-
 
 	def getAzElTLENow(self, tleEntry):
 		return Services.getAzElTLE(self, tleEntry, datetime.now())
@@ -161,44 +82,8 @@ class Services():
 		riseTime = _Helper.roundMicrosecond(details[0])
 		setTime = _Helper.roundMicrosecond(details[4])
 		duration  = setTime - riseTime
-				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+		#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0,riseTime, setTime, duration, details[3],details[1],details[5])
-
-	def updateTLE():
-		"""
-		Retrieves TLE data from external source, checks format and places in db 
-		"""
-		requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt")
-		tle=requestsObject.text
-	
-		#splits text into one list with format:  AK
-		#name, line1, line2, name, line1, line2
-		tleArray = tle.split('\r\n')
-
-		#remove errant empty entry
-		if tleArray[len(tleArray)-1]=='':
-		 	del tleArray[len(tleArray)-1]
-		if len(tleArray)%3 !=0:
-			print ("major error") #TODO: raisemassive error AK
-
-		checkedTLEArray = _Helper.checkTLEFormat(tleArray)
-
-		i=0
-		while i <= (len(checkedTLEArray)-3):
-			name = _Helper.adder(checkedTLEArray[i]).strip()
-			try: 
-				tleEntry = TLE.objects.get(name=name)
-				pass #what does pass do?
-			except TLE.DoesNotExist as e:
-				#create new entry in db
-				newTLE = TLE(name=name, line1=checkedTLEArray[i+1], line2=checkedTLEArray[i+2])
-				newTLE.save()
-			else:
-				#update existing
-				tleEntry.line1 = checkedTLEArray[i+1]
-				tleEntry.line2 = checkedTLEArray[i+2]
-				tleEntry.save()
-			i+=3	
 
 	def getAzElTLENow(self, tleEntry):
 
@@ -344,9 +229,26 @@ class _Helper():
 		msRound = int(round(ms,0))
 		dateTime = dateTime + timedelta(seconds = msRound) - timedelta(microseconds = dateTime.microsecond)
 		return dateTime
-		
-thread1 = myThread(1, "Rotator Thread", 1)
 
+
+class rotatorThread (threading.Thread):
+	def __init__(self, threadID, name, counter):
+		threading.Thread.__init__(self)
+		self.threadID = threadID
+		self.name = name
+		self.couner = counter
+	def run(self):
+		print ("Starting " + self.name) 
+		#rs.hi()
+		#rs.get_position()
+		#print(result)
+		print("Exiting "+ self.name)
+
+
+
+
+#main tread executes as standard and other  threads are started here
+thread1 = rotatorThread(1, "Rotator Thread", 1)
 thread1.start()
 print ("Got too here")
 
