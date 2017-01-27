@@ -38,7 +38,6 @@ def findNumberOfPasses():
 	else:
 		numberOfPasses+=1
 
-
 	if (sat2LOS - (sat1AOS+transactionTime))>=transactionTime or (sat1AOS - sat2AOS) >= transactionTime:
 		pass
 		#can be fit in end gap									or can be fit in start gap
@@ -89,112 +88,61 @@ def findNumberOfPasses1(satPrimary,satListConflicts):
 
 
 def findConflictingGroups(satList):
-
 	satListConflicts=[]
 	for i in range(len(satList)):
-		#Does it conflict with sat
-		# print("gello")
-		# print(satPrimary.AOS)
-		# print(sat.LOS)
-		# print(satPrimary.LOS)
-		# print(sat.AOS)
 		conflicts=[]
 		for j in range(i+1, len(satList)):
 			if satList[i].AOS <= satList[j].LOS and satList[i].LOS >= satList[j].AOS:
 				#they conflict
-				print('{} conflicts with {}'.format(satList[i],satList[j]))
+				#print('{} conflicts with {}'.format(satList[i],satList[j]))
 				if satList[i] and satList[j] not in conflicts:
 					conflicts.append(satList[i].name)
 					conflicts.append(satList[j].name)
-				# if satList[i] not in conflicts:
-				# 	conflicts.append(satList[i].name)
-				# if satList[j] not in conflicts:
-				# 	conflicts.append(satList[j].name)
-		
 
 		if len(conflicts)>0:
 			satListConflicts.append(list(set(conflicts)))
 
-	print(satListConflicts)
-	# for lis1,lis2 in satListConflicts:
-	# 	print lis1, lis2
-	# 	for ele in lis1:
-	# 		if ele in lis2:
-	# 			lis3 = lis1+lis2
-	# 			print(lis3)
-	# 			satListConflicts.append(lis)
-	finalConflicts=[]
-	for k in range(len(satListConflicts)):
-		for l in range(k+1,len(satListConflicts)):
-			#list vs list
-			print('{} compared with {}'.format(satListConflicts[k],satListConflicts[l]))
-			mergedList = mergeLists(satListConflicts[k],satListConflicts[l])
-			
-			if mergedList is not None and mergedList not in finalConflicts:
-				print('merged to give {}'.format(mergedList))
-				finalConflicts.append(mergedList)
+	blah = mergeLists(satListConflicts)
 
-	print(finalConflicts)
-	finalConflicts1=[]
-	for m in range(len(finalConflicts)):
-		for n in range(m+1,len(finalConflicts)):
-			#list vs list
-			print('{} compared with {}'.format(finalConflicts[m],finalConflicts[n]))
-			mergedList = mergeLists(finalConflicts[m],finalConflicts[n])
-			if mergedList is not None and mergedList not in finalConflicts1:
-				print('merged to give {}'.format(mergedList))
-				finalConflicts1.append(mergedList)
+	return blah
 
-	print(finalConflicts1)
-	# final=[]
-	# for m in range(len(finalConflicts)):
-	# 	for n in range(m+1,len(finalConflicts)):
-	# 		if(set(finalConflicts[m]).issuperset(finalConflicts[n])):
-	# 			print('{} is super set of {}'.format(finalConflicts[m],finalConflicts[n]))
-	# 			final.append(finalConflicts[m])
+def mergeLists(satListConflicts):
+	#def finalListConflicts():
+    # satListConflicts = [['sat1', 'sat7', 'sat4', 'sat2', 'sat6'], ['sat6', 'sat7', 'sat4', 'sat2', 'sat5'],
+    #                     ['sat3', 'sat11', 'sat10'], ['sat6', 'sat7', 'sat4'], ['sat6', 'sat7'], ['sat9', 'sat8'],
+    #                    ['sat11', 'sat10']]
+    # satListConflicts = [['sat2', 'sat1', 'sat6', 'sat7', 'sat8', 'sat9', 'sat4'], 
+    # 					['sat2', 'sat6', 'sat7', 'sat5', 'sat8', 'sat9', 'sat4'], 
+    # 					['sat11', 'sat3', 'sat10'], ['sat8', 'sat6', 'sat7', 'sat9', 'sat4'], 
+    # 					['sat7', 'sat8', 'sat9', 'sat6'], ['sat8', 'sat9', 'sat7'], 
+    # 					['sat8', 'sat9'], ['sat11', 'sat10']]
+    #print(satListConflictssatListConflicts)
+    finaListsConflicts = []
+    finaListsConflictsTrimmed=[]
+    for i in range(len(satListConflicts) - 1):
+        c1 = satListConflicts[i]
+        c2 = satListConflicts
+        #c3 = [list(filter(lambda x: x in c1, sublist)) for sublist in c2]
+        c3 = [list(filter(lambda x: x in c1, satListConflicts[j])) for j in range(len(c2))]
+        #http://stackoverflow.com/questions/642763/python-intersection-of-two-lists
+        c4 = []
+        # print(c1)
+        # print(c2)
+        # print(c3)
+        # #print(c4)
+        for z in range(len(c3)):
+            if (c3[z] != []):
+               c4 = list(set(c2[z]) | set(c1))
+               c1 = c4
+        #print(c1)
+        finaListsConflicts.append(c1)
 
-	# for x in satListConflicts:
-	# 	print("[")
-	# 	for b in x:
-	# 		print(b.name)
 
-	#print(satListConflicts)
-	return satListConflicts
+    for i in finaListsConflicts:
+        if i not in finaListsConflictsTrimmed:
+            finaListsConflictsTrimmed.append(i)
 
-def mergeLists(list1,list2):
-	# list1=["sat1","sat2","sat3","sat4"]
-	# list2=["sat2","sat3","sat4","sat5"]
-
-	list3=[]
-	for ele in list1:
-		if ele in list2:
-			list3=list1+list2
-			return list(set(list3))
-
-def findConflictingSats(satPrimary,satList):
-
-	satListConflicts=[]
-	
-	for sat in satList:
-		#Does it conflict with sat
-		# print("gello")
-		# print(satPrimary.AOS)
-		# print(sat.LOS)
-		# print(satPrimary.LOS)
-		# print(sat.AOS)
-		#if sat1.AOS <= sat2.LOS and sat1.LOS >= sat2.AOS:
-		if satPrimary.AOS <= sat.LOS and satPrimary.LOS >= sat.AOS:
-			#they conflict
-			#print("conflict")
-			satListConflicts.append(sat)
-
-	if len(satListConflicts) == 1:
-		#no conflicts
-		satListConflicts.remove(satPrimary)
-	#for x in satListConflicts:
-		#print (x.name)
-	#print(satListConflicts)
-	return satListConflicts
+    print(finaListsConflictsTrimmed)
 
 sat1AOS = datetime(2017,1,25,12,2,0)
 sat1LOS = datetime(2017,1,25,12,5,0)
@@ -203,17 +151,17 @@ sat2LOS = datetime(2017,1,25,12,8,0)
 sat3AOS = datetime(2017,1,25,12,25,0)
 sat3LOS = datetime(2017,1,25,12,30,0)
 sat4AOS = datetime(2017,1,25,11,57,0)
-sat4LOS = datetime(2017,1,25,12,03,0)
-sat5AOS = datetime(2017,1,25,12,07,0)
+sat4LOS = datetime(2017,1,25,12,3,0)
+sat5AOS = datetime(2017,1,25,12,7,0)
 sat5LOS = datetime(2017,1,25,12,10,0)
 sat6AOS = datetime(2017,1,25,11,57,0)
-sat6LOS = datetime(2017,1,25,12,04,0)
+sat6LOS = datetime(2017,1,25,12,4,0)
 sat7AOS = datetime(2017,1,25,11,57,0)
-sat7LOS = datetime(2017,1,25,12,04,0)
+sat7LOS = datetime(2017,1,25,12,4,0)
 sat8AOS = datetime(2017,1,25,12,59,0)
-sat8LOS = datetime(2017,1,25,13,03,0)
+sat8LOS = datetime(2017,1,25,13,3,0)
 sat9AOS = datetime(2017,1,25,13,00,0)
-sat9LOS = datetime(2017,1,25,13,04,0)
+sat9LOS = datetime(2017,1,25,13,4,0)
 sat10AOS = datetime(2017,1,25,12,27,0)
 sat10LOS = datetime(2017,1,25,12,31,0)
 sat11AOS = datetime(2017,1,25,12,28,0)
@@ -234,12 +182,14 @@ sat11 = satellite("sat11",sat11AOS,sat11LOS)
 satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
 
 satListConflicts = findConflictingGroups(satList)#findConflictingSats(sat1,satList)
-
-# for x in satListConflicts:
-# 	print(x)
+#hristos(satListConflicts)
+# # for x in satListConflicts:
+# # 	print(x)
 
 #reordered= [x for x in satList if x in satListConflicts]
 
 # for x in reordered:
 # 	print(x)
 #findNumberOfPasses1(sat1,satListConflicts)
+
+#mergeLists(listList)
