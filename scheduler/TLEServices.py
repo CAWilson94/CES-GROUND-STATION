@@ -1,5 +1,3 @@
-import requests
-from scheduler.RotatorServices import rotator_services as rs
 from scheduler.models import TLE, AzEl, NextPass
 import math, ephem, threading
 from datetime import date, datetime, timedelta
