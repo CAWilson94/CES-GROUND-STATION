@@ -14,7 +14,7 @@ class satellite(object):
 	def __str__(self):
 		return self.name
 
-def blah():
+def blah(satListConflictGroups):
 	sat1AOS = datetime(2017,1,25,12,2,0)
 	sat1LOS = datetime(2017,1,25,12,5,0)
 	sat2AOS = datetime(2017,1,25,12,0,0)
@@ -22,58 +22,58 @@ def blah():
 
 	sat1 = satellite("sat1",sat1AOS, sat1LOS)
 	sat2 = satellite("sat2",sat2AOS, sat2LOS)	
-	group = [sat1,sat2]
+	#group = [sat2,sat1]
 
 	transactionTime = timedelta(minutes=3)
-	#for group in satListConflictGroups:
-	passes=0
-	blackList=[]
-	for sat in group:
-		conflicts=False
-		thisSatPassStart = 0
-		thisSatPassEnd = 0
-		for time in blackList:
-			if sat.AOS <= time[1] and sat.LOS >= time[0]:
-			#sat conflicts with one of the times in blackList
-				#in i=1 sat is sat2 and blacklist is sat 1
-				endGap = sat.LOS - (time[0]+transactionTime)
-				if endGap<timedelta(0):
-					endGap = endGap*-1
-				frontGap = time[0] - sat.AOS
-				if frontGap<timedelta(0):
-					frontGap = frontGap*-1
+	for group in satListConflictGroups:
+		passes=0
+		blackList=[]
+		for sat in group:
+			conflicts=False
+			thisSatPassStart = 0
+			thisSatPassEnd = 0
+			for time in blackList:
+				if sat.AOS <= time[1] and sat.LOS >= time[0]:
+				#sat conflicts with one of the times in blackList
+					#in i=1 sat is sat2 and blacklist is sat 1
+					endGap = sat.LOS - (time[0]+transactionTime)
+					if endGap<timedelta(0):
+						endGap = endGap*-1
+					frontGap = time[0] - sat.AOS
+					if frontGap<timedelta(0):
+						frontGap = frontGap*-1
 
-				if endGap>=transactionTime:
-					#can be fit in end gap
-					#fit in some random place in end gap
-					print("fit in end gap")
+					if endGap>=transactionTime:
+						#can be fit in end gap
+						#fit in some random place in end gap
+						print("fit in end gap")
 
-					thisSatPassStart = sat.LOS-transactionTime
-					thisSatPassEnd = sat.LOS
-					conflicts=False
-				elif frontGap >= transactionTime:
-					#can be fit in start gap
-					#fit in some random place in front gap
-					print("fit in front gap")
-					conflicts=False
+						thisSatPassStart = sat.LOS-transactionTime
+						thisSatPassEnd = sat.LOS
+						conflicts=False
+					elif frontGap >= transactionTime:
+						#can be fit in start gap
+						#fit in some random place in front gap
+						print("fit in front gap")
+						conflicts=False
+						thisSatPassStart = sat.AOS
+						thisSatPassEnd = sat.AOS + transactionTime
+					else:
+						#can't fit in and we need another pass
+						passes+=1
+						conflicts=True
+				else:
 					thisSatPassStart = sat.AOS
 					thisSatPassEnd = sat.AOS + transactionTime
-				else:
-					#can't fit in and we need another pass
-					passes+=1
-					conflicts=True
-			else:
-				thisSatPassStart = sat.AOS
+					conflicts=False
+			if len(blackList)==0:
+				thisSatPassStart=sat.AOS
 				thisSatPassEnd = sat.AOS + transactionTime
-				conflicts=False
-		if len(blackList)==0:
-			thisSatPassStart=sat.AOS
-			thisSatPassEnd = sat.AOS + transactionTime
-		if conflicts is False:
-			#Sat doesn't conflict with any times made so far
-			tempTime = [thisSatPassStart,thisSatPassEnd]
-			if tempTime not in blackList:
-				blackList.append(tempTime)	
+			if conflicts is False:
+				#Sat doesn't conflict with any times made so far
+				tempTime = [thisSatPassStart,thisSatPassEnd]
+				if tempTime not in blackList:
+					blackList.append(tempTime)	
 
 	print(blackList)
 	print(passes)
@@ -280,6 +280,9 @@ sat11 = satellite("sat11",sat11AOS,sat11LOS)
 
 satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
 
+satListConflictGroups =  [[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]]
+blah(satListConflictGroups)
+
 #satListConflicts = findConflictingGroups(satList)#findConflictingSats(sat1,satList)
 #hristos(satListConflicts)
 # # for x in satListConflicts:
@@ -298,5 +301,5 @@ date = date1-date2
 #if date < delta:	
 #	print("neggers")
 #findNumberOfPasses()
-blah()
+
 #mergeLists(listList)
