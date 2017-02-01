@@ -1,11 +1,41 @@
 from .services import Services, _Helper
+from scheduler.TLEServices import TLE_Services
+from scheduler.missionServices import mission_services
 from .models import TLE, AzEl, NextPass, Mission
 from django.test import TestCase
 from datetime import date, datetime, timedelta
 import ephem
 # Create your tests here. 
 
+class TLEServicesTests(TestCase):
+    def test_FindById_is_correct(self):
+        tleEntry = TLE_Services.findTLEById('3')
+        shouldBe = TLE('45', "NANOSATC-BR1",
+                        '1 40024U 14033Q   17021.95106765  .00000421  00000-0  50647-4 0  9994',
+                        '2 40024  97.9211 293.9798 0013770  65.7971 294.4683 14.89043048140788',)
+        self.assertIs(tleEntry == (shouldBe), True)
 
+    def test_FindByName_is_correct(self):
+        tleEntry = TLE_Services.findTLEByName("NANOSATC-BR1")
+        shouldBe = TLE(name ="NANOSATC-BR1",
+                        line1 ='1 40024U 14033Q   17021.95106765  .00000421  00000-0  50647-4 0  9994',
+                        line2 ='2 40024  97.9211 293.9798 0013770  65.7971 294.4683 14.89043048140788',)
+        self.assertIs(tleEntry == (shouldBe), True)
+"""
+    def test_saveTLE_is_correct(self):
+        tleEntry = TLE_Services.findTLEByName("NANOSATC-BR1")
+        shouldBe = TLE('45', "NANOSATC-BR1",
+                        '1 40024U 14033Q   17021.95106765  .00000421  00000-0  50647-4 0  9994',
+                        '2 40024  97.9211 293.9798 0013770  65.7971 294.4683 14.89043048140788',)
+        self.assertIs(tleEntry == (shouldBe), True)
+
+    def test_removeTLE_is_correct(self):
+        tleEntry = TLE_Services.findTLEByName("NANOSATC-BR1")
+        shouldBe = TLE('45', "NANOSATC-BR1",
+                        '1 40024U 14033Q   17021.95106765  .00000421  00000-0  50647-4 0  9994',
+                        '2 40024  97.9211 293.9798 0013770  65.7971 294.4683 14.89043048140788',)
+        self.assertIs(tleEntry == (shouldBe), True)
+"""
 class pyephemTests(TestCase):
     def test_getazeldata_is_correct1(self):
         # test needs to be updated in roughly early 2018 to a newer time if datetime
@@ -249,22 +279,22 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue0 = Services.findMissionById(0)
+        testValue0 = mission_services.findMissionById(0)
         self.assertIs(testValue0 == mission1, False)
         self.assertIs(testValue0 == mission2, False)
         self.assertIs(testValue0 == mission3, False)
 
-        testValue1 = Services.findMissionById(1)
+        testValue1 = mission_services.findMissionById(1)
         self.assertIs(testValue1 == mission1, True)
         self.assertIs(testValue1 == mission2, False)
         self.assertIs(testValue1 == mission3, False)
 
-        testValue2 = Services.findMissionById(2)
+        testValue2 = mission_services.findMissionById(2)
         self.assertIs(testValue2 == mission1, False)
         self.assertIs(testValue2 == mission2, True)
         self.assertIs(testValue2 == mission3, False)
 
-        testValue3 = Services.findMissionById(3)
+        testValue3 = mission_services.findMissionById(3)
         self.assertIs(testValue3 == mission1, False)
         self.assertIs(testValue3 == mission2, False)
         self.assertIs(testValue3 == mission3, True)
@@ -289,22 +319,22 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue0 = Services.findMissionByName('Mission0')
+        testValue0 = mission_services.findMissionByName('Mission0')
         self.assertIs(testValue0 == mission1, False)
         self.assertIs(testValue0 == mission2, False)
         self.assertIs(testValue0 == mission3, False)
 
-        testValue1 = Services.findMissionByName('Mission1')
+        testValue1 = mission_services.findMissionByName('Mission1')
         self.assertIs(testValue1 == mission1, True)
         self.assertIs(testValue1 == mission2, False)
         self.assertIs(testValue1 == mission3, False)
 
-        testValue2 = Services.findMissionByName('Mission2')
+        testValue2 = mission_services.findMissionByName('Mission2')
         self.assertIs(testValue2 == mission1, False)
         self.assertIs(testValue2 == mission2, True)
         self.assertIs(testValue2 == mission3, False)
 
-        testValue3 = Services.findMissionByName('Mission3')
+        testValue3 = mission_services.findMissionByName('Mission3')
         self.assertIs(testValue3 == mission1, False)
         self.assertIs(testValue3 == mission2, False)
         self.assertIs(testValue3 == mission3, True)
@@ -334,17 +364,17 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue1 = Services.findMissionsByTLE(t1)
+        testValue1 = mission_services.findMissionsByTLE(t1)
         self.assertIs(mission1 in testValue1, True)
         self.assertIs(mission2 in testValue1, False)
         self.assertIs(mission3 in testValue1, False)
 
-        testValue2 = Services.findMissionsByTLE(t2)
+        testValue2 = mission_services.findMissionsByTLE(t2)
         self.assertIs(mission1 in testValue2, False)
         self.assertIs(mission2 in testValue2, True)
         self.assertIs(mission3 in testValue2, True)
 
-        testValue3 = Services.findMissionsByTLE(t3)
+        testValue3 = mission_services.findMissionsByTLE(t3)
         self.assertIs(mission1 in testValue3, False)
         self.assertIs(mission2 in testValue3, False)
         self.assertIs(mission3 in testValue3, False)
@@ -369,17 +399,17 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue1 = Services.findMissionsByStatus('Finished')
+        testValue1 = mission_services.findMissionsByStatus('Finished')
         self.assertIs(mission1 in testValue1, True)
         self.assertIs(mission2 in testValue1, False)
         self.assertIs(mission3 in testValue1, False)
 
-        testValue2 = Services.findMissionsByStatus('Tracked')
+        testValue2 = mission_services.findMissionsByStatus('Tracked')
         self.assertIs(mission1 in testValue2, False)
         self.assertIs(mission2 in testValue2, True)
         self.assertIs(mission3 in testValue2, True)
 
-        testValue3 = Services.findMissionsByStatus('Pending')
+        testValue3 = mission_services.findMissionsByStatus('Pending')
         self.assertIs(mission1 in testValue3, False)
         self.assertIs(mission2 in testValue3, False)
         self.assertIs(mission3 in testValue3, False)
@@ -405,17 +435,17 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue1 = Services.findMissionsByPriority(1)
+        testValue1 = mission_services.findMissionsByPriority(1)
         self.assertIs(mission1 in testValue1, False)
         self.assertIs(mission2 in testValue1, True)
         self.assertIs(mission3 in testValue1, True)
 
-        testValue2 = Services.findMissionsByPriority(2)
+        testValue2 = mission_services.findMissionsByPriority(2)
         self.assertIs(mission1 in testValue2, False)
         self.assertIs(mission2 in testValue2, False)
         self.assertIs(mission3 in testValue2, False)
 
-        testValue3 = Services.findMissionsByPriority(3)
+        testValue3 = mission_services.findMissionsByPriority(3)
         self.assertIs(mission1 in testValue3, True)
         self.assertIs(mission2 in testValue3, False)
         self.assertIs(mission3 in testValue3, False)
@@ -441,22 +471,22 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue0 = Services.findMissionsByCurrentNumberOfPasses(0)
+        testValue0 = mission_services.findMissionsByCurrentNumberOfPasses(0)
         self.assertIs(mission1 in testValue0, False)
         self.assertIs(mission2 in testValue0, False)
         self.assertIs(mission3 in testValue0, False)
 
-        testValue1 = Services.findMissionsByCurrentNumberOfPasses(1)
+        testValue1 = mission_services.findMissionsByCurrentNumberOfPasses(1)
         self.assertIs(mission1 in testValue1, True)
         self.assertIs(mission2 in testValue1, False)
         self.assertIs(mission3 in testValue1, False)
 
-        testValue2 = Services.findMissionsByCurrentNumberOfPasses(2)
+        testValue2 = mission_services.findMissionsByCurrentNumberOfPasses(2)
         self.assertIs(mission1 in testValue2, False)
         self.assertIs(mission2 in testValue2, True)
         self.assertIs(mission3 in testValue2, False)
 
-        testValue3 = Services.findMissionsByCurrentNumberOfPasses(3)
+        testValue3 = mission_services.findMissionsByCurrentNumberOfPasses(3)
         self.assertIs(mission1 in testValue3, False)
         self.assertIs(mission2 in testValue3, False)
         self.assertIs(mission3 in testValue3, True)
@@ -482,22 +512,22 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        testValue1 = Services.findMissionsByMaxNumberOfPasses(1)
+        testValue1 = mission_services.findMissionsByMaxNumberOfPasses(1)
         self.assertIs(mission1 in testValue1, False)
         self.assertIs(mission2 in testValue1, False)
         self.assertIs(mission3 in testValue1, False)
 
-        testValue2 = Services.findMissionsByMaxNumberOfPasses(2)
+        testValue2 = mission_services.findMissionsByMaxNumberOfPasses(2)
         self.assertIs(mission1 in testValue2, False)
         self.assertIs(mission2 in testValue2, True)
         self.assertIs(mission3 in testValue2, False)
 
-        testValue3 = Services.findMissionsByMaxNumberOfPasses(3)
+        testValue3 = mission_services.findMissionsByMaxNumberOfPasses(3)
         self.assertIs(mission1 in testValue3, True)
         self.assertIs(mission2 in testValue3, False)
         self.assertIs(mission3 in testValue3, False)
 
-        testValue4 = Services.findMissionsByMaxNumberOfPasses(4)
+        testValue4 = mission_services.findMissionsByMaxNumberOfPasses(4)
         self.assertIs(mission1 in testValue4, False)
         self.assertIs(mission2 in testValue4, False)
         self.assertIs(mission3 in testValue4, True)
@@ -522,10 +552,10 @@ class missionTests(TestCase):
         mission2.save()
         mission3.save()
 
-        self.assertIs(mission1 == Services.findMissionByName('Mission1'), True)
+        self.assertIs(mission1 == mission_services.findMissionByName('Mission1'), True)
 
-        Services.removeMissionByName("Mission1")
-        self.assertIs(Services.findMissionByName('Mission1') == mission1, False)
+        mission_services.removeMissionByName("Mission1")
+        self.assertIs(mission_services.findMissionByName('Mission1') == mission1, False)
 
 
     # def test_SaveOrUpdate(self):

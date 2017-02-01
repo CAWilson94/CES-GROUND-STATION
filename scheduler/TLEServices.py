@@ -6,21 +6,21 @@ class TLE_Services():
 
 	def findTLEById(id):
 		try:
-			tleEntryFi = TLE.objects.get(id = id)
-			print ("got it") 
-			pass
+			tleEntryId = TLE.objects.all() #get(id = id)
+			print(repr(tleEntryId))
 		except TLE.DoesNotExist as e:
-			print ("major error") 
-		return tleEntryFi
+			tleEntryId = None
+		return tleEntryId
 
 	def findTLEByName(name):
+		tleEntryName = TLE.objects.get(name = name)
+		print(repr(tleEntry))
 		try:
-			tleEntryF = TLE.objects.get(name = name)
-			print ("got it")
-			pass
+			tleEntryName = TLE.objects.get(name = name)
+			print("here" + repr(tleEntryName))
 		except TLE.DoesNotExist as e:
-			print ("major error")
-		return tleEntryF
+			tleEntryName = None
+		return tleEntryName
 
 	def saveTLE(TLEw):
 		try: 
