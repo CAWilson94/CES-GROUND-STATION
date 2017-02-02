@@ -6,33 +6,33 @@ class TLE_Services():
 
 	def findTLEById(id):
 		try:
-			tleEntryId = TLE.objects.all() #get(id = id)
-			print(repr(tleEntryId))
+			tleEntryId = TLE.objects.get(id = id)
+			#print(repr(tleEntryId))
 		except TLE.DoesNotExist as e:
 			tleEntryId = None
 		return tleEntryId
 
 	def findTLEByName(name):
 		tleEntryName = TLE.objects.get(name = name)
-		print(repr(tleEntry))
 		try:
 			tleEntryName = TLE.objects.get(name = name)
-			print("here" + repr(tleEntryName))
+			print(repr(tleEntryName))
 		except TLE.DoesNotExist as e:
 			tleEntryName = None
 		return tleEntryName
 
 	def saveTLE(TLEw):
 		try: 
-			tleEntry = TLE.objects.get(name=name)
+			TLEw.save()
+			#tleEntry = TLE.objects.get(name=TLEw.name)
 			pass #what does pass do?
 		except TLE.DoesNotExist as e:
 			print("Already exists")			
-		else:
-			newTLE = TLE(name=name, line1=line1, line2=line2)
-			newTLE.save()
+		#else:
+			#newTLE = TLE(name=TLEw.name, line1=TLEw.line1, line2=TLEw.line2)
+			#newTLE.save()
 
-	def removeTLEByID(id):
+	def removeTLEById(id):
 		try:
 			TLE.objects.get(id = id).delete()
 			#tleEntryR.delete()

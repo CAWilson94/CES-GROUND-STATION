@@ -9,19 +9,69 @@ import ephem
 
 class TLEServicesTests(TestCase):
     def test_FindById_is_correct(self):
-        tleEntry = TLE_Services.findTLEById('3')
-        shouldBe = TLE('45', "NANOSATC-BR1",
-                        '1 40024U 14033Q   17021.95106765  .00000421  00000-0  50647-4 0  9994',
-                        '2 40024  97.9211 293.9798 0013770  65.7971 294.4683 14.89043048140788',)
-        self.assertIs(tleEntry == (shouldBe), True)
+        t1 = TLE(id = '0',
+                name="EYESAT-1 (AO-27)",
+                 line1="1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991",
+                 line2="2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061")
 
+        t2 = TLE(name='TIANWANG 1A (TW-1A)',
+                 line1='1 40928U 15051D   17012.78841078  .00002327  00000-0  71003-4 0  9998',
+                 line2='2 40928  97.2476  51.3649 0014522  42.3053  46.5607 15.34836540 72858')
+
+        t3 = TLE(name='SWISSCUBE',
+                 line1='1 35932U 09051B   17012.34187112  .00000118  00000-0  37698-4 0  9992',
+                 line2='2 35932  98.4726 148.2822 0007800  18.8768 341.2717 14.55942386387640')
+
+        print(repr(t1))
+        t1.save()
+        t2.save()
+        t3.save()
+        
+        tleEntry = TLE_Services.findTLEById(0)
+        print(repr(shouldBe))
+        """
+        shouldBe = TLE(id = '0',"EYESAT-1 (AO-27)",
+                "1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991",
+                "2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061")
+
+        print(repr(shouldBe))
+
+        tleEntry1 = TLE_Services.findTLEById(1)
+        shouldBe1 = TLE('1',"TIANWANG 1A (TW-1A)",
+                 "1 40928U 15051D   17012.78841078  .00002327  00000-0  71003-4 0  9998",
+                 "2 40928  97.2476  51.3649 0014522  42.3053  46.5607 15.34836540 72858")
+
+        tleEntry2 = TLE_Services.findTLEById(2)
+        shouldBe2 = TLE('2',"SWISSCUBE",
+                 "1 35932U 09051B   17012.34187112  .00000118  00000-0  37698-4 0  9992",
+                 "2 35932  98.4726 148.2822 0007800  18.8768 341.2717 14.55942386387640")
+        """
+        self.assertIs(tleEntry == (t1), True)
+       #self.assertIs(tleEntry1 == (shouldBe1), True)
+       #self.assertIs(tleEntry2 == (shouldBe2), True)
+
+"""
     def test_FindByName_is_correct(self):
+
+         t1 = TLE(name="EYESAT-1 (AO-27)",
+                 line1="1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991",
+                 line2="2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061")
+
+        t2 = TLE(name='TIANWANG 1A (TW-1A)',
+                 line1='1 40928U 15051D   17012.78841078  .00002327  00000-0  71003-4 0  9998',
+                 line2='2 40928  97.2476  51.3649 0014522  42.3053  46.5607 15.34836540 72858')
+        t3 = TLE(name='SWISSCUBE',
+                 line1='1 35932U 09051B   17012.34187112  .00000118  00000-0  37698-4 0  9992',
+                 line2='2 35932  98.4726 148.2822 0007800  18.8768 341.2717 14.55942386387640')
+        t1.save()
+        t2.save()
+        t3.save()
         tleEntry = TLE_Services.findTLEByName("NANOSATC-BR1")
         shouldBe = TLE(name ="NANOSATC-BR1",
                         line1 ='1 40024U 14033Q   17021.95106765  .00000421  00000-0  50647-4 0  9994',
                         line2 ='2 40024  97.9211 293.9798 0013770  65.7971 294.4683 14.89043048140788',)
         self.assertIs(tleEntry == (shouldBe), True)
-"""
+
     def test_saveTLE_is_correct(self):
         tleEntry = TLE_Services.findTLEByName("NANOSATC-BR1")
         shouldBe = TLE('45', "NANOSATC-BR1",

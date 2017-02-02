@@ -29,6 +29,7 @@ class schedulerThread (threading.Thread):
 		print ("Starting " + self.name) 
 		print("Polling for new now")
 		Services.pollForNew()
+		ts.removeTLEById(180)
 		print("Exiting "+ self.name)
 
 class Services():
