@@ -1,5 +1,6 @@
 import serial
 import datetime as dt
+import csv
 """
 Created: 23/01/2017
 Last modified: 23/01/2017
@@ -39,7 +40,7 @@ def write_elevation(el, ser):
 	"""
 	ser.write(cmdStart.encode())
 	ser.write(cmdArr[0].encode())
-	ser.write((cmdArr[-1] + str(el)).encode())
+	ser.write((cmdArr[-1] + str(el*10)).encode())
 	ser.write(cmdEnd.encode())
 
 def write_azimuth(az, ser):
@@ -52,7 +53,7 @@ def write_azimuth(az, ser):
 	"""
 	ser.write(cmdStart.encode())
 	ser.write(cmdArr[1].encode())
-	ser.write((cmdArr[-1] + str(az)).encode())
+	ser.write((cmdArr[-1] + str(az*10)).encode())
 	ser.write(cmdEnd.encode())
 
 
@@ -88,13 +89,17 @@ def set_position(az, el):
 	print("done")
 	ser.close()
 
+
 start = dt.datetime.now()		
-set_position(0, 0)
+set_position(96, 96)
 get_position()
 end = dt.datetime.now()
 
 time = end-start
 print(time)
+
+
+
 
 
 
