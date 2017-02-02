@@ -1,5 +1,7 @@
 import serial
 import datetime as dt
+import numpy as np
+import time
 import csv
 """
 Created: 23/01/2017
@@ -89,9 +91,29 @@ def set_position(az, el):
 	print("done")
 	ser.close()
 
+els = [0, 0.1, 0.5, 0.7, 0.9, 1, 1.5, 1.9, 2.5, 3.6, 4.9, 9, 15, 20, 25]
+azs = [300, 314, 325, 330, 342, 357, 0, 1.6, 3.5, 7.7, 11.9, 18, 25, 30, 34]
+counter = 0;
 
-start = dt.datetime.now()		
-set_position(96, 96)
+start = dt.datetime.now()
+print(str(len(azs)) + "yer maw")	
+#set_position(300, 0)
+get_position()
+while(counter < len(azs)):
+	print(str(azs[counter]) + ", " + str(els[counter]))
+	#set_position(azs[counter], els[counter])
+	time.sleep(5)
+	#get_position()
+	counter += 1
+
+"""
+The loop sets the values every 5 seconds.
+The az rotator can't go from 357 to 0 withouth going back around 357 degree anticlockwise
+So the loop keeps sending commands to set the position, the antenna controller buffers them, 
+but the az and el aren't in sync because the antenna controller sends the command to each rotator individually
+get position loops until the rotators have stopped moving, so set then get position acts as a sort of "set and wait"
+"""	
+	
 get_position()
 end = dt.datetime.now()
 
