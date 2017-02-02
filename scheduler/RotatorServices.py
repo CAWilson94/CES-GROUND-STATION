@@ -102,7 +102,7 @@ get_position()
 while(counter < len(azs)):
 	print(str(azs[counter]) + ", " + str(els[counter]))
 	#set_position(azs[counter], els[counter])
-	time.sleep(5)
+	#time.sleep(5)
 	#get_position()
 	counter += 1
 
