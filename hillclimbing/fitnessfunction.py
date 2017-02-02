@@ -21,15 +21,11 @@ class satellite(object):
 		
 def fitnessFunction(satList):
 
+	#is priority maintained?
+
 	satListConflictGroups = findConflictingGroups(satList)
 
-	print(" unmerged conflict groups")
-	print(satListConflictGroups)
-
 	mergedGroups = mergeLists(satListConflictGroups)
-	
-	print ("mergedGroups")
-	print(mergedGroups)
 
 	reorderedConflictGroups=[]
 	for group in mergedGroups:
@@ -37,11 +33,9 @@ def fitnessFunction(satList):
 		reordered= [x for x in satList if x in group]
 		reorderedConflictGroups.append(reordered)
 
-	print("conflict groups")
-	print(reorderedConflictGroups)
-
 	nextPass = findSchedulableSatellites(reorderedConflictGroups)
 
+	print(nextPass)
 	return nextPass
 
 def findConflictingGroups(satList):
@@ -76,39 +70,41 @@ def mergeLists(satListConflicts):
 	# 					['sat7', 'sat8', 'sat9', 'sat6'], ['sat8', 'sat9', 'sat7'], 
 	# 					['sat8', 'sat9'], ['sat11', 'sat10']]
 	#print(satListConflictssatListConflicts)
-	finaListsConflicts = []
-	finaListsConflictsTrimmed=[]
-	for i in range(len(satListConflicts) - 1):
-		subList = satListConflicts[i]
-		#c2 = satListConflicts
-		#c3 = [list(filter(lambda x: x in c1, sublist)) for sublist in c2]
-		#function = lambda x: x in c1
-		#iterable = satListConflicts[j] (list)
-		c3 = [list(filter(lambda x: x in subList, satListConflicts[subListIndex])) for subListIndex in range(len(satListConflicts))]
-		#return an iterator from the elements of iterable where function return true
-		#http://stackoverflow.com/questions/642763/python-intersection-of-two-lists
+
+	
+	
+	prevSatConlicts = []
+
+	while len(satListConflicts) != len(prevSatConlicts):
+		finaListsConflictsTrimmed=[]
+		finaListsConflicts = []
+
+		for i in range(len(satListConflicts)):
+			subList = satListConflicts[i]
+			#c2 = satListConflicts
+			#c3 = [list(filter(lambda x: x in c1, sublist)) for sublist in c2]
+			#function = lambda x: x in c1
+			#iterable = satListConflicts[j] (list)
+			c3 = [list(filter(lambda x: x in subList, satListConflicts[subListIndex])) for subListIndex in range(len(satListConflicts))]
+			
+			#return an iterator from the elements of iterable where function return true
+			#http://stackoverflow.com/questions/642763/python-intersection-of-two-lists
+			
+			c4 = []
+			for z in range(len(c3)):
+				if (c3[z] != []):
+					c4 = list(set(satListConflicts[z]) | set(subList))
+					subList = c4
+			finaListsConflicts.append(subList)
+
 		
-		#print("if c3  {} is in {}".format(c3,subList))
-		c4 = []
-		# print(c1)
-		# print(c2)
-		# print(c3)
-		# #print(c4)
-		for z in range(len(c3)):
-			if (c3[z] != []):
-				c4 = list(set(satListConflicts[z]) | set(subList))
-		#        print('{} | {} = {}'.format(list(set(satListConflicts[z])),set(subList),c4))
-				subList = c4
-		#print(c1)
-		#print("FInalproduct {}".format(subList))
-		finaListsConflicts.append(subList)
+		for i in finaListsConflicts:
+			if i not in finaListsConflictsTrimmed:
+				finaListsConflictsTrimmed.append(i)
+		#prev                 #new
+		prevSatConlicts = satListConflicts
+		satListConflicts =  finaListsConflictsTrimmed
 
-
-	for i in finaListsConflicts:
-		if i not in finaListsConflictsTrimmed:
-			finaListsConflictsTrimmed.append(i)
-
-	#print(finaListsConflictsTrimmed)
 	return finaListsConflictsTrimmed
 
 def findSchedulableSatellites(satListConflictGroups):
@@ -127,7 +123,7 @@ def findSchedulableSatellites(satListConflictGroups):
 			thisSatPassStart = 0
 			thisSatPassEnd = 0
 			for time in blackList:
-				if sat.AOS <= time[1] and sat.LOS >= time[0]:
+				if sat.AOS < time[1] and sat.LOS > time[0]:
 					#print('{} conflicts with {} {}'.format(sat.name,time[0],time[1]))
 				#sat conflicts with one of the times in blackList
 					#in i=1 sat is sat2 and blacklist is sat 1
@@ -168,18 +164,32 @@ def findSchedulableSatellites(satListConflictGroups):
 					thisSatPassEnd = sat.AOS + transactionTime
 					conflicts=False
 
+			tempTime = []
 			if len(blackList)==0:
 				#print(sat.name)
 				thisSatPassStart=sat.AOS
 				thisSatPassEnd = sat.AOS + transactionTime
+				tempTime = [thisSatPassStart,thisSatPassEnd]
+				#print("bad times {}".format(tempTime))
+				blackList.append(tempTime)	
 			if conflicts is False:
 				#Sat doesn't conflict with any times made so far
+				#c3 = [list(filter(lambda time: tempTime[0] < time[1] and tempTime[1] > time[0], blackList[blackListIndex])) for blackListIndex in range(len(blackList))]
+				conflictBlack = False
 				tempTime = [thisSatPassStart,thisSatPassEnd]
+				for time in blackList:
+					if tempTime[0] < time[1] and tempTime[1] > time[0]:
+						conflictBlack=True
+						break
+					else:
+						conflictBlack=False
 
-				if tempTime not in blackList:
+				if conflictBlack != True:
+					#print("Adding {} to blacklist".format(tempTime))
 					scheduledSats.append(sat)
-					blackList.append(tempTime)	
+					blackList.append(tempTime)			
 		
+		print(blackList)
 		unScheduledSatFromGroup = [sat for sat in group if sat not in scheduledSats]
 		unScheduledSats.append(unScheduledSatFromGroup)
 		nextPassList.append(scheduledSats)
@@ -191,10 +201,10 @@ def findSchedulableSatellites(satListConflictGroups):
 	score=0
 	for satList in unScheduledSats:
 		score +=len(satList)
-	print(score) # want lowest0.
+	print(score) # want lowest.
 	return nextPassList
 
-def test_findSchedulableSatellites_many_sats():
+def test_findSchedulableSatellites_many_real_sats():
 
 
 	catAOS = datetime(2017,1,25,0,52,59)
@@ -270,7 +280,9 @@ def test_findSchedulableSatellites_many_sats():
 	itup]
 		#self.assertIs(shouldBe == ,)
 
-
+	#findSchedulableSatellites([[sixtysevenC,sixtysevenD,brite,fcone,fcthree,fcfive,fefourteen,itup]])
+	#findSchedulableSatellites([[sixtysevenD,sixtysevenC,brite,fcone,fcthree,fcfive,fefourteen,itup]])
+	#findSchedulableSatellites([[sixtysevenD,sixtysevenC,fcone,brite,fcthree,fcfive,fefourteen,itup]])
 	fitnessFunction(satList)
 
 # clas = fit.FitnessFunction()
@@ -278,87 +290,97 @@ def test_findSchedulableSatellites_many_sats():
 
 test_findSchedulableSatellites_many_sats()
 
-# sat1AOS = datetime(2017,1,25,12,2,0)
-# sat1LOS = datetime(2017,1,25,12,5,0)
-# sat2AOS = datetime(2017,1,25,12,0,0)
-# sat2LOS = datetime(2017,1,25,12,8,0)
-# sat3AOS = datetime(2017,1,25,12,25,0)
-# sat3LOS = datetime(2017,1,25,12,30,0)
-# sat4AOS = datetime(2017,1,25,11,57,0)
-# sat4LOS = datetime(2017,1,25,12,3,0)
-# sat5AOS = datetime(2017,1,25,12,7,0)
-# sat5LOS = datetime(2017,1,25,12,10,0)
-# sat6AOS = datetime(2017,1,25,11,57,0)
-# sat6LOS = datetime(2017,1,25,12,4,0)
-# sat7AOS = datetime(2017,1,25,11,57,0)
-# sat7LOS = datetime(2017,1,25,12,4,0)
-# sat8AOS = datetime(2017,1,25,11,57,0)
-# sat8LOS = datetime(2017,1,25,12,4,0)
-# sat9AOS = datetime(2017,1,25,13,0,0)
-# sat9LOS = datetime(2017,1,25,13,4,0)
-# sat10AOS = datetime(2017,1,25,12,27,0)
-# sat10LOS = datetime(2017,1,25,12,31,0)
-# sat11AOS = datetime(2017,1,25,12,28,0)
-# sat11LOS = datetime(2017,1,25,12,34,0)
 
-# sat1AOS = datetime(2017,1,25,12,2,0)
-# sat1LOS = datetime(2017,1,25,12,5,0)
-# sat2AOS = datetime(2017,1,25,12,0,0)
-# sat2LOS = datetime(2017,1,25,12,8,0)
-# sat3AOS = datetime(2017,1,25,12,25,0)
-# sat3LOS = datetime(2017,1,25,12,30,0)
-# sat4AOS = datetime(2017,1,25,11,57,0)
-# sat4LOS = datetime(2017,1,25,12,3,0)
-# sat5AOS = datetime(2017,1,25,12,7,0)
-# sat5LOS = datetime(2017,1,25,12,10,0)
-# sat6AOS = datetime(2017,1,25,11,57,0)
-# sat6LOS = datetime(2017,1,25,12,4,0)
-# sat7AOS = datetime(2017,1,25,11,57,0)
-# sat7LOS = datetime(2017,1,25,12,4,0)
-# sat8AOS = datetime(2017,1,25,12,59,0)
-# sat8LOS = datetime(2017,1,25,13,3,0)
-# sat9AOS = datetime(2017,1,25,13,0,0)
-# sat9LOS = datetime(2017,1,25,13,4,0)
-# sat10AOS = datetime(2017,1,25,12,27,0)
-# sat10LOS = datetime(2017,1,25,12,31,0)
-# sat11AOS = datetime(2017,1,25,12,28,0)
-# sat11LOS = datetime(2017,1,25,12,34,0)
+def test_findSchedulableSatellites_many_fake_sats():
 
-# sat1 = satellite("sat1",sat1AOS, sat1LOS)
-# sat2 = satellite("sat2",sat2AOS, sat2LOS)
-# sat3 = satellite("sat3",sat3AOS, sat3LOS)
-# sat4 = satellite("sat4",sat4AOS, sat4LOS)
-# sat5 = satellite("sat5",sat5AOS, sat5LOS)
-# sat6 = satellite("sat6",sat6AOS, sat6LOS)
-# sat7 = satellite("sat7",sat7AOS, sat7LOS)
-# sat8 = satellite("sat8",sat8AOS, sat8LOS)
-# sat9 = satellite("sat9",sat9AOS, sat9LOS)
-# sat10 = satellite("sat10",sat10AOS,sat10LOS)
-# sat11 = satellite("sat11",sat11AOS,sat11LOS)
+	sat1AOS = datetime(2017,1,25,12,2,0)
+	sat1LOS = datetime(2017,1,25,12,5,0)
+	sat2AOS = datetime(2017,1,25,12,0,0)
+	sat2LOS = datetime(2017,1,25,12,8,0)
+	sat3AOS = datetime(2017,1,25,12,25,0)
+	sat3LOS = datetime(2017,1,25,12,30,0)
+	sat4AOS = datetime(2017,1,25,11,57,0)
+	sat4LOS = datetime(2017,1,25,12,3,0)
+	sat5AOS = datetime(2017,1,25,12,7,0)
+	sat5LOS = datetime(2017,1,25,12,10,0)
+	sat6AOS = datetime(2017,1,25,11,57,0)
+	sat6LOS = datetime(2017,1,25,12,4,0)
+	sat7AOS = datetime(2017,1,25,11,57,0)
+	sat7LOS = datetime(2017,1,25,12,4,0)
+	sat8AOS = datetime(2017,1,25,11,57,0)
+	sat8LOS = datetime(2017,1,25,12,4,0)
+	sat9AOS = datetime(2017,1,25,13,0,0)
+	sat9LOS = datetime(2017,1,25,13,4,0)
+	sat10AOS = datetime(2017,1,25,12,27,0)
+	sat10LOS = datetime(2017,1,25,12,31,0)
+	sat11AOS = datetime(2017,1,25,12,28,0)
+	sat11LOS = datetime(2017,1,25,12,34,0)
 
-# #satList=[sat1,sat2,sat3,sat5]
-# satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
+	sat1 = satellite("sat1",sat1AOS, sat1LOS)
+	sat2 = satellite("sat2",sat2AOS, sat2LOS)
+	sat3 = satellite("sat3",sat3AOS, sat3LOS)
+	sat4 = satellite("sat4",sat4AOS, sat4LOS)
+	sat5 = satellite("sat5",sat5AOS, sat5LOS)
+	sat6 = satellite("sat6",sat6AOS, sat6LOS)
+	sat7 = satellite("sat7",sat7AOS, sat7LOS)
+	sat8 = satellite("sat8",sat8AOS, sat8LOS)
+	sat9 = satellite("sat9",sat9AOS, sat9LOS)
+	sat10 = satellite("sat10",sat10AOS,sat10LOS)
+	sat11 = satellite("sat11",sat11AOS,sat11LOS)
 
-# #satListConflictGroups =  [satList,[sat8]]
-# satListConflictsGroup = findConflictingGroups(satList)#findConflictingSats(sat1,satList)
+	satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
+
+	fitnessFunction(satList)
+
+def test_findSchedulableSatellites_many_fake_sats_but_diff():
+
+	sat1AOS = datetime(2017,1,25,12,2,0)
+	sat1LOS = datetime(2017,1,25,12,5,0)
+	sat2AOS = datetime(2017,1,25,12,0,0)
+	sat2LOS = datetime(2017,1,25,12,8,0)
+	sat3AOS = datetime(2017,1,25,12,25,0)
+	sat3LOS = datetime(2017,1,25,12,30,0)
+	sat4AOS = datetime(2017,1,25,11,57,0)
+	sat4LOS = datetime(2017,1,25,12,3,0)
+	sat5AOS = datetime(2017,1,25,12,7,0)
+	sat5LOS = datetime(2017,1,25,12,10,0)
+	sat6AOS = datetime(2017,1,25,11,57,0)
+	sat6LOS = datetime(2017,1,25,12,4,0)
+	sat7AOS = datetime(2017,1,25,11,57,0)
+	sat7LOS = datetime(2017,1,25,12,4,0)
+	sat8AOS = datetime(2017,1,25,12,59,0)
+	sat8LOS = datetime(2017,1,25,13,3,0)
+	sat9AOS = datetime(2017,1,25,13,0,0)
+	sat9LOS = datetime(2017,1,25,13,4,0)
+	sat10AOS = datetime(2017,1,25,12,27,0)
+	sat10LOS = datetime(2017,1,25,12,31,0)
+	sat11AOS = datetime(2017,1,25,12,28,0)
+	sat11LOS = datetime(2017,1,25,12,34,0)
+
+	sat1 = satellite("sat1",sat1AOS, sat1LOS)
+	sat2 = satellite("sat2",sat2AOS, sat2LOS)
+	sat3 = satellite("sat3",sat3AOS, sat3LOS)
+	sat4 = satellite("sat4",sat4AOS, sat4LOS)
+	sat5 = satellite("sat5",sat5AOS, sat5LOS)
+	sat6 = satellite("sat6",sat6AOS, sat6LOS)
+	sat7 = satellite("sat7",sat7AOS, sat7LOS)
+	sat8 = satellite("sat8",sat8AOS, sat8LOS)
+	sat9 = satellite("sat9",sat9AOS, sat9LOS)
+	sat10 = satellite("sat10",sat10AOS,sat10LOS)
+	sat11 = satellite("sat11",sat11AOS,sat11LOS)
+
+	satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
+
+	fitnessFunction(satList)
 
 
-# reorderedConflictGroups=[]
-# for group in satListConflictsGroup:
-# 	#print("sdfsd")
-# 	reordered= [x for x in satList if x in group]
-# 	reorderedConflictGroups.append(reordered)
-# 	#print(reordered)
 
-# print(reorderedConflictGroups)
-# findSchedulableSatellites(reorderedConflictGroups)
+#check we don't lose a sat during processing
+#check against a varied set of sats
 
 
 
 
 
-list2=[2,3]
-list1=[3,2]
 
-if list1 in list2:
-	?
+
