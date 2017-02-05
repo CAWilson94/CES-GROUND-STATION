@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from random import shuffle
 
 class satellite(object):
+	"Just a ibject I made to avoid importing an actual object"
 	name=""
 	AOS=None
 	LOS=None
@@ -22,10 +23,13 @@ class satellite(object):
 		
 def fitnessFunction(satList):
 
-	#is priority maintained?
+	"""Calling all the necessary parts in order
+		and checking the priority is in order
+		ensuring the order of the list"""
+
+	#is priority maintained function goes here
 
 	satListConflictGroups = findConflictingGroups(satList)
-
 
 	mergedGroups = mergeLists(satListConflictGroups)
 
@@ -41,6 +45,12 @@ def fitnessFunction(satList):
 	return score
 
 def findConflictingGroups(satList):
+	""" Compares each satellite with each other to find the ones
+		that conflict at all with each other. 
+		eg. if sat1 and sat2 conflict they are added to conflicts
+		and sat3 and sat4 conflicts they added to conflicts but in a 
+		different list/group
+	"""
 	satListConflicts=[]
 	for i in range(len(satList)):
 		conflicts=[]
@@ -61,6 +71,14 @@ def findConflictingGroups(satList):
 	return satListConflicts
 
 def mergeLists(satListConflicts):
+	""" findConflictingGroups work isn't finished, it is continued here. 
+		If any list shares one or more element with another list then 
+		they should really be one list/group
+		eg. if sat1 and sat2 conflict, and sat2 and sat3 conflict,
+		findConflictingGroups would put them in two different lists but
+		merge lists combines them into a group even though sat1 and 
+		sat3 don't conflict 
+	"""
 	#def finalListConflicts():
 	#what happens if 2nd list is bigger than the first
 	# satListConflicts = [['sat1', 'sat4', 'sat2', 'sat6'], ['sat6', 'sat7', 'sat4', 'sat2', 'sat5'],
@@ -83,11 +101,14 @@ def mergeLists(satListConflicts):
 			#c3 = [list(filter(lambda x: x in c1, sublist)) for sublist in c2]
 			#function = lambda x: x in c1
 			#iterable = satListConflicts[j] (list)
+			
+			"Gets all the lists that share elements with subList"
 			c3 = [list(filter(lambda x: x in subList, satListConflicts[subListIndex])) for subListIndex in range(len(satListConflicts))]
 			
 			#return an iterator from the elements of iterable where function return true
 			#http://stackoverflow.com/questions/642763/python-intersection-of-two-lists
 			
+			"Combines those lists into one list"
 			c4 = []
 			for z in range(len(c3)):
 				if (c3[z] != []):
@@ -95,7 +116,7 @@ def mergeLists(satListConflicts):
 					subList = c4
 			finaListsConflicts.append(subList)
 
-		
+		"Gets rid of duplicate lists"
 		for i in finaListsConflicts:
 			if i not in finaListsConflictsTrimmed:
 				finaListsConflictsTrimmed.append(i)
@@ -105,21 +126,29 @@ def mergeLists(satListConflicts):
 
 	return finaListsConflictsTrimmed
 
-def findSchedulableSatellites(satListConflictGroups):
 
+def findSchedulableSatellites(satListConflictGroups):
+	""" The groups are now correct and the order was reestablished before 
+	being passed in here. This goes through each sat in each group to find where
+	each satellite conflicts with each other satellite. Compares these gaps
+	with the transactionTime to figure out if this time available is useful to
+	us. Checks with the blacklist. ie. times that are in use. If the space of gap
+	is enough and that time isn't in use/conflicts we can schedule a satellite here 
+	and that time period is then 'blacklisted' ie in use. 
+
+	"""
 	transactionTime = timedelta(minutes=3)
 	nextPassList = []
 	unScheduledSats = []
 	for group in satListConflictGroups:
-		passes=0
 		blackList=[]
 		scheduledSats=[]
 		unScheduledSatFromGroup = []
 		for sat in group:
 			#print(sat.name)
 			conflicts=False
-			thisSatPassStart = 0
-			thisSatPassEnd = 0
+			curSatRise = 0
+			curSatSet = 0
 			for time in blackList:
 				if sat.AOS < time[1] and sat.LOS > time[0]:
 					#print('{} conflicts with {} {}'.format(sat.name,time[0],time[1]))
@@ -132,50 +161,49 @@ def findSchedulableSatellites(satListConflictGroups):
 					if frontGap<timedelta(0):
 						frontGap = frontGap*-1
 
-					#if frontGap and endGap both >= tt and we can
+					#TODO: if frontGap and endGap both >= tt and we can
 					#fit in either, pick one at random
 					if endGap>=transactionTime:
 						#can be fit in end gap
-						#fit in some random place in end gap
+						#TODO: fit in some random place in end gap
 						#print("fit in end gap")
 
-						thisSatPassStart = sat.LOS-transactionTime
-						thisSatPassEnd = sat.LOS
+						curSatRise = sat.LOS-transactionTime
+						curSatSet = sat.LOS
 						conflicts=False
 					elif frontGap >= transactionTime:
 						#can be fit in start gap
-						#fit in some random place in front gap
+						#TODO: fit in some random place in front gap
 						#print("fit in front gap")
 						conflicts=False
-						thisSatPassStart = sat.AOS
-						thisSatPassEnd = sat.AOS + transactionTime
+						curSatRise = sat.AOS
+						curSatSet = sat.AOS + transactionTime
 					else:
 						#can't fit in and we need another pass
-						passes+=1
 						#print("adding")
 						#unScheduledSats.append(sat.name)
 						conflicts=True
 						break
 
 				else:
-					thisSatPassStart = sat.AOS
-					thisSatPassEnd = sat.AOS + transactionTime
+					curSatRise = sat.AOS
+					curSatSet = sat.AOS + transactionTime
 					conflicts=False
 
 			tempTime = []
 			if len(blackList)==0:
-				#print(sat.name)
-				thisSatPassStart=sat.AOS
-				thisSatPassEnd = sat.AOS + transactionTime
-				tempTime = [thisSatPassStart,thisSatPassEnd]
-				#print("bad times {}".format(tempTime))
+				##For first satellite to be scheduled
+				curSatRise=sat.AOS
+				curSatSet = sat.AOS + transactionTime
+				tempTime = [curSatRise,curSatSet]
 				scheduledSats.append(sat)
 				blackList.append(tempTime)	
 			if conflicts is False:
-				#Sat doesn't conflict with any times made so far
-				#c3 = [list(filter(lambda time: tempTime[0] < time[1] and tempTime[1] > time[0], blackList[blackListIndex])) for blackListIndex in range(len(blackList))]
+				#Check satellite doesn't conflict with 'blacklisted' times
+				#before adding it
+			
 				conflictBlack = False
-				tempTime = [thisSatPassStart,thisSatPassEnd]
+				tempTime = [curSatRise,curSatSet]
 				for time in blackList:
 					if tempTime[0] < time[1] and tempTime[1] > time[0]:
 						conflictBlack=True
@@ -184,11 +212,11 @@ def findSchedulableSatellites(satListConflictGroups):
 						conflictBlack=False
 
 				if conflictBlack != True:
-					#print("Adding {} to blacklist".format(tempTime))
 					scheduledSats.append(sat)
 					blackList.append(tempTime)			
 		
 		print(blackList)
+		#Find unscheduled satellites from scheduled
 		unScheduledSatFromGroup = [sat for sat in group if sat not in scheduledSats]
 		unScheduledSats.append(unScheduledSatFromGroup)
 		nextPassList.append(scheduledSats)
@@ -197,6 +225,8 @@ def findSchedulableSatellites(satListConflictGroups):
 	print(nextPassList)
 	print("unScheduledSats")
 	print(unScheduledSats)
+
+	#Count number of unscheduled
 	score=0
 	for satList in unScheduledSats:
 		score +=len(satList)
@@ -380,16 +410,22 @@ def test_findSchedulableSatellites_many_fake_sats_but_diff():
 
 
 def hillclimbing(satList):
+	""" Actual algorithm which isn't quite hillclimbing cause it 
+		shuffles the list rather than moving one step from 
+		current position"""
+	""" Shuffle the list at least 100 times, if better list comes from
+		shuffling reset maxIterations and shuffle. If no better list
+		comes, then that could be it"""
 
 	maxIterations = 100
 	i=0
-	oldUnscheduled = 190
+	oldUnscheduled = 2000000   #just a really big number
 	newOrder=[]
 	curOrder=satList
 	while i<maxIterations:
 		shuffle(curOrder) 
 		#shuffling can make it find different solutions
-		#shuffling count as hc with random restart?
+		#shuffling count as hc with random restart kinda?
 		newUnscheduled = fitnessFunction(curOrder)
 		if newUnscheduled < oldUnscheduled:
 			#use that 
