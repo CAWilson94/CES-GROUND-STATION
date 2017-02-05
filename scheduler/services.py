@@ -61,18 +61,24 @@ class Services():
 	def getAzElTLE(self, tleEntry, dateTime):
 		"""
 		Returns an AzEl object calculated with one satellite and one instanteous measure
-		of time """
+		of time 
+		"""
+
 		# getObserver preferences file AK
 		observer = _Helper.getObserver(self, dateTime);
+
 		try:
 			sat = ephem.readtle(tleEntry.name, tleEntry.line1, tleEntry.line2)  # necessary?
 		except ValueError:
 			return "Format of TLEEntry is incorrect (getAzElTLE)"
+
 		sat.compute(observer)
 		return AzEl(0, sat.az, sat.alt)
 
+
 	def getAzElTLENow(self, tleEntry):
 		return Services.getAzElTLE(self, tleEntry, datetime.now())
+
 
 	def getAzElForPeriod(self, tleEntry, riseTime, setTime, period):
 		"""
@@ -86,6 +92,7 @@ class Services():
 			i += 1  # change azel id? AK
 			azelProgress.append(azel)
 		return azelProgress
+
 
 	def getNextPass(self, tleEntry, dateTime):
 		"""
@@ -105,13 +112,21 @@ class Services():
 		# riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0, riseTime, setTime, duration, details[3], details[1], details[5])
 
-
 	def updateTLE():
 		"""
 		Retrieves TLE data from external source, checks format and places in db
 		"""
-		requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt")
-		tle = requestsObject.text
+		tle=[]
+		try:
+			requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt",timeout=0.3)
+			tle = requestsObject.text
+			#requests.exceptions.RequestException.
+		# except requests.packages.urllib3.exceptions.NewConnectionError as e:
+		# 	print("can't connect")
+		# 	return
+		except OSError as ex:
+			print("Cannot connect to Internet or Celestrak is unreachable")
+			return
 
 		# splits text into one list with format:  AK
 		# name, line1, line2, name, line1, line2
@@ -122,6 +137,7 @@ class Services():
 			del tleArray[len(tleArray) - 1]
 		if len(tleArray) % 3 != 0:
 			print("major error")  # TODO: raisemassive error AK
+			# cause some entry(s) don't have three entries
 
 		checkedTLEArray = _Helper.checkTLEFormat(tleArray)
 
@@ -141,7 +157,6 @@ class Services():
 				tleEntry.line2 = checkedTLEArray[i + 2]
 				tleEntry.save()
 			i += 3
-
 
 class _Helper():
 	# Helper Functions
@@ -205,4 +220,5 @@ class _Helper():
 		msRound = int(round(ms, 0))
 		dateTime = dateTime + timedelta(seconds=msRound) - timedelta(microseconds=dateTime.microsecond)
 		return dateTime
+
 
