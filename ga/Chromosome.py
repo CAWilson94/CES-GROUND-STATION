@@ -18,3 +18,21 @@ class Chromosome(object):
 	"""
 	Generate a random gene
 	"""
+
+	@property
+    def chromosomeStr(self):
+        return self.chromosomeStr
+
+    @property
+    def fitness(self):
+        return self.fitness
+
+    @chromsomeStr.setter
+    def chromosomeStr(self, chromosomeStr)
+
+    @fitness.setter
+    def fitness(self, chromosomeStr)
+
+
+
+
