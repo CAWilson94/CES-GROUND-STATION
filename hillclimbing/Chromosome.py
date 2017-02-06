@@ -10,14 +10,14 @@ class Chromosome(object):
 	# Can I have more than one initalizer in python??
 
 	def randomChromo():
-	"""
-	Generate a random chromsome 
-	"""
+		"""
+		Generate a random chromsome 
+		"""
 
 	def randomGene():
-	"""
-	Generate a random gene
-	"""
+		"""
+		Generate a random gene
+		"""
 
 	@property
     def chromosomeStr(self):
@@ -28,10 +28,10 @@ class Chromosome(object):
         return self.fitness
 
     @chromsomeStr.setter
-    def chromosomeStr(self, chromosomeStr)
+    def chromosomeStr(self, chromosomeStr):
 
     @fitness.setter
-    def fitness(self, chromosomeStr)
+    def fitness(self, chromosomeStr):
 
 
 
