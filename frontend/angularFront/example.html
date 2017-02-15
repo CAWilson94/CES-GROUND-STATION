@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+
+    <title>Learning AngularJS</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript"></script>
+    <script src="app.js" type="text/javascript"></script>
+  <script src="maincontroller.js" type="text/javascript"></script> 
+
+  </head>
+</head>
+<body>
+	<!-- this div is an angular application: ng-app -->
+	<!-- uses the controller MainController: ng-controller -->
+	<!-- anything within the 'content' div will be controller by  	   MainController -->
+	<!-- in the same directory as this html page, a js file called 		app.js and maincontroller.js --> 
+   <div id='content' ng-app='MyTutorialApp' ng-controller='MainController'>
+   <h1>{{hello}}</h1>
+    <select ng-model='selectedPerson' ng-options='obj.name for obj in people'></select>
+    <select ng-model='selectedGenre'>
+      <option ng-repeat='label in people[selectedPerson.id].music'>{{hello}}</option> 
+    </select>
+  </div>
+
+ 
+</body>
+</html>
