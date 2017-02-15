@@ -1,15 +1,15 @@
-<div ng-app="scheduler">
 <div ng-controller="SchedulerController">
 
-    TLEs
+	TLEs
+	{{messdage}}
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
-            {{tle}}
-
-            <hr/>
-        </div>
-    </div>
-    <br>
-
-
+			{{tle.id}} <br>
+			{{tle.name}} <br>
+			{{tle.line1}} <br>
+			{{tle.line2}} <br>
+			<hr/>
+		</div>
+	</div>
+	<br>
 </div>

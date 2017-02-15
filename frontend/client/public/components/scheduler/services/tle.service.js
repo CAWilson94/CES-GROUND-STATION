@@ -4,7 +4,7 @@ scheduler
             'http://localhost:8000/api/tles/:id/',
             {},
             {
-                'query': {
+                query: {
                     method: 'GET',
                     isArray: true,
                     headers: {

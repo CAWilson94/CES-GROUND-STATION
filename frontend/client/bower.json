@@ -1,11 +1,14 @@
 {
   "name": "scheduler-client",
   "description": "A sample Angular application",
+  "license": "MIT",
   "dependencies": {
-    "angular": "^1.5.7",
-    "angular-ui-router": "^0.3.1",
-    "angular-bootstrap": "^1.3.3",
-    "angular-resource": "~1.4.8"
+    "angular": "^1.5.8",
+    "angular-resource": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "bootstrap": "3.3.x",
+    "angular-ui-router": "^0.4.2",
+    "angular-bootstrap": "^1.3.3"
   },
   "resolutions": {
     "angular": "^1.5.7"
