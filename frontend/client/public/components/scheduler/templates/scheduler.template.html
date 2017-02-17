@@ -1,8 +1,8 @@
 <div ng-controller="SchedulerController">
 
 
-<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
-<script src="select2-4.0.3/dist/js/select2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="cssbootstrap.min.js"></script>
 
 <select class="ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="selectedName" multiple title="sat pick" ng-options="tle.name for tle in tles">
 </select>
@@ -17,7 +17,7 @@
   </select>
 
 	TLEs
-	{{messdage}}
+	{{hello}}
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
 			{{tle.id}} <br>
