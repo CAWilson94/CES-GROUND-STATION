@@ -4,6 +4,9 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="cssbootstrap.min.js"></script>
 
+-->
+
+<!--
 <select class="ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="selectedName" multiple title="sat pick" ng-options="tle.name for tle in tles">
 </select>
 
@@ -15,9 +18,15 @@
     <option value="sat5">SAT-FIVE</option>
     <option value="sat6">SAT-SIX</option>
   </select>
-
   -->
 
+<script type="text/javascript">
+  	var bootstrap3_enabled = (typeof $().emulateTransitionEnd == 'function');
+	document.write(bootstrap3_enabled);
+  </script>
+
+
+  <h1> HELLO </h1>
 <div ng-controller="SchedulerController">
 	TLEs
 	{{hello}}
