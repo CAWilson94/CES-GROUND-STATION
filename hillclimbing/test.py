@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 from random import shuffle
 
 class satellite(object):
-	"Just a ibject I made to avoid importing an actual object"
+	"Just an object I made to avoid importing an actual object"
 	name=""
 	AOS=None
 	LOS=None
@@ -135,8 +135,8 @@ def findSchedulableSatellites(satListConflictGroups):
 	us. Checks with the blacklist. ie. times that are in use. If the space of gap
 	is enough and that time isn't in use/conflicts we can schedule a satellite here 
 	and that time period is then 'blacklisted' ie in use. 
-
 	"""
+
 	transactionTime = timedelta(minutes=3)
 	nextPassList = []
 	unScheduledSats = []
@@ -145,64 +145,21 @@ def findSchedulableSatellites(satListConflictGroups):
 		scheduledSats=[]
 		unScheduledSatFromGroup = []
 		for sat in group:
-			#print(sat.name)
-			conflicts=False
-			curSatRise = 0
-			curSatSet = 0
-			for time in blackList:
-				if sat.AOS < time[1] and sat.LOS > time[0]:
-					#print('{} conflicts with {} {}'.format(sat.name,time[0],time[1]))
-				#sat conflicts with one of the times in blackList
-					#in i=1 sat is sat2 and blacklist is sat 1
-					endGap = sat.LOS - (time[0]+transactionTime)
-					if endGap<timedelta(0):
-						endGap = endGap*-1
-					frontGap = time[0] - sat.AOS
-					if frontGap<timedelta(0):
-						frontGap = frontGap*-1
-
-					#TODO: if frontGap and endGap both >= tt and we can
-					#fit in either, pick one at random
-					if endGap>=transactionTime:
-						#can be fit in end gap
-						#TODO: fit in some random place in end gap
-						#print("fit in end gap")
-
-						curSatRise = sat.LOS-transactionTime
-						curSatSet = sat.LOS
-						conflicts=False
-					elif frontGap >= transactionTime:
-						#can be fit in start gap
-						#TODO: fit in some random place in front gap
-						#print("fit in front gap")
-						conflicts=False
-						curSatRise = sat.AOS
-						curSatSet = sat.AOS + transactionTime
-					else:
-						#can't fit in and we need another pass
-						#print("adding")
-						#unScheduledSats.append(sat.name)
-						conflicts=True
-						break
-
-				else:
-					curSatRise = sat.AOS
-					curSatSet = sat.AOS + transactionTime
-					conflicts=False
-
 			tempTime = []
+			conflicts=False
+			curSatRise,curSatRise,conflicts,blackList = findUsableTime(sat, blackList, transactionTime,conflicts)
+			#Find a time to fit it in
+
 			if len(blackList)==0:
-				##For first satellite to be scheduled
-				curSatRise=sat.AOS
-				curSatSet = sat.AOS + transactionTime
-				tempTime = [curSatRise,curSatSet]
-				scheduledSats.append(sat)
-				blackList.append(tempTime)	
+				curSatRise=sat.AOS 				
+				curSatSet = sat.AOS + transactionTime 				
+				tempTime = [curSatRise,curSatSet] 				
+				scheduledSats.append(sat) 				
+				blackList.append(tempTime)
+
 			if conflicts is False:
 				#Check satellite doesn't conflict with 'blacklisted' times
 				#before adding it
-			
-				conflictBlack = False
 				tempTime = [curSatRise,curSatSet]
 				for time in blackList:
 					if tempTime[0] < time[1] and tempTime[1] > time[0]:
@@ -212,6 +169,7 @@ def findSchedulableSatellites(satListConflictGroups):
 						conflictBlack=False
 
 				if conflictBlack != True:
+				#if tempTime is not blackList:
 					scheduledSats.append(sat)
 					blackList.append(tempTime)			
 		
@@ -233,8 +191,64 @@ def findSchedulableSatellites(satListConflictGroups):
 	print(score) # want lowest.
 	return score
 
-def test_findSchedulableSatellites_many_real_sats():
+def findUsableTime(sat, blackList, transactionTime,conflicts):
 
+	curSatRise = 0
+	curSatSet = 0
+	
+	for time in blackList:
+		if sat.AOS < time[1] and sat.LOS > time[0]:
+			#print('{} conflicts with {} {}'.format(sat.name,time[0],time[1]))
+			#sat conflicts with one of the times in blackList
+			#in i=1 sat is sat2 and blacklist is sat 1
+			endGap = sat.LOS - (time[0]+transactionTime)
+			if endGap<timedelta(0):
+				endGap = endGap*-1
+			frontGap = time[0] - sat.AOS
+			if frontGap<timedelta(0):
+				frontGap = frontGap*-1
+			#TODO: if frontGap and endGap both >= tt and we can
+			#fit in either, pick one at random
+			if endGap>=transactionTime:
+				#can be fit in end gap
+				#TODO: fit in some random place in end gap
+				#print("fit in end gap")
+				curSatRise = sat.LOS-transactionTime
+				curSatSet = sat.LOS
+				conflicts=False
+			elif frontGap >= transactionTime:
+				#can be fit in start gap
+				#TODO: fit in some random place in front gap
+				#print("fit in front gap")
+				conflicts=False
+				curSatRise = sat.AOS
+				curSatSet = sat.AOS + transactionTime
+			else:
+				#can't fit in and we need another pass
+				#print("adding")
+				#unScheduledSats.append(sat.name)
+				conflicts=True
+				return 0,0,conflicts,blackList
+				
+		else:
+			curSatRise = sat.AOS
+			curSatSet = sat.AOS + transactionTime
+			conflicts=False
+
+	#tempTime = [curSatRise,curSatRise]
+
+	# if len(blackList)==0:
+	# 	##For first satellite to be scheduled
+	# 	curSatRise=sat.AOS
+	# 	curSatSet = sat.AOS + transactionTime
+	# 	tempTime = [curSatRise,curSatSet]
+	# 	print("leeeed")
+				
+	
+	return curSatRise,curSatRise, conflicts, blackList
+
+
+def test_findSchedulableSatellites_many_real_sats():
 
 	catAOS = datetime(2017,1,25,0,52,59)
 	catLOS = datetime(2017,1,25,1,04,28)
@@ -409,41 +423,6 @@ def test_findSchedulableSatellites_many_fake_sats_but_diff():
 # test_findSchedulableSatellites_many_fake_sats()
 
 
-def hillclimbingsimple(satList):
-	""" Actual algorithm which isn't quite hillclimbing cause it 
-		shuffles the list rather than moving one step from 
-		current position"""
-	""" Shuffle the list at least 100 times, if better list comes from
-		shuffling reset maxIterations and shuffle. If no better list
-		comes, then that could be it"""
-
-	maxIterations = 100
-	i=0
-	oldUnscheduled = 2000000   #just a really big number
-	newOrder=[]
-	curOrder=satList
-	while i<maxIterations:
-		
-		#swap two elements
-
-
-		#shuffling can make it find different solutions
-		#shuffling count as hc with random restart kinda?
-		newUnscheduled = fitnessFunction(curOrder)
-		if newUnscheduled < oldUnscheduled:
-			#use that 
-			print("New Order")
-			#curOrder=newOrder
-			oldUnscheduled=newUnscheduled
-			i=0
-		else:
-			print("Keep Order")
-			i+=1
-			
-	if i==100:
-		print("{} curOrder could be global maxima".format(curOrder))		
-		return curOrder
-
 def hillclimbing(satList):
 	""" Actual algorithm which isn't quite hillclimbing cause it 
 		shuffles the list rather than moving one step from 
@@ -454,19 +433,19 @@ def hillclimbing(satList):
 
 	maxIterations = 100
 	i=0
-	oldScore = max   #just a really big number
+	oldUnscheduled = max   #just a really big number
 	newOrder=[]
 	curOrder=satList
 	while i<maxIterations:
 		shuffle(curOrder) 
 		#shuffling can make it find different solutions
 		#shuffling count as hc with random restart kinda?
-		newScore = fitnessFunction(curOrder)
-		if newScore < oldScore:
+		newUnscheduled = fitnessFunction(curOrder)
+		if newUnscheduled < oldUnscheduled:
 			#use that 
 			print("New Order")
 			#curOrder=newOrder
-			oldScore=newScore
+			oldUnscheduled=newUnscheduled
 			i=0
 		else:
 			print("Keep Order")
@@ -601,8 +580,7 @@ def test_hillclimbing_many_fake_sats_but_diff():
 
 
 test_hillclimbing_many_fake_sats()
-
-
+#test_findSchedulableSatellites_many_fake_sats()
 
 # def swap(satList):
 # 	int x1=0
