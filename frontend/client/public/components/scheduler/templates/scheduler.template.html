@@ -1,5 +1,21 @@
 <div ng-controller="SchedulerController">
 
+
+<link href="select2-4.0.3/dist/css/select2.min.css" rel="stylesheet" />
+<script src="select2-4.0.3/dist/js/select2.min.js"></script>
+
+<select class="ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="selectedName" multiple title="sat pick" ng-options="tle.name for tle in tles">
+</select>
+
+  <select class = "js-states form-control" title="Pick a Sat" data-live-search="true">
+    <option value="sat1">SAT-ONE</option>
+    <option value="sat2">SAT-TWO</option>
+    <option value="sat3">SAT-THREE</option>
+    <option value="sat4">SAT-FOUR</option>
+    <option value="sat5">SAT-FIVE</option>
+    <option value="sat6">SAT-SIX</option>
+  </select>
+
 	TLEs
 	{{messdage}}
 	<div ng-repeat="tle in tles">
