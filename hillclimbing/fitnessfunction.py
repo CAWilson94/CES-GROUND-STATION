@@ -1,6 +1,7 @@
 #!usr/bin/env python  
 from datetime import date, datetime, timedelta
-from random import shuffle
+from random import shuffle,randint
+import itertools
 
 class satellite(object):
 	"Just a ibject I made to avoid importing an actual object"
@@ -408,8 +409,7 @@ def test_findSchedulableSatellites_many_fake_sats_but_diff():
 # test_findSchedulableSatellites_many_fake_sats_but_diff()
 # test_findSchedulableSatellites_many_fake_sats()
 
-
-def hillclimbingsimple(satList):
+def hillclimbingSteepest(satList):
 	""" Actual algorithm which isn't quite hillclimbing cause it 
 		shuffles the list rather than moving one step from 
 		current position"""
@@ -419,26 +419,139 @@ def hillclimbingsimple(satList):
 
 	maxIterations = 100
 	i=0
-	oldUnscheduled = 2000000   #just a really big number
+	oldScore = max   #just a really big number
 	newOrder=[]
 	curOrder=satList
 	while i<maxIterations:
 		
-		#swap two elements
+		#findAllNeighbours
+		ListOfAllNeighbours = itertools.permutations(curOrder)
+		print(ListOfAllNeighbours)
+		steepestScore=0
+		steepestNeighbour=[]
+		for neighbour in ListOfAllNeighbours:
+			newScore = fitnessFunction(neighbour)
+			if(newScore>steepestScore):
+				steepestScore=newScore
+				steepestNeighbour=neighbour
+				#break;
 
+		# print("it")
+		# #shuffling can make it find different solutions
+		# #shuffling count as hc with random restart kinda?
+		curOrder=steepestNeighbour
+		#newScore = fitnessFunction(curOrder)
+		
+		# #Could change so it only/ changes when it's a lot better or a little better
+		# if newScore < oldScore:
+		# 	#use that 
+		# 	print("New Order")
+		# 	#curOrder=newOrder
+		# 	oldScore=newScore
+		# 	i=0
+		# else:
+		# 	print("Keep Order")
+	 	i+=1
+		print(i)	
 
+	if i==100:
+		print("{} curOrder could be global maxima".format(curOrder))		
+		return curOrder
+
+def hillclimbingStochastic(satList):
+	""" Actual algorithm which isn't quite hillclimbing cause it 
+		shuffles the list rather than moving one step from 
+		current position"""
+	""" Shuffle the list at least 100 times, if better list comes from
+		shuffling reset maxIterations and shuffle. If no better list
+		comes, then that could be it"""
+
+	maxIterations = 100
+	i=0
+	oldScore = max   #just a really big number
+	newOrder=[]
+	curOrder=satList
+	while i<maxIterations:
+		
+		#swap two random elements
+		i1 = randint(0,len(curOrder)-1)
+		i2 = randint(0,len(curOrder)-1)
+		swap1 = curOrder[i1]
+		swap2 = curOrder[i2]
+
+		curOrder[i2]=swap1
+		curOrder[i1]=swap2
 		#shuffling can make it find different solutions
 		#shuffling count as hc with random restart kinda?
-		newUnscheduled = fitnessFunction(curOrder)
-		if newUnscheduled < oldUnscheduled:
+		newScore = fitnessFunction(curOrder)
+		
+		#Could change so it onlt changes when it's a lot better or a little better
+		if newScore < oldScore:
 			#use that 
 			print("New Order")
 			#curOrder=newOrder
-			oldUnscheduled=newUnscheduled
+			oldScore=newScore
 			i=0
 		else:
 			print("Keep Order")
 			i+=1
+			
+	if i==100:
+		print("{} curOrder could be global maxima".format(curOrder))		
+		return curOrder
+
+def hillclimbingSimple(satList):
+	""" Actual algorithm which isn't quite hillclimbing cause it 
+		shuffles the list rather than moving one step from 
+		current position"""
+	""" Shuffle the list at least 100 times, if better list comes from
+		shuffling reset maxIterations and shuffle. If no better list
+		comes, then that could be it"""
+
+	maxIterations = 50
+	i=0
+	oldScore = max   #just a really big number
+
+	newOrder=[]
+	curOrder=satList
+	while i<maxIterations:
+		
+		ListOfAllNeighbours = itertools.permutations(curOrder)
+		oldNeighbourScore=0
+		for neighbour in ListOfAllNeighbours:
+			newNeighbourScore  = fitnessFunction(neighbour)
+			if(newNeighbourScore > oldNeighbourScore):
+				print("New Order")
+				curOrder=neighbour
+				oldNeighbourScore=newNeighbourScore
+				newScore=newNeighbourScore
+				break;
+				
+
+		#swap first two elements, if that is no better, swap next then next....
+		
+		# for j in range(0,len(curOrder)-1):
+		# 	swap1=curOrder[j]
+		# 	swap2=curOrder[j+1]
+		# 	curOrder[j]=swap2
+		# 	curOrder[j+1]=swap1
+		# 	newScore = fitnessFunction(curOrder)
+
+		# i1 = randint(0,len(newOrder))
+		# i2 = randint(0,len(newOrder))
+		# swap1 = curOrder[i1]
+		# swap2 = curOrder[i2]
+
+		# curOrder[i2]=swap1
+		# curOrder[i1]=swap2
+		#shuffling can make it find different solutions
+		#shuffling count as hc with random restart kinda?
+
+		if newScore <= oldScore:
+			i+=1
+		else:
+			i=0
+
 			
 	if i==100:
 		print("{} curOrder could be global maxima".format(curOrder))		
@@ -556,7 +669,7 @@ def test_hillclimbing_many_fake_sats():
 
 	satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9]#,sat10,sat11]
 
-	hillclimbing(satList)
+	hillclimbingSimple(satList)
 
 def test_hillclimbing_many_fake_sats_but_diff():
 
