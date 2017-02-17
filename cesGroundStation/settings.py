@@ -57,11 +57,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'cesGroundStation.urls'
 
-CORS_ORIGIN_WHITELIST = (
 
-   'localhost:8081',
-
-)
 
 TEMPLATES = [
     {
@@ -130,3 +126,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+CORS_ORIGIN_WHITELIST = (
+   'localhost:8081',
+)
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+
+CSRF_TRUSTED_ORIGINS = (
+    'localhost:8081',
+)
