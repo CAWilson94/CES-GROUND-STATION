@@ -25,9 +25,20 @@
 
 	    <!-- Services -->
 	    <script src="public/components/scheduler/services/tle.service.js"></script>
+
+        
+        
+        <nav class="navbar navbar-light bg-faded justify-content-between">
+            <a class="navbar-brand">Quick Search TLE</a>
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+        </nav>
     
 </head>
     <body>
+  
         <!-- The dynamic templates will be served within this div -->
         <ui-view></ui-view>
     </body>
