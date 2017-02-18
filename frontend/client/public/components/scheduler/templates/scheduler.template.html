@@ -1,7 +1,26 @@
-<div ng-controller="SchedulerController">
+<!--
+<select class="ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="selectedName" multiple title="sat pick" ng-options="tle.name for tle in tles">
+</select>
 
+  <select class = "js-states form-control" title="Pick a Sat" data-live-search="true">
+    <option value="sat1">SAT-ONE</option>
+    <option value="sat2">SAT-TWO</option>
+    <option value="sat3">SAT-THREE</option>
+    <option value="sat4">SAT-FOUR</option>
+    <option value="sat5">SAT-FIVE</option>
+    <option value="sat6">SAT-SIX</option>
+  </select>-->
+ 
+</!DOCTYPE html>
+<html>
+<head>
+	<title>BOOP</title> <!-- need to override this -->
+	<h1> HELLO </h1>
+</head>
+<body>
+<div ng-controller="SchedulerController">
 	TLEs
-	{{messdage}}
+	{{hello}}
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
 			{{tle.id}} <br>
@@ -13,3 +32,6 @@
 	</div>
 	<br>
 </div>
+
+</body>
+</html>
