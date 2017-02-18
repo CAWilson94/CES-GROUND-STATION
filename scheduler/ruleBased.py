@@ -5,6 +5,9 @@ class Pass():
 		self.start = start
 		self.end = end
 		self.duration = duration
+
+	def passAsStr(self):
+		return self.name + ": " +str(self.start) + " -> " + str(self.end)
 	
 passes = [
 	Pass("a", 10, 12, 2), Pass("a", 22, 24, 2), Pass("a", 34, 36, 2), 
@@ -21,18 +24,57 @@ def conflicts(periodStart, periodEnd, passToCheck):
 	else:
 		return False
 
+aPass = passes[3];
+try:
+	print(str(passes.index(aPass)))
+except ValueError:
+	print("not found")
+"""
+	Rules for filtering the list of conflicts down to one satellite. 
+		1. Highest Priority first
+		2. The one that hasn't been looked at at all
+		3. The one hasn't been looked at in the longest time
+		4. The one that comes first chronologically
+		5. Randomly chosen
 
+	
+	Rule 1: Filter by priority
+		if only one is found with a higher priority
+			add to order
+		if more than one are found of the higher priority
+			apply rule 2
+		if none are found
+			apply rule 2
+	Rule 2: Filter by whether it has been picked at all. 
+		if only one hasn't been picked before
+			add it to order
+		if more than one is found that hasn't been picked before
+			apply rule 4
+		if none are found that weren't picked before
+			apply rule 3
+	Rule 3: Find the largest index for each conflict
+		sort the list by the index, choose the one with the smallest index. 
+
+"""
+"""
 def findNext(conflicting):
 	print("There were : " + str(len(conflicting)) + " conflics found:")
 	if(conflicting):
+		# Rule 1
 		temp = conflicting
 		chosenNext = temp[0]
-		#look for one that hasn't been picked before
+		# Rule 2 look for one that hasn't been picked before
 		for i in range(len(temp)):
 			print(temp[i].name)
-			#if chosenNext[i] in order:
-			#	print("")
-			#	del chosenNext[i]
+			# Remove the ones that have been seen before
+			if chosenNext[i] in order:
+				print(chosenNext[i].passAsStr() + " has been seen before, removing it.")
+				del chosenNext[i]
+			if(temp):
+				if(len(temp) == 1):
+					return temp[0]
+				else:
+					# more than one left, next rule
 	return conflicting[1]
 
 print("Initial list")
@@ -47,9 +89,9 @@ for aPass in passes:
 
 i = 0
 print("passes: " + str(len(passes)))
-for i in range(len(passes)):
+while(i < len(passes)):
 	j = i + 1
-	print("i: " + str(i) + ", j: " + str(j))
+	print("i: " + str(i) + ", j: " + str(j) + ", passes[i] is: " + passes[i].passAsStr())
 
 	conflicting = []
 	periodStart = passes[i].start
@@ -66,14 +108,20 @@ for i in range(len(passes)):
 	if(conflicting):
 		conflicting.append(passes[i])
 		conflicting.sort(key=lambda x: x.start, reverse=False)
+		print("Conflicts")
 		for x in range(len(conflicting)):
 			print(conflicting[x].name + ": " + str(conflicting[x].start) + " -> " + str(conflicting[x].end))
-		orderOfPasses.append(findNext(conflicting))
+		nextPass = findNext(conflicting)
+		print("Added: " + nextPass.passAsStr() + " from conflict res.")
+		orderOfPasses.append(nextPass)
 		i = j
 	else:
+		print("Added: " + passes[i].passAsStr())
 		orderOfPasses.append(passes[i])
+		i+=1
 
 for i in range(len(orderOfPasses)):
 	print(orderOfPasses[i].name + " : " +str(orderOfPasses[i].start) + " -> " + str(orderOfPasses[i].end))
 
-	
+"""
+
