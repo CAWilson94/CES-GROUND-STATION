@@ -14,19 +14,47 @@
 </!DOCTYPE html>
 <html>
 <head>
-	<title>BOOP</title> <!-- need to override this -->
-	<h1> HELLO </h1>
 </head>
 <body>
 
+<div class = drop-down>
 <select class="selectpicker" data-live-search="true">
-  <option data-tokens="ketchup mustard">TLE INPUT</option>
-  <option data-tokens="mustard">TLEINPUT1</option>
-  <option data-tokens="frosting">YERMAW</option>
+  <option data-tokens="TLEEX1">TLE INPUT</option>
+  <option data-tokens="TLEEX2">TLEINPUT1</option>
+  <option data-tokens="TLEEX3">YERMAW</option>
 </select>
+</div>
+
+<style type="text/css">
+  /*Drop down*/
+  div.drop-down.ng-scope{
+    margin-bottom: 1cm;
+    margin-left: 19px;
+  }
+  /*Table*/
+  div.tle-table.ng-scope{
+    margin-bottom: 1cm;
+    padding-left: 19px;
+    padding-right: 19px;
+  }
 
 
+</style>
 
+<div class = tle-table>
+<table class="table table-sm table-inverse">
+  <thead>
+    <tr>
+      <th>Sat Name</th>
+      <th>Next Pass</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- replace with options etc -->
+  </tbody>
+</table>
+</div>
 
 <div ng-controller="SchedulerController">
 	TLEs
