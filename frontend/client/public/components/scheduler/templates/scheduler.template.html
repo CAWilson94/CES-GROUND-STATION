@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<div class = drop-down>
+<div class = "drop-down">
 <select class="selectpicker" data-live-search="true">
   <option data-tokens="TLEEX1">TLE INPUT</option>
   <option data-tokens="TLEEX2">TLEINPUT1</option>
@@ -31,34 +31,33 @@
     margin-bottom: 1cm;
     margin-left: 19px;
   }
-  /*Table*/
-  div.tle-table.ng-scope{
-    margin-bottom: 1cm;
-    padding-left: 19px;
-    padding-right: 19px;
-  }
+ </style>
 
-
-</style>
-
-<div class = tle-table>
-<table class="table table-sm table-inverse">
-  <thead>
-    <tr>
-      <th>Sat Name</th>
-      <th>Next Pass</th>
-      <th>Duration</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- replace with options etc -->
-  </tbody>
-</table>
-</div>
+<div class = "container-fluid">
+  <div class="row">
+  <div class = "col-sm-5">
+      <table class="table table-sm table-inverse">
+          <thead>
+          <tr>
+            <th>Sat Name</th>
+            <th>Next Pass</th>
+            <th>Duration</th>
+          </tr>
+          </thead>
+          <tbody> 
+           <tr>
+           <td>Ex1</td>
+           <td>Ex2</td>
+           <td>Ex3</td>
+           </tr>
+          </tbody>
+      </table>
+  </div>
+  </div>
+</div> 
 
 <div ng-controller="SchedulerController">
-	TLEs
-	{{hello}}
+	<h> TLEs: Currently not showing up on my desktop</h>
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
 			{{tle.id}} <br>
