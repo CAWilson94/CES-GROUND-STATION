@@ -1,34 +1,152 @@
+from random import randint
+import time 
+
+	# 6 hrs = 360
+	# 1 day = 1440
+	# 2 days = 2880
+	# 3 days = 4320
+TIMEFRAME_MINS = 4320
+PASS_LEN_MAX = 20
+PRIORITY_MAX = 2
+NUM_OF_PASSES = 1000
+
+DEBUG = False
 
 class Pass():
-	def __init__(self, name, start, end, duration):
+	def __init__(self, name, start, end, duration, priority):
 		self.name = name
 		self.start = start
 		self.end = end
 		self.duration = duration
+		self.priority = priority
 
 	def passAsStr(self):
-		return self.name + ": " +str(self.start) + " -> " + str(self.end)
+		return self.name + " (" + str(self.priority) + "): " +str(self.start) + " -> " + str(self.end )
+
+satelliteNames = ["a", "b", "c", "d", "e", "f", "g"]
+
+priorities = []
+for i in range(len(satelliteNames)):
+	priorities.append(randint(0, PRIORITY_MAX))
+
+def generatePass():
+	satIndex = randint(0, len(satelliteNames)-1)
+	name = satelliteNames[satIndex]
+	duration = randint(0, PASS_LEN_MAX)
+	startTime = randint(0, TIMEFRAME_MINS) 
+	endTime = startTime+duration
+	priority = priorities[satIndex]
+	return Pass(name, startTime, endTime, duration, priority)
+
+passes = []
+
+for i in range(NUM_OF_PASSES):
+	passes.append(generatePass())
+
+
+
 	
-passes = [
-	Pass("a", 10, 12, 2), Pass("a", 22, 24, 2), Pass("a", 34, 36, 2), 
-	Pass("b", 0, 1, 1), Pass("b", 4, 5, 1), Pass("b", 7, 8, 1), 
-	Pass("c", 4, 6, 2), Pass("c", 16, 18, 2), Pass("c", 28, 30, 2), 
-	Pass("d", 2, 5, 3), Pass("d", 14, 17, 3), Pass("d", 26, 29, 3), 
-]
+# passes = [
+#  	Pass("a", 10, 12, 2, 1), Pass("a", 22, 24, 1, 1), Pass("a", 34, 36, 2, 1), 
+#  	Pass("b", 0, 1, 1, 1), Pass("b", 4, 5, 1, 1), Pass("b", 7, 8, 1, 1), 
+#  	Pass("c", 4, 6, 2, 1), Pass("c", 16, 18, 2, 1), Pass("c", 28, 30, 2, 1), 
+#  	Pass("d", 2, 5, 3, 1), Pass("d", 14, 17, 3, 1), Pass("d", 26, 29, 3, 1), 
+# ]
+
+# aPass = passes[3];
+# try:
+# 	print(str(passes.index(aPass)))
+# 	print(passes[passes.index(aPass)].passAsStr())
+# except ValueError:
+# 	print("not found")
 
 orderOfPasses = []
 
+def lastIndex(list, value):
+	# list[::-1] reverses list
+	# index finds the index from the reversed list
+	# take this away from the lenght to get last index
+	#return len(list) - list[::-1].index(value)
+	index = 0
+	temp = orderOfPasses[::-1]
+	while(index < len(temp)):
+		if(temp[index].name == value.name):
+			return len(temp) - index
+		index += 1
+	return -1
+
+# General checking if the pass is within conflicting time period
 def conflicts(periodStart, periodEnd, passToCheck):
 	if(passToCheck.start>periodStart and passToCheck.start < periodEnd):
 		return True
 	else:
 		return False
 
-aPass = passes[3];
-try:
-	print(str(passes.index(aPass)))
-except ValueError:
-	print("not found")
+# Rule 1
+# Filter out low priority 
+def filterPriority(conflicting):
+	if(conflicting):
+		highestPriority = conflicting[0].priority
+		#print("Highest Priority: " + str(highestPriority))
+		filtered = []
+
+		for sat in conflicting:
+			if(sat.priority == highestPriority):
+				filtered.append(sat)
+				#print("Added " + sat.passAsStr())
+				
+			if(sat.priority > highestPriority):
+				filtered = []
+				highestPriority = sat.priority
+				filtered.append(sat)
+				#print("Found new highest: " + str())
+
+		if(filtered):
+			return filtered
+
+	return conflicting
+
+# Rule 2
+# Pick ones which haven't been picked yet
+def filterByUnpicked(conflicting):
+	if(conflicting):
+		neverPicked = []
+		for sat in conflicting:
+			unpicked = True
+			for aPass in orderOfPasses:
+				if(aPass.name == sat.name):
+					unpicked = False
+
+			if(unpicked):
+				#print("Not picked: " + sat.passAsStr())
+				neverPicked.append(sat)
+		if(neverPicked):
+			return neverPicked
+
+	return None
+
+# Rule 3
+# Pick the oldest one
+def filterByOldest(conflicting):
+	if(conflicting):
+		oldest = conflicting[0]
+		oldestLastIndex = lastIndex(orderOfPasses, oldest)
+
+		index = 0
+		while(index < len(conflicting)):
+			current = conflicting[index]
+			currentLastIndex = lastIndex(orderOfPasses, current)
+			if(currentLastIndex < oldestLastIndex):
+				oldest = current
+				oldestLastIndex = currentLastIndex
+			index += 1
+
+
+		return oldest
+	return None
+
+
+
 """
 	Rules for filtering the list of conflicts down to one satellite. 
 		1. Highest Priority first
@@ -52,76 +170,145 @@ except ValueError:
 			apply rule 4
 		if none are found that weren't picked before
 			apply rule 3
-	Rule 3: Find the largest index for each conflict
-		sort the list by the index, choose the one with the smallest index. 
+	Rule 3: Find one which hasn't been picked in the longest time. 
+		add it to the order
+	Rule 4: Choose a radom one
+		add it to the order
 
+	Later change Rule 4 to:
+	Rule 4.1: Find the one which leaves the lagest gap between the 
+			  start or the end of the pass
+		if one found
+			add it to the order
+		else 
+			apply original Rule 4
+		
 """
-"""
-def findNext(conflicting):
-	print("There were : " + str(len(conflicting)) + " conflics found:")
+
+def findNext(conflicting, startTime, endTime):
+	#print("There were : " + str(len(conflicting)) + " conflics found:")
 	if(conflicting):
-		# Rule 1
 		temp = conflicting
-		chosenNext = temp[0]
-		# Rule 2 look for one that hasn't been picked before
-		for i in range(len(temp)):
-			print(temp[i].name)
-			# Remove the ones that have been seen before
-			if chosenNext[i] in order:
-				print(chosenNext[i].passAsStr() + " has been seen before, removing it.")
-				del chosenNext[i]
-			if(temp):
-				if(len(temp) == 1):
-					return temp[0]
-				else:
-					# more than one left, next rule
-	return conflicting[1]
+		chosen = temp[0]
 
-print("Initial list")
-for aPass in passes: 
-	print(str(aPass.start) + ",")
+		# Rule 1
+		temp = filterPriority(temp)
 
+		if(len(temp) == 1):
+			if(DEBUG):
+				print("Only one found with highest priority, returning: " + temp[0].passAsStr())
+			return temp[0]
+
+		unpicked = filterByUnpicked(temp)
+
+		if(unpicked is not None):
+			if(len(unpicked) == 1):
+				if(DEBUG):
+					print("Only one found which wasn't picked before, returning: " + unpicked[0].passAsStr())
+				return unpicked[0]
+			elif(len(unpicked) > 1):
+				returning = unpicked[randint(0, len(unpicked)-1)]
+				if(DEBUG):
+					print("Multiple not picked before, reurning random one: " + returning.passAsStr())
+				return returning
+				# Implement this when dealing with partial conflicts too. 
+				# return filterByTimeSaved(temp, startTime, endTime)
+			else: 
+				print("No unpicked found")
+
+		returning = filterByOldest(temp)
+		if(DEBUG):
+			print("Returning oldest one picked: " + returning.passAsStr())
+		return returning
+		
+	if(DEBUG):
+		print("*** Returning first item in conflicts ***")
+	return conflicting[0]
+
+
+			
+
+
+# print("Initial list")
+# for aPass in passes: 
+# 	print(str(aPass.start) + ",")
+
+timeStart = time.clock()
+
+# Sort from earliest first
 passes.sort(key=lambda x: x.start, reverse=False)
 
 print("Sorted list")
 for aPass in passes: 
-	print(str(aPass.start) + ",")
+	print(aPass.passAsStr())
+
 
 i = 0
+conflictsNum = 0
+
 print("passes: " + str(len(passes)))
+#for each satellites
 while(i < len(passes)):
 	j = i + 1
-	print("i: " + str(i) + ", j: " + str(j) + ", passes[i] is: " + passes[i].passAsStr())
+	#print("i: " + str(i) + ", j: " + str(j) + ", passes[i] is: " + passes[i].passAsStr())
 
+	# find time window of conflic
 	conflicting = []
-	periodStart = passes[i].start
-	periodEnd = passes[i].end
+	periodStart = passes[i].start 
+	periodEnd = passes[i].end + 2
 
 	while(j<len(passes)):
+		# find all satellites which start in the time window.
 		if(conflicts(periodStart, periodEnd, passes[j])):
 			conflicting.append(passes[j])
 			if(passes[j].end > periodEnd):
-				periodEnd = passes[j].end
+				periodEnd = passes[j].end + 1
 			j += 1
 		else:
 			break
+	# if any were found
 	if(conflicting):
 		conflicting.append(passes[i])
 		conflicting.sort(key=lambda x: x.start, reverse=False)
-		print("Conflicts")
-		for x in range(len(conflicting)):
-			print(conflicting[x].name + ": " + str(conflicting[x].start) + " -> " + str(conflicting[x].end))
-		nextPass = findNext(conflicting)
-		print("Added: " + nextPass.passAsStr() + " from conflict res.")
+
+		# print("Conflicts")
+		# for x in range(len(conflicting)):
+		# 	print(conflicting[x].name + ": " + str(conflicting[x].start) + " -> " + str(conflicting[x].end))
+		# print("---------")
+
+		# resolve the conflict
+		nextPass = findNext(conflicting, periodStart, periodEnd)
+		if(DEBUG):
+			print("Added: " + nextPass.passAsStr() + " from conflict res.")
+		# append to the order
 		orderOfPasses.append(nextPass)
+		conflictsNum += 1
+		# skip all sats which were conflicting
+		# change this to find conflicts from end of sat selected to end of conflict window for sats > 4 mins
 		i = j
 	else:
-		print("Added: " + passes[i].passAsStr())
+		# no conflics add and move on to next sat
+		if(DEBUG):
+			print("Added: " + passes[i].passAsStr())
 		orderOfPasses.append(passes[i])
-		i+=1
 
-for i in range(len(orderOfPasses)):
-	print(orderOfPasses[i].name + " : " +str(orderOfPasses[i].start) + " -> " + str(orderOfPasses[i].end))
+		i = i+ 1
 
-"""
+timeEnd = time.clock()
 
+print("Order: ")
+print(orderOfPasses[0].name + " : " +str(orderOfPasses[0].start) + " -> " + str(orderOfPasses[0].end))	
+a = 1
+errors  = 0
+while(a < len(orderOfPasses)):
+	if(orderOfPasses[a].start < orderOfPasses[a-1].end):
+		print("This one starts before the previous one ends")
+		errors += 1
+	print(orderOfPasses[a].passAsStr())	
+	a+= 1
+print("---------------")
+print("Num of passes: " + str(NUM_OF_PASSES))
+print("Num of passes ordered: " + str(len(orderOfPasses)))
+print("Num of conflicts resolved: " + str(conflictsNum))
+print("Num of Errors: " + str(errors))
+print("Time taken: %s seconds" % (timeEnd - timeStart))
