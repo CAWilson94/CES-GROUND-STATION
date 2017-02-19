@@ -1,4 +1,5 @@
-__pycache__/
+cesGroundStation/__pycache__/
+scheduler/__pycache__/
 db.sqlite3
 *.pyc 
 *.pyo
