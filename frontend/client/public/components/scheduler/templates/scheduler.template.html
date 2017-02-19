@@ -23,6 +23,10 @@
   <option data-tokens="TLEEX2">TLEINPUT1</option>
   <option data-tokens="TLEEX3">YERMAW</option>
 </select>
+<button type="button" class="btn btn-outline-primary">
+  <span class="glyphicon glyphicon-plus"></span>
+</button>
+
 </div>
 
 <style type="text/css">
@@ -57,7 +61,7 @@
 </div> 
 
 <div ng-controller="SchedulerController">
-	<h> TLEs: Currently not showing up on my desktop</h>
+	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
 			{{tle.id}} <br>
