@@ -17,7 +17,8 @@ class TLEList(generics.ListCreateAPIView):
 	TLEs in the db by serializering the query results, convertng 
 	to json and returning it to the place that sent the http request
 	"""
-	Services.updateTLE()
+	some_instance = Services()
+	some_instance.updateTLE()
 	queryset = get_list_or_404(TLE)
 	serializer_class = TLESerializer
 

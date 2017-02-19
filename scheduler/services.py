@@ -111,8 +111,8 @@ class Services():
 		duration = setTime - riseTime
 		# riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0, riseTime, setTime, duration, details[3], details[1], details[5])
-
-	def updateTLE():
+	
+	def updateTLE(self):
 		"""
 		Retrieves TLE data from external source, checks format and places in db
 		"""
