@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view
 
 
 class TLEViewSet(viewsets.ModelViewSet):
+	Services.updateTLE()
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
 

@@ -11,7 +11,7 @@
     <option value="sat6">SAT-SIX</option>
   </select>-->
  
-</!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 </head>
@@ -40,7 +40,7 @@
 <div class = "container-fluid">
   <div class="row">
   <div class = "col-sm-5">
-      <table class="table table-sm table-inverse table-hover table-responsive"">
+      <table id = "tleTable" class="table table-sm table-inverse table-hover table-responsive"">
           <thead>
           <tr>
             <th>Sat Name</th>
@@ -79,8 +79,13 @@
 	<br>
 </div>
 
+
+<script type="text/javascript">
+  $(document).ready(function() {
+   // $('#tleTable').DataTable();
+  } );
+
+</script>
 </body>
-
-
 </html>
 </html>
