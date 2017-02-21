@@ -9,29 +9,14 @@ from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
-
+from rest_framework.decorators import detail_route
+from rest_framework.renderers import StaticHTMLRenderer
 
 
 class TLEViewSet(viewsets.ModelViewSet):
 	Services.updateTLE()
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
-
-# class TLEList(generics.ListCreateAPIView):
-
-# 	Services.updateTLE()
-# 	queryset = get_list_or_404(TLE)
-# 	serializer_class = TLESerializer
-
-# class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
-# 	queryset = TLE.objects.all()
-# 	serializer_class = TLESerializer   
-# viewset
-
-# class TLEUpdate(APIView):
-# 	def post(self, request, format=None):
-# 		print("bob") AK
-# 		Services.updateTLE()
 
 class PyephemData(APIView):
 
