@@ -1,7 +1,7 @@
 scheduler
-    .factory('TLE', function($resource) {
+    .factory('AZEL',function($resource) {
         return $resource(
-            'http://localhost:8000/api/tles/:id/',
+            'http://localhost:8000/api/tles/:id/azel',
             {},
             {
                 query: {
@@ -9,7 +9,7 @@ scheduler
                     isArray: true,
                     headers: {
                         'Content-Type':'application/json',
-                        'Accept':'application/json'
+                        'Accept':'application/json'                        
                     }
                 }
             },

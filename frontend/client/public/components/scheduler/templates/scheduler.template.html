@@ -67,6 +67,14 @@
 
 <div ng-controller="SchedulerController">
 	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
+
+  <div ng-repeat="azels in azel">
+    <div style="margin-left:20px;">
+      {{azel.azimuth}}
+  <br>
+ </div>
+  </div>
+
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
 			{{tle.id}} <br>
@@ -76,8 +84,8 @@
 			<hr/>
 		</div>
 	</div>
-	<br>
-</div>
+ </div>
+
 
 
 <script type="text/javascript">

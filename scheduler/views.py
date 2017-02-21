@@ -19,7 +19,6 @@ class TLEViewSet(viewsets.ModelViewSet):
 	serializer_class = TLESerializer
 
 class PyephemData(APIView):
-
 	def get_object(self, pk):
 		try:
 			return TLE.objects.get(pk=pk)
