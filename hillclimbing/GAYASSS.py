@@ -34,6 +34,7 @@ the one with smallest time at end is winner
 """
 orderOne = [magicRainbow, fabbyRainbow, greyRainbow, squeakyRainbow]
 ordertwo = [squeakyRainbow, fabbyRainbow, greyRainbow, magicRainbow]
+# Need to add date to this to know if scheduled for same day or not
 orderedPasses = [orderOne, ordertwo]
 
 
