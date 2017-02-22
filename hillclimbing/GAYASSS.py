@@ -40,9 +40,11 @@ orderedPasses = [orderOne, ordertwo]
 def fitness():
 	""" The smallest time is the winner basically """
 	for x in orderedPasses:
+		total = 0;
 		for y,z in zip(x[1:],x):
-			print(y.name,z.name)
-			print(y.startTime, z.endTime)
 			diff=(datetime.datetime.strptime(str(y.startTime),"%I:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%I:%M:%S"))
-			print("%s" %diff)
+		total += int(diff.total_seconds())
+		print ("YEER MAR")
+		print(str(datetime.timedelta(seconds=total)))
+
 fitness()
