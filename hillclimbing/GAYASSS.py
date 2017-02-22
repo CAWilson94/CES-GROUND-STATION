@@ -34,18 +34,21 @@ the one with smallest time at end is winner
 """
 orderOne = [magicRainbow, fabbyRainbow, greyRainbow, squeakyRainbow]
 ordertwo = [squeakyRainbow, fabbyRainbow, greyRainbow, magicRainbow]
-# Need to add date to this to know if scheduled for same day or not
 orderedPasses = [orderOne, ordertwo]
 
 
-def fitness():
+def fitness(passList):
 	""" The smallest time is the winner basically """
-	for x in orderedPasses:
-		total = 0;
-		for y,z in zip(x[1:],x):
-			diff=(datetime.datetime.strptime(str(y.startTime),"%I:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%I:%M:%S"))
-		total += int(diff.total_seconds())
-		print ("YEER MAR")
-		print(str(datetime.timedelta(seconds=total)))
+	total = 0;
+	for y,z in zip(passList[1:],passList):
+		#print(y.name,z.name)
+		#print(y.startTime, z.endTime)
+		diff=(datetime.datetime.strptime(str(y.startTime),"%I:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%I:%M:%S"))
+		#print("%s" %diff)
+		total += abs(int(diff.total_seconds()))
+	print ("YERMAWWWWWW\n")
+	print(str(datetime.timedelta(seconds=abs(total))))
+	fitness = total;
+	return fitness
 
-fitness()
+fitness(orderOne)
