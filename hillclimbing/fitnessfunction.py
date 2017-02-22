@@ -2,6 +2,7 @@
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 import itertools
+import sys
 
 class satellite(object):
 	"Just a ibject I made to avoid importing an actual object"
@@ -238,7 +239,7 @@ def test_findSchedulableSatellites_many_real_sats():
 
 
 	catAOS = datetime(2017,1,25,0,52,59)
-	catLOS = datetime(2017,1,25,1,04,28)
+	catLOS = datetime(2017,1,25,1,4,28)
 	sixtysevenCAOS = datetime(2017,1,25,0,6,52)
 	sixtysevenCLOS = datetime(2017,1,25,0,14,42)
 	sixtysevenDAOS = datetime(2017,1,25,0,8,37)
@@ -256,7 +257,7 @@ def test_findSchedulableSatellites_many_real_sats():
 	eagleAOS = datetime(2017,1,25,0,53,13)
 	eagleLOS = datetime(2017,1,25,1,2,56)	
 	exoAOS = datetime(2017,1,25,0,57,27)
-	exoLOS = datetime(2017,1,25,1,05,27)
+	exoLOS = datetime(2017,1,25,1,5,27)
 	fconeAOS = datetime(2017,1,25,0,17,14)
 	fconeLOS = datetime(2017,1,25,0,30,6)
 	fcthreeAOS = datetime(2017,1,25,0,11,3)
@@ -300,9 +301,6 @@ def test_findSchedulableSatellites_many_real_sats():
 	fethirteen = satellite("fethirteen",fethirteenAOS,fethirteenLOS)
 	fefourteen = satellite("fefourteen",fefourteenAOS,fefourteenLOS)
 	itup = satellite("itup",itupAOS, itupLOS)
-
-
-
 
 	#satList=[sat1,sat2,sat3,sat5]
 	satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,eagle,
@@ -401,8 +399,6 @@ def test_findSchedulableSatellites_many_fake_sats_but_diff():
 
 	fitnessFunction(satList)
 
-
-
 #check we don't lose a sat during processing
 #check against a varied set of sats
 # test_findSchedulableSatellites_many_real_sats()
@@ -417,23 +413,31 @@ def hillclimbingSteepest(satList):
 		shuffling reset maxIterations and shuffle. If no better list
 		comes, then that could be it"""
 
-	maxIterations = 100
+	maxIterations = 1000
 	i=0
-	oldScore = max   #just a really big number
+	oldScore = sys.maxsize   #just a really big number
 	newOrder=[]
 	curOrder=satList
 	while i<maxIterations:
 		
-		#findAllNeighbours
-		iteratorOfAllNeighboursIncItself = itertools.permutations(curOrder)
-		ListOfAllNeighboursIncItself = list(iteratorOfAllNeighboursIncItself)
-		ListOfAllNeighbours = ListOfAllNeighboursIncItself[1:len(ListOfAllNeighboursIncItself)]
+		listOfNearestNeighboursAndItself=[]
+		generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
+		j=0
+		for n in generatorOfAllNeighboursIncItself:
+			if j==200:
+				break
+			#print(list(n))
+			listOfNearestNeighboursAndItself.append(list(n))
+			j+=1
+
+		listOfNearestNeighbours = listOfNearestNeighboursAndItself[1:]
+
 		#print(ListOfAllNeighbours)
 		oldSteepestScore=0
 		maxNoNeighbours=5
 		noNeighbours=0
 		steepestNeighbour=[]
-		for neighbour in ListOfAllNeighbours:
+		for neighbour in listOfNearestNeighbours:
 			print(maxNoNeighbours)
 			if(noNeighbours==maxNoNeighbours):
 				break
@@ -455,14 +459,14 @@ def hillclimbingSteepest(satList):
 
 		# #Could change so it only/ changes when it's a lot better or a little better
 		if newScore < oldScore:
-		 	#use that 
-		 	print("New Order")
-		 	curOrder=steepestNeighbour
-		 	oldScore=newScore
-		 	i=0
+			#use that 
+			print("New Order")
+			curOrder=steepestNeighbour
+			oldScore=newScore
+			i=0
 		else:
-		 	print("Keep Order")
-	 		i+=1
+			print("Keep Order")
+			i+=1
 		print(i)	
 
 	if i==maxIterations:
@@ -470,16 +474,14 @@ def hillclimbingSteepest(satList):
 		return curOrder
 
 def hillclimbingStochastic(satList):
-	""" Actual algorithm which isn't quite hillclimbing cause it 
-		shuffles the list rather than moving one step from 
-		current position"""
-	""" Shuffle the list at least 100 times, if better list comes from
-		shuffling reset maxIterations and shuffle. If no better list
-		comes, then that could be it"""
+	""" does not examine all neighbors before deciding how to move. 
+	Rather, it selects a neighbor at random, and decides (based on 
+	the amount of improvement in that neighbor) whether to move 
+	to that neighbor or to examine another."""
 
-	maxIterations = 100
+	maxIterations = 1000
 	i=0
-	oldScore = max   #just a really big number
+	oldScore = sys.maxsize   #just a really big number
 	newOrder=[]
 	curOrder=satList
 	while i<maxIterations:
@@ -512,54 +514,57 @@ def hillclimbingStochastic(satList):
 		return curOrder
 
 def hillclimbingSimple(satList):
-	""" Actual algorithm which isn't quite hillclimbing cause it 
-		shuffles the list rather than moving one step from 
-		current position"""
-	""" Shuffle the list at least 100 times, if better list comes from
-		shuffling reset maxIterations and shuffle. If no better list
-		comes, then that could be it"""
+	""" In simple hill climbing, the first closer node is chosen"""
 
 	maxIterations = 50
 	i=0
-	oldScore = max   #just a really big number
-
+	oldScore = sys.maxsize   #just a really big number
+	newScore=0
 	newOrder=[]
 	curOrder=satList
+
 	while i<maxIterations:
-		
-		iteratorOfAllNeighboursIncItself = itertools.permutations(curOrder)
-		ListOfAllNeighboursIncItself = list(iteratorOfAllNeighboursIncItself)
-		ListOfAllNeighbours = ListOfAllNeighboursIncItself[1:len(ListOfAllNeighboursIncItself)]
-		#print(ListOfAllNeighbours)
+		listOfNearestNeighboursAndItself=[]
+		generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
+		j=0
+		for n in generatorOfAllNeighboursIncItself:
+			if j==10:
+				break
+			#print(list(n))
+			listOfNearestNeighboursAndItself.append(list(n))
+			j+=1
+		listOfNearestNeighbours = listOfNearestNeighboursAndItself[1:]
+
 		oldNeighbourScore=0
-		for neighbour in ListOfAllNeighbours:
+		for neighbour in listOfNearestNeighbours:
 			newNeighbourScore  = fitnessFunction(neighbour)
-			if(newNeighbourScore > oldNeighbourScore):
+			if(newNeighbourScore < oldNeighbourScore):
 				print("New Order")
 				print(neighbour)
 				curOrder=neighbour
 				oldNeighbourScore=newNeighbourScore
 				newScore=newNeighbourScore
 				break;
+			#print(neighbour)
 
-		#swap first two elements, if that is no better, swap next then next....
-		
-		# for j in range(0,len(curOrder)-1):
-		# 	swap1=curOrder[j]
-		# 	swap2=curOrder[j+1]
-		# 	curOrder[j]=swap2
-		# 	curOrder[j+1]=swap1
-		# 	newScore = fitnessFunction(curOrder)
+				#swap first two elements, if that is no better, swap next then next....
+				
+				# for j in range(0,len(curOrder)-1):
+				# 	swap1=curOrder[j]
+				# 	swap2=curOrder[j+1]
+				# 	curOrder[j]=swap2
+				# 	curOrder[j+1]=swap1
+				# 	newScore = fitnessFunction(curOrder)
 
-		# i1 = randint(0,len(newOrder))
-		# i2 = randint(0,len(newOrder))
-		# swap1 = curOrder[i1]
-		# swap2 = curOrder[i2]
+				# i1 = randint(0,len(newOrder))
+				# i2 = randint(0,len(newOrder))
+				# swap1 = curOrder[i1]
+				# swap2 = curOrder[i2]
 
-		# curOrder[i2]=swap1
-		# curOrder[i1]=swap2
-		#shuffling can make it find different solutions
-		#shuffling count as hc with random restart kinda?
+				# curOrder[i2]=swap1
+				# curOrder[i1]=swap2
+				#shuffling can make it find different solutions
+				#shuffling count as hc with random restart kinda?
 
 		if newScore <= oldScore:
 			oldScore=newScore
@@ -567,6 +572,7 @@ def hillclimbingSimple(satList):
 		else:
 			i=0
 
+		print(i)
 			
 	if i==maxIterations:
 		print("{} curOrder could be global maxima".format(curOrder))		
@@ -582,7 +588,7 @@ def hillclimbing(satList):
 
 	maxIterations = 100
 	i=0
-	oldScore = max   #just a really big number
+	oldScore = sys.maxsize   #just a really big number
 	newOrder=[]
 	curOrder=satList
 	while i<maxIterations:
@@ -684,7 +690,7 @@ def test_hillclimbing_many_fake_sats():
 
 	satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9]#,sat10,sat11]
 
-	hillclimbingSteepest(satList)
+	hillclimbing(satList)
 
 def test_hillclimbing_many_fake_sats_but_diff():
 
@@ -728,15 +734,110 @@ def test_hillclimbing_many_fake_sats_but_diff():
 	hillclimbing(satList)
 
 
-test_hillclimbing_many_fake_sats()
+def test_hillclimb_many_real_sats():
+	catAOS = datetime(2017,1,25,0,52,59)
+	catLOS = datetime(2017,1,25,1,4,28)
+	sixtysevenCAOS = datetime(2017,1,25,0,6,52)
+	sixtysevenCLOS = datetime(2017,1,25,0,14,42)
+	sixtysevenDAOS = datetime(2017,1,25,0,8,37)
+	sixtysevenDLOS = datetime(2017,1,25,0,16,18)
+	aistAOS = datetime(2017,1,25,0,35,21)
+	aistLOS = datetime(2017,1,25,0,48,8)
+	beesatAOS = datetime(2017,1,25,0,46,48)
+	beesatLOS = datetime(2017,1,25,1,0,4) 
+	briteAOS = datetime(2017,1,25,0,19,39)
+	briteLOS = datetime(2017,1,25,0,30,4)
+	cubebugAOS = datetime(2017,1,25,0,41,54)
+	cubebugLOS = datetime(2017,1,25,0,52,49)
+	sailAOS = datetime(2017,1,25,0,41,17)
+	sailLOS = datetime(2017,1,25,0,53,28)
+	eagleAOS = datetime(2017,1,25,0,53,13)
+	eagleLOS = datetime(2017,1,25,1,2,56)	
+	exoAOS = datetime(2017,1,25,0,57,27)
+	exoLOS = datetime(2017,1,25,1,5,27)
+	fconeAOS = datetime(2017,1,25,0,17,14)
+	fconeLOS = datetime(2017,1,25,0,30,6)
+	fcthreeAOS = datetime(2017,1,25,0,11,3)
+	fcthreeLOS = datetime(2017,1,25,0,23,54)
+	fcfiveAOS = datetime(2017,1,25,0,8,47)
+	fcfiveLOS = datetime(2017,1,25,0,21,37)
+	fceightAOS = datetime(2017,1,25,0,52,35)
+	fceightLOS = datetime(2017,1,25,1,5,21)
+	fcnineAOS = datetime(2017,1,25,0,50,43)
+	fcnineLOS = datetime(2017,1,25,1,3,31)
+	fctenAOS = datetime(2017,1,25,0,53,57)
+	fctenLOS = datetime(2017,1,25,1,6,40)
+	fcelevenAOS = datetime(2017,1,25,0,59,45)
+	fcelevenLOS = datetime(2017,1,25,1,12,25)	
+	fethirteenAOS = datetime(2017,1,25,1,7,32)
+	fethirteenLOS = datetime(2017,1,25,1,15,6)	
+	fefourteenAOS = datetime(2017,1,25,0,0,33)
+	fefourteenLOS = datetime(2017,1,25,0,8,13)	
+	itupAOS = datetime(2017,1,25,0,22,12)
+	itupLOS = datetime(2017,1,25,0,34,49)	
 
+	#09 
 
+	cat = satellite("cat",catAOS, catLOS)
+	sixtysevenC = satellite("sixtysevenC",sixtysevenCAOS, sixtysevenCLOS)
+	sixtysevenD = satellite("sixtysevenD",sixtysevenDAOS, sixtysevenDLOS)
+	aist = satellite("aist",aistAOS, aistLOS)
+	beesat = satellite("beesat",beesatAOS, beesatLOS)
+	brite = satellite("brite",briteAOS, briteLOS)
+	cubebug = satellite("cubebug",cubebugAOS, cubebugLOS)
+	sail = satellite("sail",sailAOS, sailLOS)
+	eagle = satellite("eagle",eagleAOS, eagleLOS)
+	exo = satellite("exo",exoAOS,exoLOS)
+	fcone = satellite("fcone",fconeAOS,fconeLOS)
+	fcthree = satellite("fcthree",fcthreeAOS, fcthreeLOS)
+	fcfive = satellite("fcfive",fcfiveAOS, fcfiveLOS)
+	fceight = satellite("fceight",fceightAOS,fceightLOS)
+	fcnine = satellite("fcnine",fcnineAOS,fcnineLOS)
+	fcten = satellite("fcten",fctenAOS, fctenLOS)
+	fceleven = satellite("fceleven",fcelevenAOS, fcelevenLOS)
+	fethirteen = satellite("fethirteen",fethirteenAOS,fethirteenLOS)
+	fefourteen = satellite("fefourteen",fefourteenAOS,fefourteenLOS)
+	itup = satellite("itup",itupAOS, itupLOS)
 
-# def swap(satList):
-# 	int x1=0
-# 	int x2=0
-# 	while x1==x2:
-# 		x1 = satList
-# 	swap two random elements?
+	#satList=[sat1,sat2,sat3,sat5]
+	satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,eagle,
+	exo,fcone,fcthree,fcfive,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
+	itup]
+	# satList=["cat","sixtysevenC","sixtysevenD","aist","beesat","brite","cubebug","sail","eagle",
+	# "exo","fcone","fcthree","fcfive","fcfive","fceight","fcnine","fcten","fceleven","fethirteen","fefourteen",
+	# "itup"]
+	
+	hillclimbingSteepest(satList)
+
+#test_hillclimbing_many_fake_sats()
+test_hillclimb_many_real_sats()
+
+# def all_perms(elements):
+	
+# 	if len(elements) <=1:
+# 		yield elements
+# 	else:
+# 		for perm in all_perms(elements[1:]):
+# 			#if i==5:
+# 			#	return
+# 			#for i in range(len(elements)):
+# 			for i in range(len(elements)):
+# 				# nb elements[0:1] works in both string and list contexts
+# 				yield perm[:i] + elements[0:1] + perm[i:]
+
+# test=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+# lis2 = itertools.permutations(test)
+#lis2 = all_perms(test)
+
+# i=0;
+# for l in lis2:
+# 	if(i==5):
+# 		break;
+# 	print(l)
+# 	i+=1
+# for l in lis2:
+# 	print(l)
+# for l in range(0,len(lis2)):
+# 	print(l)
 
 
