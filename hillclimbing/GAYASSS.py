@@ -43,6 +43,6 @@ def fitness():
 		for y,z in zip(x[1:],x):
 			print(y.name,z.name)
 			print(y.startTime, z.endTime)
-			diff=(time.strptime(str(y.startTime),"%I:%M:%S")) - (time.strptime(str(z.endTime),"%I:%M:%S"))
+			diff=(datetime.datetime.strptime(str(y.startTime),"%I:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%I:%M:%S"))
 			print("%s" %diff)
 fitness()
