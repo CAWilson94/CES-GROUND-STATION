@@ -5,8 +5,7 @@ import random
 CROSSOVER_RATE = 10; # TODO: Ammend this
 
 class satPass:
-	' Class representing passes for satellites'
-
+	' Class representing passes for satellite passes'
 	def __init__(self, name, startTime, endTime):
 		self.name = name
 		self.startTime = startTime
@@ -15,7 +14,7 @@ class satPass:
 
 
 class Individual:
-	' Class representing an individual'
+	' Class representing an individual (or chromosome)'
 	def __init__(self, satList, fitness):
 		self.satList = satList
 		self.fitness = fitness
@@ -25,7 +24,7 @@ class Individual:
 
 	def setFitness(fitness):
 		self.fitness = fitness
-
+# Just some test data ... nothing to see here.
 magicRainbow = satPass("Vegeta",(datetime.time(9, 0)),(datetime.time(9,20)));
 fabbyRainbow = satPass("Goku",(datetime.time(11,0)),(datetime.time(12,20)));
 greyRainbow = satPass("Yamcha",(datetime.time(10,10)),(datetime.time(10,30)));
@@ -50,7 +49,7 @@ the one with smallest time at end is winner
 """
 orderOne = [magicRainbow, fabbyRainbow, greyRainbow, squeakyRainbow]
 ordertwo = [squeakyRainbow, fabbyRainbow, greyRainbow, magicRainbow]
-orderedPasses = [orderOne, ordertwo]
+orderedPasses = [orderOne, ordertwo] # More test data .. more of nothing to see here.
 
 
 def fitness(passList):
@@ -67,20 +66,22 @@ def fitness(passList):
 	return fitness
 
 
-
+# May need to create class to package together the indiviuals. Or rather, map from db to object. 
+# This should be done with Django however. 
 indiOne = Individual(orderOne,fitness(orderOne))
 indiTwo = Individual(ordertwo, fitness(ordertwo))
 
-indiList = [indiOne,indiTwo]
+indiList = [indiOne,indiTwo] # TODO: This and the above should be in createPopulation? 
 
 def createPopulation(indiList): # will replace with db 
-	'will take in data from db instead and package individuals from there' 
+	"""will take in data from db instead and package individuals from there"""
 	population = []
 	for item in indiList:
 		population.append(item)
 	return population
 
 def tournie(population):
+	"""Tournament to generate new generation"""
 	newGen = []
 	crossed = []
 	while(len(crossed)!=len(population)):
@@ -93,10 +94,10 @@ def tournie(population):
 	return crossed
 
 def clear(someList):
-	""" python does not seem to have a clear list function..
+	"""python does not seem to have a clear list function..
 		Splice in the list [] (0 elements) at the location [:]
 		(all indexes from start to finish)
-	 """ 
+	"""
 	someList[:] = []
 
 
