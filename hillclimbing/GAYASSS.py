@@ -1,5 +1,8 @@
 import datetime
 import time
+import random
+
+CROSSOVER_RATE = 10; # TODO: Ammend this
 
 class satPass:
 	' Class representing passes for satellites'
@@ -77,6 +80,25 @@ def createPopulation(indiList): # will replace with db
 		population.append(item)
 	return population
 
+def tournie(population):
+	newGen = []
+	crossed = []
+	while(len(crossed)!=len(population)):
+		newGen = randomParents(population) # TODO: create randomParents function
+		i = random.randint(0,10) # Random int between 0 and 10
+		if(i < CROSSOVER_RATE):
+			tempIndiList = crossover(newGen[0], newGen[1])
+			crossed.extend(tempIndiList)
+			clear(newGen)
+	return crossed
+
+def clear(someList):
+	""" python does not seem to have a clear list function..
+		Splice in the list [] (0 elements) at the location [:]
+		(all indexes from start to finish)
+	 """ 
+	someList[:] = []
+
 
 def GA(population):
 	""" Genetic algorithm for finding best suited order of sats """
@@ -87,7 +109,7 @@ def GA(population):
 		gen++
 		sortByFitness(population)
 		population.append(best[0])
-		if(gen > 100):
+		if(gen > 100): # since there is no definitive stopping value. i.e. if fitness was 0
 			sortByFitness(best)
 			print("best order is: " + best[0])
 			return
