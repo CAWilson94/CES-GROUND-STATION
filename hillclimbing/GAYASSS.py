@@ -13,11 +13,11 @@ class satPass:
 		self.duration = (endTime.minute- startTime.minute)
 
 
-class Individual:
-	' Class representing an individual (or chromosome)'
-	def __init__(self, satList, fitness):
+class Gene:
+	' Class representing a gene in a chromosome'
+	def __init__(self, satList):
 		self.satList = satList
-		self.fitness = fitness
+		
 
 	def setSatList(satList):
 		self.satList = satList
@@ -26,41 +26,30 @@ class Individual:
 		self.fitness = fitness
 
 class Population:
-	' Class representing population: a population contains individuals hurrah!'
+	' Class representing population: a population contains chromosomes hurrah!'
 
 	def __init__(self, indiList):
 		self.indiList = indiList
 
-# Just some test data ... nothing to see here.
+class Chromosome:
+	' Class representing a chromosome: where a chromosome is basically a random ordered list of sat passes'
+	def __init__(self, satPassList):
+		self.satPassList = satPassList
+		self.fitness = fitness(satPassList)
+
+# Each one of these is a gene
 magicRainbow = satPass("Vegeta",(datetime.time(9, 0)),(datetime.time(9,20)));
 fabbyRainbow = satPass("Goku",(datetime.time(11,0)),(datetime.time(12,20)));
 greyRainbow = satPass("Yamcha",(datetime.time(10,10)),(datetime.time(10,30)));
 squeakyRainbow = satPass("Goten",(datetime.time(10,40)),(datetime.time(10,50)));
 
-"""
-print (magicRainbow.name)
-print (magicRainbow.startTime)
-print (magicRainbow.endTime)
-print(magicRainbow.duration)
-
-print (fabbyRainbow.name)
-print (fabbyRainbow.startTime)
-print (fabbyRainbow.endTime)
-print(fabbyRainbow.duration)
-"""
-
-"""
-Need a list of orders
-iterate through each 
-the one with smallest time at end is winner
-"""
 
 orderOne = [magicRainbow, fabbyRainbow, greyRainbow, squeakyRainbow] # A chromosome basically (or individual)
 ordertwo = [squeakyRainbow, fabbyRainbow, greyRainbow, magicRainbow] # A chromosome basically (or individual)
 orderedPasses = [orderOne, ordertwo] # More test data .. more of nothing to see here.
-
-population = Population(orderedPasses) # Use this throughout
-
+chromo1 = Chromosome(orderOne)
+chromo2 = Chromosome(ordertwo)
+population = Population(orderedPasses)
 
 def fitness(passList):
 	""" The smallest time is the winner basically """
@@ -75,13 +64,6 @@ def fitness(passList):
 	y.fitness = fitness # want fitness to be for the orders so create individual from this
 	return fitness
 
-
-# May need to create class to package together the indiviuals. Or rather, map from db to object. 
-# This should be done with Django however. 
-indiOne = Individual(orderOne,fitness(orderOne))
-indiTwo = Individual(ordertwo, fitness(ordertwo))
-
-indiList = [indiOne,indiTwo] # TODO: This and the above should be in createPopulation? 
 
 def createPopulation(indiList): # will replace with db 
 	"""will take in data from db instead and package individuals from there"""
@@ -120,7 +102,7 @@ def clear(someList):
 	"""python does not seem to have a clear list function..
 		Splice in the list [] (0 elements) at the location [:]
 		(all indexes from start to finish)
-	"""
+	"""	
 	someList[:] = []
 
 
@@ -137,7 +119,7 @@ def GA(population):
 			sortByFitness(best)
 			print("best order is: " + best[0])
 			return
-	print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: chromosomeString should be individual string. 
+	print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: chromosomeString should be Gene string. 
 
 
 
