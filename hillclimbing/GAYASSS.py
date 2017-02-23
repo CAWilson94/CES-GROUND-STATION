@@ -91,7 +91,7 @@ def randomParents(population):
 		sortByFitness(tempList)
 		parents.append(tempList[0])
 		clear(tempList)
-	retun parents
+	return parents
 
 def tournie(population):
 	"""Tournament to generate new generation"""
