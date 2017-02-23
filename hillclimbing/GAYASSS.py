@@ -79,9 +79,21 @@ def createPopulation(indiList): # will replace with db
 
 
 def GA(population):
-	for item in population:
-		print("fitness is:")
-		print(item.fitness)
+	""" Genetic algorithm for finding best suited order of sats """
+	population = createPopulation(population)
+	best = [] # Keep a list of the recent best solutions
+	gen = 0;
+	while(true):
+		gen++
+		sortByFitness(population)
+		population.append(best[0])
+		if(gen > 100):
+			sortByFitness(best)
+			print("best order is: " + best[0])
+			return
+	print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: create this chromosome string getter for population 
+	population = tournie(population) # TODO: Create tournie function		
+
 
 
 GA(createPopulation(indiList))
