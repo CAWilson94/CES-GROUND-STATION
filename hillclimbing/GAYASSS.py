@@ -80,6 +80,19 @@ def createPopulation(indiList): # will replace with db
 		population.append(item)
 	return population
 
+def randomParents(population):
+	""" Select Parents for tournament function"""
+	tempList = []
+	parents = []
+	for index in range(2):
+		parentOne = random.randint(0,len(population))
+		parentTwo = random.randint(0,len(population))
+		tempList.extend([parentOne,parentTwo])
+		sortByFitness(tempList)
+		parents.append(tempList[0])
+		clear(tempList)
+	retun parents
+
 def tournie(population):
 	"""Tournament to generate new generation"""
 	newGen = []
