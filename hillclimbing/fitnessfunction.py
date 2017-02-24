@@ -43,7 +43,7 @@ def fitnessFunction(satList):
 
 	score = findSchedulableSatellites(reorderedConflictGroups)
 
-	print(score)
+	#print(score)
 	return score
 
 def findConflictingGroups(satList):
@@ -606,10 +606,33 @@ def hillclimbing(satList):
 			print("Keep Order")
 			i+=1
 			
-	if i==100:
+	if i==maxIterations:
 		print("{} curOrder could be global maxima".format(curOrder))		
 		return curOrder
 
+def randomRestart(satList):
+
+	curOrder=satList
+	i=0
+	maxIterations = 50
+	newScore=0
+	oldScore=sys.maxsize
+
+	shuffle(curOrder)
+	while i<maxIterations:
+		hillclimbing = hillclimbingSimple(curOrder)
+		newScore = fitnessFunction(hillclimbing)
+
+		if(newScore<oldScore):
+			oldScore=newScore
+			curOrder=hillclimbing
+
+		shuffle(curOrder)
+		i+=1
+	if i==maxIterations:
+		print oldScore
+		print("{} curOrder could be global maxima".format(curOrder))		
+		return curOrder
 
 def test_hillclimbing_many_real_sats():
 	sat1AOS = datetime(2017,1,25,12,2,0)
@@ -807,7 +830,12 @@ def test_hillclimb_many_real_sats():
 	# "exo","fcone","fcthree","fcfive","fcfive","fceight","fcnine","fcten","fceleven","fethirteen","fefourteen",
 	# "itup"]
 	
-	hillclimbingSteepest(satList)
+	randomRestart(satList)
+
+	# cuslist=[[cat,sixtysevenC],[sixtysevenD,aist]]
+
+	# for l in cuslist:
+	# 	print(l[0])
 
 #test_hillclimbing_many_fake_sats()
 test_hillclimb_many_real_sats()
