@@ -87,6 +87,9 @@ class rotator_services():
 		print("done")
 		ser.close()
 
+	def hi():
+		print("Hola")
+
 	
 
 

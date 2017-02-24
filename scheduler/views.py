@@ -15,9 +15,10 @@ class TLEList(generics.ListCreateAPIView):
 	"""
 	With behind the scenes magic, this returns the list of 
 	TLEs in the db by serializering the query results, convertng 
-	to json and returning it to the place that send the http request
+	to json and returning it to the place that sent the http request
 	"""
-	Services.updateTLE()
+	some_instance = Services()
+	some_instance.updateTLE()
 	queryset = get_list_or_404(TLE)
 	serializer_class = TLESerializer
 
@@ -25,7 +26,7 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
 	With behind the scenes magic, this returns the details of the
 	request TLE from the db by serializering the query result, converting 
-	to json and returning it to the place that send the http request
+	to json and returning it to the place that sent the http request
 	"""
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer   
@@ -38,7 +39,7 @@ class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class PyephemData(APIView):
 	"""
-	A slighlty more exposed verions of TLEList and TLEDetail, performs
+	A slightly more exposed verion of APIView, performs
 	custom behaviour when a get request is sent
 	"""
 	def get_object(self, pk):
