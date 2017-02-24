@@ -40,7 +40,8 @@ class AzEl(models.Model):
 
 class NextPass(models.Model):
     # leaves an empty table :(
-    # tle = models.ForeignKey(TLE.name, on_delete=models.CASCADE)
+       # models.CharField(max_length=30)
+    tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
     # AOS
     riseTime = models.DateField()
     # LOS
@@ -75,8 +76,8 @@ class NextPass(models.Model):
         return riseTime and setTime and duration and maxElevation and riseAzimuth and setAzimuth
 
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.tle
 
 
 class Mission(models.Model):
