@@ -40,6 +40,7 @@ class HillClimbing():
 
 			if newScore < oldScore:
 				oldScore=newScore
+				bestOrder = curOrder
 				i=0
 			else:
 				i+=1
@@ -50,11 +51,12 @@ class HillClimbing():
 				
 		if i==maxIterations:
 			print(" Simple HillClimbing finished with the order ")
-			for n in curOrder:
-				print(" {}".format(n.tle))
+			# for n in curOrder:
+			# 	pass
+			# 	print(n)
 			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 			print("And a score of {}".format(oldScore))
-			return curOrder
+			return bestOrder
 
 	def stochastic(satList):
 		""" does not examine any neighbors before deciding how to move. 
@@ -80,10 +82,11 @@ class HillClimbing():
 
 			newScore = _Helper.fitnessFunction(curOrder)
 			
-			#Could change so it only changes when it's a lot better or a little better
+			#Could make it so it only changes when it's a lot better or a little better
 			if newScore < oldScore:
 				#use that 
 				oldScore=newScore
+				bestOrder=list(curOrder)
 				i=0
 			else:
 				i+=1
@@ -91,13 +94,16 @@ class HillClimbing():
 			if i%(maxIterations/10)==0:
 				print(".")
 
-		if i==maxIterations:
-			print(" Stochastic HillClimbing finished with the order ")
-			for n in curOrder:
-				print(" {}".format(n.tle))
-			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
-			print("And a score of {}".format(oldScore))
-			return curOrder
+
+		#if i==maxIterations:
+		print(" Stochastic HillClimbing finished with the order ")
+		# for n in curOrder:
+		# 	print(n)
+		#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
+		print("And a score of {}".format(oldScore))
+		# for n in bestOrder:
+		# 	print(n)
+		return bestOrder
 
 	def steepest(satList):
 		""" Looks at as many neighbours as it can and picks the best
@@ -150,8 +156,8 @@ class HillClimbing():
 
 		if i==maxIterations:
 			print(" Steepest HillClimbing Finished with the order ")
-			for n in curOrder:
-				print(" {}".format(n.tle))
+			# for n in curOrder:
+			# 	print(" {}".format(n.tle))
 			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 			print("And a score of {}".format(oldScore))
 			return curOrder
@@ -165,25 +171,25 @@ class HillClimbing():
 		newScore=0
 		oldScore=sys.maxsize
 
-		shuffle(curOrder)
+		#shuffle(curOrder)
 		while i<maxIterations:
-			hillclimbing = HillClimbing.simple(curOrder)
-			newScore = _Helper.fitnessFunction(hillclimbing)
+			shuffle(curOrder)									# find a different starting point
+			hillclimbing = HillClimbing.simple(curOrder)		# find best order you can
+			newScore = _Helper.fitnessFunction(hillclimbing)	# get the number from that order
 
 			if(newScore<oldScore):
 				oldScore=newScore
-				curOrder=hillclimbing
-
-			shuffle(curOrder)
+				curOrder=list(hillclimbing)
+				bestOrder=list(curOrder)
 			i+=1
 
 		if i==maxIterations:
 			print(" Random Restart HillClimbing finished with the order ")
-			for n in curOrder:
-				print(" {}".format(n.tle))
+			# for n in curOrder:
+			# 	print(" {}".format(n.tle))
 			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 			print("And a score of {}".format(oldScore))
-			return curOrder
+			return bestOrder
 
 class _Helper():
 	def fitnessFunction(satList):
@@ -468,14 +474,17 @@ class blah():
 		fefourteen = NextPass(18,fefourteenTLE,fefourteenAOS,fefourteenLOS,date1,date1,date1,date1)
 		itup = NextPass(19,itupTLE,itupAOS, itupLOS,date1,date1,date1,date1)		
 
-		satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,eagle,
-		exo,fcone,fcthree,fcfive,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
-		itup]
+		# satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,eagle,
+		# exo,fcone,fcthree,fcfive,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
+		# itup]
+		satList=[brite,fceight,eagle,fefourteen,sixtysevenC,fethirteen,itup,sail,sixtysevenD,exo,beesat,
+		fceleven,fcfive,fcnine,fcten,fcone,cat,fcthree,cubebug,aist]
 			#self.assertIs(shouldBe == ,)
 
 		#findSchedulableSatellites([[sixtysevenC,sixtysevenD,brite,fcone,fcthree,fcfive,fefourteen,itup]])
 		#findSchedulableSatellites([[sixtysevenD,sixtysevenC,brite,fcone,fcthree,fcfive,fefourteen,itup]])
 		#findSchedulableSatellites([[sixtysevenD,sixtysevenC,fcone,brite,fcthree,fcfive,fefourteen,itup]])
-		_Helper.fitnessFunction(satList)
+		score=_Helper.fitnessFunction(satList)
+		print(score)
 		#HillClimbing.simple(satList)
 #test_findSchedulableSatellites_many_real_sats()
