@@ -10,7 +10,6 @@ from rest_framework import status, generics
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
 
-from scheduler.searchAlgorithms import blah
 
 class TLEList(generics.ListCreateAPIView):
 	"""
@@ -18,7 +17,6 @@ class TLEList(generics.ListCreateAPIView):
 	TLEs in the db by serializering the query results, convertng 
 	to json and returning it to the place that sent the http request
 	"""
-	blah.test_findSchedulableSatellites_many_real_sats()
 	some_instance = Services()
 	some_instance.updateTLE()# user should be prompted on start up that they need to update the tle
 	queryset = get_list_or_404(TLE)
