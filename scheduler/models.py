@@ -9,7 +9,7 @@ class TLE(models.Model):
     line2 = models.CharField(max_length=70)
 
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.name)
 
 
 # objects = models.TLEManager()
@@ -51,6 +51,7 @@ class NextPass(models.Model):
 #  3) Quit, and let me add a default in models.py
 
     tle = models.ForeignKey(TLE, on_delete=models.CASCADE,null=True)
+    #tle=models.CharField(max_length=30)
     # AOS
     riseTime = models.DateField()
     # LOS

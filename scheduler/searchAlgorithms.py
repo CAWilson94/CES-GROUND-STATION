@@ -7,9 +7,10 @@ import sys
 
 class HillClimbing():
 
-	def simple(satList):
+	def simple(satList, usefulTime):
 		""" In simple hill climbing, the first closer node is chosen"""
 
+		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
 		maxIterations = 50
 		i=0
@@ -31,7 +32,7 @@ class HillClimbing():
 
 			oldNeighbourScore=sys.maxsize
 			for neighbour in listOfNearestNeighbours:
-				newNeighbourScore  = _Helper.fitnessFunction(neighbour)
+				newNeighbourScore,nextPassList  = _Helper.fitnessFunction(neighbour,usefulTime)
 				if(newNeighbourScore < oldNeighbourScore):
 					curOrder=neighbour
 					oldNeighbourScore=newNeighbourScore
@@ -40,7 +41,60 @@ class HillClimbing():
 
 			if newScore < oldScore:
 				oldScore=newScore
-				bestOrder = curOrder
+				bestOrder = list(curOrder)
+				bestNextPassList = list(nextPassList)
+				i=0
+			else:
+				i+=1
+			#print(newScore)
+
+			if i%maxIterations/10:
+				print(".")
+				
+		if i==maxIterations:
+			print(" Simple HillClimbing finished with the order ")
+			# for n in curOrder:
+			# 	pass
+			# 	print(n)
+			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
+			print("And a score of {}".format(oldScore))
+			return oldScore,bestNextPassList
+
+	def simpleRR(satList,usefulTime):
+		""" In simple hill climbing, the first closer node is chosen"""
+		bestNextPassList=[]
+		print(" Starting simple hillclimbing")
+		maxIterations = 50
+		i=0
+		oldScore = sys.maxsize
+		newScore=0
+		newOrder=[]
+		curOrder=satList
+
+		while i<maxIterations:
+			listOfNearestNeighboursAndItself=[]
+			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
+			j=0
+			for n in generatorOfAllNeighboursIncItself:
+				if j==10:
+					break
+				listOfNearestNeighboursAndItself.append(list(n))
+				j+=1
+			listOfNearestNeighbours = listOfNearestNeighboursAndItself[1:]
+
+			oldNeighbourScore=sys.maxsize
+			for neighbour in listOfNearestNeighbours:
+				newNeighbourScore,nextPassList  = _Helper.fitnessFunction(neighbour,usefulTime)
+				if(newNeighbourScore < oldNeighbourScore):
+					curOrder=neighbour
+					oldNeighbourScore=newNeighbourScore
+					newScore=newNeighbourScore
+					break;
+
+			if newScore < oldScore:
+				oldScore=newScore
+				bestOrder = list(curOrder)
+				bestNextPassList = list(nextPassList)
 				i=0
 			else:
 				i+=1
@@ -58,7 +112,7 @@ class HillClimbing():
 			print("And a score of {}".format(oldScore))
 			return bestOrder
 
-	def stochastic(satList):
+	def stochastic(satList,usefulTime):
 		""" does not examine any neighbors before deciding how to move. 
 		Rather, it selects a neighbor at random, and moves to that one
 		if it is better."""
@@ -68,6 +122,7 @@ class HillClimbing():
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
+		bestNextPassList=[]
 		curOrder=satList
 		while i<maxIterations:
 			
@@ -80,20 +135,20 @@ class HillClimbing():
 			curOrder[i2]=swap1
 			curOrder[i1]=swap2
 
-			newScore = _Helper.fitnessFunction(curOrder)
-			
+			newScore,nextPassList = _Helper.fitnessFunction(curOrder,usefulTime)
+			#blah = _Helper.fitnessFunction(curOrder)
 			#Could make it so it only changes when it's a lot better or a little better
 			if newScore < oldScore:
 				#use that 
 				oldScore=newScore
 				bestOrder=list(curOrder)
+				bestNextPassList=list(nextPassList)
 				i=0
 			else:
 				i+=1
 			
 			if i%(maxIterations/10)==0:
 				print(".")
-
 
 		#if i==maxIterations:
 		print(" Stochastic HillClimbing finished with the order ")
@@ -103,9 +158,13 @@ class HillClimbing():
 		print("And a score of {}".format(oldScore))
 		# for n in bestOrder:
 		# 	print(n)
-		return bestOrder
+		# if type(newOrder2) is list:
+		# 	print("it's a tlist")
+		# 	print(newOrder2)
+		# 	print(len(newOrder2))
+		return oldScore, bestNextPassList
 
-	def steepest(satList):
+	def steepest(satList,usefulTime):
 		""" Looks at as many neighbours as it can and picks the best
 		neighbour it finds"""
 
@@ -115,6 +174,7 @@ class HillClimbing():
 		oldScore = sys.maxsize   #just a really big number
 		newOrder=[]
 		curOrder=satList
+		bestNextPassList=[]
 		while i<maxIterations:
 			
 			listOfNearestNeighboursAndItself=[]
@@ -131,7 +191,7 @@ class HillClimbing():
 			oldSteepestScore=sys.maxsize
 			steepestNeighbour=[]
 			for neighbour in listOfNearestNeighbours:
-				newSteepestScore = _Helper.fitnessFunction(neighbour)
+				newSteepestScore,nextPassList = _Helper.fitnessFunction(neighbour,usefulTime)
 				if(newSteepestScore<oldSteepestScore):
 					oldSteepestScore=newSteepestScore
 					steepestNeighbour=neighbour
@@ -145,6 +205,7 @@ class HillClimbing():
 				#print("New Order")
 				curOrder=steepestNeighbour
 				oldScore=newScore
+				bestNextPassList=list(nextPassList)
 				i=0
 			else:
 				#print("Keep Order")
@@ -160,9 +221,9 @@ class HillClimbing():
 			# 	print(" {}".format(n.tle))
 			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 			print("And a score of {}".format(oldScore))
-			return curOrder
+			return oldScore,bestNextPassList
 
-	def randomRestart(satList):
+	def randomRestart(satList,usefulTime):
 		print(" Starting hillclimbing with random restart")
 
 		curOrder=satList
@@ -170,17 +231,18 @@ class HillClimbing():
 		maxIterations = 50
 		newScore=0
 		oldScore=sys.maxsize
-
+		bestNextPassList=[]
 		#shuffle(curOrder)
 		while i<maxIterations:
 			shuffle(curOrder)									# find a different starting point
-			hillclimbing = HillClimbing.simple(curOrder)		# find best order you can
-			newScore = _Helper.fitnessFunction(hillclimbing)	# get the number from that order
+			hillclimbing = HillClimbing.simpleRR(curOrder,usefulTime)		# find best order you can
+			newScore,nextPassList = _Helper.fitnessFunction(hillclimbing,usefulTime)	# get the number from that order
 
 			if(newScore<oldScore):
 				oldScore=newScore
 				curOrder=list(hillclimbing)
 				bestOrder=list(curOrder)
+				bestNextPassList=list(nextPassList)
 			i+=1
 
 		if i==maxIterations:
@@ -189,10 +251,10 @@ class HillClimbing():
 			# 	print(" {}".format(n.tle))
 			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 			print("And a score of {}".format(oldScore))
-			return bestOrder
+			return oldScore, bestNextPassList
 
 class _Helper():
-	def fitnessFunction(satList):
+	def fitnessFunction(satList,usefulTime):
 
 		"""Calling all the necessary parts in order
 			and checking the priority is in order
@@ -204,10 +266,12 @@ class _Helper():
 		# 	if sat.priority<prevSat:
 		# 		#priority order is violated
 		# 		return sys.maxima
-			
+
+		nextPassList=[]
 		satListConflictGroups = _Helper.__findConflictingGroups(satList)
 
 		if len(satListConflictGroups)==0:
+			#no conflicts
 			return 0
 
 		mergedGroups = _Helper.__mergeLists(satListConflictGroups)
@@ -217,10 +281,11 @@ class _Helper():
 			reordered= [x for x in satList if x in group]
 			reorderedConflictGroups.append(reordered)
 
-		score = _Helper.__findSchedulableSatellites(reorderedConflictGroups)
+		score,nextPassList = _Helper.__findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
 		#print(score)
-		return score
+		#print(nextPassList)
+		return score,nextPassList
 
 	def __findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones
@@ -290,7 +355,7 @@ class _Helper():
 		return finaListsConflictsTrimmed
 
 
-	def __findSchedulableSatellites(satListConflictGroups):
+	def __findSchedulableSatellites(satListConflictGroups,usefulTime):
 		""" The groups are now correct and the order was reestablished before 
 		being passed in here. This goes through each sat in each group to find where
 		each satellite conflicts with each other satellite. Compares these gaps
@@ -298,15 +363,17 @@ class _Helper():
 		us. Checks with the blacklist. ie. times that are in use. If the space of gap
 		is enough and that time isn't in use/conflicts we can schedule a satellite here 
 		and that time period is then 'blacklisted' ie in use. 
-
 		"""
-		transactionTime = timedelta(minutes=3)
+
+		transactionTime = timedelta(minutes=usefulTime)
 		nextPassList = []
 		unScheduledSats = []
+		allScheduledSats=[]
 		for group in satListConflictGroups:
 			blackList=[]
 			scheduledSats=[]
 			unScheduledSatFromGroup = []
+			newPasses=[]
 			for sat in group:
 				conflicts=False
 				curSatRise = 0
@@ -354,7 +421,12 @@ class _Helper():
 					curSatSet = sat.riseTime + transactionTime
 					tempTime = [curSatRise,curSatSet]
 					scheduledSats.append(sat)
-					blackList.append(tempTime)	
+					blackList.append(tempTime)
+					
+					sat.riseTime=curSatRise
+					sat.setTime=curSatSet
+					newPasses.append(sat)
+
 				if conflicts is False:
 					#Check satellite doesn't conflict with 'blacklisted' times
 					#before adding it
@@ -370,121 +442,22 @@ class _Helper():
 
 					if conflictBlack != True:
 						scheduledSats.append(sat)
-						blackList.append(tempTime)			
+						blackList.append(tempTime)
+
+						sat.riseTime=curSatRise
+						sat.setTime=curSatSet
+						newPasses.append(sat)	
 			
 			#Find unscheduled satellites from scheduled
 			unScheduledSatFromGroup = [sat for sat in group if sat not in scheduledSats]
 			unScheduledSats.append(unScheduledSatFromGroup)
-			nextPassList.append(scheduledSats)
+			allScheduledSats.extend(scheduledSats)
+			nextPassList.extend(newPasses)
 
-		#Count number of unscheduled
 		score=0
 		for satList in unScheduledSats:
+
 			score +=len(satList)
 		#print(score) # want lowest.
-		return score
+		return score,nextPassList
 
-class blah():
-
-	def test_findSchedulableSatellites_many_real_sats():
-
-
-		catAOS = datetime(2017,1,25,0,52,59)
-		catLOS = datetime(2017,1,25,1,4,28)
-		sixtysevenCAOS = datetime(2017,1,25,0,6,52)
-		sixtysevenCLOS = datetime(2017,1,25,0,14,42)
-		sixtysevenDAOS = datetime(2017,1,25,0,8,37)
-		sixtysevenDLOS = datetime(2017,1,25,0,16,18)
-		aistAOS = datetime(2017,1,25,0,35,21)
-		aistLOS = datetime(2017,1,25,0,48,8)
-		beesatAOS = datetime(2017,1,25,0,46,48)
-		beesatLOS = datetime(2017,1,25,1,0,4) 
-		briteAOS = datetime(2017,1,25,0,19,39)
-		briteLOS = datetime(2017,1,25,0,30,4)
-		cubebugAOS = datetime(2017,1,25,0,41,54)
-		cubebugLOS = datetime(2017,1,25,0,52,49)
-		sailAOS = datetime(2017,1,25,0,41,17)
-		sailLOS = datetime(2017,1,25,0,53,28)
-		eagleAOS = datetime(2017,1,25,0,53,13)
-		eagleLOS = datetime(2017,1,25,1,2,56)	
-		exoAOS = datetime(2017,1,25,0,57,27)
-		exoLOS = datetime(2017,1,25,1,5,27)
-		fconeAOS = datetime(2017,1,25,0,17,14)
-		fconeLOS = datetime(2017,1,25,0,30,6)
-		fcthreeAOS = datetime(2017,1,25,0,11,3)
-		fcthreeLOS = datetime(2017,1,25,0,23,54)
-		fcfiveAOS = datetime(2017,1,25,0,8,47)
-		fcfiveLOS = datetime(2017,1,25,0,21,37)
-		fceightAOS = datetime(2017,1,25,0,52,35)
-		fceightLOS = datetime(2017,1,25,1,5,21)
-		fcnineAOS = datetime(2017,1,25,0,50,43)
-		fcnineLOS = datetime(2017,1,25,1,3,31)
-		fctenAOS = datetime(2017,1,25,0,53,57)
-		fctenLOS = datetime(2017,1,25,1,6,40)
-		fcelevenAOS = datetime(2017,1,25,0,59,45)
-		fcelevenLOS = datetime(2017,1,25,1,12,25)	
-		fethirteenAOS = datetime(2017,1,25,1,7,32)
-		fethirteenLOS = datetime(2017,1,25,1,15,6)	
-		fefourteenAOS = datetime(2017,1,25,0,0,33)
-		fefourteenLOS = datetime(2017,1,25,0,8,13)	
-		itupAOS = datetime(2017,1,25,0,22,12)
-		itupLOS = datetime(2017,1,25,0,34,49)	
-
-		catTLE = TLE(0,"cat","line1","line2")
-		sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
-		sixtysevenDTLE= TLE(1,"sixtysevenD","line1","line2")
-		aistTLE= TLE(1,"aist","line1","line2")
-		beesatTLE= TLE(1,"beesat","line1","line2")
-		briteTLE= TLE(1,"brite","line1","line2")
-		cubebugTLE= TLE(1,"cubebug","line1","line2")
-		sailTLE= TLE(1,"sail","line1","line2")
-		eagleTLE= TLE(1,"eagle","line1","line2")
-		exoTLE= TLE(1,"exo","line1","line2")
-		fconeTLE= TLE(1,"fcone","line1","line2")
-		fcthreeTLE= TLE(1,"fcthree","line1","line2")
-		fcfiveTLE= TLE(1,"fcfive","line1","line2")
-		fceightTLE	= TLE(1,"fceight","line1","line2")
-		fcnineTLE= TLE(1,"fcnine","line1","line2")
-		fctenTLE= TLE(1,"fcten","line1","line2")
-		fcelevenTLE= TLE(1,"fceleven","line1","line2")
-		fethirteenTLE= TLE(1,"fethirteen","line1","line2")
-		fefourteenTLE= TLE(1,"fefourteen","line1","line2")
-		itupTLE= TLE(1,"itup","line1","line2")
-
-		date1 = datetime(2017, 1, 1, 12, 0, 0)
-			# id, tle, riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-		cat = NextPass(0,catTLE, catAOS, catLOS, 0,0,0,0)
-		sixtysevenC = NextPass(1,sixtysevenCTLE,sixtysevenCAOS, sixtysevenCLOS,date1,date1,date1,date1)
-		sixtysevenD = NextPass(2,sixtysevenDTLE,sixtysevenDAOS, sixtysevenDLOS,date1,date1,date1,date1)
-		aist = NextPass(3,aistTLE,aistAOS, aistLOS,date1,date1,date1,date1)
-		beesat = NextPass(4,beesatTLE,beesatAOS, beesatLOS,date1,date1,date1,date1)
-		brite = NextPass(5,briteTLE,briteAOS, briteLOS,date1,date1,date1,date1)
-		cubebug = NextPass(6,cubebugTLE,cubebugAOS, cubebugLOS,date1,date1,date1,date1)
-		sail = NextPass(7,sailTLE,sailAOS, sailLOS,date1,date1,date1,date1)
-		eagle = NextPass(8,eagleTLE,eagleAOS, eagleLOS,date1,date1,date1,date1)
-		exo = NextPass(9,exoTLE,exoAOS,exoLOS,date1,date1,date1,date1)
-		fcone = NextPass(10,fconeTLE,fconeAOS,fconeLOS,date1,date1,date1,date1)
-		fcthree = NextPass(11,fcthreeTLE,fcthreeAOS, fcthreeLOS,date1,date1,date1,date1)
-		fcfive = NextPass(12,fcfiveTLE,fcfiveAOS, fcfiveLOS,date1,date1,date1,date1)
-		fceight = NextPass(13,fceightTLE,fceightAOS,fceightLOS,date1,date1,date1,date1)
-		fcnine = NextPass(14,fcnineTLE,fcnineAOS,fcnineLOS,date1,date1,date1,date1)
-		fcten = NextPass(15,fctenTLE,fctenAOS, fctenLOS,date1,date1,date1,date1)
-		fceleven = NextPass(16,fcelevenTLE,fcelevenAOS, fcelevenLOS,date1,date1,date1,date1)
-		fethirteen = NextPass(17,fethirteenTLE,fethirteenAOS,fethirteenLOS,date1,date1,date1,date1)
-		fefourteen = NextPass(18,fefourteenTLE,fefourteenAOS,fefourteenLOS,date1,date1,date1,date1)
-		itup = NextPass(19,itupTLE,itupAOS, itupLOS,date1,date1,date1,date1)		
-
-		# satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,eagle,
-		# exo,fcone,fcthree,fcfive,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
-		# itup]
-		satList=[brite,fceight,eagle,fefourteen,sixtysevenC,fethirteen,itup,sail,sixtysevenD,exo,beesat,
-		fceleven,fcfive,fcnine,fcten,fcone,cat,fcthree,cubebug,aist]
-			#self.assertIs(shouldBe == ,)
-
-		#findSchedulableSatellites([[sixtysevenC,sixtysevenD,brite,fcone,fcthree,fcfive,fefourteen,itup]])
-		#findSchedulableSatellites([[sixtysevenD,sixtysevenC,brite,fcone,fcthree,fcfive,fefourteen,itup]])
-		#findSchedulableSatellites([[sixtysevenD,sixtysevenC,fcone,brite,fcthree,fcfive,fefourteen,itup]])
-		score=_Helper.fitnessFunction(satList)
-		print(score)
-		#HillClimbing.simple(satList)
-#test_findSchedulableSatellites_many_real_sats()
