@@ -27,10 +27,6 @@ class Population:
     def __init__(self, chromosome):
         self.chromosome = chromosome
 
-    def randomPopulation(self):
-
-        return population
-
 class Chromosome:
     ' Class representing a chromosome: where a chromosome is basically a random ordered list of sat passes'
     fitness = 0;
@@ -97,16 +93,18 @@ def sortByFitness(population):
 
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
-    population = Population()
     best = [] # Keep a list of the recent best solutions
     gen = 0;
     while(1):
         gen+=1
         population = sortByFitness(population)
-        population.append(best[0])
+        best.append(population[0])
         if(gen > 100): # since there is no definitive stopping value. i.e. if fitness was 0
             best = sortByFitness(best)
-            print("best order is: " + best[0])
+            print("best order is: \n")
+            print(best[0].fitness)
+            for item in best[0].satPassList:
+            	print(item.name)
             return
     print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: chromosomeString should be Gene string.
 
@@ -134,6 +132,7 @@ population = orderedPasses
 for chromosome in population:
 	for gene in chromosome:
 		print(gene.name)
+
 """
 
 chromo1.fitness = fitness(chromo1)
@@ -141,6 +140,7 @@ chromo2.fitness = fitness(chromo2)
 
 chromoList = [chromo1,chromo2]
 
+"""
 for item in chromoList:
 	print(item.fitness)
 
@@ -150,9 +150,17 @@ print("now sorted by fitness: \n")
 
 for item in chromoList:
 	print(item.fitness)
+"""
+
+
+GA(chromoList)
 
 
 
+"""
+Just change population to a list? 
+
+"""
 
 
 
