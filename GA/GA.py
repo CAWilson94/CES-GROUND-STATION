@@ -8,8 +8,10 @@ Need to figure out how to get fitness of a chromosome
 import datetime
 import time
 import random
+import operator
 
 CROSSOVER_RATE = 10; # TODO: Ammend this
+FITNESS_CMP= operator.attrgetter("fitness")
 
 class satPass:
     ' Class representing passes for satellite passes: which in turn, represents a gene in a chromosome'
@@ -87,6 +89,9 @@ def clear(someList):
 
 def sortByFitness(population):
     "sort chromosomes by fitness"
+    fitnessSorted = sorted(population, key=cmpfun)
+    return fitnessSorted
+
     
 
 def GA(population):
