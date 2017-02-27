@@ -33,6 +33,7 @@ class Population:
 
 class Chromosome:
     ' Class representing a chromosome: where a chromosome is basically a random ordered list of sat passes'
+    fitness = 0;
     def __init__(self, satPassList):
         self.satPassList = satPassList
         #self.fitness = fitness # update later
@@ -89,7 +90,7 @@ def clear(someList):
 
 def sortByFitness(population):
     "sort chromosomes by fitness"
-    fitnessSorted = sorted(population, key=cmpfun)
+    fitnessSorted = sorted(population, key=FITNESS_CMP)
     return fitnessSorted
 
     
@@ -127,11 +128,30 @@ orderedPasses = [orderOne, ordertwo] # More test data .. more of nothing to see 
 chromo1 = Chromosome(orderOne)
 chromo2 = Chromosome(ordertwo) # TODO: get a more elegant way to do this ya pleb
 
+"""
 population = orderedPasses
 
 for chromosome in population:
 	for gene in chromosome:
 		print(gene.name)
+"""
+
+chromo1.fitness = fitness(chromo1)
+chromo2.fitness = fitness(chromo2)
+
+chromoList = [chromo1,chromo2]
+
+for item in chromoList:
+	print(item.fitness)
+
+chromoList = sortByFitness(chromoList)
+
+print("now sorted by fitness: \n")
+
+for item in chromoList:
+	print(item.fitness)
+
+
 
 
 
