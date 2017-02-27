@@ -1,18 +1,20 @@
 from random import randint
 import time 
 
+CONFLICT_PADDING = 0 # mins added to the end of the conflict period
+
 	# 6 hrs = 360
 	# 1 day = 1440
 	# 2 days = 2880
 	# 3 days = 4320
-TIMEFRAME_MINS = 4320
-PASS_LEN_MAX = 15
+TIMEFRAME_MINS = 60
+PASS_LEN_MAX = 5
 PRIORITY_MAX = 2
-NUM_OF_PASSES = 500
+NUM_OF_PASSES = 40
 
 DEBUG = True
 
-DEBUG_LEVEL = 0
+DEBUG_LEVEL =5
 
 class Pass():
 	def __init__(self, name, start, end, duration, priority):
@@ -44,9 +46,6 @@ passes = []
 
 for i in range(NUM_OF_PASSES):
 	passes.append(generatePass())
-
-
-
 	
 # passes = [
 #  	Pass("a", 10, 12, 2, 1), Pass("a", 22, 24, 1, 1), Pass("a", 34, 36, 2, 1), 
@@ -131,16 +130,20 @@ def filterByUnpicked(conflicting):
 # Pick the oldest one
 def filterByOldest(conflicting):
 	if(conflicting):
-		oldest = conflicting[0]
-		oldestLastIndex = lastIndex(orderOfPasses, oldest)
+		oldestPass = conflicting[0]
+		oldest = [oldestPass]
+		oldestLastIndex = lastIndex(orderOfPasses, oldestPass)
 
 		index = 0
 		while(index < len(conflicting)):
 			current = conflicting[index]
 			currentLastIndex = lastIndex(orderOfPasses, current)
 			if(currentLastIndex < oldestLastIndex):
-				oldest = current
+				oldest = [conflicting[index]] # reset oldest list
+				oldestPass = current
 				oldestLastIndex = currentLastIndex
+			elif(currentLastIndex == oldestLastIndex):
+				oldest.append(conflicting[index])
 			index += 1
 
 
@@ -209,6 +212,12 @@ def findNext(conflicting, startTime, endTime):
 					print("Only one found which wasn't picked before, returning: " + unpicked[0].passAsStr())
 				return unpicked[0]
 			elif(len(unpicked) > 1):
+
+				if(DEBUG and DEBUG_LEVEL >= 3):
+					print("Unpicked:")
+					for sat in unpicked:
+						print(sat.passAsStr())
+
 				returning = unpicked[randint(0, len(unpicked)-1)]
 				if(DEBUG and DEBUG_LEVEL >= 2):
 					print("Multiple not picked before, reurning random one: " + returning.passAsStr())
@@ -218,10 +227,36 @@ def findNext(conflicting, startTime, endTime):
 			else: 
 				print("No unpicked found")
 
-		returning = filterByOldest(temp)
-		if(DEBUG and DEBUG_LEVEL >= 2):
-			print("Returning oldest one picked: " + returning.passAsStr())
-		return returning
+		oldest = filterByOldest(temp)
+		if(len(oldest) == 1):
+			if(DEBUG and DEBUG_LEVEL >= 2):
+				print("One oldest found, returning it: " + returning.passAsStr())
+			return oldest[0]
+		elif(len(oldest) > 1):
+
+			if(DEBUG and DEBUG_LEVEL >= 3):
+				print("Oldest:")
+				for sat in oldest:
+					print(sat.passAsStr())
+
+
+			returning = oldest[randint(0, len(oldest)-1)]
+			if(DEBUG and DEBUG_LEVEL >= 2):
+				print("Multiple oldest found, returning random one: " + returning.passAsStr())
+			return returning
+			# Implement this when dealing with partial conflicts too. 
+			# return filterByTimeSaved(temp, startTime, endTime)
+
+		# filter by most time saved
+		# if multiple are found with similar times, 
+		# 	 pick randomly
+		# else if one is found
+		# 	 return it
+
+		# Work out largest gap from picked sat
+		# Make a list of satellites which have more than MIN_PASS_LEN left in that gap
+		# 
+
 		
 	if(DEBUG and DEBUG_LEVEL >= 2):
 		print("*** Returning first item in conflicts ***")
@@ -257,14 +292,14 @@ while(i < len(passes)):
 	# find time window of conflic
 	conflicting = []
 	periodStart = passes[i].start 
-	periodEnd = passes[i].end + 1
+	periodEnd = passes[i].end + CONFLICT_PADDING
 
 	while(j<len(passes)):
 		# find all satellites which start in the time window.
 		if(conflicts(periodStart, periodEnd, passes[j])):
 			conflicting.append(passes[j])
 			if(passes[j].end > periodEnd):
-				periodEnd = passes[j].end + 1
+				periodEnd = passes[j].end + CONFLICT_PADDING
 			j += 1
 		else:
 			break
@@ -276,7 +311,7 @@ while(i < len(passes)):
 		if(DEBUG and DEBUG_LEVEL >= 2):
 			print("Conflicts")
 			for x in range(len(conflicting)):
-				print(conflicting[x].name + ": " + str(conflicting[x].start) + " -> " + str(conflicting[x].end))
+				print(conflicting[x].passAsStr())
 			print("---------")
 
 		# resolve the conflict
