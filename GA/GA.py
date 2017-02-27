@@ -102,10 +102,10 @@ def GA(population):
     gen = 0;
     while(1):
         gen+=1
-        sortByFitness(population)
+        population = sortByFitness(population)
         population.append(best[0])
         if(gen > 100): # since there is no definitive stopping value. i.e. if fitness was 0
-            sortByFitness(best)
+            best = sortByFitness(best)
             print("best order is: " + best[0])
             return
     print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: chromosomeString should be Gene string.
