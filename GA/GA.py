@@ -12,6 +12,7 @@ import operator
 
 CROSSOVER_RATE = 10; # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
+START_TIME_CMP= operator.attrgetter("startTime")
 
 class satPass:
     ' Class representing passes for satellite passes: which in turn, represents a gene in a chromosome'
@@ -37,18 +38,22 @@ class Chromosome:
 def crossover():
  """crossover function"""
 
+
+
 def randomParents(population):
     """ Select Parents for tournament function"""
     tempList = []
     parents = []
-    for index in range(2):
-        parentOne = random.randint(0,len(population))
-        parentTwo = random.randint(0,len(population))
-        tempList.extend([parentOne,parentTwo])
-        sortByFitness(tempList)
-        parents.append(tempList[0])
-        clear(tempList)
-    return parents
+    #for index in range(2):
+    parentOne = random.randint(0,len(population))
+    for item in parentOne:
+       	print("P1: " +  item)
+        #parentTwo = random.randint(0,len(population))
+        #tempList.extend([parentOne,parentTwo])
+        #sortByFitness(tempList)
+        #parents.append(tempList[0])
+        #clear(tempList)
+    #return parents
 
 
 def fitness(chromosome):
@@ -89,8 +94,7 @@ def sortByFitness(population):
     fitnessSorted = sorted(population, key=FITNESS_CMP)
     return fitnessSorted
 
-    
-
+   
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
     best = [] # Keep a list of the recent best solutions
@@ -101,11 +105,12 @@ def GA(population):
         best.append(population[0])
         if(gen > 100): # since there is no definitive stopping value. i.e. if fitness was 0
             best = sortByFitness(best)
-            print("best order is: \n")
-            print(best[0].fitness)
+            print("best fitness: %s" %best[0].fitness)
+            print("best order is:")
             for item in best[0].satPassList:
             	print(item.name)
             return
+        tournie(population)
     print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: chromosomeString should be Gene string.
 
 
@@ -119,12 +124,11 @@ squeakyRainbow = satPass("Goten",(datetime.time(10,40)),(datetime.time(10,50)));
 
 
 orderOne = [magicRainbow, fabbyRainbow, greyRainbow, squeakyRainbow] # A chromosome basically (or individual)
-ordertwo = [squeakyRainbow, fabbyRainbow, greyRainbow, magicRainbow] # A chromosome basically (or individual)
-orderedPasses = [orderOne, ordertwo] # More test data .. more of nothing to see here.
 
+chromo1 = sorted(orderOne, key= START_TIME_CMP)
 
-chromo1 = Chromosome(orderOne)
-chromo2 = Chromosome(ordertwo) # TODO: get a more elegant way to do this ya pleb
+for item in chromo1:
+	print(item.name)
 
 """
 population = orderedPasses
@@ -133,14 +137,19 @@ for chromosome in population:
 	for gene in chromosome:
 		print(gene.name)
 
-"""
 
+
+""
 chromo1.fitness = fitness(chromo1)
 chromo2.fitness = fitness(chromo2)
 
 chromoList = [chromo1,chromo2]
 
 """
+"""
+
+
+
 for item in chromoList:
 	print(item.fitness)
 
@@ -152,15 +161,42 @@ for item in chromoList:
 	print(item.fitness)
 """
 
+"""
+Testing tounie now:
+	RandomParents issue: 
+		For random parents you will need to look through the sat passes list (or DB)
+		select random sat passes to fill each chromosome..
 
-GA(chromoList)
-
-
+		Clearly, the number of passes in each chromosome can be different, so how do we decide this?
 
 """
-Just change population to a list? 
 
 """
+print("\nmother\n")
+for item in chromo1.satPassList:
+	print(item.name)
+
+print("\nfatherz\n")
+for item in chromo2.satPassList:
+	print(item.name)
+
+population = chromoList
+
+mother = population[0].satPassList
+father = population[1].satPassList
+
+child = mother[:3] + father[3:]
+
+childChromo = Chromosome(child)
+childChromo.fitness = fitness(childChromo)
+
+print("\nchild\n")
+for item in childChromo.satPassList: 
+	print(item.name)
+	
+"""
+
+# Need to make sure the lists are always unique and not repeating elements?
 
 
 
