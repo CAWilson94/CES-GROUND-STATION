@@ -12,9 +12,16 @@ PASS_LEN_MAX = 5
 PRIORITY_MAX = 2
 NUM_OF_PASSES = 40
 
-DEBUG = True
+DEBUG = False
 
 DEBUG_LEVEL =5
+
+orderOfPasses = []
+
+satelliteNames = ["a", "b", "c", "d", "e", "f", "g"]
+
+priorities = [1, 1, 1, 0, 0, 1, 2]
+
 
 class Pass():
 	def __init__(self, name, start, end, duration, priority):
@@ -27,9 +34,6 @@ class Pass():
 	def passAsStr(self):
 		return self.name + " (" + str(self.priority) + "): " +str(self.start) + " -> " + str(self.end )
 
-satelliteNames = ["a", "b", "c", "d", "e", "f", "g"]
-
-priorities = [1, 1, 1, 0, 0, 1, 2]
 #for i in range(len(satelliteNames)):
 #	priorities.append(randint(0, PRIORITY_MAX))
 
@@ -42,26 +46,27 @@ def generatePass():
 	priority = priorities[satIndex]
 	return Pass(name, startTime, endTime, duration, priority)
 
-passes = []
+def generatePasses():
+	passes = []
 
-for i in range(NUM_OF_PASSES):
-	passes.append(generatePass())
+	for i in range(NUM_OF_PASSES):
+		passes.append(generatePass())
+
+	return passes
 	
-# passes = [
-#  	Pass("a", 10, 12, 2, 1), Pass("a", 22, 24, 1, 1), Pass("a", 34, 36, 2, 1), 
-#  	Pass("b", 0, 1, 1, 1), Pass("b", 4, 5, 1, 1), Pass("b", 7, 8, 1, 1), 
-#  	Pass("c", 4, 6, 2, 1), Pass("c", 16, 18, 2, 1), Pass("c", 28, 30, 2, 1), 
-#  	Pass("d", 2, 5, 3, 1), Pass("d", 14, 17, 3, 1), Pass("d", 26, 29, 3, 1), 
-# ]
+	# passes = [
+	#  	Pass("a", 10, 12, 2, 1), Pass("a", 22, 24, 1, 1), Pass("a", 34, 36, 2, 1), 
+	#  	Pass("b", 0, 1, 1, 1), Pass("b", 4, 5, 1, 1), Pass("b", 7, 8, 1, 1), 
+	#  	Pass("c", 4, 6, 2, 1), Pass("c", 16, 18, 2, 1), Pass("c", 28, 30, 2, 1), 
+	#  	Pass("d", 2, 5, 3, 1), Pass("d", 14, 17, 3, 1), Pass("d", 26, 29, 3, 1), 
+	# ]
 
-# aPass = passes[3];
-# try:
-# 	print(str(passes.index(aPass)))
-# 	print(passes[passes.index(aPass)].passAsStr())
-# except ValueError:
-# 	print("not found")
-
-orderOfPasses = []
+	# aPass = passes[3];
+	# try:
+	# 	print(str(passes.index(aPass)))
+	# 	print(passes[passes.index(aPass)].passAsStr())
+	# except ValueError:
+	# 	print("not found")
 
 def lastIndex(list, value):
 	# list[::-1] reverses list
@@ -264,89 +269,109 @@ def findNext(conflicting, startTime, endTime):
 
 
 			
+def findNextRandomly(conflicts):
+	return conflicts[randint(0, len(conflicts)-1)]
 
 
-# print("Initial list")
-# for aPass in passes: 
-# 	print(str(aPass.start) + ",")
 
-timeStart = time.clock()
+def getOrderedList(passes):
+	# print("Initial list")
+	# for aPass in passes: 
+	# 	print(str(aPass.start) + ",")
 
-# Sort from earliest first
-passes.sort(key=lambda x: x.start, reverse=False)
+	# Sort from earliest first
+	passes.sort(key=lambda x: x.start, reverse=False)
 
-print("Sorted list")
-for aPass in passes: 
-	print(aPass.passAsStr())
+	if(DEBUG and DEBUG_LEVEL == 4):
+		print("Passes: " + str(len(passes)))
 
+		print("Sorted list")
+		for aPass in passes: 
+			print(aPass.passAsStr())
 
-i = 0
-conflictsNum = 0
+	i = 0
+	conflictsNum = 0
 
-print("passes: " + str(len(passes)))
-#for each satellites
-while(i < len(passes)):
-	j = i + 1
-	#print("i: " + str(i) + ", j: " + str(j) + ", passes[i] is: " + passes[i].passAsStr())
+	#for each satellites
+	while(i < len(passes)):
+		j = i + 1
+		#print("i: " + str(i) + ", j: " + str(j) + ", passes[i] is: " + passes[i].passAsStr())
 
-	# find time window of conflic
-	conflicting = []
-	periodStart = passes[i].start 
-	periodEnd = passes[i].end + CONFLICT_PADDING
+		# find time window of conflic
+		conflicting = []
+		periodStart = passes[i].start 
+		periodEnd = passes[i].end + CONFLICT_PADDING
 
-	while(j<len(passes)):
-		# find all satellites which start in the time window.
-		if(conflicts(periodStart, periodEnd, passes[j])):
-			conflicting.append(passes[j])
-			if(passes[j].end > periodEnd):
-				periodEnd = passes[j].end + CONFLICT_PADDING
-			j += 1
+		while(j<len(passes)):
+			# find all satellites which start in the time window.
+			if(conflicts(periodStart, periodEnd, passes[j])):
+				conflicting.append(passes[j])
+				if(passes[j].end > periodEnd):
+					periodEnd = passes[j].end + CONFLICT_PADDING
+				j += 1
+			else:
+				break
+		# if any were found
+		if(conflicting):
+			conflicting.append(passes[i])
+			conflicting.sort(key=lambda x: x.start, reverse=False)
+
+			if(DEBUG and DEBUG_LEVEL >= 2):
+				print("Conflicts")
+				for x in range(len(conflicting)):
+					print(conflicting[x].passAsStr())
+				print("---------")
+
+			# resolve the conflict
+			## nextPass = findNext(conflicting, periodStart, periodEnd)
+			nextPass = findNextRandomly(conflicting)
+			if(DEBUG ):
+				print("Added: " + nextPass.passAsStr() + " from conflict res.")
+			# append to the order
+			orderOfPasses.append(nextPass)
+			conflictsNum += 1
+			# skip alland DEBUG_LEVEL >= 1 sats which were conflicting
+			# change this to find conflicts from end of sat selected to end of conflict window for sats > 4 mins
+			i = j
 		else:
-			break
-	# if any were found
-	if(conflicting):
-		conflicting.append(passes[i])
-		conflicting.sort(key=lambda x: x.start, reverse=False)
+			# no conflics add and move on to next sat
+			if(DEBUG and DEBUG_LEVEL >= 1):
+				print("Added: " + passes[i].passAsStr())
+			orderOfPasses.append(passes[i])
 
-		if(DEBUG and DEBUG_LEVEL >= 2):
-			print("Conflicts")
-			for x in range(len(conflicting)):
-				print(conflicting[x].passAsStr())
-			print("---------")
+			i = i+ 1
 
-		# resolve the conflict
-		nextPass = findNext(conflicting, periodStart, periodEnd)
-		if(DEBUG ):
-			print("Added: " + nextPass.passAsStr() + " from conflict res.")
-		# append to the order
-		orderOfPasses.append(nextPass)
-		conflictsNum += 1
-		# skip alland DEBUG_LEVEL >= 1 sats which were conflicting
-		# change this to find conflicts from end of sat selected to end of conflict window for sats > 4 mins
-		i = j
-	else:
-		# no conflics add and move on to next sat
-		if(DEBUG and DEBUG_LEVEL >= 1):
-			print("Added: " + passes[i].passAsStr())
-		orderOfPasses.append(passes[i])
+	return orderOfPasses
 
-		i = i+ 1
 
-timeEnd = time.clock()
+# timeStart = time.clock()
+# getOrderedList()
+# timeEnd = time.clock()
 
-print("Order: ")
-print(orderOfPasses[0].name + " : " +str(orderOfPasses[0].start) + " -> " + str(orderOfPasses[0].end))	
-a = 1
-errors  = 0
-while(a < len(orderOfPasses)):
-	if(orderOfPasses[a].start < orderOfPasses[a-1].end):
-		print("This one starts before the previous one ends")
-		errors += 1
-	print(orderOfPasses[a].passAsStr())	
-	a+= 1
-print("---------------")
-print("Num of passes: " + str(NUM_OF_PASSES))
-print("Num of passes ordered: " + str(len(orderOfPasses)))
-print("Num of conflicts resolved: " + str(conflictsNum))
-print("Num of Errors: " + str(errors))
-print("Time taken: %s seconds" % (timeEnd - timeStart))
+# print("Order: ")
+# print(orderOfPasses[0].name + " : " +str(orderOfPasses[0].start) + " -> " + str(orderOfPasses[0].end))	
+# a = 1
+# errors  = 0
+# while(a < len(orderOfPasses)):
+# 	if(orderOfPasses[a].start < orderOfPasses[a-1].end):
+# 		print("This one starts before the previous one ends")
+# 		errors += 1
+# 	print(orderOfPasses[a].passAsStr())	
+# 	a+= 1
+# print("---------------")
+# print("Num of passes: " + str(NUM_OF_PASSES))
+# print("Num of passes ordered: " + str(len(orderOfPasses)))
+# print("Num of conflicts resolved: " + str(conflictsNum))
+# print("Num of Errors: " + str(errors))
+# print("Time taken: %s seconds" % (timeEnd - timeStart))
+
+passes = generatePasses()
+for i in range(50):
+	chromo = []
+	chromo = getOrderedList(passes)
+	chromoStr = ""
+	for thing in chromo:
+		chromoStr = chromoStr + thing.passAsStr() + ", "
+	print(chromoStr)
+	orderOfPasses = []
+
