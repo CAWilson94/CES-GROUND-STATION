@@ -12,9 +12,9 @@ PASS_LEN_MAX = 5
 PRIORITY_MAX = 2
 NUM_OF_PASSES = 40
 
-DEBUG = False
+DEBUG = True
 
-DEBUG_LEVEL =5
+DEBUG_LEVEL =2
 
 orderOfPasses = []
 
@@ -205,7 +205,7 @@ def findNext(conflicting, startTime, endTime):
 		temp = filterPriority(temp)
 
 		if(len(temp) == 1):
-			if(DEBUG and DEBUG_LEVEL >= 2):
+			if(DEBUG and DEBUG_LEVEL >= 3):
 				print("Only one found with highest priority, returning: " + temp[0].passAsStr())
 			return temp[0]
 
@@ -213,18 +213,18 @@ def findNext(conflicting, startTime, endTime):
 
 		if(unpicked is not None):
 			if(len(unpicked) == 1):
-				if(DEBUG and DEBUG_LEVEL >= 2):
+				if(DEBUG and DEBUG_LEVEL >= 3):
 					print("Only one found which wasn't picked before, returning: " + unpicked[0].passAsStr())
 				return unpicked[0]
 			elif(len(unpicked) > 1):
 
-				if(DEBUG and DEBUG_LEVEL >= 3):
+				if(DEBUG and DEBUG_LEVEL >= 4):
 					print("Unpicked:")
 					for sat in unpicked:
 						print(sat.passAsStr())
 
 				returning = unpicked[randint(0, len(unpicked)-1)]
-				if(DEBUG and DEBUG_LEVEL >= 2):
+				if(DEBUG and DEBUG_LEVEL >= 3):
 					print("Multiple not picked before, reurning random one: " + returning.passAsStr())
 				return returning
 				# Implement this when dealing with partial conflicts too. 
@@ -234,19 +234,19 @@ def findNext(conflicting, startTime, endTime):
 
 		oldest = filterByOldest(temp)
 		if(len(oldest) == 1):
-			if(DEBUG and DEBUG_LEVEL >= 2):
+			if(DEBUG and DEBUG_LEVEL >= 3):
 				print("One oldest found, returning it: " + returning.passAsStr())
 			return oldest[0]
 		elif(len(oldest) > 1):
 
-			if(DEBUG and DEBUG_LEVEL >= 3):
+			if(DEBUG and DEBUG_LEVEL >= 4):
 				print("Oldest:")
 				for sat in oldest:
 					print(sat.passAsStr())
 
 
 			returning = oldest[randint(0, len(oldest)-1)]
-			if(DEBUG and DEBUG_LEVEL >= 2):
+			if(DEBUG and DEBUG_LEVEL >= 3):
 				print("Multiple oldest found, returning random one: " + returning.passAsStr())
 			return returning
 			# Implement this when dealing with partial conflicts too. 
@@ -263,7 +263,7 @@ def findNext(conflicting, startTime, endTime):
 		# 
 
 		
-	if(DEBUG and DEBUG_LEVEL >= 2):
+	if(DEBUG and DEBUG_LEVEL >= 3):
 		print("*** Returning first item in conflicts ***")
 	return conflicting[0]
 
@@ -323,8 +323,8 @@ def getOrderedList(passes):
 				print("---------")
 
 			# resolve the conflict
-			## nextPass = findNext(conflicting, periodStart, periodEnd)
-			nextPass = findNextRandomly(conflicting)
+			nextPass = findNext(conflicting, periodStart, periodEnd)
+			#nextPass = findNextRandomly(conflicting)
 			if(DEBUG ):
 				print("Added: " + nextPass.passAsStr() + " from conflict res.")
 			# append to the order
@@ -341,37 +341,39 @@ def getOrderedList(passes):
 
 			i = i+ 1
 
+
+	print("Num of conflicts resolved: " + str(conflictsNum))
+
 	return orderOfPasses
 
 
-# timeStart = time.clock()
-# getOrderedList()
-# timeEnd = time.clock()
+timeStart = time.clock()
+orderOfPasses = getOrderedList(generatePasses())
+timeEnd = time.clock()
 
-# print("Order: ")
-# print(orderOfPasses[0].name + " : " +str(orderOfPasses[0].start) + " -> " + str(orderOfPasses[0].end))	
-# a = 1
-# errors  = 0
-# while(a < len(orderOfPasses)):
-# 	if(orderOfPasses[a].start < orderOfPasses[a-1].end):
-# 		print("This one starts before the previous one ends")
-# 		errors += 1
-# 	print(orderOfPasses[a].passAsStr())	
-# 	a+= 1
-# print("---------------")
-# print("Num of passes: " + str(NUM_OF_PASSES))
-# print("Num of passes ordered: " + str(len(orderOfPasses)))
-# print("Num of conflicts resolved: " + str(conflictsNum))
-# print("Num of Errors: " + str(errors))
-# print("Time taken: %s seconds" % (timeEnd - timeStart))
+print("Order: ")
+print(orderOfPasses[0].name + " : " +str(orderOfPasses[0].start) + " -> " + str(orderOfPasses[0].end))	
+a = 1
+errors  = 0
+while(a < len(orderOfPasses)):
+	if(orderOfPasses[a].start < orderOfPasses[a-1].end):
+		print("This one starts before the previous one ends")
+		errors += 1
+	print(orderOfPasses[a].passAsStr())	
+	a+= 1
+print("---------------")
+print("Num of passes: " + str(NUM_OF_PASSES))
+print("Num of passes ordered: " + str(len(orderOfPasses)))
+print("Num of Errors: " + str(errors))
+print("Time taken: %s seconds" % (timeEnd - timeStart))
 
-passes = generatePasses()
-for i in range(50):
-	chromo = []
-	chromo = getOrderedList(passes)
-	chromoStr = ""
-	for thing in chromo:
-		chromoStr = chromoStr + thing.passAsStr() + ", "
-	print(chromoStr)
-	orderOfPasses = []
+# passes = generatePasses()
+# for i in range(50):
+# 	chromo = []
+# 	chromo = getOrderedList(passes)
+# 	chromoStr = ""
+# 	for thing in chromo:
+# 		chromoStr = chromoStr + thing.passAsStr() + ", "
+# 	print(chromoStr)
+# 	orderOfPasses = []
 
