@@ -9,10 +9,12 @@ import datetime
 import time
 import random
 import operator
+from random import randint
 
 CROSSOVER_RATE = 10; # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
 START_TIME_CMP= operator.attrgetter("startTime")
+passNames = ["cube_a","cube_b","cube_c","cube_d"]
 
 class satPass:
     ' Class representing passes for satellite passes: which in turn, represents a gene in a chromosome'
@@ -37,8 +39,6 @@ class Chromosome:
 
 def crossover():
  """crossover function"""
-
-
 
 def randomParents(population):
     """ Select Parents for tournament function"""
@@ -101,11 +101,31 @@ def conflictSingle(satPassA, satPassB):
         return False
    
 def conflictingList(chromosome):
+    conflictList = []
+  
     for i in range(len(chromosome)):
         for j in range(i + 1, len(chromosome)):
             if(conflictSingle(chromosome[i],chromosome[j])):
                 print("Conflict! :O ")
                 print(chromosome[i].endTime, chromosome[j].startTime) 
+                print(chromosome[i].name, chromosome[j].name) 
+                if chromosome[i] not in conflictList:
+                    conflictList.append(chromosome[i])
+                if chromosome[j] not in conflictList:
+                    conflictList.append(chromosome[j])
+    return conflictList
+
+def genPasses():
+    randNames = randint(0, len(passNames)-1)
+    name = passNames[randNames]
+    rstartmin = randint(0, 59)
+    rstartHour = randint(0, 23)
+    rendmin = randint(0, 59)
+    rendHour = randint(0, 23)
+    startTime = (datetime.time(rstartHour, rstartmin))
+    endTime = (datetime.time(rendHour, rendmin))
+    return satPass(name, startTime,endTime)
+
 
 
 def GA(population):
@@ -143,10 +163,22 @@ chromo1 = sorted(orderOne, key= START_TIME_CMP)
 for item in chromo1:
 	print(item.name)
 
-print(conflictingList(chromo1))
+boop = conflictingList(chromo1)
 
 
+print("yer maw\n")
 
+for item in boop:
+    print(item.name)
 
+boopList = []
+for i in range(5):
+    boop = genPasses()
+    print(boop.name + " : " + str(boop.startTime) + " : " + str(boop.endTime))
+    boopList.append(boop)
 
+print("testing name: ")
+
+for item in boopList:
+    print(item.name)
 
