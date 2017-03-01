@@ -105,8 +105,8 @@ def conflictingList(chromosome):
         for j in range(i + 1, len(chromosome)):
             if(conflictSingle(chromosome[i],chromosome[j])):
                 print("Conflict! :O ")
-                print(chromosome[i].name, chromosome[j].name) 
-                  
+                print(chromosome[i].endTime, chromosome[j].startTime) 
+
 
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
