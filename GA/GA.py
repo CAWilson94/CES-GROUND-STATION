@@ -11,9 +11,10 @@ import random
 import operator
 from random import randint
 
-CROSSOVER_RATE = 10; # TODO: Ammend this
+CROSSOVER_RATE = 10 # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
 START_TIME_CMP= operator.attrgetter("startTime")
+CHROMO_LENGTH = 20
 passNames = ["cube_a","cube_b","cube_c","cube_d"]
 
 class satPass:
@@ -62,7 +63,7 @@ def fitness(chromosome):
     for y,z in zip(chromosome.satPassList[1:],chromosome.satPassList):
         #print(y.name,z.name)
         #print(y.startTime, z.endTime)
-        diff=(datetime.datetime.strptime(str(y.startTime),"%I:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%I:%M:%S"))
+        diff=(datetime.datetime.strptime(str(y.startTime),"%H:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%H:%M:%S"))
         #print("%s" %diff)
         total += abs(int(diff.total_seconds()))
     fitness = total;
@@ -126,7 +127,19 @@ def genPasses():
     endTime = (datetime.time(rendHour, rendmin))
     return satPass(name, startTime,endTime)
 
+def generateChromosome():
+    chromosomeSatPasses = []
+    for i in range(CHROMO_LENGTH):
+        chromosomeSatPasses.append(genPasses())
+    chromosome = Chromosome(chromosomeSatPasses)
+    chromosome.fitness = fitness(chromosome)
+    chromosome.satPassList = sorted(chromosome.satPassList, key = START_TIME_CMP)
+    return chromosome
 
+
+def generatePopulation():
+    chromo = generateChromosome()
+    conflictingList(chromo)
 
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
@@ -158,27 +171,24 @@ cube_d = satPass("cube_d",(datetime.time(10,40)),(datetime.time(10,50)));
 
 orderOne = [cube_d,cube_c,cube_b,cube_a] # A chromosome basically (or individual)
 
-chromo1 = sorted(orderOne, key= START_TIME_CMP)
+"""
+chromosomeSatPasses = []
 
-for item in chromo1:
-	print(item.name)
-
-boop = conflictingList(chromo1)
+for i in range(CHROMO_LENGTH):
+    chromosomeSatPasses.append(genPasses())
 
 
-print("yer maw\n")
+chromo = Chromosome(chromosomeSatPasses)
 
-for item in boop:
+
+for item in chromo.satPassList:
     print(item.name)
+    print(item.startTime)
+    print(item.endTime)
+print(fitness(chromo))
+"""
 
-boopList = []
-for i in range(5):
-    boop = genPasses()
-    print(boop.name + " : " + str(boop.startTime) + " : " + str(boop.endTime))
-    boopList.append(boop)
+chromosome = generateChromosome()
 
-print("testing name: ")
-
-for item in boopList:
-    print(item.name)
-
+for item in chromosome.satPassList:
+    print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
