@@ -14,7 +14,7 @@ from random import randint
 CROSSOVER_RATE = 10 # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
 START_TIME_CMP= operator.attrgetter("startTime")
-CHROMO_LENGTH = 20
+CHROMO_LENGTH = 5
 passNames = ["cube_a","cube_b","cube_c","cube_d"]
 
 class satPass:
@@ -103,13 +103,11 @@ def conflictSingle(satPassA, satPassB):
    
 def conflictingList(chromosome):
     conflictList = []
+    chromosome = chromosome.satPassList
   
     for i in range(len(chromosome)):
         for j in range(i + 1, len(chromosome)):
             if(conflictSingle(chromosome[i],chromosome[j])):
-                print("Conflict! :O ")
-                print(chromosome[i].endTime, chromosome[j].startTime) 
-                print(chromosome[i].name, chromosome[j].name) 
                 if chromosome[i] not in conflictList:
                     conflictList.append(chromosome[i])
                 if chromosome[j] not in conflictList:
@@ -139,7 +137,18 @@ def generateChromosome():
 
 def generatePopulation():
     chromo = generateChromosome()
-    conflictingList(chromo)
+
+    print("list without conflicts: \n")
+
+    for item in chromo.satPassList:
+        print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
+
+    chromo = conflictingList(chromo)
+
+    print("list of conflicts: \n")
+
+    for item in chromo:
+        print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
 
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
@@ -188,7 +197,4 @@ for item in chromo.satPassList:
 print(fitness(chromo))
 """
 
-chromosome = generateChromosome()
-
-for item in chromosome.satPassList:
-    print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
+generatePopulation()
