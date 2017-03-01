@@ -9,6 +9,7 @@ import datetime
 import time
 import random
 import operator
+import passmod as pm
 
 CROSSOVER_RATE = 10; # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
@@ -94,6 +95,11 @@ def sortByFitness(population):
     fitnessSorted = sorted(population, key=FITNESS_CMP)
     return fitnessSorted
 
+def conflict(satPassA, satPassB):
+    if(satPassB.startTime<satPassA.endTime):
+        return True
+    else:
+        return False
    
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
@@ -117,87 +123,20 @@ def GA(population):
 ' ---------------------- Testing Data ---------------------- '
 # Each one of these is a gene
 
-magicRainbow = satPass("Vegeta",(datetime.time(9, 0)),(datetime.time(9,20)));
-fabbyRainbow = satPass("Goku",(datetime.time(11,0)),(datetime.time(12,20)));
-greyRainbow = satPass("Yamcha",(datetime.time(10,10)),(datetime.time(10,30)));
-squeakyRainbow = satPass("Goten",(datetime.time(10,40)),(datetime.time(10,50)));
+cube_a = satPass("cube_a",(datetime.time(9, 0)),(datetime.time(9,20)));
+cube_b = satPass("cube_b",(datetime.time(11,0)),(datetime.time(12,20)));
+cube_c = satPass("cube_c",(datetime.time(9,10)),(datetime.time(10,30)));
+cube_d = satPass("cube_d",(datetime.time(10,40)),(datetime.time(10,50)));
 
 
-orderOne = [magicRainbow, fabbyRainbow, greyRainbow, squeakyRainbow] # A chromosome basically (or individual)
+orderOne = [cube_d,cube_c,cube_b,cube_a] # A chromosome basically (or individual)
 
 chromo1 = sorted(orderOne, key= START_TIME_CMP)
 
 for item in chromo1:
 	print(item.name)
 
-"""
-population = orderedPasses
-
-for chromosome in population:
-	for gene in chromosome:
-		print(gene.name)
-
-
-
-""
-chromo1.fitness = fitness(chromo1)
-chromo2.fitness = fitness(chromo2)
-
-chromoList = [chromo1,chromo2]
-
-"""
-"""
-
-
-
-for item in chromoList:
-	print(item.fitness)
-
-chromoList = sortByFitness(chromoList)
-
-print("now sorted by fitness: \n")
-
-for item in chromoList:
-	print(item.fitness)
-"""
-
-"""
-Testing tounie now:
-	RandomParents issue: 
-		For random parents you will need to look through the sat passes list (or DB)
-		select random sat passes to fill each chromosome..
-
-		Clearly, the number of passes in each chromosome can be different, so how do we decide this?
-
-"""
-
-"""
-print("\nmother\n")
-for item in chromo1.satPassList:
-	print(item.name)
-
-print("\nfatherz\n")
-for item in chromo2.satPassList:
-	print(item.name)
-
-population = chromoList
-
-mother = population[0].satPassList
-father = population[1].satPassList
-
-child = mother[:3] + father[3:]
-
-childChromo = Chromosome(child)
-childChromo.fitness = fitness(childChromo)
-
-print("\nchild\n")
-for item in childChromo.satPassList: 
-	print(item.name)
-	
-"""
-
-# Need to make sure the lists are always unique and not repeating elements?
-
+print(conflict(cube_a, cube_c))
 
 
 
