@@ -9,7 +9,6 @@ import datetime
 import time
 import random
 import operator
-import passmod as pm
 
 CROSSOVER_RATE = 10; # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
@@ -95,12 +94,20 @@ def sortByFitness(population):
     fitnessSorted = sorted(population, key=FITNESS_CMP)
     return fitnessSorted
 
-def conflict(satPassA, satPassB):
+def conflictSingle(satPassA, satPassB):
     if(satPassB.startTime<satPassA.endTime):
         return True
     else:
         return False
    
+def conflictingList(chromosome):
+    for i in range(len(chromosome)):
+        for j in range(i + 1, len(chromosome)):
+            if(conflictSingle(chromosome[i],chromosome[j])):
+                print("Conflict! :O ")
+                print(chromosome[i].name, chromosome[j].name) 
+                  
+
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
     best = [] # Keep a list of the recent best solutions
@@ -136,7 +143,7 @@ chromo1 = sorted(orderOne, key= START_TIME_CMP)
 for item in chromo1:
 	print(item.name)
 
-print(conflict(cube_a, cube_c))
+print(conflictingList(chromo1))
 
 
 
