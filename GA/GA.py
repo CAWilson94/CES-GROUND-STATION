@@ -100,6 +100,9 @@ def conflictSingle(satPassA, satPassB):
         return True
     else:
         return False
+
+def conflictWindow():
+	""" Split conflicts into different windows """
    
 def conflictingList(chromosome):
     conflictList = []
