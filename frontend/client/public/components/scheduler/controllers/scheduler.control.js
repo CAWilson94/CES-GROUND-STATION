@@ -7,6 +7,7 @@ scheduler
 		AZEL.query().$promise.then(function(date){
 			$scope.azel = data;
 		});
+		$('#tleTable').DataTable();
 		
 });
 
