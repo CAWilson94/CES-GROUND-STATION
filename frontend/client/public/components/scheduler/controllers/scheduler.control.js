@@ -9,5 +9,6 @@ scheduler
 		});
 		
     	$('#tleTable').DataTable();	
+    	$('.selectpicker').selectpicker();
 });
 
