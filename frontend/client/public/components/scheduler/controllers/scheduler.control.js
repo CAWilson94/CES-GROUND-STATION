@@ -8,5 +8,6 @@ scheduler
 			$scope.azel = data;
 		});
 		
+    	$('#tleTable').DataTable();	
 });
 
