@@ -50,24 +50,31 @@
           </tr>
           </thead>
           <tbody> 
-           <tr>
-           <td>Ex1</td>
-           <td>Ex2</td>
-           <td>Ex3</td>
+           <tr ng-repeat="tle in tles">
+           <td>{{tle.id}}</td>
+           <td>{{tle.name}</td>
+           <td>{{tle.name}}</td>
            </tr>
-           <tr>
-           <td>Ex1.1</td>
-           <td>Ex2.1</td>
-           <td>Ex3.1</td>
-           </tr>
+           </div>
           </tbody>
       </table>
   </div>
   </div>
 </div> 
 
+
+
 <div ng-controller="SchedulerController">
 	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
+
+  <table>
+  <tr ng-repeat="tle in tles">
+    <td>{{ tle.name }}</td>
+    <td>{{ tle.id }}</td>
+    <td>{{ tle.line1 }}</td>
+    <td>{{ tle.line2 }}</td>
+  </tr>
+</table>
 
   <div ng-repeat="azels in azel">
     <div style="margin-left:20px;">
@@ -76,15 +83,6 @@
  </div>
   </div>
 
-	<div ng-repeat="tle in tles">
-		<div style="margin-left: 20px;">
-			{{tle.id}} <br>
-			{{tle.name}} <br>
-			{{tle.line1}} <br>
-			{{tle.line2}} <br>
-			<hr/>
-		</div>
-	</div>
  </div>
 
 
