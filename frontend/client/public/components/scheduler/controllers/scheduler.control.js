@@ -1,5 +1,5 @@
 scheduler
-	.controller('SchedulerController', function($scope, TLE, AZEL){
+	.controller('SchedulerController', function($scope, TLE, AZEL, $timeout){
 		TLE.query().$promise.then(function(data) {
 			$scope.tles = data;
 		});
@@ -13,8 +13,10 @@ scheduler
 		
     	$('#tleTable').DataTable();	
 
-
-    	$('.selectpicker').selectpicker();
+    	$setTimeout(function() {
+    		$('.selectpicker').selectpicker('refresh');
+    	}, 10);
+    	
 
     	
 });
