@@ -13,9 +13,9 @@ scheduler
 		
     	$('#tleTable').DataTable();	
 
-    	$setTimeout(function() {
-    		$('.selectpicker').selectpicker('refresh');
-    	}, 10);
+    	 $timeout(function () {
+                    $('.selectpicker').parent().selectpicker('refresh');
+                });
     	
 
     	
