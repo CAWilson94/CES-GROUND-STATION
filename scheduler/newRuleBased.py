@@ -2,21 +2,21 @@ from random import randint
 import time 
 
 CONFLICT_PADDING = 1 # mins added to the end of the conflict period
-MIN_SUB_PASS_LEN = 5 # minimum lengh of pass to fill in the conflict window once a sat is chosen. 
+MIN_SUB_PASS_LEN = 3 # minimum lengh of pass to fill in the conflict window once a sat is chosen. 
 
 	# 6 hrs = 360
 	# 1 day = 1440
 	# 2 days = 2880
 	# 3 days = 4320
-TIMEFRAME_MINS = 120 # total timeframe for passes
+TIMEFRAME_MINS = 240 # total timeframe for passes
 PASS_LEN_MAX = 8 # the longest a pass will be
 PASS_LEN_MIN = 2  # the shortest a pass will be 
 PRIORITY_MAX = 2 # The highest priority given to sats (commented out)
-NUM_OF_PASSES = 10 # Max number of passes in initial array
+NUM_OF_PASSES = 25 # Max number of passes in initial array
 
-DEBUG = True
+DEBUG = False
 
-DEBUG_LEVEL =2
+DEBUG_LEVEL = 2
 
 orderOfPasses = []
 
@@ -243,7 +243,7 @@ def findNext(conflicting, startTime, endTime):
 		oldest = filterByOldest(temp)
 		if(len(oldest) == 1):
 			if(DEBUG and DEBUG_LEVEL >= 3):
-				print("One oldest found, returning it: " + returning.passAsStr())
+				print("One oldest found, returning it: " + oldest[0].passAsStr())
 			return oldest[0]
 		elif(len(oldest) > 1):
 
@@ -322,9 +322,12 @@ def fillBeforeChosen(conflicts, chosen):
 			duration = end - start
 			return Pass(bestFit.name, start, end, duration , bestFit.priority)
 		else: 
+			if(DEBUG and DEBUG_LEVEL >= 2):
+				print("Nothing found before")
 			return None
 	else: 
-		print("Nothing found before")
+		if(DEBUG and DEBUG_LEVEL >= 2):
+			print("Nothing found before")
 		return None
 
 def fillAfterChosen(conflicts, chosen):
@@ -368,9 +371,12 @@ def fillAfterChosen(conflicts, chosen):
 			duration = end - start
 			return Pass(bestFit.name, start, end, duration , bestFit.priority)
 		else: 
+			if(DEBUG and DEBUG_LEVEL >= 2):
+				print("Nothing found after")
 			return None
 	else: 
-		print("Nothing found after")
+		if(DEBUG and DEBUG_LEVEL >= 2):
+			print("Nothing found after")
 		return None
 
 def fillConflictWindow(conflicts, chosen):
@@ -392,19 +398,17 @@ def fillConflictWindow(conflicts, chosen):
 
 
 def getOrderedList(passes):
-	# print("Initial list")
-	# for aPass in passes: 
-	# 	print(str(aPass.start) + ",")
-
 	# Sort from earliest first
 	passes.sort(key=lambda x: x.start, reverse=False)
 
-	if(DEBUG and DEBUG_LEVEL == 2):
+	if(DEBUG and DEBUG_LEVEL >= 2):
 		print("Passes: " + str(len(passes)))
-
 		print("Sorted list")
 		for aPass in passes: 
 			print(aPass.passAsStr())
+
+	if(DEBUG and DEBUG_LEVEL >= 1):
+		print("")
 
 	i = 0
 	conflictsNum = 0
@@ -412,8 +416,6 @@ def getOrderedList(passes):
 	#for each satellites
 	while(i < len(passes)):
 		j = i + 1
-		#print("i: " + str(i) + ", j: " + str(j) + ", passes[i] is: " + passes[i].passAsStr())
-
 		# find time window of conflic
 		conflicting = []
 		periodStart = passes[i].start 
@@ -444,7 +446,7 @@ def getOrderedList(passes):
 
 			filledWindow = fillConflictWindow(conflicting, nextPass)
 			#nextPass = findNextRandomly(conflicting)
-			if(DEBUG ):
+			if(DEBUG and DEBUG_LEVEL >= 1):
 				for sat in filledWindow: 
 					print("Added: " + sat.passAsStr() + " from conflict res.")
 			# append to the order
@@ -462,8 +464,8 @@ def getOrderedList(passes):
 
 			i = i+ 1
 
-
-	print("Num of conflicts resolved: " + str(conflictsNum))
+	if(DEBUG and DEBUG_LEVEL >= 1):
+		print("Num of conflicts resolved: " + str(conflictsNum))
 
 	return orderOfPasses
 
@@ -488,6 +490,20 @@ print("Num of passes ordered: " + str(len(orderOfPasses)))
 print("Num of Errors: " + str(errors))
 print("Time taken: %s seconds" % (timeEnd - timeStart))
 
+print("\n\n")
+numOfIterations = 100000
+totalPasses = 0
+for i in range(numOfIterations):
+	orderOfPasses = []
+	timeStart = time.clock()
+	orderOfPasses = getOrderedList(generatePasses())
+	timeEnd = time.clock()
+	print("Num of passes ordered: " + str(len(orderOfPasses)))
+	totalPasses += len(orderOfPasses)
+	print("Time taken: %s seconds" % (timeEnd - timeStart))
+	print("---------------")
+
+print("On average found: " + str(totalPasses/numOfIterations))
 # passes = generatePasses()
 # for i in range(50):
 # 	chromo = []
