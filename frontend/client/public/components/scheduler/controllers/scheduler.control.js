@@ -14,7 +14,9 @@ scheduler
     	$('#tleTable').DataTable();	
 
     	 $timeout(function () {
-                    $('.selectpicker').parent().selectpicker('refresh');
+    	 	$scope.$apply(function(){
+    	 		 $('.selectpicker').parent().selectpicker({ showSubText:true});
+    	 	})
                 });
     	
 
