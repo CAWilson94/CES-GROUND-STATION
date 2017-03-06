@@ -6,14 +6,15 @@ scheduler
 		AZEL.query().$promise.then(function(date){
 			$scope.azel = data;
 		});
+
+		$scope.button_click = function() {
+          window.alert("boopity");
+      };
 		
     	$('#tleTable').DataTable();	
+
+
     	$('.selectpicker').selectpicker();
-
-
-    	$("#button_one").click(function() {
- 		 window.alert( "Handler for .click() called." );
-		});
 
     	
 });

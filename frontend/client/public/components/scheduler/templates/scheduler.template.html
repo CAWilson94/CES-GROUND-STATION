@@ -18,13 +18,15 @@
 </head>
 <body>
 
+
+<div ng-controller="SchedulerController">
 <div class = "drop-down">
 <select class="selectpicker" data-live-search="true">
   <option data-tokens="TLEEX1">TLE INPUT</option>
   <option data-tokens="TLEEX2">TLEINPUT1</option>
   <option data-tokens="TLEEX3">YERMAW</option>
 </select>
-<button type="button" id = "button_one" class="btn btn-primary-outline">
+<button type="button" ng-click = 'button_click()' id = "button_one" class="btn btn-primary-outline">
   <span class="glyphicon glyphicon-plus"></span>
 </button>
 
@@ -41,7 +43,7 @@
 <div class = "container-fluid">
   <div class="row">
   <div class = "col-sm-5">
-     <table id = "tleTable" class="display" cellspacing="0" width="100%" >
+     <table id = "tleTable" datatable = "ng" class="display" cellspacing="0" width="100%" >
           <thead>
           <tr>
             <th>Sat Name</th>
@@ -64,7 +66,7 @@
 
 
 
-<div ng-controller="SchedulerController">
+
 	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
 
   <table>
