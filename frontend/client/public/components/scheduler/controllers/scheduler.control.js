@@ -1,5 +1,5 @@
 scheduler
-	.controller('SchedulerController', function($scope, TLE, AZEL, $timeout){
+	.controller('SchedulerController', function($scope, TLE, AZEL){
 		TLE.query().$promise.then(function(data) {
 			$scope.tles = data;
 		});
@@ -10,16 +10,12 @@ scheduler
 		$scope.button_click = function() {
           window.alert("boopity");
       };
-		
-    	$('#tleTable').DataTable();	
-
-    	 $timeout(function () {
-    	 	$scope.$apply(function(){
-    	 		 $('.selectpicker').parent().selectpicker({ showSubText:true});
-    	 	})
-                });
     	
 
-    	
+    	angular.element(document).ready(function(){
+    		$('#tleTable').DataTable();	
+    		$('#selectpicker').selectpicker('refresh');    	
+    	})
+    		
 });
 

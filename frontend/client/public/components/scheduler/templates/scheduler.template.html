@@ -23,7 +23,7 @@
 <div class = "drop-down" style="margin-bottom: 20px ; margin-left:12px">
 
 
-<select class="selectpicker" data-live-search="true" ng-model="tles" ng-controller="SchedulerController">
+<select id = "selectpicker" class="selectpicker" data-live-search="true" ng-model="tles" ng-controller="SchedulerController">
   <option ng-repeat="tle in tles">{{tle.name}}</option>
 </select>
 
@@ -42,7 +42,7 @@
 <div class = "container-fluid">
   <div class="row">
   <div class = "col-sm-5">
-     <table id = "tleTable" class="display" cellspacing="0" width="100%" >
+     <table id = "tleTable" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
           <thead>
           <tr>
             <th>Sat Name</th>
@@ -53,7 +53,7 @@
           <tbody> 
            <tr ng-repeat="tle in tles">
            <td>{{tle.id}}</td>
-           <td>{{tle.name}</td>
+           <td>{{tle.name}}</td>
            <td>{{tle.name}}</td>
            </tr>
            <tr>
@@ -78,15 +78,6 @@
 <div ng-controller="SchedulerController">
 	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
 
-  <table>
-  <tr ng-repeat="tle in tles">
-    <td>{{ tle.name }}</td>
-    <td>{{ tle.id }}</td>
-    <td>{{ tle.line1 }}</td>
-    <td>{{ tle.line2 }}</td>
-  </tr>
-</table>
-
   <div ng-repeat="azels in azel">
     <div style="margin-left:20px;">
       {{azel.azimuth}}
@@ -96,9 +87,6 @@
 
  </div>
  </div>
-
-
-
 
 </body>
 </html>
