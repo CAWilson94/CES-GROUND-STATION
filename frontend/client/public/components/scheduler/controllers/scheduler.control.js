@@ -10,6 +10,11 @@ scheduler
     	$('#tleTable').DataTable();	
     	$('.selectpicker').selectpicker();
 
+
+    	$("#button_one").click(function() {
+ 		 window.alert( "Handler for .click() called." );
+		});
+
     	
 });
 
