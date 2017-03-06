@@ -1,17 +1,18 @@
 from random import randint
 import time 
 
-CONFLICT_PADDING = 0 # mins added to the end of the conflict period
+CONFLICT_PADDING = 1 # mins added to the end of the conflict period
 MIN_SUB_PASS_LEN = 5 # minimum lengh of pass to fill in the conflict window once a sat is chosen. 
 
 	# 6 hrs = 360
 	# 1 day = 1440
 	# 2 days = 2880
 	# 3 days = 4320
-TIMEFRAME_MINS = 60
-PASS_LEN_MAX = 5
-PRIORITY_MAX = 2
-NUM_OF_PASSES = 40
+TIMEFRAME_MINS = 120 # total timeframe for passes
+PASS_LEN_MAX = 8 # the longest a pass will be
+PASS_LEN_MIN = 2  # the shortest a pass will be 
+PRIORITY_MAX = 2 # The highest priority given to sats (commented out)
+NUM_OF_PASSES = 10 # Max number of passes in initial array
 
 DEBUG = True
 
@@ -42,6 +43,8 @@ def generatePass():
 	satIndex = randint(0, len(satelliteNames)-1)
 	name = satelliteNames[satIndex]
 	duration = randint(0, PASS_LEN_MAX)
+	while(duration < PASS_LEN_MIN):
+		duration = randint(0, PASS_LEN_MAX)
 	startTime = randint(0, TIMEFRAME_MINS) 
 	endTime = startTime+duration
 	priority = priorities[satIndex]
@@ -49,9 +52,13 @@ def generatePass():
 
 def generatePasses():
 	passes = []
-
+	previousPass = generatePass()
+	passes.append(previousPass)
 	for i in range(NUM_OF_PASSES):
-		passes.append(generatePass())
+		newPass = generatePass()
+		while(newPass == previousPass):
+			newPass = generatePass()
+		passes.append(newPass)
 
 	return passes
 	
@@ -283,13 +290,11 @@ def fillBeforeChosen(conflicts, chosen):
 	startTime = conflicts[0].start
 	endTime = chosen.start - CONFLICT_PADDING
 
-	print("Before chosen - total conflicting remaining: " + str(len(conflicts)))
 	counter = 0
 	for sat in conflicts:
 		if(sat.start > endTime):
 			del conflicts[conflicts.index(sat)]
 		counter += 1
-	print("Filtered for before chosen, counter: " + str(counter))
 
 	if(conflicts):
 		bestFit = conflicts[0]
@@ -310,14 +315,20 @@ def fillBeforeChosen(conflicts, chosen):
 				bestTime = satPeriod
 				bestFit = sat
 
+
 		if(bestTime > MIN_SUB_PASS_LEN):
-			return Pass(bestFit.name, bestFit.start,  bestFit.start + bestTime, bestFit.priority)
+			start = bestFit.start
+			end = bestFit.start + bestTime
+			duration = end - start
+			return Pass(bestFit.name, start, end, duration , bestFit.priority)
 		else: 
 			return None
 	else: 
+		print("Nothing found before")
 		return None
 
 def fillAfterChosen(conflicts, chosen):
+
 	if(chosen in conflicts):
 		del conflicts[conflicts.index(chosen)]
 
@@ -326,13 +337,11 @@ def fillAfterChosen(conflicts, chosen):
 	startTime = chosen.end + CONFLICT_PADDING
 	endTime = conflicts[len(conflicts)-1].end
 
-	print("After chosen - total conflicting remaining: " + str(len(conflicts)))
 	counter = 0
 	for sat in conflicts:
 		if(sat.end > startTime):
 			del conflicts[conflicts.index(sat)]
 		counter += 1
-	print("Filtered for After chosen, counter: " + str(counter))
 
 	if(conflicts):
 		bestFit = conflicts[0]
@@ -354,21 +363,25 @@ def fillAfterChosen(conflicts, chosen):
 				bestFit = sat
 
 		if(bestTime > MIN_SUB_PASS_LEN):
-			return Pass(bestFit.name, bestFit.end - bestTime, bestFit.end, bestFit.priority)
+			start = bestFit.end - bestTime
+			end = bestFit.end
+			duration = end - start
+			return Pass(bestFit.name, start, end, duration , bestFit.priority)
 		else: 
 			return None
 	else: 
+		print("Nothing found after")
 		return None
 
 def fillConflictWindow(conflicts, chosen):
 	localSchedule = []
 	localSchedule.append(chosen)
 
-	satBefore = fillBeforeChosen(conflicts, chosen)
+	satBefore = fillBeforeChosen(conflicts[:], chosen)
 	if(satBefore is not None):
 		localSchedule.append(satBefore)
 
-	satAfter = fillAfterChosen(conflicts, chosen)
+	satAfter = fillAfterChosen(conflicts[:], chosen)
 	if(satAfter is not None):
 		localSchedule.append(satAfter)
 
@@ -386,7 +399,7 @@ def getOrderedList(passes):
 	# Sort from earliest first
 	passes.sort(key=lambda x: x.start, reverse=False)
 
-	if(DEBUG and DEBUG_LEVEL == 4):
+	if(DEBUG and DEBUG_LEVEL == 2):
 		print("Passes: " + str(len(passes)))
 
 		print("Sorted list")
@@ -460,7 +473,7 @@ orderOfPasses = getOrderedList(generatePasses())
 timeEnd = time.clock()
 
 print("Order: ")
-print(orderOfPasses[0].name + " : " +str(orderOfPasses[0].start) + " -> " + str(orderOfPasses[0].end))	
+print(orderOfPasses[0].passAsStr())	
 a = 1
 errors  = 0
 while(a < len(orderOfPasses)):
