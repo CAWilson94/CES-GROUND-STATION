@@ -14,17 +14,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+   <script type="text/javascript">
+       $scope.$watch(function() {
+      $('satpick').selectpicker('refresh');
+</script>
 </head>
 <body>
 
 <div class = "drop-down">
-<select class="selectpicker" data-live-search="true">
-  <option data-tokens="TLEEX1">TLE INPUT</option>
-  <option data-tokens="TLEEX2">TLEINPUT1</option>
-  <option data-tokens="TLEEX3">YERMAW</option>
+<select name="satpick" class="selectpicker" data-live-search="true" ng-controller="SchedulerController">
+  <option ng-repeat="tle in tles" data-tokens="{{tle.name}}">{{tle.name}}</option>
 </select>
-<button type="button" class="btn btn-primary-outline">
+<button type="button" class="btn btn-primary-outline" ng-click="open()">
   <span class="glyphicon glyphicon-plus"></span>
 </button>
 
@@ -66,15 +67,21 @@
   </div>
 </div> 
 
-<div ng-controller="SchedulerController">
-	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
 
-  <div ng-repeat="azels in azel">
+
+<div ng-controller="SchedulerController">
+
+<div>
+    <md-button ng-click="showAlert()" class="md-raised md-warn">
+      Employee Alert!
+      </md-button>
+  </div>
+<!--   <div ng-repeat="azels in azel">
     <div style="margin-left:20px;">
       {{azel.azimuth}}
   <br>
  </div>
-  </div>
+  </div> -->
 
 	<div ng-repeat="tle in tles">
 		<div style="margin-left: 20px;">
@@ -85,11 +92,11 @@
 			<hr/>
 		</div>
 	</div>
+
+
  </div>
 
 
 
-
 </body>
-</html>
 </html>

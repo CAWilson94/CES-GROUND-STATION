@@ -3,7 +3,7 @@
   "description": "A sample Angular application",
   "license": "MIT",
   "dependencies": {
-    "angular": "^1.5.8",
+    "angular": "^1.6.3",
     "angular-resource": "^1.5.8",
     "angular-route": "^1.5.8",
     "bootstrap": "3.3.x",
@@ -12,6 +12,6 @@
     "datatables.net": "^2.1.1"
   },
   "resolutions": {
-    "angular": "^1.5.7"
+    "angular": "1.6.2"
   }
 }

@@ -3,8 +3,15 @@
 var scheduler = angular.module("scheduler", []);
 
 angular
-    .module('Application', [
+    .module('Scheduler', [
         'appRoutes',
         'scheduler',
-	    'ngResource'
+	    'ngResource',
+	    'ngMaterial'
     ]);
+
+angular
+	.module('ngMaterial',[
+		'ng',
+		'ngAnimate',
+		'ngAria'])
