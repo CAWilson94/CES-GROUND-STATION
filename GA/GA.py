@@ -14,8 +14,11 @@ from random import randint
 CROSSOVER_RATE = 10 # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
 START_TIME_CMP= operator.attrgetter("startTime")
-CHROMO_LENGTH = 5
+CHROMO_LENGTH = 10
 passNames = ["cube_a","cube_b","cube_c","cube_d"]
+
+
+
 
 class satPass:
     ' Class representing passes for satellite passes: which in turn, represents a gene in a chromosome'
@@ -37,6 +40,19 @@ class Chromosome:
     def __init__(self, satPassList):
         self.satPassList = satPassList
         #self.fitness = fitness # update later
+
+
+
+cube_a = satPass("cube_a",(datetime.time(9, 0)),(datetime.time(10,0)));
+cube_b = satPass("cube_b",(datetime.time(9,20)),(datetime.time(9,40)));
+cube_c = satPass("cube_c",(datetime.time(10,20)),(datetime.time(10,40)));
+cube_d = satPass("cube_d",(datetime.time(11,0)),(datetime.time(11,20)));
+cube_e = satPass("cube_e",(datetime.time(11,10)),(datetime.time(11,40)));
+cube_f = satPass("cube_f",(datetime.time(11,30)),(datetime.time(11,50)));
+cube_g = satPass("cube_g",(datetime.time(12,0)),(datetime.time(12,30)));
+
+TEST_PASS_LIST = [cube_a,cube_d,cube_b,cube_e,cube_f,cube_c,cube_g]
+
 
 def crossover():
  """crossover function"""
@@ -107,11 +123,15 @@ def conflictingList(chromosome):
   
     for i in range(len(chromosome)):
         for j in range(i + 1, len(chromosome)):
+            print(i, " :", j)
             if(conflictSingle(chromosome[i],chromosome[j])):
+                print("conflict: i", chromosome[i].name, " with: ", chromosome[j].name)
                 if chromosome[i] not in conflictList:
                     conflictList.append(chromosome[i])
                 if chromosome[j] not in conflictList:
                     conflictList.append(chromosome[j])
+            else:
+                break
     return conflictList
 
 def genPasses():
@@ -134,9 +154,16 @@ def generateChromosome():
     chromosome.satPassList = sorted(chromosome.satPassList, key = START_TIME_CMP)
     return chromosome
 
+def testChromosome(satPassList):
+    chromosome = Chromosome(satPassList)
+    chromosome.fitness = fitness(chromosome)
+    chromosome.satPassList = sorted(chromosome.satPassList, key = START_TIME_CMP)
+    return chromosome    
+    
 
 def generatePopulation():
-    chromo = generateChromosome()
+    #chromo = generateChromosome()
+    chromo = testChromosome(TEST_PASS_LIST)
 
     print("list without conflicts: \n")
 
@@ -172,13 +199,6 @@ def GA(population):
 ' ---------------------- Testing Data ---------------------- '
 # Each one of these is a gene
 
-cube_a = satPass("cube_a",(datetime.time(9, 0)),(datetime.time(9,20)));
-cube_b = satPass("cube_b",(datetime.time(11,0)),(datetime.time(12,20)));
-cube_c = satPass("cube_c",(datetime.time(9,10)),(datetime.time(10,30)));
-cube_d = satPass("cube_d",(datetime.time(10,40)),(datetime.time(10,50)));
-
-
-orderOne = [cube_d,cube_c,cube_b,cube_a] # A chromosome basically (or individual)
 
 """
 chromosomeSatPasses = []
