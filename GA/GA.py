@@ -123,18 +123,26 @@ def conflictWindow():
 def conflictingList(chromosome):
     conflictList = []
     chromosome = chromosome.satPassList
+
+    d = {}
   
     for i in range(len(chromosome)):
         for j in range(i + 1, len(chromosome)):
-            print(i, " :", j)
             if(conflictSingle(chromosome[i],chromosome[j])):
-                print("conflict: i", chromosome[i].name, " with: ", chromosome[j].name)
                 if chromosome[i] not in conflictList:
                     conflictList.append(chromosome[i])
+                    d[i] = [chromosome[i]]
                 if chromosome[j] not in conflictList:
                     conflictList.append(chromosome[j])
+                    d[j] = [chromosome[j]]
             else:
                 break
+
+    print("Dictionary: \n")
+
+    for k, v in d.items():
+        print(k,v)
+
     return conflictList
 
 def genPasses():
