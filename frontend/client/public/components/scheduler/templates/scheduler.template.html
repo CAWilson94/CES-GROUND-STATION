@@ -23,8 +23,8 @@
 <div class = "drop-down" style="margin-bottom: 20px ; margin-left:12px">
 
 
-<select class="nya-selectpicker" ng-model="tles">
-  <option ng-repeat="tle in tles" value="{{tle.name}}">{{tle.name}}</option>
+<select class="selectpicker" boot-select-picker data-live-search="true" ng-model="tles" ng-controller="SchedulerController">
+ <option ng-repeat="tle in tles">{{tle.name}}</option>
 </select>
 
 
@@ -41,7 +41,7 @@
 
 <div class = "container-fluid">
   <div class="row">
-  <div class = "col-sm-5">
+  <div  class = "col-sm-5">
      <table id = "tleTable" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
           <thead>
           <tr>

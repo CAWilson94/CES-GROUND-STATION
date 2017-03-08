@@ -9,5 +9,4 @@ angular
         'appRoutes',
         'scheduler',
 	    'ngResource',
-	    'nya.bootstrap.select'
     ]);

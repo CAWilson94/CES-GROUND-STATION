@@ -7,15 +7,31 @@ scheduler
 			$scope.azel = data;
 		});
 
+		/**
 		$scope.button_click = function() {
           window.alert("boopity");
       };
 
-    	
     	angular.element(document).ready(function(){
     		$('#tleTable').DataTable();	
-    		$('.nya-selectpicker').selectpicker('refresh');    	
+  			//$('.selectpicker').selectpicker('refresh');   	
     	})
-		
+    	**/
+    	
 });
+
+
+scheduler.directive('bootSelectPicker', function(){
+	 return {
+     restrict: "A",
+     require: "ngModel",
+     link: function(scope, element, attrs, ctrl) {      
+       $(element).selectpicker('refresh');
+     }
+   };
+})
+
+
+
+
 
