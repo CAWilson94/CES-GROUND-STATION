@@ -8,5 +8,6 @@ angular
     .module('Application', [
         'appRoutes',
         'scheduler',
-	    'ngResource'
+	    'ngResource',
+	    'nya.bootstrap.select'
     ]);

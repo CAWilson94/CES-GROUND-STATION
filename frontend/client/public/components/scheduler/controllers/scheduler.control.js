@@ -10,12 +10,12 @@ scheduler
 		$scope.button_click = function() {
           window.alert("boopity");
       };
-    	
 
+    	
     	angular.element(document).ready(function(){
     		$('#tleTable').DataTable();	
-    		$('#selectpicker').selectpicker('refresh');    	
+    		$('.nya-selectpicker').selectpicker('refresh');    	
     	})
-    		
+		
 });
 
