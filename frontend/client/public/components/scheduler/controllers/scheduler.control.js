@@ -20,14 +20,11 @@ scheduler
     	
 });
 
-
-scheduler.directive('bootSelectPicker', function(){
+scheduler.directive('bootSelectPicker', function($timeout){
 	 return {
-     restrict: "A",
-     require: "ngModel",
-     link: function(scope, element, attrs, ctrl) {      
+     link: $timeout(function(scope, element, attrs, ctrl) {      
        $(element).selectpicker('refresh');
-     }
+     }, 3000)
    };
 })
 
