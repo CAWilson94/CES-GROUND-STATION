@@ -1,5 +1,5 @@
 scheduler
-	.controller('SchedulerController', function($scope, TLE, AZEL){
+	.controller('SchedulerController', function($scope, TLE, AZEL,$timeout){
 		TLE.query().$promise.then(function(data) {
 			$scope.tles = data;
 		});
@@ -7,11 +7,15 @@ scheduler
 			$scope.azel = data;
 		});
 
-		/**
+		
 		$scope.button_click = function() {
           window.alert("boopity");
       };
 
+		//$('.selectpicker').selectpicker('refresh');  
+
+
+		/**
     	angular.element(document).ready(function(){
     		$('#tleTable').DataTable();	
   			//$('.selectpicker').selectpicker('refresh');   	
@@ -20,13 +24,23 @@ scheduler
     	
 });
 
-scheduler.directive('bootSelectPicker', function($timeout){
-	 return {
-     link: $timeout(function(scope, element, attrs, ctrl) {      
-       $(element).selectpicker('refresh');
-     }, 3000)
-   };
+
+ scheduler.directive('bootSelectPicker', function() {
+  return {
+    restrict: "A",
+    require: "ngModel",
+    link: function(scope, element, attrs, ctrl) {
+      setTimeout(function() {
+       $(element).selectpicker('refresh');   
+      }, 10);
+     
+    }
+  };
 })
+
+ angular.element(function() {
+  angular.bootstrap(document, ['scheduler']);
+});
 
 
 
