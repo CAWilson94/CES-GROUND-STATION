@@ -42,13 +42,13 @@ class Chromosome:
 
 
 
-cube_a = satPass("cube_a",(datetime.time(9, 0)),(datetime.time(10,0)));
-cube_b = satPass("cube_b",(datetime.time(9,20)),(datetime.time(9,40)));
-cube_c = satPass("cube_c",(datetime.time(10,20)),(datetime.time(10,40)));
-cube_d = satPass("cube_d",(datetime.time(11,0)),(datetime.time(11,20)));
-cube_e = satPass("cube_e",(datetime.time(11,10)),(datetime.time(11,40)));
-cube_f = satPass("cube_f",(datetime.time(11,30)),(datetime.time(11,50)));
-cube_g = satPass("cube_g",(datetime.time(12,0)),(datetime.time(12,30)));
+cube_a = satPass("cube_a",(datetime.datetime(2017,12,4, 9, 0)),(datetime.datetime(2017,12,4,10,0)));
+cube_b = satPass("cube_b",(datetime.datetime(2017,12,4,9,20)),(datetime.datetime(2017,12,4,9,40)));
+cube_c = satPass("cube_c",(datetime.datetime(2017,12,4,10,20)),(datetime.datetime(2017,12,4,10,40)));
+cube_d = satPass("cube_d",(datetime.datetime(2017,12,4,11,0)),(datetime.datetime(2017,12,4,11,20)));
+cube_e = satPass("cube_e",(datetime.datetime(2017,12,4,11,10)),(datetime.datetime(2017,12,4,11,40)));
+cube_f = satPass("cube_f",(datetime.datetime(2017,12,4,11,30)),(datetime.datetime(2017,12,4,11,50)));
+cube_g = satPass("cube_g",(datetime.datetime(2017,12,4,12,0)),(datetime.datetime(2017,12,4,12,30)));
 
 TEST_PASS_LIST = [cube_a,cube_d,cube_b,cube_e,cube_f,cube_c,cube_g]
 
@@ -89,7 +89,8 @@ def fitness(chromosome):
     for y,z in zip(chromosome.satPassList[1:],chromosome.satPassList):
         #print(y.name,z.name)
         #print(y.startTime, z.endTime)
-        diff=(datetime.datetime.strptime(str(y.startTime),"%H:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%H:%M:%S"))
+        diff = (y.startTime - z.endTime)
+        #diff=(datetime.datetime.strptime(str(y.startTime),"%H:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%H:%M:%S"))
         #print("%s" %diff)
         total += abs(int(diff.total_seconds()))
     fitness = total;
@@ -107,13 +108,17 @@ def fitnessVariety_sum(chromosome):
     """  want different sats and not just any.. """
     diffNames = 0
     satLookedat = []
+    duration = 0
     for satPass in chromosome.satPassList:
-        duration = (satPass.endTime.minute- satPass.startTime.minute)
+        duration += (satPass.endTime - satPass.startTime).total_seconds()
         print(satPass.name, " duration: " , duration)
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
             diffNames += 1
+
+    print(diffNames, "diffNames: ", diffNames)
     fitness = duration * diffNames
+    print("fitness: ", fitness)
 
     return fitness
 
@@ -317,7 +322,3 @@ boop = generatePopulation()
 populateshit = setFitness(boop)
 
 printPopulation(populateshit)
-
-
-
-
