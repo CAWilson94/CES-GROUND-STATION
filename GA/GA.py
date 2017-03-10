@@ -15,6 +15,7 @@ CROSSOVER_RATE = 10 # TODO: Ammend this
 FITNESS_CMP= operator.attrgetter("fitness")
 START_TIME_CMP= operator.attrgetter("startTime")
 CHROMO_LENGTH = 10
+POPULATION_SIZE = 10
 passNames = ["cube_a","cube_b","cube_c","cube_d"]
 
 
@@ -111,8 +112,8 @@ def sortByFitness(population):
     fitnessSorted = sorted(population, key=FITNESS_CMP)
     return fitnessSorted
 
-def conflictSingle(satPassA, satPassB):
-    if(satPassB.startTime<satPassA.endTime):
+def conflictSingle(satPassB, passAendTime):
+    if(satPassB.startTime<passAendTime):
         return True
     else:
         return False
@@ -120,30 +121,69 @@ def conflictSingle(satPassA, satPassB):
 def conflictWindow():
 	""" Split conflicts into different windows """
    
-def conflictingList(chromosome):
+def randomChromosome(chromosome):
+    """ Generates random chromosome with random non conflicting sat passes: i.e. picks from conflicting windows"""
     conflictList = []
     chromosome = chromosome.satPassList
+    orderedPassList = []
+    i = 0
 
     d = {}
   
-    for i in range(len(chromosome)):
+    while i < len(chromosome):
+        windowEnd = chromosome[i].endTime
+
         for j in range(i + 1, len(chromosome)):
-            if(conflictSingle(chromosome[i],chromosome[j])):
+
+            if(conflictSingle(chromosome[j], windowEnd)):
                 if chromosome[i] not in conflictList:
                     conflictList.append(chromosome[i])
-                    d[i] = [chromosome[i]]
+
                 if chromosome[j] not in conflictList:
                     conflictList.append(chromosome[j])
-                    d[j] = [chromosome[j]]
+
+                if chromosome[j].endTime > chromosome[i].endTime: 
+                    windowEnd = chromosome[j].endTime
             else:
+               
+
+                if(conflictList):
+                    d[len(orderedPassList)] = conflictList 
+                    orderedPassList.append(conflictList[randint(0,len(conflictList)-1)])
+                else: 
+                    orderedPassList.append(chromosome[i])
+                conflictList = []
+                i = j - 1
                 break
+        if(i==len(chromosome)-1):
+            orderedPassList.append(chromosome[i])
+        i+=1
+
+    """
+    print("\nRandom chromosome")
+
+    for item in orderedList:
+        print(item.name)
+
 
     print("Dictionary: \n")
 
+    
     for k, v in d.items():
-        print(k,v)
 
-    return conflictList
+        stringName = ""
+        for item in v: 
+            stringName+=item.name + " "
+
+        print(k,stringName)
+        """
+    randomChromosome = Chromosome(orderedPassList)
+    #randomChromosome.fitness = fitness(randomChromosome)
+
+    return randomChromosome
+
+
+
 
 def genPasses():
     randNames = randint(0, len(passNames)-1)
@@ -174,19 +214,25 @@ def testChromosome(satPassList):
 
 def generatePopulation():
     #chromo = generateChromosome()
-    chromo = testChromosome(TEST_PASS_LIST)
+    chromosome = testChromosome(TEST_PASS_LIST)
+
+    populationList = []
 
     print("list without conflicts: \n")
 
-    for item in chromo.satPassList:
+    for item in chromosome.satPassList:
         print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
 
-    chromo = conflictingList(chromo)
+    for i in range(POPULATION_SIZE):
 
-    print("list of conflicts: \n")
+        chromo = randomChromosome(chromosome)
 
-    for item in chromo:
-        print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
+        populationList.append(chromo)
+
+        print("list of conflicts: \n")
+
+        for item in chromo.satPassList:
+            print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
 
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
