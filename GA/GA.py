@@ -19,15 +19,13 @@ POPULATION_SIZE = 10
 passNames = ["cube_a","cube_b","cube_c","cube_d"]
 
 
-
-
 class satPass:
     ' Class representing passes for satellite passes: which in turn, represents a gene in a chromosome'
     def __init__(self, name, startTime, endTime):
         self.name = name
         self.startTime = startTime
         self.endTime = endTime
-        self.duration = (endTime.minute- startTime.minute)
+        self.duration = (endTime.minute - startTime.minute)
 
 class Population:
     ' Class representing population: a population contains chromosomes hurrah!'
@@ -73,6 +71,17 @@ def randomParents(population):
         #clear(tempList)
     #return parents
 
+def setFitness(population):
+    """ set fitness of every chromosome in population so this is only done once in the program: 
+        i.e. instead of setting fitness on chromosome creation and crossover just do it in the 
+        GA function.
+
+        returns a population of chromosomes with fitnesses :O 
+    """
+    for chromosome in population:
+        chromosome.fitness = fitnessVariety_sum(chromosome)
+
+    return population
 
 def fitness(chromosome):
     """ The smallest time is the winner basically """
@@ -87,6 +96,28 @@ def fitness(chromosome):
     y.fitness = fitness # want fitness to be for the orders so create individual from this
     return fitness
 
+def fitnessPassSum(chromosome):
+    """ Here, the metric for fitness is going to be most contact with sats: so bigger is better"""
+    fitness = 0
+    for satPass in chromosome.satPassList:
+        fitness += (satPass.endTime - satPass.startTime)
+    return fitness
+
+def fitnessVariety_sum(chromosome):
+    """  want different sats and not just any.. """
+    diffNames = 0
+    satLookedat = []
+    for satPass in chromosome.satPassList:
+        duration = (satPass.endTime.minute- satPass.startTime.minute)
+        print(satPass.name, " duration: " , duration)
+        if satPass.name not in satLookedat:
+            satLookedat.append(satPass.name)
+            diffNames += 1
+    fitness = duration * diffNames
+
+    return fitness
+
+        
 def tournie(population):
     """Tournament to generate new generation"""
     newGen = []
@@ -165,10 +196,8 @@ def randomChromosome(chromosome):
     for item in orderedList:
         print(item.name)
 
-
     print("Dictionary: \n")
 
-    
     for k, v in d.items():
 
         stringName = ""
@@ -210,7 +239,13 @@ def testChromosome(satPassList):
     chromosome.fitness = fitness(chromosome)
     chromosome.satPassList = sorted(chromosome.satPassList, key = START_TIME_CMP)
     return chromosome    
-    
+
+def printPopulation(populateshit):    
+    for chromosome in populateshit: 
+        stringName = ""
+        for item in chromosome.satPassList : 
+            stringName+=item.name + " "
+        print(chromosome.fitness, stringName)
 
 def generatePopulation():
     #chromo = generateChromosome()
@@ -234,12 +269,15 @@ def generatePopulation():
         for item in chromo.satPassList:
             print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
 
+    return populationList
+
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
     best = [] # Keep a list of the recent best solutions
     gen = 0;
     while(1):
         gen+=1
+        setFitness(population) # check this
         population = sortByFitness(population)
         best.append(population[0])
         if(gen > 100): # since there is no definitive stopping value. i.e. if fitness was 0
@@ -274,4 +312,12 @@ for item in chromo.satPassList:
 print(fitness(chromo))
 """
 
-generatePopulation()
+boop = generatePopulation()
+
+populateshit = setFitness(boop)
+
+printPopulation(populateshit)
+
+
+
+
