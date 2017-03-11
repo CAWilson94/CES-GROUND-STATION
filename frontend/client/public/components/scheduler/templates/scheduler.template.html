@@ -1,97 +1,47 @@
-<!--
-<select class="ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="selectedName" multiple title="sat pick" ng-options="tle.name for tle in tles">
-</select>
 
-  <select class = "js-states form-control" title="Pick a Sat" data-live-search="true">
-    <option value="sat1">SAT-ONE</option>
-    <option value="sat2">SAT-TWO</option>
-    <option value="sat3">SAT-THREE</option>
-    <option value="sat4">SAT-FOUR</option>
-    <option value="sat5">SAT-FIVE</option>
-    <option value="sat6">SAT-SIX</option>
-  </select>-->
- 
 <!DOCTYPE html>
 <html>
 <head>
 
 </head>
-<body>
+<body ng-controller="SchedulerController"> <!-- controller controls everything here and child elements -->
 
-
-<div ng-sparkline></div>
 
 <div class = "table_drop_down" style="margin-left: 30px">
 
 <div class = "drop-down" style="margin-bottom: 20px ; margin-left:12px">
 
-<select class="selectpicker" boot-select-picker data-live-search="true" ng-model="tles" ng-controller="SchedulerController">
+<select class="selectpicker" boot-select-picker data-live-search="true" ng-model="tles" >
     <option ng-repeat="tle in tles">{{tle.name}}</option>
   </select>
 
+</div>
+</div>
+
+
+</body>
+</html>
+</html>
+
+
+
 
 <!--
-<select ng-model="tles" ng-controller="SchedulerController">
-<option ng-repeat="tle in tles">{{tle.name}}</option>
-</select>-->
+
 
 <button type="button" ng-click = 'button_click()' id = "button_one" class="btn btn-primary-outline">
-  <span class="glyphicon glyphicon-plus"></span>
+<span class="glyphicon glyphicon-plus"></span>
 </button>
 
 </div>
-
-<div class = "container-fluid">
-  <div class="row">
-  <div  class = "col-sm-5">
-     <table id = "tleTable" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
-          <thead>
-          <tr>
-            <th>Sat Name</th>
-            <th>Next Pass</th>
-            <th>Duration</th>
-          </tr>
-          </thead>
-          <tbody> 
-           <tr ng-repeat="tle in tles">
-           <td>{{tle.id}}</td>
-           <td>{{tle.name}}</td>
-           <td>{{tle.name}}</td>
-           </tr>
-           <tr>
-            <td>some data here </td>
-           <td> some data there </td>
-           <td>some data here </td>
-           </tr>
-           <tr>
-            <td>some data here </td>
-           <td> some data there </td>
-           <td>some data here </td>
-           </tr>
-           </div>
-          </tbody>
-      </table>
-  </div>
-  </div>
-</div> 
-
-
-
-<div ng-controller="SchedulerController">
-	<!--<h> TLEs: Currently not showing up on my desktop</h>-->
-
   <div ng-repeat="azels in azel">
     <div style="margin-left:20px;">
       {{azel.azimuth}}
   <br>
  </div>
   </div>
-
- </div>
-
  
  </div>
 
-</body>
-</html>
-</html>
+
+ -->
