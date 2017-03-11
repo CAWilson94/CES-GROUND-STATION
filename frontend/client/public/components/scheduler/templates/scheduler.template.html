@@ -1,15 +1,3 @@
-<!--
-<select class="ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="selectedName" multiple title="sat pick" ng-options="tle.name for tle in tles">
-</select>
-
-  <select class = "js-states form-control" title="Pick a Sat" data-live-search="true">
-    <option value="sat1">SAT-ONE</option>
-    <option value="sat2">SAT-TWO</option>
-    <option value="sat3">SAT-THREE</option>
-    <option value="sat4">SAT-FOUR</option>
-    <option value="sat5">SAT-FIVE</option>
-    <option value="sat6">SAT-SIX</option>
-  </select>-->
  
 <!DOCTYPE html>
 <html>
@@ -23,8 +11,8 @@
 
 <div class = "drop-down" style="margin-bottom: 20px ; margin-left:12px">
     <div layout="column" layout-align="start start">
-      <md-select placeholder="Pick a Satellite" ng-model="tles" md-on-open="tles" style="min-width: 200px; margin-top: 45px;">
-          <md-option ng-value="tle" ng-repeat="tle in tles">{{tle.name}}</md-option>
+      <md-select placeholder="Pick a Satellite" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px; margin-top: 45px;">
+          <md-option ng-repeat="tle in tles track by $index">{{tle.name}} </md-option>
       </md-select>
     </div>
 
