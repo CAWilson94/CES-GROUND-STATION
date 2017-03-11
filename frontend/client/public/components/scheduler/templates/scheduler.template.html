@@ -11,7 +11,7 @@
 
 <div class = "drop-down" style="margin-bottom: 20px ; margin-left:12px">
     <div layout="column" layout-align="start start">
-      <md-select placeholder="Pick a Satellite" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px; margin-top: 45px;">
+      <md-select placeholder="Pick a Satellite" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px; margin-top: 50px;">
           <md-option ng-repeat="tle in tles track by $index">{{tle.name}} </md-option>
       </md-select>
     </div>
