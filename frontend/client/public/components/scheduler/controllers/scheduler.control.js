@@ -7,40 +7,38 @@ scheduler
 			$scope.azel = data;
 		});
 
-		
+
+		$scope.user = null;
+  $scope.users = null;
+
+  $scope.loadUsers = function() {
+
+    $scope.users =  $scope.users  || [
+        { id: 1, name: 'TEABAGS' },
+        { id: 2, name: 'DOOPPYY' },
+        { id: 3, name: 'BALALALLA' },
+        { id: 4, name: 'ROASTERS' },
+        { id: 5, name: 'CUBESAT1' },
+        { id: 1, name: 'YERMAW' },
+        { id: 2, name: 'LINDAAA' },
+        { id: 3, name: 'BALDEEPSMAW' },
+        { id: 4, name: 'COFFEE' },
+        { id: 5, name: 'COOKIES' }
+      ];
+  };
+
+
+
+    
 		$scope.button_click = function() {
           window.alert("boopity");
       };
 
-		//$('.selectpicker').selectpicker('refresh');  
-
-
-		/**
-    	angular.element(document).ready(function(){
-    		$('#tleTable').DataTable();	
-  			//$('.selectpicker').selectpicker('refresh');   	
-    	})
-    	**/
+		
     	
 });
 
 
- scheduler.directive('bootSelectPicker', function() {
-  return {
-    restrict: "A",
-    require: "ngModel",
-    link: function(scope, element, attrs, ctrl) {
-      setTimeout(function() {
-       $(element).selectpicker('refresh');   
-      }, 10);
-     
-    }
-  };
-})
-
- angular.element(function() {
-  angular.bootstrap(document, ['scheduler']);
-});
 
 
 
