@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="Application">
 
-<link rel="stylesheet"  href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet"  href="bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">
-<!-- DataTables CSS -->
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
 
 
     
@@ -13,39 +9,17 @@
         <meta charset="utf-8">
         <title>Ground Station App</title>
 
-        <!--  Angular Setup -->
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
-
-        <!-- boostrap components && datatables-->
-        <script src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-
-        <!-- selectpicker wrapper -->
-         <script src="bower_components/nya-bootstrap-select/dist/js/nya-bs-select.js"></script>
-
-
-        <!-- Application Setup -->
-        <script src="public/appRoutes.js"></script>
-        <script src="public/app.js"></script>
-
-        <!--  Controllers -->
-        <script src="public/components/scheduler/controllers/scheduler.control.js"></script>
-
-
-	    <!-- Services -->
-	    <script src="public/components/scheduler/services/tle.service.js"></script>
-        <script src="public/components/scheduler/services/azel.service.js"></script>
-        
-        <!-- DataTables -->
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-        <script type=" text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
-
+       
+<link rel="stylesheet"  href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet"  href="bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
+<!-- angular material -->
+<link rel="stylesheet" href= "bower_components/angular-material/angular-material.css">
 
     
 </head>
+
     <body>
 
      <!-- HEADER AND NAVBAR -->
@@ -67,5 +41,43 @@
   
         <!-- The dynamic templates will be served within this div -->
         <ui-view></ui-view>
+
+
+         <!--  Angular Setup -->
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+
+        <!-- boostrap components && datatables-->
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
+        <!-- selectpicker wrapper -->
+         <script src="bower_components/nya-bootstrap-select/dist/js/nya-bs-select.js"></script>
+
+
+        <!-- Application Setup -->
+        <script src="public/appRoutes.js"></script>
+        <script src="public/app.js"></script>
+
+        <!--  Controllers -->
+        <script src="public/components/scheduler/controllers/scheduler.control.js"></script>
+
+
+        <!-- Services -->
+        <script src="public/components/scheduler/services/tle.service.js"></script>
+        <script src="public/components/scheduler/services/azel.service.js"></script>
+        
+        <!-- DataTables -->
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+        <script type=" text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+
+        <!-- angular material dependancies-->
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/angular-aria/angular-aria.js"></script>
+        <!-- angular material -->
+        <script src="bower_components/angular-material/angular-material.js"></script>
+
     </body>
 </html>

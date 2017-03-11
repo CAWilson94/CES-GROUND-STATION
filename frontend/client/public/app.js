@@ -1,6 +1,6 @@
 'use strict';
 
-var scheduler = angular.module("scheduler", []);
+var scheduler = angular.module("scheduler", ["ngMaterial"]);
 
 
 
