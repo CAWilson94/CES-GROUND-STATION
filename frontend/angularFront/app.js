@@ -4,5 +4,4 @@
 
  Now need to create another file called maincontroller.js
 */
-var app = angular.module('MyTutorialApp',[]);
-var app1 = angular.module('boop',[]);
+var app = angular.module('MyTutorialApp',['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
