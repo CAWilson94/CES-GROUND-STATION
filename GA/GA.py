@@ -41,7 +41,7 @@ class Chromosome:
         #self.fitness = fitness # update later
 
 
-
+' ---------------------- Testing Data ---------------------- '
 cube_a = satPass("cube_a",(datetime.datetime(2017,12,4, 9, 0)),(datetime.datetime(2017,12,4,10,0)));
 cube_b = satPass("cube_b",(datetime.datetime(2017,12,4,9,20)),(datetime.datetime(2017,12,4,9,40)));
 cube_c = satPass("cube_c",(datetime.datetime(2017,12,4,10,20)),(datetime.datetime(2017,12,4,10,40)));
@@ -52,9 +52,26 @@ cube_g = satPass("cube_g",(datetime.datetime(2017,12,4,12,0)),(datetime.datetime
 
 TEST_PASS_LIST = [cube_a,cube_d,cube_b,cube_e,cube_f,cube_c,cube_g]
 
+chromsomeOne = Chromosome(cube_b)
+chromsomeTwo = Chromosome(cube_c)
 
-def crossover():
- """crossover function"""
+
+def crossover(chromoOne, chromoTwo):
+ """crossover function: crosses over pass lists while keeping them in order wrt to time."""
+ child1satPassList = chromoOne.satPassList[:2] + chromoTwo.satPassList[2:]
+ child2satPassList = chromoTwo.satPassList[:2] + chromoOne.satPassList[2:]
+ 
+ childOne = Chromosome(child1satPassList)
+ childTwo = Chromosome(child2satPassList)
+ # Could probably create a "package Chromosome" function..
+ childOne.fitness = fitness(childOne)
+ childTwo.fitness = fitness(childTwo)
+ childOne.satPassList = sorted(childOne.satPassList, key = START_TIME_CMP)
+ childTwo.satPassList = sorted(childTwo.satPassList, key = START_TIME_CMP)
+
+
+
+
 
 def randomParents(population):
     """ Select Parents for tournament function"""
@@ -68,7 +85,7 @@ def randomParents(population):
         #tempList.extend([parentOne,parentTwo])
         #sortByFitness(tempList)
         #parents.append(tempList[0])
-        #clear(tempList)
+        #tempList = []
     #return parents
 
 def setFitness(population):
@@ -133,15 +150,8 @@ def tournie(population):
         if(i < CROSSOVER_RATE):
             tempIndiList = crossover(newGen[0], newGen[1])
             crossed.extend(tempIndiList)
-            clear(newGen)
+            newGen = []
     return crossed
-
-def clear(someList):
-    """python does not seem to have a clear list function..
-        Splice in the list [] (0 elements) at the location [:]
-        (all indexes from start to finish)
-    """
-    someList[:] = []
 
 def sortByFitness(population):
     "sort chromosomes by fitness"
@@ -154,8 +164,6 @@ def conflictSingle(satPassB, passAendTime):
     else:
         return False
 
-def conflictWindow():
-	""" Split conflicts into different windows """
    
 def randomChromosome(chromosome):
     """ Generates random chromosome with random non conflicting sat passes: i.e. picks from conflicting windows"""
@@ -217,8 +225,6 @@ def randomChromosome(chromosome):
     return randomChromosome
 
 
-
-
 def genPasses():
     randNames = randint(0, len(passNames)-1)
     name = passNames[randNames]
@@ -258,19 +264,15 @@ def generatePopulation():
 
     populationList = []
 
-    print("list without conflicts: \n")
+    #print("list without conflicts: \n")
 
     for item in chromosome.satPassList:
         print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
 
     for i in range(POPULATION_SIZE):
-
         chromo = randomChromosome(chromosome)
-
         populationList.append(chromo)
-
-        print("list of conflicts: \n")
-
+        #print("list of conflicts: \n")
         for item in chromo.satPassList:
             print(item.name + " : %s"  %str(item.startTime) + " : %s" %str(item.endTime))
 
@@ -284,7 +286,7 @@ def GA(population):
         gen+=1
         setFitness(population) # check this
         population = sortByFitness(population)
-        best.append(population[0])
+        best.append(population[-1]) # this is for the case of variety fitness where largest is fittest: others should be opposite
         if(gen > 100): # since there is no definitive stopping value. i.e. if fitness was 0
             best = sortByFitness(best)
             print("best fitness: %s" %best[0].fitness)
@@ -292,33 +294,28 @@ def GA(population):
             for item in best[0].satPassList:
             	print(item.name)
             return
-        tournie(population)
+       #tournie(population)
     print("generation: " + gen + "best: " + population[0].chromosomeString) # TODO: chromosomeString should be Gene string.
 
 
-' ---------------------- Testing Data ---------------------- '
-# Each one of these is a gene
+def test():
+    boop = generatePopulation()
+    populateshit = setFitness(boop)
+    printPopulation(populateshit)
 
 
-"""
-chromosomeSatPasses = []
+    print("shit happening\n")
+    population =  sortByFitness(populateshit)
+    printPopulation(population)
+    print(population[-1].fitness)
 
-for i in range(CHROMO_LENGTH):
-    chromosomeSatPasses.append(genPasses())
-
-
-chromo = Chromosome(chromosomeSatPasses)
-
-
-for item in chromo.satPassList:
-    print(item.name)
-    print(item.startTime)
-    print(item.endTime)
-print(fitness(chromo))
-"""
 
 boop = generatePopulation()
+GA(boop)
 
-populateshit = setFitness(boop)
 
-printPopulation(populateshit)
+#crossover(chromsomeOne, chromsomeTwo)
+
+boop = [cube_c, cube_c, cube_b]
+bopit = [cube_a, cube_g, cube_b]
+yermaw = bopit[:2] + boop[2:]
