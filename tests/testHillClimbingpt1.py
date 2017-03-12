@@ -1,61 +1,64 @@
 from datetime import date,datetime
 from scheduler.models import TLE, NextPass
-from scheduler.searchAlgorithms import _Helper, HillClimbing
 from django.test import TestCase
 
-
+from scheduler.MOT.simpleHC import MOTSimpleHC
+from scheduler.MOT.steepestHC import MOTSteepestHC
+from scheduler.MOT.stochasticHC import MOTStochasticHC
+from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
+from scheduler.MOT._MOTHelper import _Helper
 
 class FitnessFunctionTests(TestCase):
-	#test individual parts of the fitness function
-	# def tests_findSchedulableSatellites(self):
+# 	#test individual parts of the fitness function
+# 	# def tests_findSchedulableSatellites(self):
 
-	# 	sixtysevenCAOS = datetime(2017,1,25,0,6,52)
-	# 	sixtysevenCLOS = datetime(2017,1,25,0,14,42)
-	# 	sixtysevenDAOS = datetime(2017,1,25,0,8,37)
-	# 	sixtysevenDLOS = datetime(2017,1,25,0,16,18)
-	# 	briteAOS = datetime(2017,1,25,0,19,39)
-	# 	briteLOS = datetime(2017,1,25,0,30,4)
-	# 	fconeAOS = datetime(2017,1,25,0,17,14)
-	# 	fconeLOS = datetime(2017,1,25,0,30,6)
-	# 	fcthreeAOS = datetime(2017,1,25,0,11,3)
-	# 	fcthreeLOS = datetime(2017,1,25,0,23,54)
-	# 	fcfiveAOS = datetime(2017,1,25,0,8,47)
-	# 	fcfiveLOS = datetime(2017,1,25,0,21,37)
-	# 	fefourteenAOS = datetime(2017,1,25,0,0,33)
-	# 	fefourteenLOS = datetime(2017,1,25,0,8,13)	
-	# 	itupAOS = datetime(2017,1,25,0,22,12)
-	# 	itupLOS = datetime(2017,1,25,0,34,49)
+# 	# 	sixtysevenCAOS = datetime(2017,1,25,0,6,52)
+# 	# 	sixtysevenCLOS = datetime(2017,1,25,0,14,42)
+# 	# 	sixtysevenDAOS = datetime(2017,1,25,0,8,37)
+# 	# 	sixtysevenDLOS = datetime(2017,1,25,0,16,18)
+# 	# 	briteAOS = datetime(2017,1,25,0,19,39)
+# 	# 	briteLOS = datetime(2017,1,25,0,30,4)
+# 	# 	fconeAOS = datetime(2017,1,25,0,17,14)
+# 	# 	fconeLOS = datetime(2017,1,25,0,30,6)
+# 	# 	fcthreeAOS = datetime(2017,1,25,0,11,3)
+# 	# 	fcthreeLOS = datetime(2017,1,25,0,23,54)
+# 	# 	fcfiveAOS = datetime(2017,1,25,0,8,47)
+# 	# 	fcfiveLOS = datetime(2017,1,25,0,21,37)
+# 	# 	fefourteenAOS = datetime(2017,1,25,0,0,33)
+# 	# 	fefourteenLOS = datetime(2017,1,25,0,8,13)	
+# 	# 	itupAOS = datetime(2017,1,25,0,22,12)
+# 	# 	itupLOS = datetime(2017,1,25,0,34,49)
 
-	# 	sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
-	# 	sixtysevenDTLE= TLE(1,"sixtysevenD","line1","line2")
-	# 	briteTLE= TLE(1,"brite","line1","line2")
-	# 	fconeTLE= TLE(1,"fcone","line1","line2")
-	# 	fcthreeTLE= TLE(1,"fcthree","line1","line2")
-	# 	fcfiveTLE= TLE(1,"fcfive","line1","line2")
-	# 	fefourteenTLE= TLE(1,"fefourteen","line1","line2")
-	# 	itupTLE= TLE(1,"itup","line1","line2")
+# 	# 	sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
+# 	# 	sixtysevenDTLE= TLE(1,"sixtysevenD","line1","line2")
+# 	# 	briteTLE= TLE(1,"brite","line1","line2")
+# 	# 	fconeTLE= TLE(1,"fcone","line1","line2")
+# 	# 	fcthreeTLE= TLE(1,"fcthree","line1","line2")
+# 	# 	fcfiveTLE= TLE(1,"fcfive","line1","line2")
+# 	# 	fefourteenTLE= TLE(1,"fefourteen","line1","line2")
+# 	# 	itupTLE= TLE(1,"itup","line1","line2")
 
-	# 	date1 = datetime(2017, 1, 1, 12, 0, 0)
-	# 		# id, tle, riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+# 	# 	date1 = datetime(2017, 1, 1, 12, 0, 0)
+# 	# 		# id, tle, riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 
-	# 	sixtysevenC = NextPass(1,sixtysevenCTLE,sixtysevenCAOS, sixtysevenCLOS,date1,date1,date1,date1)
-	# 	sixtysevenD = NextPass(2,sixtysevenDTLE,sixtysevenDAOS, sixtysevenDLOS,date1,date1,date1,date1)
-	# 	brite = NextPass(5,briteTLE,briteAOS, briteLOS,date1,date1,date1,date1)
-	# 	fcone = NextPass(10,fconeTLE,fconeAOS,fconeLOS,date1,date1,date1,date1)
-	# 	fcthree = NextPass(11,fcthreeTLE,fcthreeAOS, fcthreeLOS,date1,date1,date1,date1)
-	# 	fcfive = NextPass(12,fcfiveTLE,fcfiveAOS, fcfiveLOS,date1,date1,date1,date1)
+# 	# 	sixtysevenC = NextPass(1,sixtysevenCTLE,sixtysevenCAOS, sixtysevenCLOS,date1,date1,date1,date1)
+# 	# 	sixtysevenD = NextPass(2,sixtysevenDTLE,sixtysevenDAOS, sixtysevenDLOS,date1,date1,date1,date1)
+# 	# 	brite = NextPass(5,briteTLE,briteAOS, briteLOS,date1,date1,date1,date1)
+# 	# 	fcone = NextPass(10,fconeTLE,fconeAOS,fconeLOS,date1,date1,date1,date1)
+# 	# 	fcthree = NextPass(11,fcthreeTLE,fcthreeAOS, fcthreeLOS,date1,date1,date1,date1)
+# 	# 	fcfive = NextPass(12,fcfiveTLE,fcfiveAOS, fcfiveLOS,date1,date1,date1,date1)
 		
-	# 	fefourteen = NextPass(18,fefourteenTLE,fefourteenAOS,fefourteenLOS,date1,date1,date1,date1)
-	# 	itup = NextPass(19,itupTLE,itupAOS, itupLOS,date1,date1,date1,date1)
+# 	# 	fefourteen = NextPass(18,fefourteenTLE,fefourteenAOS,fefourteenLOS,date1,date1,date1,date1)
+# 	# 	itup = NextPass(19,itupTLE,itupAOS, itupLOS,date1,date1,date1,date1)
 		
-	# 	satGroup=[[sixtysevenC,sixtysevenD,brite,fcone,fcthree,fcfive,fefourteen,itup]]
+# 	# 	satGroup=[[sixtysevenC,sixtysevenD,brite,fcone,fcthree,fcfive,fefourteen,itup]]
 		
-	# 	score, nextpassList= _Helper._findSchedulableSatellites(satGroup)
+# 	# 	score, nextpassList= _Helper._findSchedulableSatellites(satGroup)
 
-	# 	for pas in nextpassList:
-	# 		print(pas)
-	# 		print(pas.riseTime)
-	# 		print(pas.setTime)
+# 	# 	for pas in nextpassList:
+# 	# 		print(pas)
+# 	# 		print(pas.riseTime)
+# 	# 		print(pas.setTime)
 
 	def test_fitnessFunction_many_real_sats(self):
 
@@ -315,7 +318,7 @@ class HillClimbingSimpleTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.simple(satList,usefulTime)
+		shouldBe,nextPassList=MOTSimpleHC().find(satList,usefulTime)
 		#print(order)
 		print(shouldBe)
 		#willitalwaysbefour?
@@ -373,7 +376,7 @@ class HillClimbingSimpleTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.simple(satList,usefulTime)
+		shouldBe,nextPassList=MOTSimpleHC().find(satList,usefulTime)
 		#print(order)
 		
 		#willitalwaysbefour?
@@ -422,7 +425,7 @@ class HillClimbingSimpleTests(TestCase):
 		itupAOS = datetime(2017,1,25,0,22,12)
 		itupLOS = datetime(2017,1,25,0,34,49)	
 
-	#09 
+	
 
 		catTLE = TLE(0,"cat","line1","line2")
 		sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
@@ -472,7 +475,7 @@ class HillClimbingSimpleTests(TestCase):
 		exo,fcone,fcthree,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
 		itup]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.simple(satList,usefulTime)
+		shouldBe,nextPassList=MOTSimpleHC().find(satList,usefulTime)
 
 		print(shouldBe)
 		
@@ -539,7 +542,7 @@ class HillClimbingSteepestTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.steepest(satList,usefulTime)
+		shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
 		#print(order)
 		print(shouldBe)
 		#willitalwaysbefour?
@@ -597,7 +600,7 @@ class HillClimbingSteepestTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.steepest(satList,usefulTime)
+		shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
 		#print(order)
 		print(shouldBe)
 		#willitalwaysbefour?
@@ -645,7 +648,7 @@ class HillClimbingSteepestTests(TestCase):
 		itupAOS = datetime(2017,1,25,0,22,12)
 		itupLOS = datetime(2017,1,25,0,34,49)	
 
-	#09 
+	
 
 		catTLE = TLE(0,"cat","line1","line2")
 		sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
@@ -695,7 +698,7 @@ class HillClimbingSteepestTests(TestCase):
 		exo,fcone,fcthree,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
 		itup]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.steepest(satList,usefulTime)
+		shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
 		#print(order)
 		print("{} steep real".format(shouldBe))
 		#willitalwaysbefour?  6,7
@@ -753,7 +756,7 @@ class HillClimbingStochasticTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.stochastic(satList,usefulTime)
+		shouldBe,nextPassList=MOTStochasticHC().find(satList,usefulTime)
 		#print(order)
 		print("{} sto fake".format(shouldBe))
 		#willitalwaysbefour? 4?
@@ -811,7 +814,7 @@ class HillClimbingStochasticTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.stochastic(satList,usefulTime)
+		shouldBe,nextPassList=MOTStochasticHC.find(self,satList,usefulTime)
 		#print(order)
 		print("{} stoc diff".format(shouldBe))
 		#willitalwaysbefour?
@@ -860,7 +863,7 @@ class HillClimbingStochasticTests(TestCase):
 		itupAOS = datetime(2017,1,25,0,22,12)
 		itupLOS = datetime(2017,1,25,0,34,49)	
 
-	#09 
+	 
 
 		catTLE = TLE(0,"cat","line1","line2")
 		sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
@@ -910,7 +913,7 @@ class HillClimbingStochasticTests(TestCase):
 		exo,fcone,fcthree,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
 		itup]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.stochastic(satList,usefulTime)
+		shouldBe,nextPassList=MOTStochasticHC.find(self,satList,usefulTime)
 		# for n in order:
 		# 	print(n)
 		print(shouldBe)
@@ -969,7 +972,7 @@ class HillClimbingRandomRestartTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9,sat10,sat11]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.randomRestart(satList,usefulTime)
+		shouldBe,nextPassList=MOTRandomRestartHC.find(self,satList,usefulTime)
 		#print(order)
 		print("{} from rr fake sats".format(shouldBe))
 		#willitalwaysbefour?  4 or 5
@@ -1027,7 +1030,7 @@ class HillClimbingRandomRestartTests(TestCase):
 
 		satList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7,sat8,sat9]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.randomRestart(satList,usefulTime)
+		shouldBe,nextPassList=MOTRandomRestartHC.find(self,satList,usefulTime)
 		#print(order)
 		print("{} rr diff".format(shouldBe))
 		#willitalwaysbefour?
@@ -1126,7 +1129,7 @@ class HillClimbingRandomRestartTests(TestCase):
 		exo,fcone,fcthree,fcfive,fceight,fcnine,fcten,fceleven,fethirteen,fefourteen,
 		itup]
 		usefulTime=3
-		shouldBe,nextPassList=HillClimbing.randomRestart(satList,usefulTime)
+		shouldBe,nextPassList=MOTRandomRestartHC.find(self,satList,usefulTime)
 		print("{} rr real".format(shouldBe))
 		#willitalwaysbefour?
 		self.assertIs(3<shouldBe<9,True)

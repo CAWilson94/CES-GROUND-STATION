@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from scheduler.models import TLE
+from scheduler.models import TLE, NextPass
 from scheduler.services import Services
 from scheduler.serializers import TLESerializer, AZELSerializer
 from django.http import Http404
@@ -9,7 +9,10 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
+from scheduler.MOT.simpleHC import MOTSimpleHC
+from scheduler.MOT.steepestHC import MOTSteepestHC
 
+from datetime import date,datetime
 
 class TLEList(generics.ListCreateAPIView):
 	"""
@@ -17,6 +20,7 @@ class TLEList(generics.ListCreateAPIView):
 	TLEs in the db by serializering the query results, convertng 
 	to json and returning it to the place that sent the http request
 	"""
+	
 	some_instance = Services()
 	some_instance.updateTLE()# user should be prompted on start up that they need to update the tle
 	queryset = get_list_or_404(TLE)
