@@ -77,16 +77,17 @@ def randomParents(population):
     """ Select Parents for tournament function"""
     tempList = []
     parents = []
-    #for index in range(2):
-    parentOne = random.randint(0,len(population))
-    for item in parentOne:
-       	print("P1: " +  item)
-        #parentTwo = random.randint(0,len(population))
-        #tempList.extend([parentOne,parentTwo])
-        #sortByFitness(tempList)
-        #parents.append(tempList[0])
-        #tempList = []
-    #return parents
+    for index in range(1):
+        one = random.randint(0,len(population))
+        two = random.randint(0,len(population))
+        tempList.append(population[one])
+        tempList.append(population[two])
+
+
+    print("Population from random parents: ")
+
+    printPopulation(tempList)
+    return parents
 
 def setFitness(population):
     """ set fitness of every chromosome in population so this is only done once in the program: 
@@ -313,9 +314,6 @@ def test():
 boop = generatePopulation()
 GA(boop)
 
+randomParents(boop)
 
-#crossover(chromsomeOne, chromsomeTwo)
-
-boop = [cube_c, cube_c, cube_b]
-bopit = [cube_a, cube_g, cube_b]
-yermaw = bopit[:2] + boop[2:]
+print("semi.. worked")
