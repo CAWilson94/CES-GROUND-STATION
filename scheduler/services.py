@@ -146,7 +146,6 @@ class Services():
 			name = _Helper.adder(checkedTLEArray[i]).strip()
 			try:
 				tleEntry = TLE.objects.get(name=name)
-				pass  # what does pass do?
 			except TLE.DoesNotExist as e:
 				# create new entry in db
 				newTLE = TLE(name=name, line1=checkedTLEArray[i + 1], line2=checkedTLEArray[i + 2])

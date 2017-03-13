@@ -9,7 +9,7 @@ class TLE(models.Model):
     line2 = models.CharField(max_length=70)
 
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.name)
 
 
 # objects = models.TLEManager()
@@ -40,7 +40,18 @@ class AzEl(models.Model):
 
 class NextPass(models.Model):
     # leaves an empty table :(
-    # tle = models.ForeignKey(TLE.name, on_delete=models.CASCADE)
+       # models.CharField(max_length=30)
+
+    #It doesn't make any sense to make this null but
+    #some reason django it or for there to be a default
+#     You are trying to change the nullable field 'tle' on nextpass to non-nullable without a default; we can't do that (the database needs something to populate existing rows).
+# Please select a fix:
+#  1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+#  2) Ignore for now, and let me handle existing rows with NULL myself (e.g. because you added a RunPython or RunSQL operation to handle NULL values in a previous data migration)
+#  3) Quit, and let me add a default in models.py
+
+    tle = models.ForeignKey(TLE, on_delete=models.CASCADE,null=True)
+    #tle=models.CharField(max_length=30)
     # AOS
     riseTime = models.DateField()
     # LOS
@@ -75,8 +86,8 @@ class NextPass(models.Model):
         return riseTime and setTime and duration and maxElevation and riseAzimuth and setAzimuth
 
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.tle
 
 
 class Mission(models.Model):
