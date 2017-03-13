@@ -1,8 +1,8 @@
 from random import randint
-import time 
+from datetime import datetime, timedelta
 
-CONFLICT_PADDING = 1 # mins added to the end of the conflict period
-MIN_SUB_PASS_LEN = 3 # minimum lengh of pass to fill in the conflict window once a sat is chosen. 
+CONFLICT_PADDING = timedelta(minutes = 1) # mins added to the end of the conflict period
+MIN_SUB_PASS_LEN = timedelta(minutes = 3) # minimum lengh of pass to fill in the conflict window once a sat is chosen. 
 
 	# 6 hrs = 360
 	# 1 day = 1440
@@ -10,11 +10,11 @@ MIN_SUB_PASS_LEN = 3 # minimum lengh of pass to fill in the conflict window once
 	# 3 days = 4320
 TIMEFRAME_MINS = 240 # total timeframe for passes
 PASS_LEN_MAX = 8 # the longest a pass will be
-PASS_LEN_MIN = 2  # the shortest a pass will be 
+PASS_LEN_MIN = timedelta(minutes = 2)  # the shortest a pass will be 
 PRIORITY_MAX = 2 # The highest priority given to sats (commented out)
 NUM_OF_PASSES = 25 # Max number of passes in initial array
 
-DEBUG = False
+DEBUG = True
 
 DEBUG_LEVEL = 2
 
@@ -34,21 +34,26 @@ class Pass():
 		self.priority = priority
 
 	def passAsStr(self):
-		return self.name + " (" + str(self.priority) + "): " +str(self.start) + " -> " + str(self.end )
+		return self.name + " (" + str(self.priority) + "): " + str(self.start.strftime('%H:%M:%S')) + " -> " + str(self.end.strftime('%H:%M:%S'))
 
 #for i in range(len(satelliteNames)):
 #	priorities.append(randint(0, PRIORITY_MAX))
 
+dateNow = datetime.now()
+
 def generatePass():
 	satIndex = randint(0, len(satelliteNames)-1)
 	name = satelliteNames[satIndex]
-	duration = randint(0, PASS_LEN_MAX)
+	duration = timedelta(minutes = randint(0, PASS_LEN_MAX))
 	while(duration < PASS_LEN_MIN):
-		duration = randint(0, PASS_LEN_MAX)
-	startTime = randint(0, TIMEFRAME_MINS) 
-	endTime = startTime+duration
+		duration = timedelta(minutes = randint(0, PASS_LEN_MAX))
+	startTime = dateNow + timedelta(minutes = randint(0, TIMEFRAME_MINS))
+	startTime.time()
+	endTime = startTime + duration
 	priority = priorities[satIndex]
 	return Pass(name, startTime, endTime, duration, priority)
+
+generatePass()
 
 def generatePasses():
 	passes = []
@@ -132,7 +137,6 @@ def filterByUnpicked(conflicting):
 					unpicked = False
 
 			if(unpicked):
-				#print("Not picked: " + sat.passAsStr())
 				neverPicked.append(sat)
 		if(neverPicked):
 			return neverPicked
@@ -470,9 +474,9 @@ def getOrderedList(passes):
 	return orderOfPasses
 
 
-timeStart = time.clock()
+timeStart = datetime.now()
 orderOfPasses = getOrderedList(generatePasses())
-timeEnd = time.clock()
+timeEnd = datetime.now()
 
 print("Order: ")
 print(orderOfPasses[0].passAsStr())	
@@ -488,22 +492,21 @@ print("---------------")
 print("Num of passes: " + str(NUM_OF_PASSES))
 print("Num of passes ordered: " + str(len(orderOfPasses)))
 print("Num of Errors: " + str(errors))
-print("Time taken: %s seconds" % (timeEnd - timeStart))
+print("Time taken: %s" % (timeEnd - timeStart))
 
-print("\n\n")
-numOfIterations = 100000
-totalPasses = 0
-for i in range(numOfIterations):
-	orderOfPasses = []
-	timeStart = time.clock()
-	orderOfPasses = getOrderedList(generatePasses())
-	timeEnd = time.clock()
-	print("Num of passes ordered: " + str(len(orderOfPasses)))
-	totalPasses += len(orderOfPasses)
-	print("Time taken: %s seconds" % (timeEnd - timeStart))
-	print("---------------")
+# numOfIterations = 100000
+# totalPasses = 0
+# for i in range(numOfIterations):
+# 	orderOfPasses = []
+# 	timeStart = datetime.now()
+# 	orderOfPasses = getOrderedList(generatePasses())
+# 	timeEnd = datetime.now()
+# 	print("Num of passes ordered: " + str(len(orderOfPasses)))
+# 	totalPasses += len(orderOfPasses)
+# 	print("Time taken: %s seconds" % (timeEnd - timeStart))
+# 	print("---------------")
 
-print("On average found: " + str(totalPasses/numOfIterations))
+# print("On average found: " + str(totalPasses/numOfIterations))
 # passes = generatePasses()
 # for i in range(50):
 # 	chromo = []
