@@ -82,11 +82,13 @@ def randomParents(population):
         two = random.randint(0,len(population))
         tempList.append(population[one])
         tempList.append(population[two])
-
-
+        temp = sortByFitness(tempList)
+        parents.append(temp)
+        tempList = []
+        temp = []
     print("Population from random parents: ")
 
-    printPopulation(tempList)
+    printPopulation(parents)
     return parents
 
 def setFitness(population):
