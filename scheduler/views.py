@@ -14,7 +14,7 @@ from rest_framework.renderers import StaticHTMLRenderer
 
 
 class TLEViewSet(viewsets.ModelViewSet):
-	Services.updateTLE()
+	Services..updateTLE()
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
 
@@ -39,35 +39,13 @@ class PyephemData(APIView):
 		serializer = AZELSerializer(azel)
 		return Response(serializer.data)
 
-class postEx(APIView):
-
+class Mission(APIView):
 	def post(self,request):
-
-		# serializer = ChosenSatListSerializer(data=request.data)
-		# if serializer.is_valid():
-		# 	serializer.save()
-		# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-		# return Response(serializer.data,status=status.HTTP_201_CREATED)
-#http://stackoverflow.com/questions/28010663/serializerclass-field-on-serializer-save-from-primary-key
-		
-		
-		listing = request.POST.getlist('name[]')
-		print(listing)
-		print ("blah")
-		
-		for elem in listing:
-			print(elem)
-			serializer = ChosenSatSerializer(data=elem)
-			if serializer.is_valid():
-				pass
-			#	serializer.save()
-			# 	print("if")
-			# else:
-			# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-		
-		#return Response(serializer.data,status=status.HTTP_201_CREATED)
-		#return HttpResponseRedirect(reverse())
+		chosenSatsList = request.POST.getlist('name[]')		
+		Services.makeMissions(chosenSatsList)
 		return HttpResponse("")
 
+	# def delete(self, request):
+	# 	pass
 #where is observer stored AK
 #when requesting satellite info, do we use id or name

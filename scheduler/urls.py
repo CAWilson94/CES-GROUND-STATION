@@ -15,8 +15,7 @@ urlpatterns = [
 # 	url(r'^scheduler/?$', views.TLEList.as_view()),
 # 	url(r'^scheduler/(?P<pk>[0-9]+)/?$', views.TLEDetail.as_view()),
  	url(r'^tles/(?P<pk>[0-9]+)/azel/?$',views.PyephemData.as_view()),
- 	url(r'^postdata/(?P<nameArray>[a-z]+)/?$',views.postEx.as_view()),
- 	url(r'^postdata/?$',views.postEx.as_view()),
+ 	url(r'^postmission/?$',views.Mission.as_view()),
  ]
 
 # urlpatterns = format_suffix_patterns(urlpatterns)

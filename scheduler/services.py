@@ -48,6 +48,18 @@ class Services():
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0,riseTime, setTime, duration, details[3],details[1],details[5])
 
+	def makeMissions(chosenSatsList, priorityList?):
+		"""
+		Saves user chosen satellites in the mission object and then saves that in db
+		"""
+		for name in chosenSatsList:
+			try:
+				mission = Misson.objects.get(name=name)
+			except Misson.DoesNotExist as e:
+				newMission = Misson(name,status)
+				newMission.save()
+			#else:
+			#	mission.priorty = newPriority
 
 	def updateTLE():
 		"""
@@ -73,7 +85,6 @@ class Services():
 			name = _Helper.adder(checkedTLEArray[i]).strip()
 			try: 
 				tleEntry = TLE.objects.get(name=name)
-				pass #what does pass do?
 			except TLE.DoesNotExist as e:
 				#create new entry in db
 				newTLE = TLE(name=name, line1=checkedTLEArray[i+1], line2=checkedTLEArray[i+2])
