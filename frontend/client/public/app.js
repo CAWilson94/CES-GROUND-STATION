@@ -9,8 +9,12 @@ angular
 	    'ngResource',
     ]);
 
+/**
+ * 
+ *
 angular
 	.module('ngMaterial',[
 		'ng',
 		'ngAnimate',
 		'ngAria'])
+*/
