@@ -1,5 +1,5 @@
 import requests
-from scheduler.models import TLE, AzEl, NextPass
+from scheduler.models import TLE, AzEl, NextPass, Mission
 import math, ephem
 from datetime import date, datetime, timedelta
 
@@ -16,7 +16,7 @@ class Services():
 			return "Format of TLEEntry is incorrect (getAzElTLE)"
 
 		sat.compute(observer)
-		return	AzEl(0, sat.az,sat.alt)
+		return	AzEl(azimuth=sat.az,elevation=sat.alt)
 
 
 	def getAzElTLENow(self, tleEntry):
@@ -46,18 +46,31 @@ class Services():
 		setTime = _Helper.roundMicrosecond(details[4])
 		duration  = setTime - riseTime
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-		return NextPass(0,riseTime, setTime, duration, details[3],details[1],details[5])
+		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],riseAzimuth=details[1],setAzimuth=details[5])
 
-	def makeMissions(chosenSatsList, priorityList?):
+	def makeMissions(chosenSatsList): #, priorityList
 		"""
 		Saves user chosen satellites in the mission object and then saves that in db
 		"""
+		print(chosenSatsList)
 		for name in chosenSatsList:
 			try:
-				mission = Misson.objects.get(name=name)
-			except Misson.DoesNotExist as e:
-				newMission = Misson(name,status)
+				mission = Mission.objects.get(name=name)
+			except Mission.DoesNotExist as e:
+				try:
+					tle = TLE.objects.get(name=name)
+				except TLE.DoesNotExist as e:
+					#print(e)
+					print("Attempted to CubeSat '{}' but it does not exist in the DB".format(name))
+					#somehow asked to schedule a satellite that isn't in the database
+					return False
+				newMission = Mission(name=name,TLE=tle,status="NEW",priority=1)
 				newMission.save()
+				return True
+			else:
+				pass
+				#update status to "needs to be scheduler again"?
+		return False
 			#else:
 			#	mission.priorty = newPriority
 
