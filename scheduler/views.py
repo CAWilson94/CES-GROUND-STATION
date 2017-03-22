@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer,ChosenSatSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
@@ -39,6 +39,28 @@ class PyephemData(APIView):
 		serializer = AZELSerializer(azel)
 		return Response(serializer.data)
 
+class postEx(APIView):
+
+	def post(self,request):
+
+		# serializer = ChosenSatListSerializer(data=request.data)
+		# if serializer.is_valid():
+		# 	serializer.save()
+		# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+		# return Response(serializer.data,status=status.HTTP_201_CREATED)
+#http://stackoverflow.com/questions/28010663/serializerclass-field-on-serializer-save-from-primary-key
+		
+		
+		print ("blah")
+		request.POST.getlist['name[]']
+		for elem in request.data:
+			serializer = ChosenSatSerializer(data=elem)
+			if serializer.is_valid():
+				serializer.save()
+			else:
+				return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+		return Response(serializer.data,status=status.HTTP_201_CREATED)
+	#return HttpResponseRedirect(reverse())
 
 #where is observer stored AK
 #when requesting satellite info, do we use id or name

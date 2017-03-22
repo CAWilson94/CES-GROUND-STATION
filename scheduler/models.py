@@ -70,6 +70,23 @@ class NextPass(models.Model):
 			return False
 		return riseTime and setTime and duration and maxElevation and riseAzimuth and setAzimuth
 
+# #email
+# class SatName(models.Model):
+# 	chosensatlist=models.ForeignKey('ChosenSatList',related_name='sats')
+# 	name = models.CharField(max_length=50)
+
+
+# #user
+# class ChosenSatList(models.Model):
+# 	listName = models.CharField(max_length=20)
+
+
+class ChosenSat(models.Model):
+	name = models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.name
+
 # class PassDetails(models.Model)
 # nextpasses = models.ForeignKey(NextPasses)
 # time = models.

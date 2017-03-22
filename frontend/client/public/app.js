@@ -3,8 +3,14 @@
 var scheduler = angular.module("scheduler", ["ngMaterial","smart-table"]);
 
 angular
-    .module('Application', [
+    .module('Scheduler', [
         'appRoutes',
         'scheduler',
 	    'ngResource',
     ]);
+
+angular
+	.module('ngMaterial',[
+		'ng',
+		'ngAnimate',
+		'ngAria'])
