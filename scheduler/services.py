@@ -74,6 +74,7 @@ class Services():
 			#else:
 			#	mission.priorty = newPriority
 
+
 	def updateTLE():
 		"""
 		Retrieves TLE data from external source, checks format and places in db 

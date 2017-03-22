@@ -14,7 +14,7 @@ from rest_framework.renderers import StaticHTMLRenderer
 
 
 class TLEViewSet(viewsets.ModelViewSet):
-	#Services.updateTLE()
+	Services.updateTLE()
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
 
