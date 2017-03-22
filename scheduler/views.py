@@ -65,8 +65,9 @@ class postEx(APIView):
 			# else:
 			# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 		
-		return Response(serializer.data,status=status.HTTP_201_CREATED)
-	#return HttpResponseRedirect(reverse())
+		#return Response(serializer.data,status=status.HTTP_201_CREATED)
+		#return HttpResponseRedirect(reverse())
+		return HttpResponse("")
 
 #where is observer stored AK
 #when requesting satellite info, do we use id or name
