@@ -2,20 +2,26 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.10.1
+ * v1.1.3
  */
-/* mixin definition ; sets LTR and RTL within the same style call */
-.md-contact-chips .md-chips .md-chip {
-  padding: 0 8px 0 0; }
-  .md-contact-chips .md-chips .md-chip .md-contact-avatar {
+.md-contact-chips .md-chips md-chip {
+  padding: 0 25px 0 0; }
+  [dir=rtl] .md-contact-chips .md-chips md-chip {
+    padding: 0 0 0 25px; }
+  .md-contact-chips .md-chips md-chip .md-contact-avatar {
     float: left; }
-    .md-contact-chips .md-chips .md-chip .md-contact-avatar img {
+    [dir=rtl] .md-contact-chips .md-chips md-chip .md-contact-avatar {
+      float: right; }
+    .md-contact-chips .md-chips md-chip .md-contact-avatar img {
       height: 32px;
       border-radius: 16px; }
-  .md-contact-chips .md-chips .md-chip .md-contact-name {
+  .md-contact-chips .md-chips md-chip .md-contact-name {
     display: inline-block;
     height: 32px;
     margin-left: 8px; }
+    [dir=rtl] .md-contact-chips .md-chips md-chip .md-contact-name {
+      margin-left: auto;
+      margin-right: 8px; }
 
 .md-contact-suggestion {
   height: 56px; }
@@ -26,6 +32,9 @@
   .md-contact-suggestion .md-contact-name {
     margin-left: 8px;
     width: 120px; }
+    [dir=rtl] .md-contact-suggestion .md-contact-name {
+      margin-left: auto;
+      margin-right: 8px; }
   .md-contact-suggestion .md-contact-name, .md-contact-suggestion .md-contact-email {
     display: inline-block;
     overflow: hidden;
@@ -36,40 +45,74 @@
 
 .md-chips {
   display: block;
-  font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
-  font-size: 13px;
-  padding: 0 0 8px 0;
-  vertical-align: middle;
-  cursor: text; }
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  padding: 0 0 8px 3px;
+  vertical-align: middle; }
   .md-chips:after {
     content: '';
     display: table;
     clear: both; }
-  .md-chips .md-chip {
+  [dir=rtl] .md-chips {
+    padding: 0 3px 8px 0; }
+  .md-chips.md-readonly .md-chip-input-container {
+    min-height: 32px; }
+  .md-chips:not(.md-readonly) {
+    cursor: text; }
+  .md-chips.md-removable md-chip {
+    padding-right: 22px; }
+    [dir=rtl] .md-chips.md-removable md-chip {
+      padding-right: 0;
+      padding-left: 22px; }
+    .md-chips.md-removable md-chip .md-chip-content {
+      padding-right: 4px; }
+      [dir=rtl] .md-chips.md-removable md-chip .md-chip-content {
+        padding-right: 0;
+        padding-left: 4px; }
+  .md-chips md-chip {
     cursor: default;
     border-radius: 16px;
     display: block;
     height: 32px;
     line-height: 32px;
     margin: 8px 8px 0 0;
-    padding: 0 8px 0 12px;
+    padding: 0 12px 0 12px;
     float: left;
     box-sizing: border-box;
-    max-width: 100%; }
-    .md-chips .md-chip .md-chip-content {
+    max-width: 100%;
+    position: relative; }
+    [dir=rtl] .md-chips md-chip {
+      margin: 8px 0 0 8px; }
+    [dir=rtl] .md-chips md-chip {
+      float: right; }
+    .md-chips md-chip .md-chip-content {
       display: block;
-      padding-right: 4px;
       float: left;
       white-space: nowrap;
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis; }
-      .md-chips .md-chip .md-chip-content:focus {
+      [dir=rtl] .md-chips md-chip .md-chip-content {
+        float: right; }
+      .md-chips md-chip .md-chip-content:focus {
         outline: none; }
-    .md-chips .md-chip .md-chip-remove-container {
-      display: inline-block;
-      margin-right: -5px; }
-    .md-chips .md-chip .md-chip-remove {
+    .md-chips md-chip._md-chip-content-edit-is-enabled {
+      -webkit-user-select: none;
+      /* webkit (safari, chrome) browsers */
+      -moz-user-select: none;
+      /* mozilla browsers */
+      -khtml-user-select: none;
+      /* webkit (konqueror) browsers */
+      -ms-user-select: none;
+      /* IE10+ */ }
+    .md-chips md-chip .md-chip-remove-container {
+      position: absolute;
+      right: 0;
+      line-height: 22px; }
+      [dir=rtl] .md-chips md-chip .md-chip-remove-container {
+        right: auto;
+        left: 0; }
+    .md-chips md-chip .md-chip-remove {
       text-align: center;
       width: 32px;
       height: 32px;
@@ -80,7 +123,7 @@
       box-shadow: none;
       margin: 0;
       position: relative; }
-      .md-chips .md-chip .md-chip-remove md-icon {
+      .md-chips md-chip .md-chip-remove md-icon {
         height: 18px;
         width: 18px;
         position: absolute;
@@ -92,8 +135,12 @@
     display: block;
     line-height: 32px;
     margin: 8px 8px 0 0;
-    padding: 0 8px 0 12px;
+    padding: 0;
     float: left; }
+    [dir=rtl] .md-chips .md-chip-input-container {
+      margin: 8px 0 0 8px; }
+    [dir=rtl] .md-chips .md-chip-input-container {
+      float: right; }
     .md-chips .md-chip-input-container input:not([type]), .md-chips .md-chip-input-container input[type="email"], .md-chips .md-chip-input-container input[type="number"], .md-chips .md-chip-input-container input[type="tel"], .md-chips .md-chip-input-container input[type="url"], .md-chips .md-chip-input-container input[type="text"] {
       border: 0;
       height: 32px;
@@ -123,6 +170,8 @@
         position: relative; }
     .md-chips .md-chip-input-container:not(:first-child) {
       margin: 8px 8px 0 0; }
+      [dir=rtl] .md-chips .md-chip-input-container:not(:first-child) {
+        margin: 8px 0 0 8px; }
     .md-chips .md-chip-input-container input {
       background: transparent;
       border-width: 0; }
@@ -130,7 +179,8 @@
     display: none; }
 
 @media screen and (-ms-high-contrast: active) {
-  .md-chip-input-container, md-chip {
+  .md-chip-input-container,
+  md-chip {
     border: 1px solid #fff; }
   .md-chip-input-container md-autocomplete {
     border: none; } }

@@ -2,9 +2,8 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.10.1
+ * v1.1.3
  */
-/* mixin definition ; sets LTR and RTL within the same style call */
 md-icon {
   margin: auto;
   background-repeat: no-repeat no-repeat;
@@ -12,9 +11,12 @@ md-icon {
   vertical-align: middle;
   fill: currentColor;
   height: 24px;
-  width: 24px; }
+  width: 24px;
+  min-height: 24px;
+  min-width: 24px; }
   md-icon svg {
-    pointer-events: none; }
+    pointer-events: none;
+    display: block; }
   md-icon[md-font-icon] {
-    line-height: 1;
+    line-height: 24px;
     width: auto; }
