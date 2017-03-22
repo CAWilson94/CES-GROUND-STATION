@@ -3,43 +3,23 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE, NextPass
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer,ChosenSatSerializer
 from django.http import Http404
 from rest_framework.views import APIView
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
 from scheduler.MOT.simpleHC import MOTSimpleHC
 from scheduler.MOT.steepestHC import MOTSteepestHC
+from rest_framework.decorators import detail_route
+from rest_framework.renderers import StaticHTMLRenderer
 
 from datetime import date,datetime
 
-class TLEList(generics.ListCreateAPIView):
-	"""
-	With behind the scenes magic, this returns the list of 
-	TLEs in the db by serializering the query results, convertng 
-	to json and returning it to the place that sent the http request
-	"""
-	
-	some_instance = Services()
-	some_instance.updateTLE()# user should be prompted on start up that they need to update the tle
-	queryset = get_list_or_404(TLE)
-	serializer_class = TLESerializer
-
-class TLEDetail(generics.RetrieveUpdateDestroyAPIView):
-	"""
-	With behind the scenes magic, this returns the details of the
-	request TLE from the db by serializering the query result, converting 
-	to json and returning it to the place that sent the http request
-	"""
+class TLEViewSet(viewsets.ModelViewSet):
+	Services.updateTLE()
 	queryset = TLE.objects.all()
-	serializer_class = TLESerializer   
-# viewset
-
-# class TLEUpdate(APIView):
-# 	def post(self, request, format=None):
-# 		print("bob") AK
-# 		Services.updateTLE()
+	serializer_class = TLESerializer
 
 class PyephemData(APIView):
 	"""
@@ -71,6 +51,34 @@ class PyephemData(APIView):
 		serializer = AZELSerializer(azel) 
 		return Response(serializer.data)
 
+class postEx(APIView):
+
+	def post(self,request):
+
+		# serializer = ChosenSatListSerializer(data=request.data)
+		# if serializer.is_valid():
+		# 	serializer.save()
+		# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+		# return Response(serializer.data,status=status.HTTP_201_CREATED)
+#http://stackoverflow.com/questions/28010663/serializerclass-field-on-serializer-save-from-primary-key
+		
+		
+		listing = request.POST.getlist('name[]')
+		print(listing)
+		print ("blah")
+		
+		for elem in listing:
+			print(elem)
+			serializer = ChosenSatSerializer(data=elem)
+			if serializer.is_valid():
+				pass
+			#	serializer.save()
+			# 	print("if")
+			# else:
+			# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+		
+		return Response(serializer.data,status=status.HTTP_201_CREATED)
+	#return HttpResponseRedirect(reverse())
 
 #where is observer stored AK
 #when requesting satellite info, do we use id or name

@@ -1,0 +1,62 @@
+ 
+<!DOCTYPE html>
+<html>
+<head>
+   <script type="text/javascript">
+       $scope.$watch(function() {
+      $('satpick').selectpicker('refresh');
+</script>
+</head>
+<body ng-app="scheduler">
+
+
+<div class = "table_drop_down" style="margin-left: 30px">
+
+<div class = "drop-down" layout = "row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="" >
+    <div layout="column" layout-align="start start">
+      <md-select placeholder="Pick a Satellite" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px; margin-top: 50px;"
+       ng-change = "updateTable()">
+          <md-option ng-value = "tle" ng-repeat="tle in tles">{{tle.name}} </md-option>
+      </md-select>
+
+    </div>
+
+    <div layout="column" layout-align="start start" style="padding-left: 50px">
+      <md-select placeholder="Priority Number"  ng-model="priority" style=  "margin-top: 50px;" >
+          <md-option ng-value = "priority" ng-repeat="priority in priorities" >{{priority}}</md-option>
+      </md-select>
+    </div>
+
+    <p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>
+
+
+
+ </div>
+
+
+ <div class="row">
+  <div  class = "col-sm-5" md-on-open="updateTable()">
+
+
+    <table st-table="yermaw" ng-model="hello" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Next Scheduled Pass</th>
+          <th>Duration</th>
+          <th>Mission Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{hello}}</td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+</body>
+</html>
