@@ -1,4 +1,5 @@
 import requests
+from django.db.utils import OperationalError
 from scheduler.RotatorServices import rotator_services as rs
 from scheduler.TLEServices import TLE_Services as ts
 from scheduler.missionServices import mission_services as ms
@@ -14,9 +15,12 @@ class rotatorThread (threading.Thread):
 		self.couner = counter
 	def run(self):
 		print ("Starting " + self.name) 
+		try:
 		#rs.hi()
-		Services.polling()
+			Services.polling()
 		#rs.get_position()
+		except OperationalError:
+			print("RotatorThread - Could not find table (try makemigrations and migrate again)")
 		print("Exiting "+ self.name)
 
 class schedulerThread (threading.Thread):
@@ -28,8 +32,12 @@ class schedulerThread (threading.Thread):
 	def run(self):
 		print ("Starting " + self.name) 
 		print("Polling for new now")
-		Services.pollForNew()
-		ts.removeTLEById(180)
+		try:
+			Services.pollForNew()
+		# ts.removeTLEById(180)
+
+		except OperationalError:
+			print("SchedulerThread - Could not find table (try makemigrations and migrate again)")
 		print("Exiting "+ self.name)
 
 class Services():
@@ -112,13 +120,13 @@ class Services():
 		# riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(0, riseTime, setTime, duration, details[3], details[1], details[5])
 	
-	def updateTLE(self):
+	def updateTLE():
 		"""
 		Retrieves TLE data from external source, checks format and places in db
 		"""
 		tle=[]
 		try:
-			requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt",timeout=0.3)
+			requestsObject = requests.get("http://celestrak.com/NORAD/elements/cubesat.txt",timeout=5)
 			tle = requestsObject.text
 			#requests.exceptions.RequestException.
 		# except requests.packages.urllib3.exceptions.NewConnectionError as e:
