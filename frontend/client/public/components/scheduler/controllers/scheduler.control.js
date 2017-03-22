@@ -52,6 +52,51 @@ scheduler
     $scope.updateTable = function() {
       // can you send data from here to django model? Then update scope from the model?
       $scope.yermaw.push($scope.tle.name) // may have to replace with calling to another table for scheduler updates..
-        //alert($scope.yermaw)
+      alert($scope.yermaw)
     };
+
+    /*
+     * Comms with server side: http for post request
+     *
+    .factory('satsFactory', ['$http', function($http) {
+      return function name() {
+        var fac = {};
+        // obvious naming is obvious: will change later
+        fac.addChosenSatToDB = function() {
+          $http.post("localhost:8000/api/postmission/")
+        }
+        return fac;
+      };
+    }]) */
+
+
+/**
+ *
+ *<..ng-app="app"
+// Instead of button: select picker .. forgot what I wrote for it. 
+<input type="button" ng-click="app.addSatClicked(app.satClicked)"/>
+
+..controller:
+
+app.addSatClicked = function (satClicked){
+  $http.post("http://someurl", satClicked){  ** what url? could we replace with something else? ** 
+    .success(function(data){
+      app.people = data;
+    })
+  })
+
+}
+  
+  
+  
+  
+  ------------------>
+app.post(...function(req, res){
+  data.push(req.body);
+  res.send(data)
+ *
+ *
+ * 
+ */
+
   });
