@@ -1,53 +1,24 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.db.utils import OperationalError
 from rest_framework.response import Response
-from scheduler.models import TLE, NextPass
+from scheduler.models import TLE
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer, ChosenSatSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer,ChosenSatSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
-from scheduler.MOT.simpleHC import MOTSimpleHC
-from scheduler.MOT.steepestHC import MOTSteepestHC
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
 
-from datetime import date, datetime
 
 class TLEViewSet(viewsets.ModelViewSet):
-	try:
-		Services.updateTLE()
-	except OperationalError:
-		print("Views.TLEViewSet - could not find table")	
+	#Services.updateTLE()
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
-	
-
-
-# class TLEViewSet(viewsets.ViewSet):
-
-# 	queryset = TLE.objects.all()
-
-# 	def list(self, request):
-# 		Services.updateTLE()
-# 		queryset = TLE.objects.all()
-# 		serializer_class = TLESerializer
-# 		return Response(serializer.data)
-
-# 	def retrieve(self, request, pk=None):
-# 		queryset = TLE.objects.all()
-# 		tle = get_object_or_404(queryset, pk=pk)
-# 		serializer = TLESerializer
-# 		return Response(serializer.data)
 
 class PyephemData(APIView):
-	"""
-	A slightly more exposed verion of APIView, performs
-	custom behaviour when a get request is sent
-	"""
 	def get_object(self, pk):
 		try:
 			return TLE.objects.get(pk=pk)
@@ -56,51 +27,26 @@ class PyephemData(APIView):
 
 		
 	def get(self, request, pk, format=None):
-		"""
-		Retrieves the tle data from db, then passes that to other
-		functions to get the AzEl object then convers the model
-		data into json and returns to http request maker
-		"""
 		tle = self.get_object(pk)
 		azel = Services.getAzElTLENow(self, tle)#pass in object?
-		# print(repr(azel.elevation))
-		# azel.is_valid() AK
+		#print(repr(azel.elevation))
+		#azel.is_valid() AK
 
-		# Services.makeNextPassDetails(self,tle,30)
-		# for x in list:
-			# print(x.azimuth)
+		#Services.makeNextPassDetails(self,tle,30)
+		#for x in list:
+			#print(x.azimuth)
 
-		serializer = AZELSerializer(azel) 
+		serializer = AZELSerializer(azel)
 		return Response(serializer.data)
 
-class postEx(APIView):
-
+class Mission(APIView):
 	def post(self,request):
+		chosenSatsList = request.POST.getlist('name')		
+		if Services.makeMissions(chosenSatsList):
+			return HttpResponse(status=201)
+		return HttpResponse(status=404)
 
-		# serializer = ChosenSatListSerializer(data=request.data)
-		# if serializer.is_valid():
-		# 	serializer.save()
-		# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-		# return Response(serializer.data,status=status.HTTP_201_CREATED)
-# http://stackoverflow.com/questions/28010663/serializerclass-field-on-serializer-save-from-primary-key
-		
-		
-		listing = request.POST.getlist('name[]')
-		print(listing)
-		print ("blah")
-		
-		for elem in listing:
-			print(elem)
-			serializer = ChosenSatSerializer(data=elem)
-			if serializer.is_valid():
-				pass
-			#	serializer.save()
-			# 	print("if")
-			# else:
-			# 	return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-		
-		return Response(serializer.data,status=status.HTTP_201_CREATED)
-	# return HttpResponseRedirect(reverse())
-
-# where is observer stored AK
-# when requesting satellite info, do we use id or name
+	# def delete(self, request):
+	# 	pass
+#where is observer stored AK
+#when requesting satellite info, do we use id or name

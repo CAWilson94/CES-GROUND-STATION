@@ -68,6 +68,8 @@ class NextPass(models.Model):
 	#LOS Az
 	setAzimuth = models.CharField(max_length =15)
 
+	#mission=models.ForeignKey(Mission, on_delete=models.cascade)?
+
 	def __str__(self):
 		return str(self.__dict__)
 
@@ -107,6 +109,16 @@ class ChosenSat(models.Model):
 
 	def __str__(self):
 		return self.name
+
+class Mission(models.Model):     
+	id = models.IntegerField(primary_key=True)     
+	name = models.CharField(max_length=30, unique=True)     
+	TLE = models.ForeignKey(TLE, on_delete=models.CASCADE)     
+	status = models.CharField(max_length=30)     
+	priority = models.IntegerField()     
+	
+	def __str__(self):        
+		return str(self.name)
 
 # class PassDetails(models.Model)
 # nextpasses = models.ForeignKey(NextPasses)
