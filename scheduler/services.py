@@ -70,9 +70,9 @@ class Services():
 			else:
 				pass
 				#update status to "needs to be scheduler again"?
+				#mission.priority=new priority
 		return False
-			#else:
-			#	mission.priorty = newPriority
+
 
 	def updateTLE():
 		"""
