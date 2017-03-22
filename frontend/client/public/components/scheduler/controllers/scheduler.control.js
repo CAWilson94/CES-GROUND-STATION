@@ -52,18 +52,17 @@ scheduler
     // 
     // 
     var config = {
-                headers : {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-                }
-            }
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+      }
+    }
 
     $scope.updateTable = function() {
       // can you send data from here to django model? Then update scope from the model?
       $scope.yermaw.push($scope.tle.name) // may have to replace with calling to another table for scheduler updates..
       var bob = "bob"
       $http.post('localhost:8000/api/postmission/', $scope.yermaw, config)
-      .success(alert($scope.yermaw + " yasss " + bob))
-      .error(alert("nuuuuuuuuu"));
+        .then(alert($scope.yermaw + " yasss "))  
     };
 
     /*
@@ -81,33 +80,33 @@ scheduler
     }]) */
 
 
-/**
- *
- *<..ng-app="app"
-// Instead of button: select picker .. forgot what I wrote for it. 
-<input type="button" ng-click="app.addSatClicked(app.satClicked)"/>
+    /**
+     *
+     *<..ng-app="app"
+    // Instead of button: select picker .. forgot what I wrote for it. 
+    <input type="button" ng-click="app.addSatClicked(app.satClicked)"/>
 
-..controller:
+    ..controller:
 
-app.addSatClicked = function (satClicked){
-  $http.post("http://someurl", satClicked){  ** what url? could we replace with something else? ** 
-    .success(function(data){
-      app.people = data;
-    })
-  })
+    app.addSatClicked = function (satClicked){
+      $http.post("http://someurl", satClicked){  ** what url? could we replace with something else? ** 
+        .success(function(data){
+          app.people = data;
+        })
+      })
 
-}
-  
-  
-  
-  
-  ------------------>
-app.post(...function(req, res){
-  data.push(req.body);
-  res.send(data)
- *
- *
- * 
- */
+    }
+      
+      
+      
+      
+      ------------------>
+    app.post(...function(req, res){
+      data.push(req.body);
+      res.send(data)
+     *
+     *
+     * 
+     */
 
   });
