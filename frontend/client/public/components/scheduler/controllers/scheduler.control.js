@@ -12,9 +12,12 @@ scheduler
       });
     };
     // Grabbing AZEL data from Django; under construction
-    AZEL.query().$promise.then(function(date) {
+    $scope.getAzel = function(){
+      AZEL.query().$promise.then(function(date) {
       $scope.azel = data;
     });
+    }
+    
 
     // priority settings for satellite scheduling
     $scope.priorities = [
@@ -61,7 +64,7 @@ scheduler
       // can you send data from here to django model? Then update scope from the model?
       $scope.name.push($scope.tle.name) // may have to replace with calling to another table for scheduler updates..
       var bob = "bob"
-      $http.post('http://127.0.0.1:8000/api/postmission/', $scope.name).then(alert($scope.name + " yasss "))
+      $http.post('http://127.0.0.1:8000/api/missions/', $scope.name).then(alert($scope.name + " yasss "))
     };
     /**
       .$promise.catch(function(response) {

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from scheduler.models import TLE, AzEl
+from scheduler.models import TLE, AzEl, Mission
 
 class TLESerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,6 +10,11 @@ class AZELSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = AzEl
 		fields = ('id','azimuth','elevation')
+
+class MissionSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Mission
+		fields = ('id','name','TLE','status','priority')
 
 
 # class ChosenSatListSerializer(serializers.ModelSerializer):

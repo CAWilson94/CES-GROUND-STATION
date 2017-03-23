@@ -2,9 +2,9 @@ from django.http import HttpResponse
 from django.db.utils import OperationalError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from scheduler.models import TLE
+from scheduler.models import TLE, Mission
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer, MissionSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
@@ -36,7 +36,13 @@ class PyephemData(APIView):
 		serializer = AZELSerializer(azel)
 		return Response(serializer.data)
 
-class Mission(APIView):
+class MissionView(APIView):
+
+	def get(self,request):
+		missions = Mission.objects.all()
+		serializer = MissionSerializer(missions,many=True)
+		return Response(serializer.data)
+
 	def post(self,request):
 		print(request.data)
 		# for elem in request.data:
