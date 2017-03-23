@@ -1,9 +1,10 @@
 from django.http import HttpResponse
+from django.db.utils import OperationalError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer,ChosenSatSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
@@ -14,7 +15,10 @@ from rest_framework.renderers import StaticHTMLRenderer
 
 
 class TLEViewSet(viewsets.ModelViewSet):
-	#Services.updateTLE()
+	try:
+		Services.updateTLE()
+	except OperationalError:
+		print("Views.TLEViewSet - could not update TLE")
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
 
