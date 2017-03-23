@@ -42,9 +42,11 @@ class PyephemData(APIView):
 class Mission(APIView):
 	def post(self,request):
 		chosenSatsList = request.POST.getlist('name')
-		print(str(len(chosenSatsList)))	
-		print("something happened")	
-		if Services.makeMissions(chosenSatsList):
+	
+		for elem in request.data: 
+			print(elem)
+
+		if Services.makeMissions(request.data):
 			return HttpResponse(status=201)
 		return HttpResponse(status=500)
 
