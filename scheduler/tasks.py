@@ -1,5 +1,8 @@
 from celery import task
 
+
+#app = Celery('tasks.py', broker='amqp://localhost')
+
 @task()
 def pollForNew():
 		print ( "Polling for new")
@@ -26,3 +29,6 @@ def pollQueue():
 				pass
 			except TLE.DoesNotExist as e:
 				print("Already exists")	 
+@task()
+def reverse(string):
+	return string[::-1]
