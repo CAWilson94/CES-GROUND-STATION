@@ -53,7 +53,9 @@ class Services():
 		Saves user chosen satellites in the mission object and then saves that in db
 		"""
 		print(chosenSatsList)
+		success=False
 		for name in chosenSatsList:
+			print("about to add {}".format(name))
 			try:
 				mission = Mission.objects.get(name=name)
 			except Mission.DoesNotExist as e:
@@ -63,15 +65,15 @@ class Services():
 					#print(e)
 					print("Attempted to CubeSat '{}' but it does not exist in the DB".format(name))
 					#somehow asked to schedule a satellite that isn't in the database
-					return False
+					success = False
 				newMission = Mission(name=name,TLE=tle,status="NEW",priority=1)
 				newMission.save()
-				return True
+				success = True
 			else:
 				pass
-				return True
+				#success = True
 				#update status to "needs to be scheduler again"?
-		return False
+		return success
 			#else:
 			#	mission.priorty = newPriority
 
