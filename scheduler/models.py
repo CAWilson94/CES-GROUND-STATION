@@ -103,12 +103,7 @@ class NextPass(models.Model):
 # 	listName = models.CharField(max_length=20)
 
 
-class ChosenSat(models.Model):
 
-	name = models.CharField(max_length=50)
-
-	def __str__(self):
-		return self.name
 
 class Mission(models.Model):     
 	id = models.IntegerField(primary_key=True)     

@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer,ChosenSatSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
