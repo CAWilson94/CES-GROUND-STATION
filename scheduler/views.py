@@ -29,22 +29,18 @@ class PyephemData(APIView):
 	def get(self, request, pk, format=None):
 		tle = self.get_object(pk)
 		azel = Services.getAzElTLENow(self, tle)#pass in object?
-		#print(repr(azel.elevation))
-		#azel.is_valid() AK
-
-		#Services.makeNextPassDetails(self,tle,30)
-		#for x in list:
-			#print(x.azimuth)
-
 		serializer = AZELSerializer(azel)
 		return Response(serializer.data)
 
 class Mission(APIView):
 	def post(self,request):
+		print(request.data)
+		# for elem in request.data:
+		# 	print (elem)
 		chosenSatsList = request.POST.getlist('name')
-		print(str(len(chosenSatsList)))	
+		#print(str(len(chosenSatsList)))	
 		print("something happened")	
-		if Services.makeMissions(chosenSatsList):
+		if Services.makeMissions(request.data):
 			return HttpResponse(status=201)
 		return HttpResponse(status=500)
 

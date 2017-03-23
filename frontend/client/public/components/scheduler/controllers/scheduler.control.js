@@ -12,9 +12,12 @@ scheduler
       });
     };
     // Grabbing AZEL data from Django; under construction
-    AZEL.query().$promise.then(function(date) {
-      $scope.azel = data;
-    });
+    $scope.getAzel = function(){
+      AZEL.query().$promise.then(function(date) {
+        $scope.azel = data;
+      });
+    };
+    
 
     // priority settings for satellite scheduling
     $scope.priorities = [
@@ -64,11 +67,23 @@ scheduler
       $http.post('http://127.0.0.1:8000/api/postmission/', $scope.name)
         .$promise.catch(function(response) {
           console.log($scope.name)
+          
           //this will be fired upon error
           if (response.status == 500) alert('Something baaad happend');
         }).then(alert($scope.name + " yasss "))
     };
 
+    // $scope.postTest = function(){
+    //   var dataArray = ["name1","name2","name3"];
+
+    //   $http({
+    //     url:'http://127.0.0.1:8000/api/postmission/',
+    //     method: "POST",
+    //     data: $.param(dataArray),
+    //   }).success(function(data){
+    //     alert("done");
+    //   });
+    // }
 
     /*
      * Comms with server side: http for post request
