@@ -14,7 +14,7 @@ from rest_framework.renderers import StaticHTMLRenderer
 
 
 class TLEViewSet(viewsets.ModelViewSet):
-	Services.updateTLE()
+	#Services.updateTLE()
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
 
@@ -41,10 +41,12 @@ class PyephemData(APIView):
 
 class Mission(APIView):
 	def post(self,request):
-		chosenSatsList = request.POST.getlist('name')		
+		chosenSatsList = request.POST.getlist('name')
+		print(str(len(chosenSatsList)))	
+		print("something happened")	
 		if Services.makeMissions(chosenSatsList):
 			return HttpResponse(status=201)
-		return HttpResponse(status=404)
+		return HttpResponse(status=500)
 
 	# def delete(self, request):
 	# 	pass
