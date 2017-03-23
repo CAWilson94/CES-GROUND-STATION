@@ -139,10 +139,12 @@ class Services():
 				return True
 			else:
 				pass
+				return True
 				#update status to "needs to be scheduler again"?
 		return False
 			#else:
 			#	mission.priorty = newPriority
+
 
 	def updateTLE():
 		"""
