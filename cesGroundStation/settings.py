@@ -137,6 +137,8 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = (
    'localhost:8081',
+   '127.0.0.1:8081'
+
 )
 
 CORS_ALLOW_METHODS = (
