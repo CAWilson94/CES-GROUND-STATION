@@ -56,20 +56,34 @@ scheduler
      */
     $scope.updateTable = function() {
       try {
+        // Try for select input AND POST 
         $scope.name.push($scope.tle.name)
         $scope.pri.push($scope.priority.priority)
 
-          try {
-        $http.post('http://127.0.0.1:8000/api/missions/', $scope.name).then(alert($scope.name))
-      } catch (err) {
-        console.log("Post went wrong..")
-      }
-      
+        try {
+          // Not sure this try should be here, try for post 
+
+          $http.post('http://127.0.0.1:8000/api/missions/', $scope.name)
+            .then(function successCallBack(response) {
+                // Succeess is anything between 200 and 299
+                console.log("yasss")
+              },
+              function errorCallBack(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                // Error is anything outside of range previously mentioned. 
+                console.log(response.status + " : " + response.statusText);
+              });
+
+        } catch (err) {
+          console.log("Post went wrong..")
+        }
+
       } catch (err) {
         alert("you must first select a satellite and a priority")
       }
 
-    
+
 
     };
 
