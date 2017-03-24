@@ -8,13 +8,3 @@ angular
         'scheduler',
 	    'ngResource',
     ]);
-
-/**
- * 
- *
-angular
-	.module('ngMaterial',[
-		'ng',
-		'ngAnimate',
-		'ngAria'])
-*/

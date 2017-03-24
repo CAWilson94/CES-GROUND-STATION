@@ -16,7 +16,8 @@ from rest_framework.renderers import StaticHTMLRenderer
 
 class TLEViewSet(viewsets.ModelViewSet):
 	try:
-		Services.updateTLE()
+		#Services.updateTLE()
+		pass
 	except OperationalError:
 		print("Views.TLEViewSet - could not update TLE")
 	queryset = TLE.objects.all()
@@ -45,10 +46,8 @@ class MissionView(APIView):
 
 	def post(self,request):
 		print(request.data)
-		# for elem in request.data:
-		# 	print (elem)
-		chosenSatsList = request.POST.getlist('name')
-		#print(str(len(chosenSatsList)))	
+		for elem in request.data:
+			print (elem)
 		print("something happened")	
 		if Services.makeMissions(request.data):
 			return HttpResponse(status=201)

@@ -17,22 +17,6 @@ class MissionSerializer(serializers.ModelSerializer):
 		fields = ('id','name','TLE','status','priority')
 
 
-# class ChosenSatListSerializer(serializers.ModelSerializer):
-# 	sats = serializers.ListField(child=ChosenSatSerializer())
-
-
-# class ChosenSatArraySerializer(serializers.Serializer):
-# 	child = serializers.CharField()
-
-# class SatSerialiser(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = SatName
-# 		fields=['id','email']
-
-# class ChosenSatArraySerializer(serializers.Serializer):
-# 	#child = serializers.CharField()
-# 	sats=SatSerialiser(many=True)
-# 	listName=serializers.CharField()
 
 # class CompositeObjectSerializer(serializers.Serializer):
 #     id = serializers.IntegerField()
