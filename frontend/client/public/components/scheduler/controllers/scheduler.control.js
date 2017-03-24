@@ -12,7 +12,8 @@ scheduler
       });
     };
     // Grabbing AZEL data from Django; under construction
-    AZEL.query().$promise.then(function(date) {
+     $scope.getAzel = function(){
+      AZEL.query().$promise.then(function(date) {
       $scope.azel = data;
     });
 
@@ -72,7 +73,7 @@ scheduler
       try {
 
         $scope.name.push($scope.tle.name)
-        $http.post('http://127.0.0.1:8000/api/postmission/', $scope.name).then(alert($scope.name))
+        $http.post('http://127.0.0.1:8000/api/missions/', $scope.name).then(alert($scope.name))
 
       } catch (err) {
         alert("you must first select a satellite and a priority")
