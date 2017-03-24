@@ -16,12 +16,18 @@ scheduler
       $scope.azel = data;
     });
 
-    // priority settings for satellite scheduling
-    $scope.priorities = [
-      "1: low",
-      "2: default",
-      "3: high",
-    ];
+
+
+    $scope.priorities = [{
+      name: "low",
+      priority: 1,
+    }, {
+      name: "default",
+      priority: 2,
+    }, {
+      name: "high",
+      priority: 3,
+    }];
 
     // Dummy data for now; table update in construction
     $scope.rowCollection = [{
@@ -57,11 +63,24 @@ scheduler
       }
     }
 
+
+    $scope.buttonClick = function() {
+      alert("something was clicked")
+    }
+
     $scope.updateTable = function() {
-      // can you send data from here to django model? Then update scope from the model?
-      $scope.name.push($scope.tle.name) // may have to replace with calling to another table for scheduler updates..
-      var bob = "bob"
-      $http.post('http://127.0.0.1:8000/api/postmission/', $scope.name).then(alert($scope.name + " yasss "))
+      try {
+
+        $scope.name.push($scope.tle.name)
+        $http.post('http://127.0.0.1:8000/api/postmission/', $scope.name).then(alert($scope.name))
+
+      } catch (err) {
+        alert("you must first select a satellite and a priority")
+      }
+
+
+
+      // passed name to server: should schedule then update the next pass list which we want to pull in ... aye. 
     };
     /**
       .$promise.catch(function(response) {
