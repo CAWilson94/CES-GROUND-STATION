@@ -25,8 +25,21 @@ scheduler
       });
     };
 
+    /**
+     * TODO: next passes model in here: the service for this does not have the right URL as the URL is not made yet
+     * @return void
+     *
+    $scope.loadNextPasses = function() {
+      // Grab TLE from Django 
+      NEXTPASS.query().$promise.then(function(data) {
+        $scope.nextpasses = data;
+      });
+    };
+    */
+
+
     // priorities: should default at 2 in dropdown 
-    
+
     $scope.priorities = [{
       name: "low",
       priority: 1,
@@ -61,7 +74,7 @@ scheduler
      */
     $scope.updateTable = function() {
 
-  
+
       $scope.mission = {
         name: $scope.tle.name,
         priority: $scope.priority.priority
@@ -70,7 +83,7 @@ scheduler
 
       try {
         console.log($scope.mission)
-        // Not sure this try should be here, try for post 
+          // Not sure this try should be here, try for post 
         $http.post('http://127.0.0.1:8000/api/missions/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
@@ -90,6 +103,13 @@ scheduler
       }
 
     };
+
+
+    /**
+     *
+     * while there is nothing populating the table: show output as animation loader
+     * 
+     */
 
 
 

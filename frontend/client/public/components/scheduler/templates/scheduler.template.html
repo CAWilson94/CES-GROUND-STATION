@@ -40,7 +40,6 @@
 
  </div>
 
-
  <div class="row">
   <div  class = "col-sm-5" md-on-open="updateTable()">
 
@@ -51,13 +50,16 @@
           <th>Name</th>
           <th>Next Scheduled Pass</th>
           <th>Duration</th>
-          <th>Mission Edit</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>{{hello}}</td>
+      <!--
+        <tr ng-repeat="row in nextPasses">
+          <td>{{row.name}}</td>
+          <td>{{row.nextPass}}</td>
+          <td>{{row.Duration}}</td>
           </tr>
+          -->
       </tbody>
     </table>
   </div>
