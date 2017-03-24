@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from scheduler.models import TLE, AzEl,ChosenSat
+from scheduler.models import TLE, AzEl, Mission
 
 class TLESerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,27 +11,12 @@ class AZELSerializer(serializers.ModelSerializer):
 		model = AzEl
 		fields = ('id','azimuth','elevation')
 
-class ChosenSatSerializer(serializers.ModelSerializer):
+class MissionSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = ChosenSat
-		fields=('id','name')
-
-# class ChosenSatListSerializer(serializers.ModelSerializer):
-# 	sats = serializers.ListField(child=ChosenSatSerializer())
+		model = Mission
+		fields = ('id','name','TLE','status','priority')
 
 
-# class ChosenSatArraySerializer(serializers.Serializer):
-# 	child = serializers.CharField()
-
-# class SatSerialiser(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = SatName
-# 		fields=['id','email']
-
-# class ChosenSatArraySerializer(serializers.Serializer):
-# 	#child = serializers.CharField()
-# 	sats=SatSerialiser(many=True)
-# 	listName=serializers.CharField()
 
 # class CompositeObjectSerializer(serializers.Serializer):
 #     id = serializers.IntegerField()

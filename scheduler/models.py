@@ -1,18 +1,27 @@
+import uuid
 from django.db import models
 from datetime import datetime
 # Create your models here.
 
 
 class TLE(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	name = models.CharField(max_length=30,unique=True,default="NAME")
-	line1 = models.CharField(max_length=70)#can't be null
+	line1 = models.CharField(max_length=70) #can't be null
 	line2 = models.CharField(max_length=70)
+
+	# def __init__(self, name, line1, line2):
+	#     self.name = name
+	#     self.line1 = line1
+	#     self.line2 = line2
+
 	def __str__(self):
 		return str(self.__dict__)
-#     objects = models.TLEManager()
+	# objects = models.TLEManager()
 
 
 class AzEl(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	azimuth = models.CharField(max_length =15)
 	elevation = models.CharField(max_length=15)
 
@@ -33,11 +42,22 @@ class AzEl(models.Model):
 	# def __eq__(self, other):
 	# 	return self.__dict__ == other.__dict__
 
+class Mission(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	name = models.CharField(max_length=30, unique=True)
+	TLE = models.ForeignKey(TLE, on_delete=models.CASCADE)
+	status = models.CharField(max_length=30)
+	priority = models.IntegerField()
+
+	def __str__(self):
+		return str(self.__dict__)
 
 class NextPass(models.Model):
 	#leaves an empty table :(
 	#tle = models.ForeignKey(TLE.name, on_delete=models.CASCADE)
 	#AOS
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
 	riseTime = models.DateField() 
 	#LOS
 	setTime = models.DateField()
@@ -82,22 +102,6 @@ class NextPass(models.Model):
 # class ChosenSatList(models.Model):
 # 	listName = models.CharField(max_length=20)
 
-
-class ChosenSat(models.Model):
-	name = models.CharField(max_length=50)
-
-	def __str__(self):
-		return self.name
-
-class Mission(models.Model):     
-	id = models.IntegerField(primary_key=True)     
-	name = models.CharField(max_length=30, unique=True)     
-	TLE = models.ForeignKey(TLE, on_delete=models.CASCADE)     
-	status = models.CharField(max_length=30)     
-	priority = models.IntegerField()     
-	
-	def __str__(self):        
-		return str(self.name)
 
 # class PassDetails(models.Model)
 # nextpasses = models.ForeignKey(NextPasses)
