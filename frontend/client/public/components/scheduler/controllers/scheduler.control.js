@@ -26,6 +26,7 @@ scheduler
     };
 
     // priorities: should default at 2 in dropdown 
+    
     $scope.priorities = [{
       name: "low",
       priority: 1,
@@ -60,7 +61,7 @@ scheduler
      */
     $scope.updateTable = function() {
 
-
+  
       $scope.mission = {
         name: $scope.tle.name,
         priority: $scope.priority.priority

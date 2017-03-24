@@ -11,20 +11,26 @@
 
 <div class = "drop-down" layout = "row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="" >
 
-    <div layout="column" layout-align="start start">
-      <md-select placeholder="Pick a Satellite" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px; margin-top: 50px;">
+    <div layout="column" layout-align="start start" style="margin-top: 50px">
+        <md-input-container>
+        <label>Satellite</label>
+        <md-select  placeholder="Satellite" type="text" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px;">
           <md-option ng-value = "tle" ng-repeat="tle in tles">{{tle.name}} </md-option>
       </md-select>
+      </md-input-container>
     </div>
 
-    <div layout="column" layout-align="start start" style="padding-left: 50px">
-      <md-select placeholder="Priority Number"  ng-model="priority" style=  "margin-top: 50px;" >
+    <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
+    <md-input-container>
+        <label>Priority</label>
+      <md-select ng-init="priority=priorities[1]" placeholder="Priority Number"  ng-model="priority">
           <md-option ng-value = "priority" ng-repeat="priority in priorities" >{{priority.name}} : {{priority.priority}}</md-option>
       </md-select>
+      </md-input-container>
     </div>
 
     <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
-      <md-button class="md-raised" ng-click=updateTable() style=  "margin-top: 21px;">Schedule Mission</md-button>
+      <md-button class="md-raised" ng-click=updateTable() style=  "margin-top: 48px;">Schedule Mission</md-button>
     </div>
    
 
