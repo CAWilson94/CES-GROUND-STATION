@@ -37,6 +37,7 @@ scheduler
      * SatMission object: sat name and priority
      * SatMissions List: containing sat missions objects
      */
+    var missions
 
     $scope.hallo = "hello";
     // update table from drop down; will need to take in data from scheduler i.e. table dropdown --> fetch schedule data based on this then 
@@ -48,14 +49,30 @@ scheduler
       }
     }
 
+    /**
+     * Take in current clicked dropdown inputs: sat name and priority.
+     * Pass these to back end to add to current missions. 
+     * @return void 
+     */
     $scope.updateTable = function() {
       try {
         $scope.name.push($scope.tle.name)
         $scope.pri.push($scope.priority.priority)
+
+          try {
         $http.post('http://127.0.0.1:8000/api/missions/', $scope.name).then(alert($scope.name))
+      } catch (err) {
+        console.log("Post went wrong..")
+      }
+      
       } catch (err) {
         alert("you must first select a satellite and a priority")
       }
+
+    
+
     };
+
+
 
   });
