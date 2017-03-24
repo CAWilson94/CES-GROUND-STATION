@@ -11,13 +11,8 @@ scheduler
     $scope.loadSat = function() {
       // Grab TLE from Django 
       TLE.query().$promise.then(function(data) {
-          $scope.tles = data;
-        },
-        function errorCallBack(response) {
-          console.log(response.status + " : " + response.statusText);
-        },
-
-      );
+        $scope.tles = data;
+      });
     };
 
     /**
@@ -95,6 +90,5 @@ scheduler
 
 
 
-
-// End of controller please leave it alone.
+    // End of controller please leave it alone.
   });
