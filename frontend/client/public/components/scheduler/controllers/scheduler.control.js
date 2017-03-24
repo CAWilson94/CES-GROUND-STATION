@@ -37,9 +37,6 @@ scheduler
       priority: 3,
     }];
 
-    // Should have updating sat pass object here..
-    $scope.name = [];
-    $scope.pri = [];
     /**
      * SatMission object: sat name and priority
      * SatMissions List: containing sat missions objects
@@ -55,19 +52,27 @@ scheduler
       }
     }
 
+
     /**
      * Take in current clicked dropdown inputs: sat name and priority.
      * Pass these to back end to add to current missions. 
      * @return void 
      */
     $scope.updateTable = function() {
+
+
+      $scope.mission = {
+        name: $scope.tle.name,
+        priority: $scope.priority.priority
+      };
+
+
       try {
-        // Try for select input AND POST 
-        $scope.name.push($scope.tle.name)
-        $scope.pri.push($scope.priority.priority)
+
+        console.log($scope.mission)
 
         // Not sure this try should be here, try for post 
-        $http.post('http://127.0.0.1:8000/api/missions/', $scope.name)
+        $http.post('http://127.0.0.1:8000/api/missions/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
               console.log(response)
@@ -79,7 +84,7 @@ scheduler
               console.log(response.status + " : " + response.statusText);
             },
             // Uncomment for testing output or use django shell to check missions model contents
-            alert($scope.name)
+            alert($scope.mission.name + " : " + $scope.mission.priority)
           );
 
       } catch (err) {
