@@ -19,8 +19,6 @@ scheduler
       });
     };
 
-
-
     $scope.priorities = [{
       name: "low",
       priority: 1,
@@ -32,44 +30,28 @@ scheduler
       priority: 3,
     }];
 
-    // Dummy data for now; table update in construction
-    $scope.rowCollection = [{
-      firstName: 'Laurent',
-      lastName: 'Renard',
-      birthDate: new Date('1987-05-21'),
-      balance: 102,
-      email: 'whatever@gmail.com'
-    }, {
-      firstName: 'Blandine',
-      lastName: 'Faivre',
-      birthDate: new Date('1987-04-25'),
-      balance: -2323.22,
-      email: 'oufblandou@gmail.com'
-    }, {
-      firstName: 'Francoise',
-      lastName: 'Frere',
-      birthDate: new Date('1955-08-27'),
-      balance: 42343,
-      email: 'raymondef@gmail.com'
-    }];
-
     // Should have updating sat pass object here..
     $scope.name = [];
+    $scope.pri = [];
+    /**
+     * SatMission object: sat name and priority
+     * SatMissions List: containing sat missions objects
+     */
+
     $scope.hallo = "hello";
     // update table from drop down; will need to take in data from scheduler i.e. table dropdown --> fetch schedule data based on this then 
     // update table from scheduled data
-    // 
-    //
+
     var config = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
       }
     }
 
-
     $scope.updateTable = function() {
       try {
         $scope.name.push($scope.tle.name)
+        $scope.pri.push($scope.priority.priority)
         $http.post('http://127.0.0.1:8000/api/missions/', $scope.name).then(alert($scope.name))
       } catch (err) {
         alert("you must first select a satellite and a priority")
