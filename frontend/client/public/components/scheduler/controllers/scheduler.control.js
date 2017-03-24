@@ -11,11 +11,13 @@ scheduler
         $scope.tles = data;
       });
     };
-    // Grabbing AZEL data from Django; under construction
-     $scope.getAzel = function(){
+
+    $scope.loadAxel = function() {
+      // Grabbing AZEL data from Django; under construction
       AZEL.query().$promise.then(function(date) {
-      $scope.azel = data;
-    });
+        $scope.azel = data;
+      });
+    };
 
 
 
@@ -57,7 +59,7 @@ scheduler
     // update table from drop down; will need to take in data from scheduler i.e. table dropdown --> fetch schedule data based on this then 
     // update table from scheduled data
     // 
-    // 
+    //
     var config = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
@@ -65,76 +67,13 @@ scheduler
     }
 
 
-    $scope.buttonClick = function() {
-      alert("something was clicked")
-    }
-
     $scope.updateTable = function() {
       try {
-
         $scope.name.push($scope.tle.name)
         $http.post('http://127.0.0.1:8000/api/missions/', $scope.name).then(alert($scope.name))
-
       } catch (err) {
         alert("you must first select a satellite and a priority")
       }
-
-
-
-      // passed name to server: should schedule then update the next pass list which we want to pull in ... aye. 
     };
-    /**
-      .$promise.catch(function(response) {
-        console.log($scope.name)
-          //this will be fired upon error
-        if (response.status == 500) alert('Something baaad happend');
-      })
-      */
-
-
-
-    /*
-     * Comms with server side: http for post request
-     *
-    .factory('satsFactory', ['$http', function($http) {
-      return function name() {
-        var fac = {};
-        // obvious naming is obvious: will change later
-        fac.addChosenSatToDB = function() {
-          $http.post("localhost:8000/api/postmission/")
-        }
-        return fac;
-      };
-    }]) */
-
-
-    /**
-     *
-     *<..ng-app="app"
-    // Instead of button: select picker .. forgot what I wrote for it. 
-    <input type="button" ng-click="app.addSatClicked(app.satClicked)"/>
-
-    ..controller:
-
-    app.addSatClicked = function (satClicked){
-      $http.post("http://someurl", satClicked){  ** what url? could we replace with something else? ** 
-        .success(function(data){
-          app.people = data;
-        })
-      })
-
-    }
-      
-      
-      
-      
-      ------------------>
-    app.post(...function(req, res){
-      data.push(req.body);
-      res.send(data)
-     *
-     *
-     * 
-     */
 
   });
