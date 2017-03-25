@@ -1,71 +1,70 @@
 <!DOCTYPE html>
 <html ng-app="Scheduler">
 
-    <head>
-        <meta charset="utf-8">
-        <title>Ground Station App</title>
+<head>
+    <meta charset="utf-8">
+    <title>Ground Station App</title>
 
-       
-<link rel="stylesheet"  href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
-<!-- angular material -->
-<link rel="stylesheet" href= "bower_components/angular-material/angular-material.css">
 
-    
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
+    <!-- angular material -->
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+
+
 </head>
 
-    <body>
+<body>
 
-     <!-- HEADER AND NAVBAR -->
-        <header>
-            <nav class="navbar navbar-default">
-             
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">CES Ground Station</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
+<!-- HEADER AND NAVBAR -->
+<header>
+    <nav class="navbar navbar-default">
+
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">CES Ground Station</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
                 <!--
                     <li><a href="#"><i class="fa fa-home"></i> Login</a></li>
                     <li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
                     <li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
                     -->
-                </ul>
-            </div>
-            </nav>
-        </header>
-  
-        <!-- The dynamic templates will be served within this div -->
-        <ui-view></ui-view>
+            </ul>
+        </div>
+    </nav>
+</header>
 
-         <!--  Angular Setup -->
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-        <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+<!-- The dynamic templates will be served within this div -->
+<ui-view></ui-view>
 
-        <!-- boostrap components && datatables-->
-        <script src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-       
-        <!-- angular material dependancies-->
-        <script src="bower_components/angular-animate/angular-animate.js"></script>
-        <script src="bower_components/angular-aria/angular-aria.js"></script>
-        <!-- angular material -->
-        <script src="bower_components/angular-material/angular-material.js"></script>
-        <!-- angular smart table -->
-         <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+<!--  Angular Setup -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+
+<!-- boostrap components && datatables-->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+<!-- angular material dependancies-->
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<!-- angular material -->
+<script src="bower_components/angular-material/angular-material.js"></script>
+<!-- angular smart table -->
+<script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
 
 
-
-        <!-- Application Setup -->
-        <script src="public/appRoutes.js"></script>
-        <script src="public/app.js"></script>
-        <!--  Controllers -->
-        <script src="public/components/scheduler/controllers/scheduler.control.js"></script>
-        <!-- Services -->
-        <script src="public/components/scheduler/services/tle.service.js"></script>
-        <script src="public/components/scheduler/services/azel.service.js"></script>
-
-    </body>
+<!-- Application Setup -->
+<script src="public/appRoutes.js"></script>
+<script src="public/app.js"></script>
+<!--  Controllers -->
+<script src="public/components/scheduler/controllers/scheduler.control.js"></script>
+<!-- Services -->
+<script src="public/components/scheduler/services/tle.service.js"></script>
+<script src="public/components/scheduler/services/azel.service.js"></script>
+<script src="public/components/scheduler/services/mission.service.js"></script>
+</body>
 </html>

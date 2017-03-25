@@ -63,6 +63,34 @@
   </div>
 </div>
 
+ <div class="row">
+
+        <div class="col-sm-3" >
+
+
+            <table st-table="missions" ng-model="mission" class="table table-striped" >
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Delete</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+
+                <tr ng-repeat="mission in missions">
+                    <td>{{ mission.name }}</td>
+                    <td>{{ mission.status }}</td>
+                    <td><button type="button" class="close" ng-click="deleteMission(mission)">&times;</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 
 
 </body>
