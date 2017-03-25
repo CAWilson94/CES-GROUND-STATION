@@ -95,7 +95,6 @@ scheduler
         };
 
         //MISSSION TABLE
-
         $scope.missions = Mission.get().$promise.then(function (data) {
             $scope.missions = data;
         });
@@ -110,6 +109,7 @@ scheduler
         };
 
         function removeA(arr) {
+            //What the fuck is this?!
             var what, a = arguments, L = a.length, ax;
             while (L > 1 && arr.length) {
                 what = a[--L];

@@ -62,9 +62,9 @@ class NextPass(models.Model):
     #AOS
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    riseTime = models.DateField()
+    riseTime = models.DateTimeField()
     #LOS
-    setTime = models.DateField()
+    setTime = models.DateTimeField()
     duration = models.DurationField()  #still that's python datetime
     maxElevation = models.CharField(max_length=15)
     #AOS Az

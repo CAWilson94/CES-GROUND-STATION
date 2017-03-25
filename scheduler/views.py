@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from scheduler.models import TLE, Mission
 from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer, MissionSerializer
+from scheduler.serializers import TLESerializer, AZELSerializer, MissionSerializer, NextPassSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets
@@ -13,6 +13,8 @@ from rest_framework.decorators import api_view
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
 
+from scheduler.MOT.simpleHC import MOTSimpleHC
+from scheduler.MOT.schedulerInterface import MOT
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
@@ -44,9 +46,22 @@ class MissionsViewSet(viewsets.ModelViewSet):
     serializer_class = MissionSerializer
 
 class MissionView(APIView):
+    # def get(self, request):
+    #     missions = Mission.objects.all()
+    #     serializer = MissionSerializer(missions, many=True)
+    #     return Response(serializer.data)
+
     def get(self, request):
         missions = Mission.objects.all()
-        serializer = MissionSerializer(missions, many=True)
+        
+        missionList=[]
+        for mission in missions:
+            missionList.append(mission)
+        print(missionList)
+        lis=Services.scheduleMissions(self, missionList,MOTSimpleHC)
+        print("final List: {}".format(lis))
+        #print(Services.returnTwo())
+        serializer = NextPassSerializer(lis,many=True)
         return Response(serializer.data)
 
     def post(self, request):

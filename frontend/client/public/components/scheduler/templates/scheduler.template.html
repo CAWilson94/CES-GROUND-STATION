@@ -70,6 +70,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Status</th>
+                    <th>Priority</th>
                     <th>Delete</th>
 
                 </tr>
@@ -80,6 +81,7 @@
                 <tr ng-repeat="mission in missions">
                     <td>{{ mission.name }}</td>
                     <td>{{ mission.status }}</td>
+                    <td>{{ mission.priority }}</td>
                     <td>
                         <button type="button" class="close" ng-click="deleteMission(mission)">&times;</button>
                     </td>
