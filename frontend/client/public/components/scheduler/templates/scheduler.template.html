@@ -1,4 +1,3 @@
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,68 +6,66 @@
 <body ng-app="scheduler">
 
 
-<div class = "table_drop_down" style="margin-left: 30px">
+<div class="table_drop_down" style="margin-left: 30px">
 
-<div class = "drop-down" layout = "row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="" >
+    <div class="drop-down" layout="row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="">
 
-    <div layout="column" layout-align="start start" style="margin-top: 50px">
-        <md-input-container>
-        <label>Satellite</label>
-        <md-select  placeholder="Satellite" type="text" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px;">
-          <md-option ng-value = "tle" ng-repeat="tle in tles">{{tle.name}} </md-option>
-      </md-select>
-      </md-input-container>
+        <div layout="column" layout-align="start start" style="margin-top: 50px">
+            <md-input-container>
+                <label>Satellite</label>
+                <md-select placeholder="Satellite" type="text" ng-model="tle" md-on-open="loadSat()"
+                           style="min-width: 200px;">
+                    <md-option ng-value="tle" ng-repeat="tle in tles">{{ tle.name }} </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
+            <md-input-container>
+                <label>Priority</label>
+                <md-select ng-init="priority=priorities[1]" placeholder="Priority Number" ng-model="priority">
+                    <md-option ng-value="priority" ng-repeat="priority in priorities">{{ priority.name }}
+                        : {{ priority.priority }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
+            <md-button class="md-raised" ng-click=updateTable() style="margin-top: 48px;">Schedule Mission</md-button>
+        </div>
+
+
+        <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
+
+
     </div>
 
-    <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
-    <md-input-container>
-        <label>Priority</label>
-      <md-select ng-init="priority=priorities[1]" placeholder="Priority Number"  ng-model="priority">
-          <md-option ng-value = "priority" ng-repeat="priority in priorities" >{{priority.name}} : {{priority.priority}}</md-option>
-      </md-select>
-      </md-input-container>
-    </div>
 
-    <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
-      <md-button class="md-raised" ng-click=updateTable() style=  "margin-top: 48px;">Schedule Mission</md-button>
-    </div>
-   
-
-    <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
+    <div class="row">
+        <div class="col-sm-5" md-on-open="updateTable()">
 
 
-
- </div>
-
-
- <div class="row">
-  <div  class = "col-sm-5" md-on-open="updateTable()">
-
-
-    <table st-table="yermaw" ng-model="hello" class="table table-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Next Scheduled Pass</th>
-          <th>Duration</th>
-          <th>Mission Edit</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{hello}}</td>
-          </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
- <div class="row">
-
-        <div class="col-sm-3" >
+            <table st-table="yermaw" ng-model="hello" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Next Scheduled Pass</th>
+                    <th>Duration</th>
+                    <th>Mission Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ hello }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
 
-            <table st-table="missions" ng-model="mission" class="table table-striped" >
+        <div class="col-sm-3">
+
+            <table st-table="missions" ng-model="mission" class="table table-striped">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -83,14 +80,14 @@
                 <tr ng-repeat="mission in missions">
                     <td>{{ mission.name }}</td>
                     <td>{{ mission.status }}</td>
-                    <td><button type="button" class="close" ng-click="deleteMission(mission)">&times;</button></td>
+                    <td>
+                        <button type="button" class="close" ng-click="deleteMission(mission)">&times;</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-
 
 
 </body>

@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="033761d0-1a7f-437f-aa83-4df0590d070a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/frontend/client/public/components/scheduler/services/mission.service.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/cesgroundstation.iml" afterPath="$PROJECT_DIR$/.idea/cesgroundstation.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/client/index.html" afterPath="$PROJECT_DIR$/frontend/client/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scheduler/models.py" afterPath="$PROJECT_DIR$/scheduler/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js" afterPath="$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html" afterPath="$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cesGroundStation/settings.py" afterPath="$PROJECT_DIR$/cesGroundStation/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scheduler/urls.py" afterPath="$PROJECT_DIR$/scheduler/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scheduler/views.py" afterPath="$PROJECT_DIR$/scheduler/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cesgroundstation.iws" />
@@ -40,12 +33,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="scheduler.template.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="scheduler.template.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.346153" vertical-offset="1070" max-vertical-offset="1768">
-              <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.03119266" vertical-offset="1054" max-vertical-offset="1717">
+              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
               <folding>
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#md-select#0;n#md-input-container#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#md-button#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -65,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scheduler.control.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="scheduler.control.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.54816115" vertical-offset="1639" max-vertical-offset="2210">
-              <caret line="78" column="27" selection-start-line="78" selection-start-column="27" selection-end-line="78" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="2210">
+              <caret line="73" column="59" selection-start-line="73" selection-start-column="59" selection-end-line="73" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -111,7 +109,7 @@
         <entry file="file://$PROJECT_DIR$/scheduler/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
-              <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+              <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -150,11 +148,11 @@
         <option value="$PROJECT_DIR$/scheduler/models.py" />
         <option value="$PROJECT_DIR$/scheduler/views.py" />
         <option value="$PROJECT_DIR$/cesGroundStation/settings.py" />
-        <option value="$PROJECT_DIR$/scheduler/urls.py" />
-        <option value="$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html" />
         <option value="$PROJECT_DIR$/frontend/client/index.html" />
         <option value="$PROJECT_DIR$/frontend/client/public/components/scheduler/services/mission.service.js" />
+        <option value="$PROJECT_DIR$/scheduler/urls.py" />
         <option value="$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js" />
+        <option value="$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html" />
       </list>
     </option>
   </component>
@@ -675,6 +673,13 @@
       <option name="number" value="Default" />
       <updated>1479938305375</updated>
     </task>
+    <task id="LOCAL-00001" summary="MIssions teble works">
+      <created>1490450843599</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1490450843599</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -683,6 +688,7 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32843137" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -718,6 +724,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="MIssions teble works" />
+    <option name="LAST_COMMIT_MESSAGE" value="MIssions teble works" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -810,24 +818,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scheduler/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="490" max-vertical-offset="1207">
-          <caret line="45" column="27" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scheduler/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
-          <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/client/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-17.538462" vertical-offset="734" max-vertical-offset="1292">
@@ -844,22 +834,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html">
+    <entry file="file://$PROJECT_DIR$/scheduler/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.346153" vertical-offset="1070" max-vertical-offset="1768">
-          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="490" max-vertical-offset="1207">
+          <caret line="45" column="27" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding>
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#md-button#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scheduler/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.54816115" vertical-offset="1639" max-vertical-offset="2210">
-          <caret line="78" column="27" selection-start-line="78" selection-start-column="27" selection-end-line="78" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="2210">
+          <caret line="73" column="59" selection-start-line="73" selection-start-column="59" selection-end-line="73" selection-end-column="59" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.03119266" vertical-offset="1054" max-vertical-offset="1717">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#md-select#0;n#md-input-container#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#md-button#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
