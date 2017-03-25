@@ -4,11 +4,13 @@ from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','cesGroundStation.settings')
 
-app = Celery('scheduler')
+from django.conf import settings
 
-app.config_from_object('django.conf:settings', namespace = 'CELERY')
+app = Celery('cesGroundStaton')#,backend = 'amqp', broker = 'amqp://guest@localhost//', include=['scheduler.tasks'])
 
-app.autodiscover_tasks()
+app.config_from_object('django.conf:settings')
+
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.task(bind = True)
 def debug_task(self):

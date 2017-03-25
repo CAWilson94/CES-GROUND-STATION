@@ -9,5 +9,8 @@ class SchedulerConfig(AppConfig):
 		print ("Apps works") # got to here
 		from scheduler.tasks import pollForNew as s
 		s.delay()
+		#from scheduler.services import Services as m
+		#m.test()
+		#bob = m.run_once(my_function)
 		#thread1 = s(1, "Scheduler Thread", 1)
 		#thread1.start()

@@ -62,7 +62,20 @@ class Services():
 #				count+=1
 #				pass
 #			except TLE.DoesNotExist as e:
-#				print("Already exists")	 
+#				print("Already exists")
+
+#	def run_once(f):
+#		def wrapper(*args, **kwargs):
+#			if not wrapper.has_run:
+#				wrapper.has_run = True
+#				return f(*args, **kwargs)
+#		wrapper.has_run = False
+#		return wrapper
+#
+#	@run_once
+#	def test():
+#		print("hiya")
+
 
 	def getAzElTLE(self, tleEntry, dateTime):
 		"""
@@ -153,6 +166,7 @@ class Services():
 
 
 	def updateTLE():
+
 		"""
 		Retrieves TLE data from external source, checks format and places in db
 		"""

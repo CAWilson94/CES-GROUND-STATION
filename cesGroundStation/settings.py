@@ -9,12 +9,13 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
+from __future__ import absolute_import, unicode_literals
 
 import os
-import djcelery
+#import djcelery
+#djcelery.setup_loader()
 
-djcelery.setup_loader()
-BROKERURL = "django://"
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,10 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'scheduler.apps.SchedulerConfig',
+    #'scheduler.apps.SchedulerConfig',
     'corsheaders',
     'djcelery',
-    #'kombu.transport.django',
+    'scheduler',
+    'kombu.transport.django',
 ]
 
 
