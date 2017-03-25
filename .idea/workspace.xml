@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="033761d0-1a7f-437f-aa83-4df0590d070a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js" afterPath="$PROJECT_DIR$/frontend/client/public/components/scheduler/controllers/scheduler.control.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html" afterPath="$PROJECT_DIR$/frontend/client/public/components/scheduler/templates/scheduler.template.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scheduler/urls.py" afterPath="$PROJECT_DIR$/scheduler/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cesgroundstation.iws" />
@@ -679,7 +676,13 @@
       <option name="project" value="LOCAL" />
       <updated>1490450843599</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="MIssions teble works">
+      <created>1490452294370</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1490452294370</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
