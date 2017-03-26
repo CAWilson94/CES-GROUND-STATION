@@ -87,6 +87,9 @@ scheduler
         $http.post('http://127.0.0.1:8000/api/missions/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
+               $scope.missions = Mission.get().$promise.then(function (data) {
+                            $scope.missions = data;
+                        });
               console.log(response)
             },
             function errorCallBack(response) {
