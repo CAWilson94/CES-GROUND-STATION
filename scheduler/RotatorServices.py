@@ -89,3 +89,15 @@ class rotator_services():
         print("done")
         ser.close()
 
+    def check_azimuth(azimuth):
+        """
+        Change the azimuth or position of azimuth rotator in certain cases
+        """
+        if(azimuth == 0):
+            azimuth = 360
+        return azimuth
+
+    def calibrate_520():
+        """
+        The rotators have a range of 0 - 520 degress: these must be calibrated. 
+        """

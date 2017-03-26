@@ -2,6 +2,7 @@ from scheduler.RotatorServices import rotator_services
 from scheduler.services import Services
 from datetime import date, datetime, timedelta
 from scheduler.models import NextPass, TLE
+from time import sleep
 
 
 class rotator_controller():
@@ -23,5 +24,7 @@ class rotator_controller():
         azel = Services.getAzElForPeriod(self, tleEntry, nextPass.riseTime,
                                          nextPass.setTime, nextPass.period)
         for item in azel:
-            # wait?
+            sleep(1)
             rs.set_position(item.elevation, item.azimuth)
+
+    
