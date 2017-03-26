@@ -84,7 +84,7 @@ scheduler
       try {
         console.log($scope.mission)
           // Not sure this try should be here, try for post 
-        $http.post('http://127.0.0.1:8000/api/missions/', $scope.mission)
+        $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
                $scope.missions = Mission.get().$promise.then(function (data) {
