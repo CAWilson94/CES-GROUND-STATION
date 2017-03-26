@@ -1,35 +1,13 @@
-from celery import task
+from celery import shared_task
 
 
 #app = Celery('tasks.py', broker='amqp://localhost')
 
-@task()
+@shared_task()
 def pollForNew():
-		print ( "Polling for new")
-		try:
-			mission_list = ms.findMissionsByStatus("New")
-			for i in mission_list:
-				i.status = ("Waiting")
-				print("Count = %r" %i)
-				pass
-		except TLE.DoesNotExist as e:
-			print("Already exists")	 
+		print ( "Polling for new") 
 
 
-@task()
+@shared_task()
 def pollQueue():
-		count = 0
-		while (count < 10):
-			try:
-				mission_list = ms.findMissionsByStatus("Ready")
-				for i in mission_list:
-					i.status = ("Tracked")
-				print("Count = %r" %count)
-				count+=1
-				pass
-			except TLE.DoesNotExist as e:
-				print("Already exists")	
-				 
-@task()
-def reverse(string):
-	return string[::-1]
+	print ( "Polling the queue")

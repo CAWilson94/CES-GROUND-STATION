@@ -2,6 +2,7 @@ from django.apps import AppConfig
 from scheduler.schedulerQueue import SchedulerQ
 from scheduler.runnables import SchedulerRunnable, RotatorsRunnable
 
+
 class SchedulerConfig(AppConfig):
 	name = 'scheduler'
 	threadsStarted = False
@@ -16,7 +17,11 @@ class SchedulerConfig(AppConfig):
 			thread2 = RotatorsRunnable(2, "Rotator Thread", schedulerQ)
 			thread2.start()
 
-		#print ("Apps works")
-		
-
-
+		print ("Apps works") # got to here
+		from scheduler.tasks import pollForNew as s
+		s.delay()
+		#from scheduler.services import Services as m
+		#m.test()
+		#bob = m.run_once(my_function)
+		#thread1 = s(1, "Scheduler Thread", 1)
+		#thread1.start()

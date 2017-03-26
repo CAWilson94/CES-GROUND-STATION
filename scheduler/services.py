@@ -40,29 +40,42 @@ class schedulerThread (threading.Thread):
 
 class Services():
 
-	def pollForNew():
-		print ( "Polling for new")
-		try:
-			mission_list = ms.findMissionsByStatus("New")
-			for i in mission_list:
-				i.status = ("Waiting")
-				print("Count = %r" %i)
-				pass
-		except TLE.DoesNotExist as e:
-			print("Already exists")	 
+#	def pollForNew():
+#		print ( "Polling for new")
+#		try:
+#			mission_list = ms.findMissionsByStatus("New")
+#			for i in mission_list:
+#				i.status = ("Waiting")
+#				print("Count = %r" %i)
+#				pass
+#		except TLE.DoesNotExist as e:
+#			print("Already exists")	 
+#
+#	def pollQueue():
+#		count = 0
+#		while (count < 10):
+#			try:
+#				mission_list = ms.findMissionsByStatus("Ready")
+#				for i in mission_list:
+#					i.status = ("Tracked")
+#				print("Count = %r" %count)
+#				count+=1
+#				pass
+#			except TLE.DoesNotExist as e:
+#				print("Already exists")
 
-	def pollQueue():
-		count = 0
-		while (count < 10):
-			try:
-				mission_list = ms.findMissionsByStatus("Ready")
-				for i in mission_list:
-					i.status = ("Tracked")
-				print("Count = %r" %count)
-				count+=1
-				pass
-			except TLE.DoesNotExist as e:
-				print("Already exists")	 
+#	def run_once(f):
+#		def wrapper(*args, **kwargs):
+#			if not wrapper.has_run:
+#				wrapper.has_run = True
+#				return f(*args, **kwargs)
+#		wrapper.has_run = False
+#		return wrapper
+#
+#	@run_once
+#	def test():
+#		print("hiya")
+
 
 	def getAzElTLE(self, tleEntry, dateTime):
 		"""
@@ -118,35 +131,42 @@ class Services():
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],riseAzimuth=details[1],setAzimuth=details[5])
 
-	def makeMissions(chosenSatsList): #, priorityList
+	def makeMissions(chosenSat): #, priorityList
 		"""
 		Saves user chosen satellites in the mission object and then saves that in db
 		"""
-		print(chosenSatsList)
-		for name in chosenSatsList:
+		print(chosenSat)
+		success=False
+		#for name in chosenSatsList:
+		name = chosenSat.get("name")
+		priority = chosenSat.get("priority")
+		# print("about to add {}".format(name))
+		try:
+			mission = Mission.objects.get(name=name)
+		except Mission.DoesNotExist as e:
 			try:
-				mission = Mission.objects.get(name=name)
-			except Mission.DoesNotExist as e:
-				try:
-					tle = TLE.objects.get(name=name)
-				except TLE.DoesNotExist as e:
-					#print(e)
-					print("Attempted to CubeSat '{}' but it does not exist in the DB".format(name))
-					#somehow asked to schedule a satellite that isn't in the database
-					return False
-				newMission = Mission(name=name,TLE=tle,status="NEW",priority=1)
-				newMission.save()
-				return True
-			else:
-				pass
-				return True
-				#update status to "needs to be scheduler again"?
-		return False
+				tle = TLE.objects.get(name=name)
+			except TLE.DoesNotExist as e:
+				#print(e)
+				print("Attempted to CubeSat '{}' but it does not exist in the DB".format(name))
+				#somehow asked to schedule a satellite that isn't in the database
+				success = False
+			newMission = Mission(name=name,TLE=tle,status="NEW",priority=priority)
+			newMission.save()
+			success = True
+		else:
+			pass
+			#success = True
+			#update status to "needs to be scheduler again"?
+			#mission.priority=new priority
+
+		return success
 			#else:
 			#	mission.priorty = newPriority
 
 
 	def updateTLE():
+
 		"""
 		Retrieves TLE data from external source, checks format and places in db
 		"""
