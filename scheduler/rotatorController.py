@@ -10,9 +10,9 @@ class rotator_controller():
                 contains TLE object and start and end times of the pass
     """
 
-    def __init__(self, arg):
+    def __init__(self, nextPass):
         super(rotator_controller, self).__init__()
-        self.arg = arg
+        self.nextPass = nextPass
 
     def moveRotators(tleEntry):
         """
@@ -20,8 +20,8 @@ class rotator_controller():
         """
         s = Services()
 
-        azel = Services.getAzElForPeriod(self, tleEntry, NextPass.riseTime,
-                                         NextPass.setTime, NextPass.period)
+        azel = Services.getAzElForPeriod(self, tleEntry, nextPass.riseTime,
+                                         nextPass.setTime, nextPass.period)
         for item in azel:
             # wait?
             rs.set_position(item.elevation, item.azimuth)
