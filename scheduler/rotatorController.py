@@ -23,4 +23,5 @@ class rotator_controller():
         azel = Services.getAzElForPeriod(self, tleEntry, NextPass.riseTime,
                                          NextPass.setTime, NextPass.period)
         for item in azel:
+            # wait?
             rs.set_position(item.elevation, item.azimuth)
