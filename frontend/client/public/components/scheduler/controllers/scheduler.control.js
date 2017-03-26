@@ -73,7 +73,7 @@ scheduler
      * @return void 
      */
     $scope.updateTable = function() {
-
+      // Each mission requires a sat name and a priority
 
       $scope.mission = {
         name: $scope.tle.name,
@@ -87,9 +87,10 @@ scheduler
         $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
-               $scope.missions = Mission.get().$promise.then(function (data) {
-                            $scope.missions = data;
-                        });
+              $scope.missions = Mission.get().$promise.then(function(data) {
+                $scope.missions = data;
+              });
+
               console.log(response)
             },
             function errorCallBack(response) {
