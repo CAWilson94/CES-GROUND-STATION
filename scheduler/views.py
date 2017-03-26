@@ -16,7 +16,7 @@ from rest_framework.renderers import StaticHTMLRenderer
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        # Services.updateTLE()
+        #Services.updateTLE()
         pass
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
