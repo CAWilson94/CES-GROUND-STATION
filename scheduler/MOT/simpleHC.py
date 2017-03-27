@@ -10,11 +10,10 @@ class MOTSimpleHC(MOT):
 	def find(self,satList,usefulTime):
 		""" In simple hill climbing, the first closer node is chosen"""
 
-		#return _Helper.returnTwo()
-
 		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
 		maxIterations = 50
+		maxNeighbours=5000
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
@@ -28,7 +27,6 @@ class MOTSimpleHC(MOT):
 			#Generator/Iterator of all the neighbours
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
 			n=0
-			maxNeighbours=500
 			#Find a smaller subset of all neighbours
 			for neighbour in generatorOfAllNeighboursIncItself:
 				if n==maxNeighbours:
@@ -45,20 +43,9 @@ class MOTSimpleHC(MOT):
 			#print(listOfNearestNeighboursAndItself)
 			newNeighbourScore=0
 			for neighbour in listOfNearestNeighboursAndItself:
-				#try:
-				#print("neighbour")
-				#print(neighbour)
 
 				newNeighbourScore,nextPassList = _Helper.fitnessFunction(self, neighbour,usefulTime)
-				#thing = _Helper.fitnessFunction(self, neighbour,usefulTime)
-				
-				#except TypeError as e:
-					#print(e)
-					#newNeighbourScore=0;
-					#nextPassList=[]
-					#newNeighbourScore=0
-				# 	pass
-				
+
 				print(newNeighbourScore)
 				#print(nextPassList)
 				if(newNeighbourScore < oldNeighbourScore):
@@ -67,14 +54,8 @@ class MOTSimpleHC(MOT):
 					oldNeighbourScore=newNeighbourScore
 					newScore=newNeighbourScore
 					break;
-
-			# print("score")
-			# print(newNeighbourScore)
-			# print(nextPassList)
 			
 			#Is this better neighbour better than cur node
-			#print("newScore")
-			#print(newScore)#
 			if newScore < oldScore:
 				oldScore=newScore
 				bestOrder = list(curOrder)

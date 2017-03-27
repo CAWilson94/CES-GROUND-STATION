@@ -28,34 +28,29 @@ class _Helper():
 			else:
 				prevMission = mission
 
-		#is priority maintained function goes here
-		# prevSat=highpriority
-		# for sat in satList:
-		# 	if sat.priority<prevSat:
-		# 		#priority order is violated
-		# 		return sys.maxima
-
-		# for mission in missionList:
-		# 	nextPass = Services.getNextPass(self, mission.TLE, datetime.now())
-		# 	nextPassList.append(nextPass)
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE, datetime.now())
+			nextPassList.append(nextPass)
 	 
 		
-		sat1 = NextPass(riseTime=datetime(2017, 3, 25, 22, 39, 3), setTime=datetime(2017, 3, 25, 22, 48, 39), duration=timedelta(0, 576), maxElevation=0,riseAzimuth=0,setAzimuth=0)
-		sat2 = NextPass(riseTime=datetime(2017, 3, 26, 5, 1, 12), setTime=datetime(2017, 3, 26, 5, 13, 53), duration=timedelta(0, 761), maxElevation=0,riseAzimuth=0,setAzimuth=0)
-		sat3 = NextPass(riseTime=datetime(2017, 3, 26, 2, 6, 51), setTime=datetime(2017, 3, 26, 2, 19, 33), duration=timedelta(0, 762), maxElevation=0,riseAzimuth=0,setAzimuth=0)
-		sat4 = NextPass(riseTime=datetime(2017, 3, 25, 23, 57, 18), setTime=datetime(2017, 3, 25, 22, 32, 10), duration=timedelta(-1, 81292), maxElevation=0,riseAzimuth=0,setAzimuth=0)
-		sat5 = NextPass(riseTime=datetime(2017, 3, 26, 4, 29, 32), setTime=datetime(2017, 3, 26, 4, 39, 40), duration=timedelta(0, 608), maxElevation=0,riseAzimuth=0,setAzimuth=0)
-		sat6 = NextPass(riseTime=datetime(2017, 3, 25, 23, 24, 42), setTime=datetime(2017, 3, 25, 23, 26, 9), duration=timedelta(0, 87), maxElevation=0,riseAzimuth=0,setAzimuth=0)
-		sat7 = NextPass(riseTime=datetime(2017, 3, 25, 22, 36, 45), setTime=datetime(2017, 3, 25, 22, 47, 4), duration=timedelta(0, 619), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat1 = NextPass(riseTime=datetime(2017, 3, 25, 22, 39, 3), setTime=datetime(2017, 3, 25, 22, 48, 39), duration=timedelta(0, 576), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat2 = NextPass(riseTime=datetime(2017, 3, 26, 5, 1, 12), setTime=datetime(2017, 3, 26, 5, 13, 53), duration=timedelta(0, 761), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat3 = NextPass(riseTime=datetime(2017, 3, 26, 2, 6, 51), setTime=datetime(2017, 3, 26, 2, 19, 33), duration=timedelta(0, 762), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat4 = NextPass(riseTime=datetime(2017, 3, 25, 23, 57, 18), setTime=datetime(2017, 3, 25, 22, 32, 10), duration=timedelta(-1, 81292), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat5 = NextPass(riseTime=datetime(2017, 3, 26, 4, 29, 32), setTime=datetime(2017, 3, 26, 4, 39, 40), duration=timedelta(0, 608), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat6 = NextPass(riseTime=datetime(2017, 3, 25, 23, 24, 42), setTime=datetime(2017, 3, 25, 23, 26, 9), duration=timedelta(0, 87), maxElevation=0,riseAzimuth=0,setAzimuth=0)
+		# sat7 = NextPass(riseTime=datetime(2017, 3, 25, 22, 36, 45), setTime=datetime(2017, 3, 25, 22, 47, 4), duration=timedelta(0, 619), maxElevation=0,riseAzimuth=0,setAzimuth=0)
 
-		nextPassList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7]
+		# nextPassList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7]
 		#print("nextpasslist")
 		#print(nextPassList)
 
-		conflictGroups = _Helper.__findConflictingGroups(nextPassList)
+		conflictGroups,nonConflictGroups = _Helper.__findConflictingGroups(nextPassList)
 
 		print("conflictGroups")
 		print(conflictGroups)
+		print("nonconflictgroups")
+		print(nonConflictGroups)
 		#print(conflictGroups)
 		if len(conflictGroups)==0:
 			#no conflicts
@@ -79,6 +74,8 @@ class _Helper():
 		if score==0:
 			pass
 
+		for sat in nonConflictGroups:
+			processedNextPassList.append(sat)
 		#print(score)
 		#print(nextPassList)
 		#print("return this {} list with this {} score".format(processedNextPassList,score))
@@ -92,11 +89,13 @@ class _Helper():
 			different list/group
 		"""
 		satListConflicts=[]
+		satListNoConflicts=[]
 		print("liiiiiist")
 		print(len(satList))
 
 		for i in range(len(satList)):
 			conflicts=[]
+			noConflicts=[]
 			for j in range(i+1, len(satList)):
 				print('{} riseTime & {} setTime compared with {} riseTime & {} setTime'.format(satList[i].riseTime,satList[i].setTime,satList[j].riseTime,satList[j].setTime))
 				if satList[i].riseTime < satList[j].setTime and satList[i].setTime > satList[j].riseTime:
@@ -107,14 +106,18 @@ class _Helper():
 						conflicts.append(satList[i])
 						conflicts.append(satList[j])
 				else:
-					print("no conflict")
-					#print("This sat {} doesn't conflict with any other".format(satList[i]))
-					conflicts.append(satList[i])	
+					for group in satListConflicts:
+						if satList[i] not in group:
+							print("no conflict")
+							noConflicts.append(satList[i])	
+					#print("This sat {} doesn't conflict with any other".format(satList[i]))	
 
 			if len(conflicts)>0:
 				satListConflicts.append(list(set(conflicts)))
+			if len(noConflicts)>0:
+				satListNoConflicts.extend(list(set(noConflicts)))
 
-		return satListConflicts
+		return satListConflicts, satListNoConflicts
 
 	def __mergeLists(satListConflicts):
 		""" findConflictingGroups work isn't finished, it is continued here. 
@@ -229,6 +232,7 @@ class _Helper():
 					
 					sat.riseTime=curSatRise
 					sat.setTime=curSatSet
+					sat.duration=transactionTime
 					newPasses.append(sat)
 
 				if conflicts is False:
@@ -250,6 +254,7 @@ class _Helper():
 
 						sat.riseTime=curSatRise
 						sat.setTime=curSatSet
+						sat.duration=transactionTime
 						newPasses.append(sat)	
 			
 			#Find unscheduled satellites from scheduled
@@ -260,7 +265,6 @@ class _Helper():
 
 		score=0
 		for satList in unScheduledSats:
-
 			score +=len(satList)
 		#print(score) # want lowest.
 		return score,nextPassList

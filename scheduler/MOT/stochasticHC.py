@@ -13,7 +13,7 @@ class MOTStochasticHC(MOT):
 		if it is better."""
 
 		print(" Starting stochastic hillclimbing")
-		maxIterations = 1000
+		maxIterations = 2000
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
@@ -29,10 +29,9 @@ class MOTStochasticHC(MOT):
 
 			curOrder[i2]=swap1
 			curOrder[i1]=swap2
-			try:
-				newScore,nextPassList = _Helper.fitnessFunction(curOrder,usefulTime)
-			except Exception as e:
-				pass
+			
+			newScore,nextPassList = _Helper.fitnessFunction(self,curOrder,usefulTime)
+
 			
 			#Could make it so it only changes when it's a lot better or a little better
 			if newScore < oldScore:
