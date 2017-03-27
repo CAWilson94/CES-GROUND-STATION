@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','cesGroundStation.settings')
 app = Celery('cesGroundStation')
 
 # Celery config starts with "CELERY_" in django settings.py
-app.config_from_object('django.conf:settings')
+app.config_from_object('django.conf:settings', namespace="CELERY")
 
 # Tells celery to look for the tasks.py file in each app
 # Alternatively the CELERY_IMPORTS setting has to be set

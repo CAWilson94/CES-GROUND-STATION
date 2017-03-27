@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-# from scheduler import views
+from scheduler import views
 from scheduler.views import TLEViewSet, PyephemData, MissionView, MissionsViewSet, CSVParseView
 from rest_framework.routers import DefaultRouter
 

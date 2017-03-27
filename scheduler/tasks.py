@@ -35,14 +35,14 @@ def RotatorsThread(schedulerQ):
 
 
 @periodic_task(
-	run_every=(crontab(minute='*/10')),
+	run_every=(crontab(minute='*/1')),
 	name ="repeating_task",
 	ignore_result=True)
 def repeatingTask():
 	myId = randint(0, 10)
-	print("Started task: " + myId)
+	print("Started task: " + str(myId))
 	sleep(65)
-	print("Ended task: " + myId)
+	print("Ended task: " + str(myId))
 
 @shared_task()
 def setSchedulerQ(schedulerQueue):
