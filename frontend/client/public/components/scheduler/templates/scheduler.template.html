@@ -41,47 +41,17 @@
             </div>
             <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
         </div>
-
         <div class="row">
             <div class="col-sm-4" md-on-open="updateTable()">
                 <label style="margin-left:10px; margin-bottom: 10px"> Next Scheduled Passes: </label>
                 <table st-table="yermaw" ng-model="nextPass" class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Next Scheduled Pass</th>
-                            <th>Duration</th>
+                        <tr ng-repeat="nextPass in nextpasses">
+                            <td>{{row.name}}</td>
+                            <td>{{row.nextPass}}</td>
+                            <td>{{row.Duration}}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>CUTE-1 (CO-55)</td>
-                            <td>10:45am</td>
-                            <td>4min</td>
-                        </tr>
-                        <tr>
-                            <td>EYESAT-1 (AO-27)</td>
-                            <td>10:49am</td>
-                            <td>3min</td>
-                        </tr>
-                        <tr>
-                            <td>CUTE-1 (CO-55)</td>
-                            <td>10:52am</td>
-                            <td>4min</td>
-                        </tr>
-                        <tr>
-                            <td>TECHEDSAT 5</td>
-                            <td>10:57am</td>
-                            <td>4min</td>
-                        </tr>
-                        <!--
-        <tr ng-repeat="row in nextPasses">
-          <td>{{row.name}}</td>
-          <td>{{row.nextPass}}</td>
-          <td>{{row.Duration}}</td>
-          </tr>
-          -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
             <div class="col-sm-4">

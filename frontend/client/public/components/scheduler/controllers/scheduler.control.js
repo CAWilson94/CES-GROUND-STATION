@@ -1,5 +1,5 @@
 scheduler
-  .controller('SchedulerController', function($scope, TLE, AZEL, Mission, $timeout, $http) {
+  .controller('SchedulerController', function($scope, TLE, NextPass, AZEL, Mission, $timeout, $http) {
 
     $scope.tle = null;
     $scope.tles = null;
@@ -28,8 +28,6 @@ scheduler
     /**
      * Download csv from current next pass tables
      */
-
-
     $scope.downloadCSV = function() {
 
       $http({
@@ -54,18 +52,19 @@ scheduler
     /**
      * TODO: next passes model in here: the service for this does not have the right URL as the URL is not made yet
      * @return void
-     *
+     */
     $scope.loadNextPasses = function() {
       // Grab TLE from Django 
-      NEXTPASS.query().$promise.then(function(data) {
+      NextPass.query().$promise.then(function(data) {
         $scope.nextpasses = data;
       });
-    };
-    */
+    }
 
 
-    // priorities: should default at 2 in dropdown 
-
+    /**
+     * priorities: should default at 2 in dropdown 
+     * @type {Array}
+     */
     $scope.priorities = [{
       name: "low",
       priority: 1,
@@ -167,71 +166,75 @@ scheduler
       return arr;
     }
 
-        /**
-         * Take in current clicked dropdown inputs: sat name and priority.
-         * Pass these to back end to add to current missions.
-         * @return void
-         */
-        $scope.updateTable = function () {
+    /**
+     * Take in current clicked dropdown inputs: sat name and priority.
+     * Pass these to back end to add to current missions.
+     * @return void
+     */
+    $scope.updateTable = function() {
 
 
-            $scope.mission = {
-                name: $scope.tle.name,
-                priority: $scope.priority.priority
-            };
+      $scope.mission = {
+        name: $scope.tle.name,
+        priority: $scope.priority.priority
+      };
 
 
-            try {
-                console.log($scope.mission)
-                // Not sure this try should be here, try for post
-                $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
-                    .then(function successCallBack(response) {
-                        // Succeess is anything between 200 and 299
-                        $scope.missions = Mission.get().$promise.then(function (data) {
-                            $scope.missions = data;
-                        });
-                        console.log(response)
-                    },
-                    function errorCallBack(response) {
-                        // called asynchronously if an error occurs
-                        // or server returns response with an error status.
-                        // Error is anything outside of range previously mentioned.
-                        console.log(response.status + " : " + response.statusText);
-                    },
-                    // Uncomment for testing output or use django shell to check missions model contents
-                    alert($scope.mission.name + " : " + $scope.mission.priority)
-                );
-            } catch (err) {
-                alert("you must first select a satellite and a priority")
-            }
+      try {
+        console.log($scope.mission)
+          // Not sure this try should be here, try for post
+        $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
+          .then(function successCallBack(response) {
+              // Succeess is anything between 200 and 299
+              $scope.missions = Mission.get().$promise.then(function(data) {
+                $scope.missions = data;
+              });
+              console.log(response)
+            },
+            function errorCallBack(response) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              // Error is anything outside of range previously mentioned.
+              console.log(response.status + " : " + response.statusText);
+            },
+            // Uncomment for testing output or use django shell to check missions model contents
+            alert($scope.mission.name + " : " + $scope.mission.priority)
+          );
+      } catch (err) {
+        alert("you must first select a satellite and a priority")
+      }
 
-        };
+    };
 
-        //MISSSION TABLE
-        $scope.missions = Mission.get().$promise.then(function (data) {
-            $scope.missions = data;
-        });
+    //MISSSION TABLE
+    $scope.missions = Mission.get().$promise.then(function(data) {
+      $scope.missions = data;
+    });
 
-        $scope.deleteMission = function (mission) {
-            id = mission.id;
-            Mission.delete({id: id}, (function (resp) {
-                console.log(resp);
-                removeA($scope.missions, mission)
-            }))
+    $scope.deleteMission = function(mission) {
+      id = mission.id;
+      Mission.delete({
+        id: id
+      }, (function(resp) {
+        console.log(resp);
+        removeA($scope.missions, mission)
+      }))
 
-        };
+    };
 
-        function removeA(arr) {
-            //What the fuck is this?!
-            var what, a = arguments, L = a.length, ax;
-            while (L > 1 && arr.length) {
-                what = a[--L];
-                while ((ax = arr.indexOf(what)) !== -1) {
-                    arr.splice(ax, 1);
-                }
-            }
-            return arr;
+    function removeA(arr) {
+      //What the fuck is this?!
+      var what, a = arguments,
+        L = a.length,
+        ax;
+      while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax = arr.indexOf(what)) !== -1) {
+          arr.splice(ax, 1);
         }
+      }
+      return arr;
+    }
 
     // End of controller please leave it alone.
   });
