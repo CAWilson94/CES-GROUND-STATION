@@ -50,16 +50,16 @@ class MissionsViewSet(viewsets.ModelViewSet):
 
 class MissionView(APIView):
 
-    # def get(self, request):
-    #     missions = Mission.objects.all()
-    #     missionList=[]
-    #     for mission in missions:
-    #         missionList.append(mission)
-    #     print(missionList)
-    #     lis=Services.scheduleMissions(self, missionList,MOTSimpleHC)
-    #     print("final List: {}".format(lis))
-    #     serializer = NextPassSerializer(lis,many=True)
-    #     return Response(serializer.data)
+    def get(self, request):
+        missions = Mission.objects.all()
+        missionList=[]
+        for mission in missions:
+            missionList.append(mission)
+        print(missionList)
+        lis=Services.scheduleMissions(self, missionList,MOTSimpleHC)
+        print("final List: {}".format(lis))
+        serializer = NextPassSerializer(lis,many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         if Services.makeMissions(request.data):
