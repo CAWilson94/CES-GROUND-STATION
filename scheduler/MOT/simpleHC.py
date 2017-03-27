@@ -20,7 +20,7 @@ class MOTSimpleHC(MOT):
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
-		newOrder=[]
+		newOrder=[] 
 		maxN=0
 
 		#Mission
