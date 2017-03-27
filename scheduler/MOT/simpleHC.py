@@ -10,11 +10,10 @@ class MOTSimpleHC(MOT):
 	def find(self,satList,usefulTime):
 		""" In simple hill climbing, the first closer node is chosen"""
 
-		#return _Helper.returnTwo()
-
 		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
 		maxIterations = 50
+		maxNeighbours=5000
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
@@ -28,7 +27,6 @@ class MOTSimpleHC(MOT):
 			#Generator/Iterator of all the neighbours
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
 			n=0
-			maxNeighbours=5000
 			#Find a smaller subset of all neighbours
 			for neighbour in generatorOfAllNeighboursIncItself:
 				if n==maxNeighbours:

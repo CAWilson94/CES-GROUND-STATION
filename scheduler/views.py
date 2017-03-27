@@ -14,11 +14,13 @@ from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
 
 from scheduler.MOT.simpleHC import MOTSimpleHC
-from scheduler.MOT.schedulerInterface import MOT
+from scheduler.MOT.steepestHC import MOTSteepestHC
+from scheduler.MOT.stochasticHC import MOTStochasticHC
+from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        Services.updateTLE()
+        #Services.updateTLE()
         pass
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
@@ -58,9 +60,8 @@ class MissionView(APIView):
         for mission in missions:
             missionList.append(mission)
         print(missionList)
-        lis=Services.scheduleMissions(self, missionList,MOTSimpleHC)
+        lis=Services.scheduleMissions(self, missionList,MOTRandomRestartHC)
         print("final List: {}".format(lis))
-        #print(Services.returnTwo())
         serializer = NextPassSerializer(lis,many=True)
         return Response(serializer.data)
 

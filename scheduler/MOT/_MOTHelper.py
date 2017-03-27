@@ -28,13 +28,6 @@ class _Helper():
 			else:
 				prevMission = mission
 
-		#is priority maintained function goes here
-		# prevSat=highpriority
-		# for sat in satList:
-		# 	if sat.priority<prevSat:
-		# 		#priority order is violated
-		# 		return sys.maxima
-
 		for mission in missionList:
 			nextPass = Services.getNextPass(self, mission.TLE, datetime.now())
 			nextPassList.append(nextPass)
