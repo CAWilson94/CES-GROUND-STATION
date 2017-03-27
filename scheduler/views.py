@@ -12,12 +12,13 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
-from csv_parse import export_csv 
+from csv_parse import export_csv
 
 from scheduler.MOT.simpleHC import MOTSimpleHC
 from scheduler.MOT.steepestHC import MOTSteepestHC
 from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
+
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
@@ -30,12 +31,12 @@ class TLEViewSet(viewsets.ModelViewSet):
 
 
 class PyephemData(APIView):
+
     def get_object(self, pk):
         try:
             return TLE.objects.get(pk=pk)
         except Snippet.DoesNotExist:
             raise Http404
-
 
     def get(self, request, pk, format=None):
         tle = self.get_object(pk)
@@ -48,17 +49,18 @@ class MissionsViewSet(viewsets.ModelViewSet):
     queryset = Mission.objects.all()
     serializer_class = MissionSerializer
 
+
 class MissionView(APIView):
 
     def get(self, request):
         missions = Mission.objects.all()
-        missionList=[]
+        missionList = []
         for mission in missions:
             missionList.append(mission)
-        #print(missionList)
-        lis=Services.scheduleMissions(self, missionList,MOTSimpleHC)
+        # print(missionList)
+        lis = Services.scheduleMissions(self, missionList, MOTSimpleHC)
         #print("final List: {}".format(lis))
-        serializer = NextPassSerializer(lis,many=True)
+        serializer = NextPassSerializer(lis, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -66,13 +68,15 @@ class MissionView(APIView):
             return HttpResponse(status=201)
         return HttpResponse(status=500)
 
+
 class CSVParseView(APIView):
     """view for exporting as csv"""
-    def get(self,request):
+
+    def get(self, request):
         return export_csv(request)
 
     # def delete(self, request):
     # pass
 
 # where is observer stored AK
-#when requesting satellite info, do we use id or name
+# when requesting satellite info, do we use id or name
