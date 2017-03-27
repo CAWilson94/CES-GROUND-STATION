@@ -151,9 +151,9 @@ class Services():
 			# Uncomment if you want mission object to update when the user
 			# "schedules a mission", with different priority than the mission
 			# which already exists"
-
-			mission.priority = priority
+			mission.priority = newPriority
 			mission.status = "NEW"
+			mission.save()
 			success = True
 		return success
 

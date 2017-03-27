@@ -29,11 +29,12 @@ class _Helper():
 				prevMission = mission
 
 		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE.name ,mission, datetime.now())
+			nextPass = Services.getNextPass(self, mission.TLE.name ,mission, datetime(2017,3,27,16,0,0))
 			print("nextPasses")
 			print(nextPass)
 			nextPassList.append(nextPass)
 	 
+	 	#put in priority groups!
 			
 		# sat1 = NextPass(riseTime=datetime(2017, 3, 25, 22, 39, 3), setTime=datetime(2017, 3, 25, 22, 48, 39), duration=timedelta(0, 576), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat1")
 		# sat2 = NextPass(riseTime=datetime(2017, 3, 26, 5, 1, 12), setTime=datetime(2017, 3, 26, 5, 13, 53), duration=timedelta(0, 761), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat2")
@@ -49,10 +50,10 @@ class _Helper():
 
 		conflictGroups,nonConflictGroups = _Helper.__findConflictingGroups(nextPassList)
 
-		print("conflictGroups")
-		print(conflictGroups)
-		print("nonconflictgroups")
-		print(nonConflictGroups)
+		# print("conflictGroups")
+		# print(conflictGroups)
+		# print("nonconflictgroups")
+		# print(nonConflictGroups)
 		
 		
 		if len(conflictGroups)==0:
@@ -74,15 +75,19 @@ class _Helper():
 		processedNextPassList=[]
 		
 		score,processedNextPassList = _Helper.__findSchedulableSatellites(reorderedConflictGroups,usefulTime)
-		if score==0:
-			pass
 
 		for sat in nonConflictGroups:
 			processedNextPassList.append(sat)
+
+		processedNextPassList=set(processedNextPassList)
+		print("nextpassprolist")
+		print(processedNextPassList)
+		#score=len(processedNextPassList)
+		score = len(nextPassList)-len(processedNextPassList)
 		#print(score)
 		#print(nextPassList)
 		#print("return this {} list with this {} score".format(processedNextPassList,score))
-		return [score,set(processedNextPassList)]
+		return [score,processedNextPassList]
 
 	def __findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones
@@ -175,6 +180,10 @@ class _Helper():
 		and that time period is then 'blacklisted' ie in use. 
 		"""
 
+
+		print("conflict groups")
+		print(satListConflictGroups)
+
 		transactionTime = timedelta(minutes=usefulTime)
 		nextPassList = []
 		unScheduledSats = []
@@ -243,8 +252,8 @@ class _Helper():
 					scheduledSats.append(sat)
 					blackList.append(tempTime)
 					
-					sat.riseTime=curSatRise
-					sat.setTime=curSatSet
+					#sat.riseTime=curSatRise
+					#sat.setTime=curSatSet
 					#sat.duration=transactionTime
 					newPasses.append(sat)
 
@@ -281,6 +290,9 @@ class _Helper():
 			nextPassList.extend(newPasses)
 
 		score=0
+
+		print("scheduled sats")
+		print(unScheduledSats)
 		for satList in unScheduledSats:
 			score +=len(satList)
 		#print(score) # want lowest.
