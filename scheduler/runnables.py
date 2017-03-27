@@ -8,6 +8,7 @@ class SchedulerRunnable(Thread):
 		self.threadID = threadID
 		self.name = name
 		self.schedulerQ = schedulerQ
+		self._stop = threading.Event()
 
 	def run(self):
 		print ("Starting " + self.name) 
@@ -20,6 +21,12 @@ class SchedulerRunnable(Thread):
 			print("In Scheduler thread - " + str(counter))
 			sleep(2)
 		print("Exiting "+ self.name)
+
+	def stop(self):
+		self._stop.set()
+
+	def stopped(self):
+		self._stop.isSet()
 
 
 

@@ -4,10 +4,16 @@ from celery.decorators import periodic_task
 from time import sleep
 from scheduler.schedulerQueue import SchedulerQ
 
-
 from random import randint
 
 schedulerQ = SchedulerQ()
+
+
+from celery.signals import celeryd_init
+
+@celeryd_init.connect
+def configure_worker1(sender=None, conf=None, **kwargs):
+    print("Init celery")
 
 @shared_task()
 def SchedulerThread(schedulerQ):
@@ -43,6 +49,9 @@ def repeatingTask():
 	myId = randint(0, 10)
 	print("Started task: " + str(myId))
 	sleep(10)
+	#tle = TLE.objects.all()
+	#index = randint(0, len(tle))
+	#print("Got TLE: " + tle[index].name)
 	print("Ended task: " + str(myId))
 
 @shared_task()

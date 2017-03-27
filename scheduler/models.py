@@ -57,22 +57,26 @@ class Mission(models.Model):
 
 
 class NextPass(models.Model):
-    # leaves an empty table :(
-    #tle = models.ForeignKey(TLE.name, on_delete=models.CASCADE)
     #AOS
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
+    tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
+
+    mission=models.ForeignKey(Mission, on_delete=models.CASCADE)
+
     riseTime = models.DateField()
-    #LOS
+    
     setTime = models.DateField()
-    duration = models.DurationField()  #still that's python datetime
+
+    duration = models.DurationField() 
+
     maxElevation = models.CharField(max_length=15)
     #AOS Az
     riseAzimuth = models.CharField(max_length=15)
     #LOS Az
     setAzimuth = models.CharField(max_length=15)
 
-    #mission=models.ForeignKey(Mission, on_delete=models.cascade)?
+    
 
     def __str__(self):
         return str(self.__dict__)

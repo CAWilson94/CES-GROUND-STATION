@@ -15,6 +15,7 @@ urlpatterns = [
     # 	url(r'^$', TLEList.as_view()),
     # 	url(r'^scheduler/?$', views.TLEList.as_view()),
     # 	url(r'^scheduler/(?P<pk>[0-9]+)/?$', views.TLEDetail.as_view()),
+    url(r'^schedule/?$', views.schedule, name="schedule"),
 	url(r'^thread/?$', views.threadTask, name="thread"),
     url(r'^tles/(?P<pk>[0-9]+)/azel/?$', PyephemData.as_view()),
     url(r'^mission/?$', MissionView.as_view()),

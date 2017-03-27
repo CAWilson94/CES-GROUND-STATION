@@ -1,18 +1,23 @@
 from django.apps import AppConfig
 from scheduler.schedulerQueue import SchedulerQ
 from scheduler.tasks import repeatingTask
+from cesGroundStation.celery import app
 
+
+print("HELLO FROM APPS!")
 
 class SchedulerConfig(AppConfig):
 	name = 'scheduler'
 	threadsStarted = False
+	
 	#main tread executes as standard and other  threads are started here
 	#might need to move this depending on how many times this module is used
 	def ready(self):
 		if(not self.threadsStarted):
 			self.threadsStarted = True
-			# print("Starting repeating task")
-			# repeatingTask.delay()
+			app.control.purge()
+			#print("Starting repeating task")
+			#repeatingTask.delay()
 			# schedulerQ = SchedulerQ()
 			# setSchedulerQ.delay(schedulerQ)
 			# SchedulerThread.delay(schedulerQ)

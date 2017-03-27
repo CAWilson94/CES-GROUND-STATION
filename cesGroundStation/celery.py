@@ -13,6 +13,8 @@ app = Celery('cesGroundStation')
 # Celery config starts with "CELERY_" in django settings.py
 app.config_from_object('django.conf:settings')
 
+app.conf.update(CELERY_RESULT_BACKEND = "djcelery.backends.database:DatabaseBackend",)
+
 # Tells celery to look for the tasks.py file in each app
 # Alternatively the CELERY_IMPORTS setting has to be set
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

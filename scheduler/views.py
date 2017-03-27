@@ -15,12 +15,24 @@ from rest_framework.renderers import StaticHTMLRenderer
 from csv_parse import export_csv 
 
 from scheduler.tasks import repeatingTask
+from scheduler.schedulerRuleBased import RuleBasedScheduler
 
+
+print("HELLO FROM VIEWS!")
+# print("Starting repeating task")
+# repeatingTask.delay()
 
 def threadTask(request):
     print("Starting repeating task")
     repeatingTask.delay()
     return HttpResponse("Started task")
+
+def schedule(request):
+    missions = Mission.objects.all()
+    scheduler = RuleBasedScheduler()
+    passes = scheduler.getOrderedList(missions)
+    return HttpResponse(passes)
+
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
