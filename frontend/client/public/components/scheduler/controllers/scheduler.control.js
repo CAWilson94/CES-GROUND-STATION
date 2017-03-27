@@ -65,17 +65,19 @@ scheduler
         }
       }
 
-      alert('booptiy')
 
-      console.log("someshit")
+
+      
         // Grab TLE from Django 
 
-      $http.get('/http://localhost:8000/api/schedulemissiontest', config)
+      $http.get('http://127.0.0.1:8000/api/schedulemissiontest', config)
         .then(function successCallback(response) {
           // this callback will be called asynchronously
           // when the response is available
-          //$scope.nextpass = data;
-          console.log(response + "SOMETHING MIGHT BE HERE")
+          $scope.nextpass = data;
+          alert('booptiy')
+          console.log("someshit")
+          console.log("SOMETHING MIGHT BE HERE" + data)
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
@@ -121,7 +123,7 @@ scheduler
      */
     $scope.updateTable = function() {
 
-      $scope.boop();
+      $scope.loadNextPasses();
       // Each mission requires a sat name and a priority
 
       $scope.mission = {
@@ -131,7 +133,7 @@ scheduler
 
 
       try {
-        console.log($scope.mission + ": mission")
+        console.log($scope.mission)
           // Not sure this try should be here, try for post 
         $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
           .then(function successCallBack(response) {
