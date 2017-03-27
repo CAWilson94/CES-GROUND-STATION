@@ -13,7 +13,7 @@ class MOTSimpleHC(MOT):
 		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
 		maxIterations = 50
-		maxNeighbours=5000
+		maxNeighbours=10000
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
