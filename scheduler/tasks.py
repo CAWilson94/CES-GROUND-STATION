@@ -1,13 +1,53 @@
+from celery.task.schedules import crontab
 from celery import shared_task
+from celery.decorators import periodic_task
+from time import sleep
+from scheduler.schedulerQueue import SchedulerQ
 
 
-#app = Celery('tasks.py', broker='amqp://localhost')
+from random import randint
+
+schedulerQ = SchedulerQ()
 
 @shared_task()
-def pollForNew():
-		print ( "Polling for new") 
+def SchedulerThread(schedulerQ):
+	print ("Starting Scheduler") 
+	counter = 0
+	while(1):
+		counter += 1
+		if(counter > 100):
+			counter = 0
+		schedulerQ.setItem(counter)
+		print("In Scheduler thread - " + str(counter))
+		sleep(2)
+	print("Exiting Scheduler")
+	
 
 
 @shared_task()
-def pollQueue():
-	print ( "Polling the queue")
+def RotatorsThread(schedulerQ):
+	print ("Starting Rotators") 
+	while(1):
+		item = schedulerQ.getItem()
+		print("In Rotators thread - " + str(item))
+		sleep(2)
+	print("Exiting Rotators")
+
+
+@periodic_task(
+	run_every=(crontab(minute='*/10')),
+	name ="repeating_task",
+	ignore_result=True)
+def repeatingTask():
+	myId = randint(0, 10)
+	print("Started task: " + myId)
+	sleep(65)
+	print("Ended task: " + myId)
+
+@shared_task()
+def setSchedulerQ(schedulerQueue):
+	schedulerQ = schedulerQueue
+
+@shared_task()
+def getSchedulerQ():
+	return schedulerQ

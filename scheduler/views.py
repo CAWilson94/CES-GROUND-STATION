@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
 
+from scheduler.tasks import getSchedulerQ
 
 class TLEViewSet(viewsets.ModelViewSet):
 	try:
@@ -22,6 +23,14 @@ class TLEViewSet(viewsets.ModelViewSet):
 		print("Views.TLEViewSet - could not update TLE")
 	queryset = TLE.objects.all()
 	serializer_class = TLESerializer
+
+class MissionViewSet(viewsets.ModelViewSet):
+	queryset = Mission.objects.all()
+	serializer_class = MissionSerializer
+
+def schedulerQ():
+	queue = getSchedulerQ.delay()
+	return HttpResponse("Your list: " + queue)
 
 class PyephemData(APIView):
 	def get_object(self, pk):
