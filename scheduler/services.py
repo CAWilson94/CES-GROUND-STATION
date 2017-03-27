@@ -101,10 +101,12 @@ class Services():
 		return azelProgress
 
 
-	def getNextPass(self, tleEntry, dateTime):
+	def getNextPass(self,tleName, mission, dateTime):
 		"""
 		Returns a next pass object of the satellite after the date given
 		"""
+		tleEntry = mission.TLE
+		
 		observer = _Helper.getObserver(self, dateTime);
 		try:
 			sat = ephem.readtle(tleEntry.name, tleEntry.line1, tleEntry.line2)
@@ -117,7 +119,8 @@ class Services():
 		setTime = _Helper.roundMicrosecond(details[4])
 		duration  = setTime - riseTime
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],riseAzimuth=details[1],setAzimuth=details[5])
+		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
+			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleName)
 
 	def makeMissions(chosenSat): #, priorityList
 		"""
@@ -149,8 +152,8 @@ class Services():
 			# "schedules a mission", with different priority than the mission
 			# which already exists"
 
-			# mission.priority = priority
-			# mission.status = "NEW"
+			mission.priority = priority
+			mission.status = "NEW"
 			success = True
 		return success
 

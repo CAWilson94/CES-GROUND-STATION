@@ -59,11 +59,11 @@ class MOTSimpleHC(MOT):
 			if newScore < oldScore:
 				oldScore=newScore
 				bestOrder = list(curOrder)
-				print("happends")
-				print(nextPassList)
+				#print("happends")
+				#print(nextPassList)
 				bestNextPassList = list(nextPassList)
-				print("bestNextPassList")
-				print(bestNextPassList)
+				#print("bestNextPassList")
+				#print(bestNextPassList)
 				i=0
 			else:
 				i+=1
