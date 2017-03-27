@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
+
 from django.conf import settings
 
 # Setting celery config file to the Django settings file
@@ -10,7 +11,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','cesGroundStation.settings')
 app = Celery('cesGroundStation')
 
 # Celery config starts with "CELERY_" in django settings.py
-app.config_from_object('django.conf:settings', namespace="CELERY")
+app.config_from_object('django.conf:settings')
 
 # Tells celery to look for the tasks.py file in each app
 # Alternatively the CELERY_IMPORTS setting has to be set

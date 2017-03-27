@@ -14,7 +14,13 @@ from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
 from csv_parse import export_csv 
 
-from scheduler.tasks import getSchedulerQ
+from scheduler.tasks import repeatingTask
+
+
+def threadTask(request):
+    print("Starting repeating task")
+    repeatingTask.delay()
+    return HttpResponse("Started task")
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
