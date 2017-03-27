@@ -21,7 +21,7 @@ from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        #Services.updateTLE()
+        Services.updateTLE()
         pass
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
