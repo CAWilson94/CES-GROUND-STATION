@@ -1,5 +1,5 @@
 scheduler
-    .factory('NEXTPASS', function($resource) {
+    .factory('NextPass', function($resource) {
         return $resource(
             'http://localhost:8000/api/tles/:id/', // WHATEVER URL SHOULD BE HERE 
             {},

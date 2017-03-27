@@ -20,10 +20,19 @@ scheduler
      */
     $scope.loadAxel = function() {
       // Grabbing AZEL data from Django; under construction
-      AZEL.query().$promise.then(function(date) {
+      AZEL.query().$promise.then(function(data) {
         $scope.azel = data;
       });
     };
+
+    /**
+     * Download csv from current next pass tables
+     */
+    $scope.downloadCSV = function() {
+      // Grabbing AZEL data from Django; under construction
+      $http.get('http://127.0.0.1:8000/api/csv/mission/')
+    };
+
 
     /**
      * TODO: next passes model in here: the service for this does not have the right URL as the URL is not made yet
