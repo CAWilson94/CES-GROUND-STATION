@@ -28,10 +28,27 @@ scheduler
     /**
      * Download csv from current next pass tables
      */
+
+
     $scope.downloadCSV = function() {
-      // Grabbing AZEL data from Django; under construction
-      $http.get('http://127.0.0.1:8000/api/csv/mission/')
+
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8000/api/csv/missions',
+        headers: {
+          'Content-Type': 'text/csv'
+        },
+      }).then(function successCallback(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        window.location.href = ('http://localhost:8000/api/csv/missions')
+        console.log(response)
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
     };
+
 
 
     /**
@@ -67,13 +84,6 @@ scheduler
 
     // update table from drop down; will need to take in data from scheduler i.e. table dropdown --> fetch schedule data based on this then 
     // update table from scheduled data
-
-    // Not in use currently: should default to JSON but in case we need them? 
-    var config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-      }
-    }
 
 
     /**
