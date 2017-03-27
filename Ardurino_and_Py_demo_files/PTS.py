@@ -14,6 +14,7 @@ def write_az_and_el(az, el):
     Therefore, if the value is more than 180 write it's modulo
     """
 
+    print(str(az) + " : " + str(el))
     if(az>180):
         az = az % 180
     if(el>180):

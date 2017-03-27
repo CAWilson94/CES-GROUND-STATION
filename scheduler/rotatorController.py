@@ -1,7 +1,8 @@
 from scheduler.RotatorServices import rotator_services
 from scheduler.services import Services
 from datetime import date, datetime, timedelta
-from scheduler.models import NextPass, TLE
+from scheduler.models import NextPass, TLE, AzEl
+from Ardurino_and_Py_demo_files.PTS import write_az_and_el
 from time import sleep
 
 
@@ -27,4 +28,19 @@ class rotator_controller():
             sleep(1)
             rs.set_position(item.elevation, item.azimuth)
 
-    
+    def sketchy_arduino_move():
+
+        initAzim = 30
+        initElev = 15
+        lenOfPass = 45  # someRandomNumber
+        azelList = []
+        for item in range(lenOfPass):
+            initElev += 1
+            initAzim += 1
+
+            azel = AzEl(azimuth=initAzim, elevation=initElev)
+            azelList.append(azel)
+
+        for item in azelList:
+            sleep(1)
+            write_az_and_el(item.azimuth, item.elevation)
