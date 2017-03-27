@@ -17,7 +17,6 @@ def export_csv(request):
         smart_str(u"Priority"),
     ])
 
-    print("done this...")
 
     for object in queryset:
         writer.writerow([
