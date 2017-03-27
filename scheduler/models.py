@@ -65,14 +65,15 @@ class NextPass(models.Model):
     riseTime = models.DateTimeField()
     #LOS
     setTime = models.DateTimeField()
-    duration = models.DurationField()  #still that's python datetime
+    duration = models.DurationField()  
     maxElevation = models.CharField(max_length=15)
     #AOS Az
     riseAzimuth = models.CharField(max_length=15)
     #LOS Az
     setAzimuth = models.CharField(max_length=15)
 
-    #mission=models.ForeignKey(Mission, on_delete=models.cascade)?
+    tle = models.CharField(max_length=20)#models.ForeignKey(TLE, on_delete=models.CASCADE)
+    mission=models.ForeignKey(Mission, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.__dict__)
