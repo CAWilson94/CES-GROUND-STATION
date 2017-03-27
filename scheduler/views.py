@@ -21,7 +21,7 @@ from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        #Services.updateTLE()
+        Services.updateTLE()
         pass
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
@@ -49,28 +49,19 @@ class MissionsViewSet(viewsets.ModelViewSet):
     serializer_class = MissionSerializer
 
 class MissionView(APIView):
+
     # def get(self, request):
     #     missions = Mission.objects.all()
-    #     serializer = MissionSerializer(missions, many=True)
+    #     missionList=[]
+    #     for mission in missions:
+    #         missionList.append(mission)
+    #     print(missionList)
+    #     lis=Services.scheduleMissions(self, missionList,MOTSimpleHC)
+    #     print("final List: {}".format(lis))
+    #     serializer = NextPassSerializer(lis,many=True)
     #     return Response(serializer.data)
 
-    def get(self, request):
-        missions = Mission.objects.all()
-        
-        missionList=[]
-        for mission in missions:
-            missionList.append(mission)
-        print(missionList)
-        lis=Services.scheduleMissions(self, missionList,MOTRandomRestartHC)
-        print("final List: {}".format(lis))
-        serializer = NextPassSerializer(lis,many=True)
-        return Response(serializer.data)
-
     def post(self, request):
-        print(request.data)
-        for elem in request.data:
-            print(elem)
-        print("something happened")
         if Services.makeMissions(request.data):
             return HttpResponse(status=201)
         return HttpResponse(status=500)

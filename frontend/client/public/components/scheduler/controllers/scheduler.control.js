@@ -144,6 +144,7 @@ scheduler
     };
 
     function removeA(arr) {
+      //What is this?!
       var what, a = arguments,
         L = a.length,
         ax;
