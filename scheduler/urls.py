@@ -17,5 +17,5 @@ urlpatterns = [
     # 	url(r'^scheduler/(?P<pk>[0-9]+)/?$', views.TLEDetail.as_view()),
     url(r'^tles/(?P<pk>[0-9]+)/azel/?$', PyephemData.as_view()),
     url(r'^save/mission/?$', MissionView.as_view()),
-    url(r'^nextpass/?$', MissionView.as_view()),
+    url(r'^schedulemissiontest/?$', MissionView.as_view()),
 ]
