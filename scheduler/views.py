@@ -12,6 +12,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
+from csv_parse import export_csv 
 
 
 class TLEViewSet(viewsets.ModelViewSet):
@@ -57,6 +58,11 @@ class MissionView(APIView):
         if Services.makeMissions(request.data):
             return HttpResponse(status=201)
         return HttpResponse(status=500)
+
+class CSVParseView(APIView):
+    """view for exporting as csv"""
+    def get(self,request):
+        return export_csv(request)
 
     # def delete(self, request):
     # pass

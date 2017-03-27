@@ -4,11 +4,12 @@ from django.utils.encoding import smart_str
 import csv
 
 
-def export_csv(request, queryset):
+def export_csv():
+    queryset = Mission.objects.all()
     response = HttpResponse(mimetype='text/csv')
     response['Content-Disposition'] = 'attachment; filename="schedule.csv"'
 
-    writer = csv.writer(response, csv.excel)
+    writer = csv.writer(csv.excel)
     response.write(u'\ufeff'.encode('utf8'))  # To open UTF-8 properly
     writer.writerow([
         smart_str(u"Name"),
@@ -26,4 +27,3 @@ def export_csv(request, queryset):
         ])
 
     return response
-

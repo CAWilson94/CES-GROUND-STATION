@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^tles/(?P<pk>[0-9]+)/azel/?$', PyephemData.as_view()),
     url(r'^save/mission/?$', MissionView.as_view()),
     url(r'missions/(?P<pk>[0-9]+)/?$', MissionView.as_view()),
+    url(r'csv/missions/?$', CSVParseView.as_view()),
+
 ]
 
 # urlpatterns = format_suffix_patterns(urlpatterns)
