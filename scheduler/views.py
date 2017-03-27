@@ -17,7 +17,7 @@ from csv_parse import export_csv
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        # Services.updateTLE()
+        #Services.updateTLE()
         pass
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
