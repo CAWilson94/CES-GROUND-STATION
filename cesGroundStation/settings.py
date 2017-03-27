@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -61,12 +61,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'cesGroundStation.urls'
-
-
 
 TEMPLATES = [
     {
@@ -136,10 +134,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 CORS_ORIGIN_WHITELIST = (
-   'localhost:8081',
-   '127.0.0.1:8081'
+    'localhost:8081',
+    '127.0.0.1:8081'
 
 )
 
@@ -152,7 +149,7 @@ CORS_ALLOW_METHODS = (
     'PUT',
 )
 
-
 CSRF_TRUSTED_ORIGINS = (
     'localhost:8081',
+    '127.0.0.1:8081'
 )

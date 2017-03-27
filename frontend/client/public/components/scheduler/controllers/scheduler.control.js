@@ -1,5 +1,5 @@
 scheduler
-  .controller('SchedulerController', function($scope, TLE, AZEL, $timeout, $http) {
+  .controller('SchedulerController', function($scope, TLE, AZEL, Mission, $timeout, $http) {
 
     $scope.tle = null;
     $scope.tles = null;
@@ -20,13 +20,35 @@ scheduler
      */
     $scope.loadAxel = function() {
       // Grabbing AZEL data from Django; under construction
-      AZEL.query().$promise.then(function(date) {
+      AZEL.query().$promise.then(function(data) {
         $scope.azel = data;
       });
     };
 
+    /**
+     * Download csv from current next pass tables
+     */
+    $scope.downloadCSV = function() {
+      // Grabbing AZEL data from Django; under construction
+      $http.get('http://127.0.0.1:8000/api/csv/mission/')
+    };
+
+
+    /**
+     * TODO: next passes model in here: the service for this does not have the right URL as the URL is not made yet
+     * @return void
+     *
+    $scope.loadNextPasses = function() {
+      // Grab TLE from Django 
+      NEXTPASS.query().$promise.then(function(data) {
+        $scope.nextpasses = data;
+      });
+    };
+    */
+
+
     // priorities: should default at 2 in dropdown 
-    
+
     $scope.priorities = [{
       name: "low",
       priority: 1,
@@ -60,8 +82,8 @@ scheduler
      * @return void 
      */
     $scope.updateTable = function() {
+      // Each mission requires a sat name and a priority
 
-  
       $scope.mission = {
         name: $scope.tle.name,
         priority: $scope.priority.priority
@@ -70,10 +92,14 @@ scheduler
 
       try {
         console.log($scope.mission)
-        // Not sure this try should be here, try for post 
-        $http.post('http://127.0.0.1:8000/api/missions/', $scope.mission)
+          // Not sure this try should be here, try for post 
+        $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
+              $scope.missions = Mission.get().$promise.then(function(data) {
+                $scope.missions = data;
+              });
+
               console.log(response)
             },
             function errorCallBack(response) {
@@ -91,6 +117,44 @@ scheduler
 
     };
 
+
+    /**
+     *
+     * while there is nothing populating the table: show output as animation loader
+     * 
+     */
+
+
+
+    //MISSSION TABLE
+
+    $scope.missions = Mission.get().$promise.then(function(data) {
+      $scope.missions = data;
+    });
+
+    $scope.deleteMission = function(mission) {
+      id = mission.id;
+      Mission.delete({
+        id: id
+      }, (function(resp) {
+        console.log(resp);
+        removeA($scope.missions, mission)
+      }))
+
+    };
+
+    function removeA(arr) {
+      var what, a = arguments,
+        L = a.length,
+        ax;
+      while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax = arr.indexOf(what)) !== -1) {
+          arr.splice(ax, 1);
+        }
+      }
+      return arr;
+    }
 
 
     // End of controller please leave it alone.

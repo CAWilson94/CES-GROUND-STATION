@@ -1,70 +1,115 @@
- 
 <!DOCTYPE html>
 <html>
+
 <head>
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body ng-app="scheduler">
-
-
-<div class = "table_drop_down" style="margin-left: 30px">
-
-<div class = "drop-down" layout = "row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="" >
-
-    <div layout="column" layout-align="start start" style="margin-top: 50px">
-        <md-input-container>
-        <label>Satellite</label>
-        <md-select  placeholder="Satellite" type="text" ng-model="tle" md-on-open = "loadSat()" style="min-width: 200px;">
-          <md-option ng-value = "tle" ng-repeat="tle in tles">{{tle.name}} </md-option>
-      </md-select>
-      </md-input-container>
-    </div>
-
-    <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
-    <md-input-container>
-        <label>Priority</label>
-      <md-select ng-init="priority=priorities[1]" placeholder="Priority Number"  ng-model="priority">
-          <md-option ng-value = "priority" ng-repeat="priority in priorities" >{{priority.name}} : {{priority.priority}}</md-option>
-      </md-select>
-      </md-input-container>
-    </div>
-
-    <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
-      <md-button class="md-raised" ng-click=updateTable() style=  "margin-top: 48px;">Schedule Mission</md-button>
-    </div>
-   
-
-    <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
-
-
-
- </div>
-
-
- <div class="row">
-  <div  class = "col-sm-5" md-on-open="updateTable()">
-
-
-    <table st-table="yermaw" ng-model="hello" class="table table-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Next Scheduled Pass</th>
-          <th>Duration</th>
-          <th>Mission Edit</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{hello}}</td>
+    <div class="table_drop_down" style="margin-left: 30px">
+        <div class="drop-down" layout="row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="">
+            <div layout="column" layout-align="start start" style="margin-top: 50px">
+                <md-input-container>
+                    <label>Satellite</label>
+                    <md-select placeholder="Satellite" type="text" ng-model="tle" md-on-open="loadSat()" style="min-width: 200px;">
+                        <md-option ng-value="tle" ng-repeat="tle in tles">{{ tle.name }} </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
+                <md-input-container>
+                    <label>Priority</label>
+                    <md-select ng-init="priority=priorities[1]" placeholder="Priority Number" ng-model="priority">
+                        <md-option ng-value="priority" ng-repeat="priority in priorities">{{ priority.name }} : {{ priority.priority }}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
+                <md-button class="md-raised" ng-click=updateTable() style="margin-top: 48px;">
+                    <!--<i class="material-icons" layout-align="bottom">add</i>-->
+                    Schedule
+                </md-button>
+                <md-tooltip md-direction="" bottom>
+                    Add new Mission to Scheduler
+                </md-tooltip>
+            </div>
+            <div layout="column" layout-align="center bottom" style="padding-left: 50px">
+                <md-button class="md-raised" ng-click=downloadCSV() style="margin-top: 48px;">CSV</md-button>
+                <md-tooltip md-direction="" bottom>
+                    Export Scheduled Passes to CSV
+                </md-tooltip>
+            </div>
+            <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
+        </div>
+        <div class="row">
+            <div class="col-sm-4" md-on-open="updateTable()">
+                <label style="margin-left:10px; margin-bottom: 10px"> Next Scheduled Passes: </label>
+                <table st-table="yermaw" ng-model="nextPass" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Next Scheduled Pass</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CUTE-1 (CO-55)</td>
+                            <td>10:45am</td>
+                            <td>4min</td>
+                        </tr>
+                        <tr>
+                            <td>EYESAT-1 (AO-27)</td>
+                            <td>10:49am</td>
+                            <td>3min</td>
+                        </tr>
+                        <tr>
+                            <td>CUTE-1 (CO-55)</td>
+                            <td>10:52am</td>
+                            <td>4min</td>
+                        </tr>
+                        <tr>
+                            <td>TECHEDSAT 5</td>
+                            <td>10:57am</td>
+                            <td>4min</td>
+                        </tr>
+                        <!--
+        <tr ng-repeat="row in nextPasses">
+          <td>{{row.name}}</td>
+          <td>{{row.nextPass}}</td>
+          <td>{{row.Duration}}</td>
           </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-
+          -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <label style="margin-left:10px; margin-bottom: 10px"> Current Missions: </label>
+                <table st-table="missions" ng-model="mission" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="mission in missions">
+                            <td align="center">{{ mission.name }}</td>
+                            <td align="center">{{ mission.status }}</td>
+                            <td align="center">{{ mission.priority }}</td>
+                            <td>
+                                <button style="display: block; text-align: center; margin-right: 15px;" type="button" class="close" ng-click="deleteMission(mission)">&times;</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end of tables row -->
+        </div>
 </body>
+
 </html>
+
 </html>
