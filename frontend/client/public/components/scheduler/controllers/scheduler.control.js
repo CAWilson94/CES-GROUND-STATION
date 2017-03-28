@@ -75,7 +75,7 @@ scheduler
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
-          console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+          console.log("Failed to get scheduled passes")
         });
     }
 

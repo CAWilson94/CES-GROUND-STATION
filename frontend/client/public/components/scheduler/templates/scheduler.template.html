@@ -54,13 +54,14 @@
                     </thead>
                     <tr ng-repeat="nextpass in nextpasses ">
                         <td>{{nextpass.tle.name}}</td>
-                        <td >Set Time: {{nextpass.setTime}}</td>
                         <td>Rise Time: {{nextpass.riseTime}}</td>
+                        <td>Set Time: {{nextpass.setTime}}</td>
                         <td>{{nextpass.duration}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+            
             <div class="col-sm-4 ">
                 <label style="margin-left:10px; margin-bottom: 10px "> Current Missions: </label>
                 <table st-table="missions " ng-model="mission " class="table table-striped ">
