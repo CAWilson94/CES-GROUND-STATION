@@ -107,23 +107,20 @@ def crossover(chromoOne, chromoTwo):
 
 def randomParents(population):
     """ Select Parents for tournament function"""
-    print("checking whats in population")
-    printPopulation(population)
-    """
     tempList = []
     parents = []
     for index in range(1):
-        one = random.randint(0,len(population))
-        two = random.randint(0,len(population))
+        print(len(population))
+        randomInt = random.sample(range(len(population)),2)
+        print(str(randomInt[0]) + ": ONE PARENT")
+        print(str(randomInt[1]) + ": TWO PARENT")
+        """
         tempList.append(population[one])
         tempList.append(population[two])
         temp = sortByFitness(tempList)
         parents.append(temp)
         tempList = []
         temp = []
-    print("Population from random parents: ")
-
-    printPopulation(parents)
     return parents
     """
 
@@ -313,15 +310,15 @@ def generatePopulation():
     populationList = []
 
     # print("list without conflicts: \n")
-    for item in chromosome.satPassList:
-        print(item.name + " : %s" % str(item.startTime) + " : %s" % str(item.endTime))
+    # for item in chromosome.satPassList:
+    # print(item.name + " : %s" % str(item.startTime) + " : %s" % str(item.endTime))
 
     for i in range(POPULATION_SIZE):
         chromo = randomChromosome(chromosome)
         populationList.append(chromo)
         # print("list of conflicts: \n")
-        for item in chromo.satPassList:
-            print(item.name + " : %s" % str(item.startTime) + " : %s" % str(item.endTime))
+        # for item in chromo.satPassList:
+        # print(item.name + " : %s" % str(item.startTime) + " : %s" % str(item.endTime))
 
     return populationList
 
@@ -360,7 +357,7 @@ def test():
 
 
 boop = generatePopulation()
-GA(boop)
+# GA(boop)
 
 randomParents(boop)
 
