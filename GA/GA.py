@@ -110,14 +110,17 @@ def randomParents(population):
     tempList = []
     parents = []
     for index in range(1):
-        print(len(population))
-        randomInt = random.sample(range(len(population)),2)
-        print(str(randomInt[0]) + ": ONE PARENT")
-        print(str(randomInt[1]) + ": TWO PARENT")
-        """
-        tempList.append(population[one])
-        tempList.append(population[two])
-        temp = sortByFitness(tempList)
+        randomInt = random.sample(range(len(population)), 2)
+
+        tempList.append(population[randomInt[0]])
+        tempList.append(population[randomInt[1]])
+
+        temp = setFitness(tempList)
+        # temp = sortByFitness(tempList)
+
+        for item in temp:
+            print(item.fitness)
+        """"
         parents.append(temp)
         tempList = []
         temp = []
@@ -168,15 +171,14 @@ def fitnessVariety_sum(chromosome):
     duration = 0
     for satPass in chromosome.satPassList:
         duration += (satPass.endTime - satPass.startTime).total_seconds()
-        print(satPass.name, " duration: ", duration)
+        # print(satPass.name, " duration: ", duration)
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
             diffNames += 1
 
-    print(diffNames, "diffNames: ", diffNames)
+    # print(diffNames, "diffNames: ", diffNames)
     fitness = duration * diffNames
-    print("fitness: ", fitness)
-
+    #print("fitness: ", fitness)
     return fitness
 
 
