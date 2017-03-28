@@ -4,6 +4,9 @@ scheduler
     $scope.tle = null;
     $scope.tles = null;
 
+    $scope.nextpass = null;
+    $scope.nextpasses = null;
+
     /**
      * Load in TLE data from Django side
      * @return {[type]} [description]
@@ -29,26 +32,60 @@ scheduler
      * Download csv from current next pass tables
      */
     $scope.downloadCSV = function() {
-      // Grabbing AZEL data from Django; under construction
-      $http.get('http://127.0.0.1:8000/api/csv/mission/')
+
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8000/api/csv/missions',
+        headers: {
+          'Content-Type': 'text/csv'
+        },
+      }).then(function successCallback(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        window.location.href = ('http://localhost:8000/api/csv/missions')
+        console.log(response)
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
     };
+
 
 
     /**
      * TODO: next passes model in here: the service for this does not have the right URL as the URL is not made yet
      * @return void
-     *
+     */
     $scope.loadNextPasses = function() {
-      // Grab TLE from Django 
-      NEXTPASS.query().$promise.then(function(data) {
-        $scope.nextpasses = data;
-      });
-    };
-    */
+
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }
+
+      $http.get('http://127.0.0.1:8000/api/schedulemissiontest', config)
+        .then(function successCallback(response, data) {
+          // this callback will be called asynchronously
+          // when the response is available
+          $scope.nextpasses = response.data;
+          console.log($scope.nextpass)
+
+        }, function errorCallback(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+        });
+    }
 
 
-    // priorities: should default at 2 in dropdown 
+    $scope.loadNextPasses()
 
+    /**
+     * priorities: should default at 2 in dropdown 
+     * @type {Array}
+     */
     $scope.priorities = [{
       name: "low",
       priority: 1,
@@ -68,13 +105,6 @@ scheduler
     // update table from drop down; will need to take in data from scheduler i.e. table dropdown --> fetch schedule data based on this then 
     // update table from scheduled data
 
-    // Not in use currently: should default to JSON but in case we need them? 
-    var config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-      }
-    }
-
 
     /**
      * Take in current clicked dropdown inputs: sat name and priority.
@@ -82,6 +112,8 @@ scheduler
      * @return void 
      */
     $scope.updateTable = function() {
+
+      $scope.loadNextPasses();
       // Each mission requires a sat name and a priority
 
       $scope.mission = {
@@ -107,15 +139,19 @@ scheduler
               // or server returns response with an error status.
               // Error is anything outside of range previously mentioned. 
               console.log(response.status + " : " + response.statusText);
-            },
+            }
             // Uncomment for testing output or use django shell to check missions model contents
-            alert($scope.mission.name + " : " + $scope.mission.priority)
+            //alert($scope.mission.name + " : " + $scope.mission.priority)
           );
       } catch (err) {
         alert("you must first select a satellite and a priority")
       }
 
+
     };
+
+
+
 
 
     /**
@@ -144,6 +180,7 @@ scheduler
     };
 
     function removeA(arr) {
+      //What is this?!
       var what, a = arguments,
         L = a.length,
         ax;

@@ -5,6 +5,7 @@ from scheduler.models import TLE, AzEl, NextPass, Mission
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
+
 class rotatorThread (threading.Thread):
 	def __init__(self, threadID, name, counter):
 		threading.Thread.__init__(self)
@@ -113,10 +114,12 @@ class Services():
 		return azelProgress
 
 
-	def getNextPass(self, tleEntry, dateTime):
+	def getNextPass(self,tleName, mission, dateTime):
 		"""
 		Returns a next pass object of the satellite after the date given
 		"""
+		tleEntry = mission.TLE
+		
 		observer = _Helper.getObserver(self, dateTime);
 		try:
 			sat = ephem.readtle(tleEntry.name, tleEntry.line1, tleEntry.line2)
@@ -129,41 +132,50 @@ class Services():
 		setTime = _Helper.roundMicrosecond(details[4])
 		duration  = setTime - riseTime
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],riseAzimuth=details[1],setAzimuth=details[5])
+		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
+			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleName)
 
 	def makeMissions(chosenSat): #, priorityList
 		"""
 		Saves user chosen satellites in the mission object and then saves that in db
 		"""
+		#Change every mission's status to NEW if new mission comes in?
 		print(chosenSat)
 		success=False
 		#for name in chosenSatsList:
-		name = chosenSat.get("name")
-		priority = chosenSat.get("priority")
+		newName = chosenSat.get("name")
+		newPriority = chosenSat.get("priority")
 		# print("about to add {}".format(name))
 		try:
-			mission = Mission.objects.get(name=name)
+			mission = Mission.objects.get(name=newName)
 		except Mission.DoesNotExist as e:
 			try:
-				tle = TLE.objects.get(name=name)
+				tle = TLE.objects.get(name=newName)
 			except TLE.DoesNotExist as e:
 				#print(e)
-				print("Attempted to CubeSat '{}' but it does not exist in the DB".format(name))
+				print("Attempted to CubeSat '{}' but it does not exist in the DB".format(newName))
 				#somehow asked to schedule a satellite that isn't in the database
 				success = False
-			newMission = Mission(name=name,TLE=tle,status="NEW",priority=priority)
+			newMission = Mission(name=newName,TLE=tle,status="NEW",priority=newPriority)
 			newMission.save()
 			success = True
 		else:
 			pass
-			#success = True
-			#update status to "needs to be scheduler again"?
-			#mission.priority=new priority
-
+			# Uncomment if you want mission object to update when the user
+			# "schedules a mission", with different priority than the mission
+			# which already exists"
+			mission.priority = newPriority
+			mission.status = "NEW"
+			mission.save()
+			success = True
 		return success
-			#else:
-			#	mission.priorty = newPriority
 
+	def scheduleMissions(self, missions, MOT): 
+		#schedulerPasses
+		score,bestNextPassList = MOT.find(self, missions, 3)
+		#print(bestNextPassList)
+		#print(score)
+		return bestNextPassList
 
 	def updateTLE():
 
@@ -210,6 +222,8 @@ class Services():
 				tleEntry.line2 = checkedTLEArray[i + 2]
 				tleEntry.save()
 			i += 3
+
+
 
 class _Helper():
 	# Helper Functions
@@ -268,6 +282,7 @@ class _Helper():
 		Takes in an ephemDate object, rounds down or up the microseconds to 
 		an integer and returns a python datetime object
 		"""
+		#once emphemDate was a none type
 		dateTime = ephemDate.datetime()
 		ms = dateTime.microsecond / 1000000
 		msRound = int(round(ms, 0))
