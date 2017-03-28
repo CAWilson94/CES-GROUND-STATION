@@ -42,27 +42,28 @@
             <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
         </div>
         <div class="row">
-            <div class="col-sm-4" md-on-open="loadNextPasses()">
-                <label style="margin-left:10px; margin-bottom: 10px"> Next Scheduled Passes: </label>
-                <table st-table="yermaw" ng-model="nextpass" class="table table-striped">
+            <div class="col-sm-5">
+                <label style="margin-left:10px; margin-bottom: 10px "> Next Scheduled Passes: </label>
+                <table st-table="nextpass " ng-model="nextpass " class="table table-striped ">
                     <thead>
-                    <tr>
+                        <tr>
                             <th>Name</th>
-                            <th>Next Pass</th>
+                            <th colspan="2" align="center">Next Pass</th>
                             <th>Duration</th>
                         </tr>
                     </thead>
-                        <tr ng-repeat="nextpass in nextpasses">
-                            <td>{{row.name}}</td>
-                            <td>{{row.nextPass}}</td>
-                            <td>{{row.Duration}}</td>
-                        </tr>
-                        </tbody>
+                    <tr ng-repeat="nextpass in nextpasses ">
+                        <td>{{nextpass.tle}}</td>
+                        <td>Rise Time: {{nextpass.riseTime}}</td>
+                        <td>Set Time: {{nextpass.setTime}}</td>
+                        <td>{{nextpass.duration}}</td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
-            <div class="col-sm-4">
-                <label style="margin-left:10px; margin-bottom: 10px"> Current Missions: </label>
-                <table st-table="missions" ng-model="mission" class="table table-striped">
+            <div class="col-sm-4 ">
+                <label style="margin-left:10px; margin-bottom: 10px "> Current Missions: </label>
+                <table st-table="missions " ng-model="mission " class="table table-striped ">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -72,12 +73,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="mission in missions">
-                            <td align="center">{{ mission.name }}</td>
-                            <td align="center">{{ mission.status }}</td>
-                            <td align="center">{{ mission.priority }}</td>
+                        <tr ng-repeat="mission in missions ">
+                            <td>{{ mission.name }}</td>
+                            <td>{{ mission.status }}</td>
+                            <td align="center ">{{ mission.priority }}</td>
                             <td>
-                                <button style="display: block; text-align: center; margin-right: 15px;" type="button" class="close" ng-click="deleteMission(mission)">&times;</button>
+                                <button style="display: block; text-align: center; margin-right: 15px; " type="button " class="close " ng-click="deleteMission(mission) ">&times;</button>
                             </td>
                         </tr>
                     </tbody>
