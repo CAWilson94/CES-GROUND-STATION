@@ -92,14 +92,20 @@ class _Helper():
 		
 		score,processedNextPassList = _Helper.__findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
+		print("nextpassprolist")
+		print(processedNextPassList)
+
+		print("noconflicts")
 		for sat in noConflictList:
+			print (sat)
 			processedNextPassList.append(sat)
 
 		processedNextPassList=set(processedNextPassList)
-		#print("nextpassprolist")
-		#print(processedNextPassList)
+
 		#score=len(processedNextPassList)
+		print("final score = {} - {}".format(len(nextPassList),len(processedNextPassList)))
 		score = len(nextPassList)-len(processedNextPassList)
+
 		#print(score)
 		#print(nextPassList)
 		#print("return this {} list with this {} score".format(processedNextPassList,score))
