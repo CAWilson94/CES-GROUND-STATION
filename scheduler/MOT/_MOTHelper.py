@@ -44,8 +44,8 @@ class _Helper():
 
 		mergedGroups = _Helper._mergeLists(conflictGroups)
 		
-		print("mergegroups")
-		print (mergedGroups)
+		#print("mergegroups")
+		#print (mergedGroups)
 
 		# reorderedConflictGroups=[]
 		# for group in mergedGroups:
