@@ -1,6 +1,7 @@
 from datetime import date,datetime
-from scheduler.models import TLE, NextPass
+from scheduler.models import TLE, NextPass,Mission
 from scheduler.MOT.steepestHC import MOTSteepestHC
+from scheduler.MOT.simpleHC import MOTSimpleHC
 from scheduler.MOT._MOTHelper import _Helper
 from django.test import TestCase
 
@@ -24,6 +25,8 @@ class FitnessFunctionTests(TestCase):
 		cubebugLOS = datetime(2017,1,25,0,52,49)
 		sailAOS = datetime(2017,1,25,0,41,17)
 		sailLOS = datetime(2017,1,25,0,53,28)
+		exoAOS=datetime(2017,1,26,0,53,0)
+		exoLOS = datetime(2017,1,26,1,1,0)
 
 		catTLE = TLE(0,"cat","line1","line2")
 		sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
@@ -34,8 +37,10 @@ class FitnessFunctionTests(TestCase):
 		cubebugTLE= TLE(1,"cubebug","line1","line2")
 		sailTLE= TLE(1,"sail","line1","line2")
 
+		Mission()
 		date1 = datetime(2017, 1, 1, 12, 0, 0)
 			# id, tle, riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
+<<<<<<< HEAD
 		# cat = NextPass(0,catTLE, catAOS, catLOS, 0,0,0,0)
 		# sixtysevenC = NextPass(1,sixtysevenCTLE,sixtysevenCAOS, sixtysevenCLOS,date1,date1,date1,date1)
 		# sixtysevenD = NextPass(2,sixtysevenDTLE,sixtysevenDAOS, sixtysevenDLOS,date1,date1,date1,date1)
@@ -110,6 +115,53 @@ class FitnessFunctionTests(TestCase):
 		steepestHC = MOTSteepestHC()
 		#shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
 		#print(order)
+=======
+		cat = NextPass(tle="catTLE", riseTime=catAOS,setTime= catLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		sixtysevenC = NextPass(tle="sixtysevenCTLE",riseTime=sixtysevenCAOS, setTime=sixtysevenCLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		sixtysevenD = NextPass(tle="sixtysevenDTLE",riseTime=sixtysevenDAOS, setTime=sixtysevenDLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		aist = NextPass(tle="aistTLE",riseTime=aistAOS, setTime=aistLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		beesat = NextPass(tle="beesatTLE",riseTime=beesatAOS, setTime=beesatLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		brite = NextPass(tle="briteTLE",riseTime=briteAOS, setTime=briteLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		cubebug = NextPass(tle="cubebugTLE",riseTime=cubebugAOS, setTime=cubebugLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		sail = NextPass(tle="sailTLE",riseTime=sailAOS, setTime=sailLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		exo = NextPass(tle="exo",riseTime=exoAOS,setTime=exoLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+		
+		# NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
+		# 	riseAzimuth=details[1],setAzimuth=detailsduration=[5], mission=mission, tle=tleName)
+		nextPassList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,exo]
+		usefulTime=3
+		MOT = MOTSteepestHC()
+		#shouldBe,nextPassList=MOT.find(satList,usefulTime)
+		
+>>>>>>> df469d8637b504654c95450007101c4aac493bf0
 		#print(nextPassList)
+		conflictGroups = _Helper._findConflictingGroups(nextPassList)
+		mergedGroups = _Helper._mergeLists(conflictGroups)
+		#print(order)
+		print("mergedgroups")
+		print(mergedGroups)
+
+		noConflictList=[]
+		for Pass in nextPassList:
+			notInGroup=True
+			for group in mergedGroups:
+				if Pass in group:
+					notInGroup=False
+			if notInGroup:
+				noConflictList.append(Pass)
+		print("noconflicts")
+		print(noConflictList)
+
+		
+		score,processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+
 		#willitalwaysbefour?
+<<<<<<< HEAD
 		#self.assertIs(shouldBe == 0,True)
+=======
+		#self.assertIs(shouldBe == 0,True)
+
+		print("processed")
+		print(processedNextPassList)
+		print(score)
+>>>>>>> df469d8637b504654c95450007101c4aac493bf0

@@ -16,7 +16,7 @@ class TLE(models.Model):
     #     self.line2 = line2
 
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.name)
 
     # objects = models.TLEManager()
 
@@ -51,9 +51,9 @@ class Mission(models.Model):
     TLE = models.ForeignKey(TLE, on_delete=models.CASCADE)
     status = models.CharField(max_length=30)
     priority = models.IntegerField()
-
+    #delete=models.CharField(max_length=30)
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.name)
 
 
 class NextPass(models.Model):

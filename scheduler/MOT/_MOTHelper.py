@@ -23,7 +23,7 @@ class _Helper():
 
 		for mission in missionList:
 			if mission.priority > prevMission.priority:
-				print ("bad priority")
+				#print ("bad priority")
 				return [sys.maxsize,[]]
 			else:
 				prevMission = mission
@@ -31,7 +31,6 @@ class _Helper():
 		print("nextPasses")
 		for mission in missionList:
 			nextPass = Services.getNextPass(self, mission.TLE.name ,mission, datetime(2017,3,27,16,0,0))
-			
 			print(nextPass)
 			nextPassList.append(nextPass)
 	 
@@ -48,24 +47,40 @@ class _Helper():
 		# nextPassList=[sat1,sat2,sat3,sat4,sat5,sat6,sat7]
 		#print("nextpasslist")
 		#print(nextPassList)
+		conflictGroups = _Helper._findConflictingGroups(nextPassList)
 
-		conflictGroups,nonConflictGroups = _Helper._findConflictingGroups(nextPassList)
 
-		# print("conflictGroups")
-		# print(conflictGroups)
+		#print("conflictGroups")
+		#print(conflictGroups)
 		# print("nonconflictgroups")
 		# print(nonConflictGroups)
 		
 		
 		if len(conflictGroups)==0:
 			#no conflicts
-			print("no conflicts")
+			#print("no conflicts")
 			#print(nextPassList)
 			#print("return this {} list with this {} score".format(nextPassList,0))
 			return [0,nextPassList]
 
 		mergedGroups = _Helper._mergeLists(conflictGroups)
 
+		noConflictList=[]
+		for Pass in nextPassList:
+			notInGroup=True
+			for group in mergedGroups:
+				if Pass in group:
+					notInGroup=False
+			if notInGroup:
+				noConflictList.append(Pass)
+
+		print("blarghasdhflksjdhflkj")
+		noConflictList=set(noConflictList)
+		# for Pass in noConflictList:
+		# 	print(Pass)
+
+		#print("conflictGroups")
+		#print(mergedGroups)
 		reorderedConflictGroups=[]
 		for group in mergedGroups:
 			reordered= [x for x in nextPassList if x in group]
@@ -78,6 +93,8 @@ class _Helper():
 		
 		score,processedNextPassList = _Helper._findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
+		print("nextpassprolist")
+		print(processedNextPassList)
 
 
 		noConflictList=[]
@@ -94,10 +111,12 @@ class _Helper():
 			processedNextPassList.append(sat)
 				
 		processedNextPassList=set(processedNextPassList)
-		#print("nextpassprolist")
-		#print(processedNextPassList)
+
+
 		#score=len(processedNextPassList)
+		print("final score = {} - {}".format(len(nextPassList),len(processedNextPassList)))
 		score = len(nextPassList)-len(processedNextPassList)
+
 		#print(score)
 		#print(nextPassList)
 		#print("return this {} list with this {} score".format(processedNextPassList,score))
@@ -111,7 +130,6 @@ class _Helper():
 			different list/group
 		"""
 		satListConflicts=[]
-		satListNoConflicts=[]
 		#print("liiiiiist")
 		#print(len(satList))
 
@@ -122,24 +140,24 @@ class _Helper():
 				#print('{} riseTime & {} setTime compared with {} riseTime & {} setTime'.format(satList[i].riseTime,satList[i].setTime,satList[j].riseTime,satList[j].setTime))
 				if satList[i].riseTime < satList[j].setTime and satList[i].setTime > satList[j].riseTime:
 					#they conflict
-					print("conflicts")
+					#print("conflicts")
 					#print('{} conflicts with {}'.format(satList[i],satList[j]))
 					if satList[i] and satList[j] not in conflicts:
 						conflicts.append(satList[i])
 						conflicts.append(satList[j])
-				else:
-					for group in satListConflicts:
-						if satList[i] not in group:
-							print("no conflict")
-							noConflicts.append(satList[i])	
+				#else:
+					#for group in satListConflicts:
+						# if satList[i] not in group:
+						# 	#print("no conflict")
+						# 	noConflicts.append(satList[i])	
 					#print("This sat {} doesn't conflict with any other".format(satList[i]))	
 
 			if len(conflicts)>0:
 				satListConflicts.append(list(set(conflicts)))
-			if len(noConflicts)>0:
-				satListNoConflicts.extend(list(set(noConflicts)))
+			# if len(noConflicts)>0:
+			# 	satListNoConflicts.extend(list(set(noConflicts)))
 
-		return satListConflicts, satListNoConflicts
+		return satListConflicts
 
 	def _mergeLists(satListConflicts):
 		""" findConflictingGroups work isn't finished, it is continued here. 
@@ -213,7 +231,7 @@ class _Helper():
 				curSatSet=0
 				for time in blackList:
 					if sat.riseTime < time[1] and sat.setTime > time[0]:
-
+						#endGap=sat.setTime-(time[1])
 						endGap = sat.setTime - (time[0]+transactionTime)
 						if endGap<timedelta(0):
 							endGap = endGap*-1
@@ -222,26 +240,25 @@ class _Helper():
 						if frontGap<timedelta(0):
 							frontGap = frontGap*-1
 
+						setWhen=""
 						#TODO: if frontGap and endGap both >= tt and we can
 						#fit in either, pick one at random
 						if endGap>=transactionTime:
+							setWhen="endGap {} - {}".format(sat.setTime,time[0])
 							#get conflcit time and work fom there instead of set time
 							#can be fit in end gap
 							#TODO: fit in some random place in end gap
 							curSatRise = sat.setTime-transactionTime
 							curSatSet = sat.setTime
-							#curSatRise = time[1]+transactionTime
-							#curSatSet = time[1]
 							conflicts=False
 						elif frontGap >= transactionTime:
 							#can be fit in start gap
 							#TODO: fit in some random place in front gap
 							#print("fit in front gap")
 							conflicts=False
+							setWhen="frontgap"
 							curSatRise = sat.riseTime
 							curSatSet = sat.riseTime + transactionTime
-							#curSatSet=time[0]-transactionTime
-							#curSatRise=time[0]
 						else:
 							#can't fit in and we need another pass
 							#print("adding")
@@ -253,6 +270,7 @@ class _Helper():
 						curSatRise = sat.riseTime
 						curSatSet = sat.riseTime + transactionTime
 						#curSatRise = time[1]
+						setWhen="else"
 						#curSatSet = time[1]+transactionTime
 						conflicts=False
 
@@ -295,6 +313,7 @@ class _Helper():
 						sat.riseTime=curSatRise
 						sat.setTime=curSatSet
 						sat.duration=transactionTime
+						sat.maxElevation=setWhen
 						newPasses.append(sat)	
 			
 			#Find unscheduled satellites from scheduled
