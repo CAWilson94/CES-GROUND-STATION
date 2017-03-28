@@ -77,9 +77,10 @@ scheduler
           // or server returns response with an error status.
           console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
         });
-
-
     }
+
+
+    $scope.loadNextPasses()
 
     /**
      * priorities: should default at 2 in dropdown 
