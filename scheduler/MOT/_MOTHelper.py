@@ -40,8 +40,13 @@ class _Helper():
 			#no conflicts
 			return [0,nextPassList]
 
+
+
 		mergedGroups = _Helper._mergeLists(conflictGroups)
 		
+		print("mergegroups")
+		print (mergedGroups)
+
 		# reorderedConflictGroups=[]
 		# for group in mergedGroups:
 		# 	reordered= [x for x in nextPassList if x in group]
@@ -50,6 +55,9 @@ class _Helper():
 		processedNextPassList=[]
 		
 		processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+
+		#print("processedNextPassList")
+		#print(processedNextPassList)
 
 		#add in satellites that don't conflict with any
 		noConflictList=[]
@@ -61,6 +69,8 @@ class _Helper():
 			if notInGroup:
 				noConflictList.append(Pass)
 		noConflictList=set(noConflictList)
+		#print("noConflictList")
+		#print(noConflictList)
 		for sat in noConflictList:
 			processedNextPassList.append(sat)
 				
@@ -163,6 +173,7 @@ class _Helper():
 				conflicts=False
 				curSatRise=0
 				curSatSet=0
+				setWhen=""
 				for time in blackList:
 					if sat.riseTime < time[1] and sat.setTime > time[0]:
 						#endGap=sat.setTime-(time[1])
@@ -174,7 +185,7 @@ class _Helper():
 						if frontGap<timedelta(0):
 							frontGap = frontGap*-1
 
-						setWhen=""
+						
 						#TODO: if frontGap and endGap both >= tt and we can
 						#fit in either, pick one at random
 						if endGap>=transactionTime:
@@ -209,13 +220,21 @@ class _Helper():
 
 				tempTime = []
 				if len(blackList)==0:
+
 					##For first satellite to be scheduled
+					# curSatRise=sat.riseTime
+					# curSatSet=sat.riseTime+transactionTime
 					curSatRise=sat.riseTime
-					curSatSet=sat.riseTime+transactionTime
+					curSatSet=sat.setTime
+
+					setWhen="first"
 					tempTime = [curSatRise,curSatSet]
 					scheduledSats.append(sat)
 					blackList.append(tempTime)
 					newPasses.append(sat)
+					#sat.riseTime=curSatRise
+					#sat.setTime=curSatSet
+					#sat.duration=transactionTime
 
 				if conflicts is False:
 					#Check satellite doesn't conflict with 'blacklisted' times
