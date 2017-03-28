@@ -103,6 +103,9 @@ def crossover(chromoOne, chromoTwo):
     childTwo.fitness = fitness(childTwo)
     childOne.satPassList = sorted(childOne.satPassList, key=START_TIME_CMP)
     childTwo.satPassList = sorted(childTwo.satPassList, key=START_TIME_CMP)
+    childList = [childOne, childTwo]
+
+    return childList
 
 
 def randomParents(population):
@@ -121,7 +124,7 @@ def randomParents(population):
 
         # List with two chromosomes randomly picked from the current population
         parents = temp  # A list with two
-        #printPopulation(parents)
+        # printPopulation(parents)
         # Clear lists for next cal
         tempList = []
         tempfit = []
@@ -187,13 +190,18 @@ def tournie(population):
     """Tournament to generate new generation"""
     newGen = []
     crossed = []
-    while (len(crossed) != len(population)):
+    i = 0
+    while len(crossed) != len(population):
         newGen = randomParents(population)
-        i = random.randint(0, 10)  # Random int between 0 and 10
-        if (i < CROSSOVER_RATE):
+        printPopulation(newGen)
+        i = random.randint(0, 10)
+        if i < CROSSOVER_RATE:
             tempIndiList = crossover(newGen[0], newGen[1])
+            printPopulation(tempIndiList)
             crossed.extend(tempIndiList)
+            printPopulation(crossed)
             newGen = []
+
     return crossed
 
 
@@ -361,7 +369,7 @@ def test():
 boop = generatePopulation()
 # GA(boop)
 
-rents = randomParents(boop)
-# tournie(boop)
+# rents = randomParents(boop)
+tournie(boop)
 
 print("semi.. worked")
