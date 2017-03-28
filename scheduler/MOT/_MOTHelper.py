@@ -70,18 +70,20 @@ class _Helper():
 			reordered= [x for x in nextPassList if x in group]
 			reorderedConflictGroups.append(reordered)
 
-		#print("reorderedConflictGroups")
-		#print(reorderedConflictGroups)
+		print("reorderedConflictGroups")
+		print(mergedGroups)
+
 		processedNextPassList=[]
 		
 		score,processedNextPassList = _Helper.__findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
 		for sat in nonConflictGroups:
+			print(sat)
 			processedNextPassList.append(sat)
 
 		processedNextPassList=set(processedNextPassList)
-		print("nextpassprolist")
-		print(processedNextPassList)
+		#print("nextpassprolist")
+		#print(processedNextPassList)
 		#score=len(processedNextPassList)
 		score = len(nextPassList)-len(processedNextPassList)
 		#print(score)
@@ -89,7 +91,7 @@ class _Helper():
 		#print("return this {} list with this {} score".format(processedNextPassList,score))
 		return [score,processedNextPassList]
 
-	def __findConflictingGroups(satList):
+	def _findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones
 			that conflict at all with each other. 
 			eg. if sat1 and sat2 conflict they are added to conflicts
@@ -127,7 +129,7 @@ class _Helper():
 
 		return satListConflicts, satListNoConflicts
 
-	def __mergeLists(satListConflicts):
+	def _mergeLists(satListConflicts):
 		""" findConflictingGroups work isn't finished, it is continued here. 
 			If any list shares one or more element with another list then 
 			they should really be one list/group
@@ -170,7 +172,7 @@ class _Helper():
 		return finaListsConflictsTrimmed
 
 
-	def __findSchedulableSatellites(satListConflictGroups,usefulTime):
+	def _findSchedulableSatellites(satListConflictGroups,usefulTime):
 		""" The groups are now correct and the order was reestablished before 
 		being passed in here. This goes through each sat in each group to find where
 		each satellite conflicts with each other satellite. Compares these gaps
@@ -181,8 +183,8 @@ class _Helper():
 		"""
 
 
-		print("conflict groups")
-		print(satListConflictGroups)
+		#print("conflict groups")
+		#print(satListConflictGroups)
 
 		transactionTime = timedelta(minutes=usefulTime)
 		nextPassList = []
@@ -214,20 +216,20 @@ class _Helper():
 							#get conflcit time and work fom there instead of set time
 							#can be fit in end gap
 							#TODO: fit in some random place in end gap
-							#curSatRise = sat.setTime-transactionTime
-							#curSatSet = sat.setTime
-							curSatRise = time[1]+transactionTime
-							curSatSet = time[1]
+							curSatRise = sat.setTime-transactionTime
+							curSatSet = sat.setTime
+							#curSatRise = time[1]+transactionTime
+							#curSatSet = time[1]
 							conflicts=False
 						elif frontGap >= transactionTime:
 							#can be fit in start gap
 							#TODO: fit in some random place in front gap
 							#print("fit in front gap")
 							conflicts=False
-							#curSatRise = sat.riseTime
-							#curSatSet = sat.riseTime + transactionTime
-							curSatSet=time[0]-transactionTime
-							curSatRise=time[0]
+							curSatRise = sat.riseTime
+							curSatSet = sat.riseTime + transactionTime
+							#curSatSet=time[0]-transactionTime
+							#curSatRise=time[0]
 						else:
 							#can't fit in and we need another pass
 							#print("adding")
@@ -236,10 +238,10 @@ class _Helper():
 							break
 
 					else:
-						#curSatRise = sat.riseTime
-						#curSatSet = sat.riseTime + transactionTime
-						curSatRise = time[1]
-						curSatSet = time[1]+transactionTime
+						curSatRise = sat.riseTime
+						curSatSet = sat.riseTime + transactionTime
+						#curSatRise = time[1]
+						#curSatSet = time[1]+transactionTime
 						conflicts=False
 
 				tempTime = []
@@ -291,8 +293,8 @@ class _Helper():
 
 		score=0
 
-		print("scheduled sats")
-		print(unScheduledSats)
+		#print("scheduled sats")
+		#print(unScheduledSats)
 		for satList in unScheduledSats:
 			score +=len(satList)
 		#print(score) # want lowest.

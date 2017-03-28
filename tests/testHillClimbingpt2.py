@@ -45,8 +45,23 @@ class FitnessFunctionTests(TestCase):
 		cubebug = NextPass(6,cubebugTLE,cubebugAOS, cubebugLOS,date1,date1,date1,date1)
 		sail = NextPass(7,sailTLE,sailAOS, sailLOS,date1,date1,date1,date1)
 		
-		satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail]
+		threepAOS = datetime(2017,1,1,18,53,45)
+		threepLOS = datetime(2017,1,1,19,2,14)
+		threepsevenAOS = datetime(2017,1,1,18,53,36)
+		threepsevenLOS = datetime(2017,1,1,19,2,5)
+
+		threep = NextPass(riseTime=threepAOS,setTime=threepLOS)
+		threepseven=NextPass(riseTime=threepsevenAOS,setTime=threepsevenLOS)
+
+		#satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail]
+		satList = [threepseven,threep]
 		usefulTime=3
+
+		conflictGroups,nonConflictGroups = _Helper._findConflictingGroups(nextPassList)	
+
+
+		mergedGroups = _Helper.__mergeLists(conflictGroups)
+
 		steepestHC = MOTSteepestHC()
 		shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
 		#print(order)
