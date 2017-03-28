@@ -48,7 +48,7 @@ class _Helper():
 		#print("nextpasslist")
 		#print(nextPassList)
 
-		conflictGroups = _Helper.__findConflictingGroups(nextPassList)
+		conflictGroups = _Helper._findConflictingGroups(nextPassList)
 
 		#print("conflictGroups")
 		#print(conflictGroups)
@@ -63,7 +63,7 @@ class _Helper():
 			#print("return this {} list with this {} score".format(nextPassList,0))
 			return [0,nextPassList]
 
-		mergedGroups = _Helper.__mergeLists(conflictGroups)
+		mergedGroups = _Helper._mergeLists(conflictGroups)
 
 		noConflictList=[]
 		for Pass in nextPassList:
@@ -90,7 +90,7 @@ class _Helper():
 		#print(reorderedConflictGroups)
 		processedNextPassList=[]
 		
-		score,processedNextPassList = _Helper.__findSchedulableSatellites(reorderedConflictGroups,usefulTime)
+		score,processedNextPassList = _Helper._findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
 		print("nextpassprolist")
 		print(processedNextPassList)
@@ -111,7 +111,7 @@ class _Helper():
 		#print("return this {} list with this {} score".format(processedNextPassList,score))
 		return [score,processedNextPassList]
 
-	def __findConflictingGroups(satList):
+	def _findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones
 			that conflict at all with each other. 
 			eg. if sat1 and sat2 conflict they are added to conflicts
@@ -148,7 +148,7 @@ class _Helper():
 
 		return satListConflicts
 
-	def __mergeLists(satListConflicts):
+	def _mergeLists(satListConflicts):
 		""" findConflictingGroups work isn't finished, it is continued here. 
 			If any list shares one or more element with another list then 
 			they should really be one list/group
@@ -191,7 +191,7 @@ class _Helper():
 		return finaListsConflictsTrimmed
 
 
-	def __findSchedulableSatellites(satListConflictGroups,usefulTime):
+	def _findSchedulableSatellites(satListConflictGroups,usefulTime):
 		""" The groups are now correct and the order was reestablished before 
 		being passed in here. This goes through each sat in each group to find where
 		each satellite conflicts with each other satellite. Compares these gaps
