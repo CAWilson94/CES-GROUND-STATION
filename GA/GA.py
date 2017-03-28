@@ -118,8 +118,10 @@ def randomParents(population):
         # Do not really need sort by fitness..
         tempfit = setFitness(tempList)
         temp = sortByFitness(tempfit)
+
         # List with two chromosomes randomly picked from the current population
-        parents.append(temp)  # A list with two
+        parents = temp  # A list with two
+        #printPopulation(parents)
         # Clear lists for next cal
         tempList = []
         tempfit = []
@@ -360,5 +362,6 @@ boop = generatePopulation()
 # GA(boop)
 
 rents = randomParents(boop)
+# tournie(boop)
 
 print("semi.. worked")
