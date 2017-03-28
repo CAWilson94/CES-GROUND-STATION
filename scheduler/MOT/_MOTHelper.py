@@ -28,9 +28,10 @@ class _Helper():
 			else:
 				prevMission = mission
 
+		print("nextPasses")
 		for mission in missionList:
 			nextPass = Services.getNextPass(self, mission.TLE.name ,mission, datetime(2017,3,27,16,0,0))
-			print("nextPasses")
+			
 			print(nextPass)
 			nextPassList.append(nextPass)
 	 
@@ -48,7 +49,7 @@ class _Helper():
 		#print("nextpasslist")
 		#print(nextPassList)
 
-		conflictGroups,nonConflictGroups = _Helper.__findConflictingGroups(nextPassList)
+		conflictGroups,nonConflictGroups = _Helper._findConflictingGroups(nextPassList)
 
 		# print("conflictGroups")
 		# print(conflictGroups)
@@ -63,7 +64,7 @@ class _Helper():
 			#print("return this {} list with this {} score".format(nextPassList,0))
 			return [0,nextPassList]
 
-		mergedGroups = _Helper.__mergeLists(conflictGroups)
+		mergedGroups = _Helper._mergeLists(conflictGroups)
 
 		reorderedConflictGroups=[]
 		for group in mergedGroups:
@@ -75,12 +76,23 @@ class _Helper():
 
 		processedNextPassList=[]
 		
-		score,processedNextPassList = _Helper.__findSchedulableSatellites(reorderedConflictGroups,usefulTime)
+		score,processedNextPassList = _Helper._findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
-		for sat in nonConflictGroups:
-			print(sat)
+
+
+		noConflictList=[]
+		for Pass in nextPassList:
+			notInGroup=True
+			for group in mergedGroups:
+				if Pass in group:
+					notInGroup=False
+			if notInGroup:
+				noConflictList.append(Pass)
+
+		for sat in noConflictList:
+			#print(sat)
 			processedNextPassList.append(sat)
-
+				
 		processedNextPassList=set(processedNextPassList)
 		#print("nextpassprolist")
 		#print(processedNextPassList)

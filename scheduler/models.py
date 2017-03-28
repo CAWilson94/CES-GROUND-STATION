@@ -76,7 +76,7 @@ class NextPass(models.Model):
     mission=models.ForeignKey(Mission, default="mission", on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.tle)
 
     def __eq__(self, other):
         riseTime = datetime(17, 1, 19, 12, 0, 0)
