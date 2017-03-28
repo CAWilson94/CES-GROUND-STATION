@@ -64,9 +64,9 @@ class NextPass(models.Model):
 
     mission=models.ForeignKey(Mission, on_delete=models.CASCADE)
 
-    riseTime = models.DateField()
+    riseTime = models.DateTimeField()
     
-    setTime = models.DateField()
+    setTime = models.DateTimeField()
 
     duration = models.DurationField() 
 
