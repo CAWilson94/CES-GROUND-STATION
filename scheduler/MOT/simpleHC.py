@@ -14,9 +14,9 @@ class MOTSimpleHC(MOT):
 		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
 		maxIterations = 50
-		maxNeighbours=round((math.sqrt(len(satList))*5000))
-		#maxNeighbours=5000
-		print("maxneighbour{}".format(maxNeighbours))
+		# maxNeighbours=round((math.sqrt(len(satList))*5000))
+		# #maxNeighbours=5000
+		# print("maxneighbour{}".format(maxNeighbours))
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
@@ -29,7 +29,7 @@ class MOTSimpleHC(MOT):
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
 			#Generator/Iterator of all the neighbours
-			print("Finding neighbours, this may take a while")
+			#print("Finding neighbours, this may take a while")
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
 			n=0
 			#Find a smaller subset of all neighbours
@@ -39,7 +39,7 @@ class MOTSimpleHC(MOT):
 				#listOfNearestNeighboursAndItself.append(list(neighbour))
 				#n+=1
 
-			print("neighbours used {}".format(n))
+			#print("neighbours used {}".format(n))
 			#Remove the current node from neighbour list
 			listOfNearestNeighbours = listOfNearestNeighboursAndItself[1:]
 
