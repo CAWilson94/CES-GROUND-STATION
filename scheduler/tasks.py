@@ -3,6 +3,7 @@ from celery import shared_task
 from celery.decorators import periodic_task
 from time import sleep
 from scheduler.schedulerQueue import SchedulerQ
+#from scheduler.models import TLE
 
 from random import randint
 
@@ -49,6 +50,7 @@ def repeatingTask():
 	myId = randint(0, 10)
 	print("Started task: " + str(myId))
 	sleep(10)
+
 	#tle = TLE.objects.all()
 	#index = randint(0, len(tle))
 	#print("Got TLE: " + tle[index].name)

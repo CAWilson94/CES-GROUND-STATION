@@ -18,17 +18,13 @@ class SchedulerHelper():
 
 			tleEntry = m.TLE
 			try:
-				nextPass = Services.getNextPass(self, tleEntry, dateNow)
-				nextPass.tle = tleEntry
-				nextPass.mission = m
+				nextPass = Services.getNextPass(self, tleEntry, m, dateNow)
 				passes.append(nextPass)
 			
 				while(nextPass.setTime < (dateNow + timedelta(hours=36))):
 					time = nextPass.setTime + timedelta(minutes=1)
 					try:
-						nextPass = Services.getNextPass(self, tleEntry, time)
-						nextPass.tle = tleEntry
-						nextPass.mission = m
+						nextPass = Services.getNextPass(self, tleEntry, m, time)
 						passes.append(nextPass)
 						
 					except ValueError: 

@@ -29,7 +29,7 @@ class _Helper():
 				prevMission = mission
 
 		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE.name ,mission, datetime(2017,3,27,16,0,0))
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime(2017,3,27,16,0,0))
 			print("nextPasses")
 			print(nextPass)
 			nextPassList.append(nextPass)

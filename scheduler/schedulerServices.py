@@ -1,16 +1,13 @@
 from datetime import datetime, timedelta
-from scheduler.services import Services
 from scheduler.MOT.ruleBased import MOTRuleBased
 from scheduler.models import TLE, Mission, NextPass
 
 class SchedulerServices():
 
-	def scheduleAndSavePasses(self):
+	def scheduleAndSavePasses(self, scheduler, usefulTime):
 		missions = Mission.objects.all().exclude(status="PAUSED")
 
-		scheduler = MOTRuleBased()
-
-		passes = scheduler.find(missions)
+		passes = scheduler.find(missions, usefulTime)
 		print("Scheduling " + str(len(passes)) + " passes.")
 		print("Removing previous passes...")
 		NextPass.objects.all().delete()

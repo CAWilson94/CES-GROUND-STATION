@@ -1,10 +1,10 @@
 import requests
 from django.db.utils import OperationalError
-from scheduler.missionServices import mission_services as ms
-from scheduler.models import TLE, AzEl, NextPass, Mission
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
+from scheduler.missionServices import mission_services as ms
+from scheduler.models import TLE, AzEl, NextPass, Mission
 
 class rotatorThread (threading.Thread):
 	def __init__(self, threadID, name, counter):
@@ -114,11 +114,10 @@ class Services():
 		return azelProgress
 
 
-	def getNextPass(self,tleName, mission, dateTime):
+	def getNextPass(self,tleEntry, mission, dateTime):
 		"""
 		Returns a next pass object of the satellite after the date given
 		"""
-		tleEntry = mission.TLE
 		
 		observer = _Helper.getObserver(self, dateTime);
 		try:
@@ -133,7 +132,7 @@ class Services():
 		duration  = setTime - riseTime
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
-			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleName)
+			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleEntry)
 
 	def makeMissions(chosenSat): #, priorityList
 		"""
@@ -170,12 +169,22 @@ class Services():
 			success = True
 		return success
 
-	def scheduleMissions(self, missions, MOT): 
-		#schedulerPasses
-		score,bestNextPassList = MOT.find(self, missions, 3)
+	def getScheduledPasses(): 
+		# passes = NextPass.objects.filter(riseTime > datetime.now()).order_by("riseTime")
+		# if(len(passes) < 10):
+		# 	#scheduler = MOTSimpleHC()
+		# 	#scheduler = MOTSteepestHC()
+		# 	#scheduler = MOTStochasticHC()
+		# 	#scheduler = MOTRandomRestartHC()
+		# 	scheduler = MOTRuleBased()
+		# 	#lis = Services.scheduleMissions(self, missionList, scheduler, 0)
+		# 	passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+		# passes = NextPass.objects.order_by("riseTime")
+		#score,bestNextPassList = MOT.find(self, missions, 3)
+		#bestNextPassList = MOT.find(missions, usefulTime)
 		#print(bestNextPassList)
 		#print(score)
-		return bestNextPassList
+		return passes
 
 	def updateTLE():
 

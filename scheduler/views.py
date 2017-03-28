@@ -1,26 +1,30 @@
 from django.http import HttpResponse
-from django.db.utils import OperationalError
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.response import Response
-from scheduler.models import TLE, Mission, NextPass
-from scheduler.services import Services
-from scheduler.serializers import TLESerializer, AZELSerializer, MissionSerializer, NextPassSerializer
 from django.http import Http404
+#from django.shortcuts import get_list_or_404, get_object_or_404
+from django.db.utils import OperationalError
+#from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status, generics, viewsets
-from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework import status, viewsets #, generics
 from rest_framework.decorators import api_view
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
+
+from datetime import datetime
 from csv_parse import export_csv
+
+from scheduler.models import TLE, Mission, NextPass
+from scheduler.services import Services
+from scheduler.schedulerServices import SchedulerServices
+from scheduler.serializers import TLESerializer, AZELSerializer, MissionSerializer, NextPassSerializer
 
 from scheduler.MOT.simpleHC import MOTSimpleHC
 from scheduler.MOT.steepestHC import MOTSteepestHC
 from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
+from scheduler.MOT.ruleBased import MOTRuleBased
 
 from scheduler.tasks import repeatingTask
-from scheduler.schedulerServices import SchedulerServices
 
 
 print("HELLO FROM VIEWS!")
@@ -112,14 +116,19 @@ class MissionsViewSet(viewsets.ModelViewSet):
 class MissionView(APIView):
 
     def get(self, request):
-        missions = Mission.objects.all()
-        missionList = []
-        for mission in missions:
-            missionList.append(mission)
-        # print(missionList)
-        lis = Services.scheduleMissions(self, missionList, MOTSimpleHC)
-        #print("final List: {}".format(lis))
-        serializer = NextPassSerializer(lis, many=True)
+        passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
+        for p in passes: 
+            print(p.tle.name + ": " + str(p.riseTime))
+        if(len(passes) < 10):
+            #scheduler = MOTSimpleHC()
+            #scheduler = MOTSteepestHC()
+            #scheduler = MOTStochasticHC()
+            #scheduler = MOTRandomRestartHC()
+            scheduler = MOTRuleBased()
+            #lis = Services.scheduleMissions(self, missionList, scheduler, 0)
+            passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+
+        serializer = NextPassSerializer(passes, many=True)
         return Response(serializer.data)
 
     def post(self, request):
