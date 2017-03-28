@@ -107,25 +107,24 @@ def crossover(chromoOne, chromoTwo):
 
 def randomParents(population):
     """ Select Parents for tournament function"""
-    tempList = []
+    tempList = []  # Temporary population List
     parents = []
     for index in range(1):
-        randomInt = random.sample(range(len(population)), 2)
+        # Two random int's from range 0 - population length
+        randomint = random.sample(range(len(population)), 2)
 
-        tempList.append(population[randomInt[0]])
-        tempList.append(population[randomInt[1]])
-
-        temp = setFitness(tempList)
-        # temp = sortByFitness(tempList)
-
-        for item in temp:
-            print(item.fitness)
-        """"
-        parents.append(temp)
+        tempList.append(population[randomint[0]])  # A single chromosome
+        tempList.append(population[randomint[1]])  # A single chromosome
+        # Do not really need sort by fitness..
+        tempfit = setFitness(tempList)
+        temp = sortByFitness(tempfit)
+        # List with two chromosomes randomly picked from the current population
+        parents.append(temp)  # A list with two
+        # Clear lists for next cal
         tempList = []
+        tempfit = []
         temp = []
     return parents
-    """
 
 
 def setFitness(population):
@@ -178,7 +177,7 @@ def fitnessVariety_sum(chromosome):
 
     # print(diffNames, "diffNames: ", diffNames)
     fitness = duration * diffNames
-    #print("fitness: ", fitness)
+    # print("fitness: ", fitness)
     return fitness
 
 
@@ -308,7 +307,6 @@ def printPopulation(populateshit):
 def generatePopulation():
     # chromo = generateChromosome()
     chromosome = testChromosome(TEST_PASS_LIST)
-
     populationList = []
 
     # print("list without conflicts: \n")
@@ -361,6 +359,6 @@ def test():
 boop = generatePopulation()
 # GA(boop)
 
-randomParents(boop)
+rents = randomParents(boop)
 
 print("semi.. worked")
