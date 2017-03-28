@@ -40,7 +40,6 @@ class FitnessFunctionTests(TestCase):
 		Mission()
 		date1 = datetime(2017, 1, 1, 12, 0, 0)
 			# id, tle, riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
-<<<<<<< HEAD
 		# cat = NextPass(0,catTLE, catAOS, catLOS, 0,0,0,0)
 		# sixtysevenC = NextPass(1,sixtysevenCTLE,sixtysevenCAOS, sixtysevenCLOS,date1,date1,date1,date1)
 		# sixtysevenD = NextPass(2,sixtysevenDTLE,sixtysevenDAOS, sixtysevenDLOS,date1,date1,date1,date1)
@@ -115,7 +114,6 @@ class FitnessFunctionTests(TestCase):
 		steepestHC = MOTSteepestHC()
 		#shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
 		#print(order)
-=======
 		cat = NextPass(tle="catTLE", riseTime=catAOS,setTime= catLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
 		sixtysevenC = NextPass(tle="sixtysevenCTLE",riseTime=sixtysevenCAOS, setTime=sixtysevenCLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
 		sixtysevenD = NextPass(tle="sixtysevenDTLE",riseTime=sixtysevenDAOS, setTime=sixtysevenDLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
@@ -128,12 +126,22 @@ class FitnessFunctionTests(TestCase):
 		
 		# NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
 		# 	riseAzimuth=details[1],setAzimuth=detailsduration=[5], mission=mission, tle=tleName)
-		nextPassList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,exo]
-		usefulTime=3
-		MOT = MOTSteepestHC()
+		# nextPassList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,exo]
+		# usefulTime=3
+		# MOT = MOTSteepestHC()
 		#shouldBe,nextPassList=MOT.find(satList,usefulTime)
 		
->>>>>>> df469d8637b504654c95450007101c4aac493bf0
+
+# sat1 = NextPass(riseTime=datetime(2017, 3, 25, 22, 39, 3), setTime=datetime(2017, 3, 25, 22, 48, 39), duration=timedelta(0, 576), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat1")
+		# sat2 = NextPass(riseTime=datetime(2017, 3, 26, 5, 1, 12), setTime=datetime(2017, 3, 26, 5, 13, 53), duration=timedelta(0, 761), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat2")
+		# sat3 = NextPass(riseTime=datetime(2017, 3, 26, 2, 6, 51), setTime=datetime(2017, 3, 26, 2, 19, 33), duration=timedelta(0, 762), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat3")
+		# sat4 = NextPass(riseTime=datetime(2017, 3, 25, 23, 57, 18), setTime=datetime(2017, 3, 25, 0, 7, 10), duration=timedelta(0,608), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat4")
+		# sat5 = NextPass(riseTime=datetime(2017, 3, 26, 4, 29, 32), setTime=datetime(2017, 3, 26, 4, 39, 40), duration=timedelta(0, 608), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat5")
+		# sat6 = NextPass(riseTime=datetime(2017, 3, 25, 23, 24, 42), setTime=datetime(2017, 3, 25, 23, 26, 9), duration=timedelta(0, 87), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat6")
+		# sat7 = NextPass(riseTime=datetime(2017, 3, 25, 22, 36, 45), setTime=datetime(2017, 3, 25, 22, 47, 4), duration=timedelta(0, 619), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat7")
+
+
+		
 		#print(nextPassList)
 		conflictGroups = _Helper._findConflictingGroups(nextPassList)
 		mergedGroups = _Helper._mergeLists(conflictGroups)
@@ -156,12 +164,8 @@ class FitnessFunctionTests(TestCase):
 		score,processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
 
 		#willitalwaysbefour?
-<<<<<<< HEAD
-		#self.assertIs(shouldBe == 0,True)
-=======
 		#self.assertIs(shouldBe == 0,True)
 
 		print("processed")
 		print(processedNextPassList)
 		print(score)
->>>>>>> df469d8637b504654c95450007101c4aac493bf0
