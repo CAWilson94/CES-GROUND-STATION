@@ -350,7 +350,7 @@ def GA(population):
             for item in best[0].satPassList:
                 print(item.name)
             return
-            # tournie(population)
+            tournie(population)
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
