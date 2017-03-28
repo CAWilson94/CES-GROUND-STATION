@@ -3,28 +3,27 @@ from celery import shared_task
 from celery.decorators import periodic_task
 from time import sleep
 from scheduler.schedulerQueue import SchedulerQ
-
 from random import randint
+#from scheduler.missionServices import mission_services as ms
+
+#from scheduler.services import pollForNew
 
 schedulerQ = SchedulerQ()
 
 
-from celery.signals import celeryd_init
-
-@celeryd_init.connect
-def configure_worker1(sender=None, conf=None, **kwargs):
-    print("Init celery")
-
 @shared_task()
-def SchedulerThread(schedulerQ):
+def SchedulerThread():
 	print ("Starting Scheduler") 
-	counter = 0
 	while(1):
-		counter += 1
-		if(counter > 100):
-			counter = 0
-		schedulerQ.setItem(counter)
-		print("In Scheduler thread - " + str(counter))
+		print ( "Polling for new")
+		try:
+			mission_list = ms.findMissionsByStatus("New")
+			for i in mission_list:
+				i.status = ("Waiting")
+				print("Count = %r" %i)
+				pass
+		except TLE.DoesNotExist as e:
+			print("Already exists")	 
 		sleep(2)
 	print("Exiting Scheduler")
 	

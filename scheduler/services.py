@@ -40,17 +40,17 @@ class schedulerThread (threading.Thread):
 
 class Services():
 
-#	def pollForNew():
-#		print ( "Polling for new")
-#		try:
-#			mission_list = ms.findMissionsByStatus("New")
-#			for i in mission_list:
-#				i.status = ("Waiting")
-#				print("Count = %r" %i)
-#				pass
-#		except TLE.DoesNotExist as e:
-#			print("Already exists")	 
-#
+	def pollForNew():
+		print ( "Polling for new")
+		try:
+			mission_list = ms.findMissionsByStatus("New")
+			for i in mission_list:
+				i.status = ("Waiting")
+				print("Count = %r" %i)
+				pass
+		except TLE.DoesNotExist as e:
+			print("Already exists")	 
+
 #	def pollQueue():
 #		count = 0
 #		while (count < 10):

@@ -3,7 +3,6 @@ from scheduler.schedulerQueue import SchedulerQ
 from scheduler.tasks import repeatingTask
 from cesGroundStation.celery import app
 
-
 print("HELLO FROM APPS!")
 
 class SchedulerConfig(AppConfig):
