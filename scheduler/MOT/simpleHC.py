@@ -8,7 +8,7 @@ import math
 
 class MOTSimpleHC(MOT):
 
-	def find(self,satList,usefulTime):
+	def find(self,missionList,usefulTime):
 		""" In simple hill climbing, the first closer node is chosen"""
 
 		bestNextPassList=[]
@@ -22,7 +22,7 @@ class MOTSimpleHC(MOT):
 		maxN=0
 
 		#Mission
-		curOrder=satList
+		curOrder=missionList
 
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]

@@ -52,9 +52,9 @@ class _Helper():
 		# 	reordered= [x for x in nextPassList if x in group]
 		# 	reorderedConflictGroups.append(reordered)
 
-		processedNextPassList=[]
+		scheduledNextPassList=[]
 		
-		processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+		scheduledNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
 
 		#print("processedNextPassList")
 		#print(processedNextPassList)
@@ -72,14 +72,14 @@ class _Helper():
 		#print("noConflictList")
 		#print(noConflictList)
 		for sat in noConflictList:
-			processedNextPassList.append(sat)
+			scheduledNextPassList.append(sat)
 				
-		processedNextPassList=set(processedNextPassList)
+		scheduledNextPassList=set(scheduledNextPassList)
 
 
 		#print("final score = {} - {}".format(len(nextPassList),len(processedNextPassList)))
-		score = len(nextPassList)-len(processedNextPassList)
-		return [score,processedNextPassList]
+		score = len(nextPassList)-len(scheduledNextPassList)
+		return [score,scheduledNextPassList]
 
 	def _findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones
