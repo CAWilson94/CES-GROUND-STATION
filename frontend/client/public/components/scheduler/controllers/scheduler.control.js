@@ -214,6 +214,6 @@ scheduler
     }
 
 
-    $interval($scope.reload, 5000);
+    //$interval($scope.reload, 5000);
     // End of controller please leave it alone.
   });
