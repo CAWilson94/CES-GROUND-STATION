@@ -42,51 +42,57 @@
             </div>
             <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
         </div>
+
+        <style>
+            .sortable {  cursor: pointer;}
+            .st-sort-ascent,.st-sort-descent {  padding-left: 4px;}
+            .st-sort-default:before {content: '\25B1'}
+            .st-sort-ascent:before {content: '\25B2'}
+            .st-sort-descent:before {content: '\25BC'}
+        </style>
+
         <div class="row">
             <div class="col-sm-5">
                 <label style="margin-left:10px; margin-bottom: 10px "> Next Scheduled Passes: </label>
                 <table st-table="nextpassesDisplay" st-safe-src="nextpasses" ng-model="nextpass" class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th colspan="2" align="center">Next Pass</th>
-                            <th>Duration</th>
+                        <tr class="sortable"> <!-- add this to skip default when sorting st-skip-natural="true" -->
+                            <th st-sort="tle.name">Name</th>
+                            <th st-sort-default="true" st-sort="riseTime">Rise Time</th>
+                            <th st-sort="setTime">Set Time</th>
+                            <th st-sort="duration">Duration</th>
                         </tr>
                     </thead>
-                    <div ng-show="!isScheduling">
-                        <tbody>
-                            <tr ng-repeat="nextpass in nextpassesDisplay">
-                                <td>{{nextpass.tle.name}}</td>
-                                <td>Rise Time: {{nextpass.riseTime}}</td>
-                                <td>Set Time: {{nextpass.setTime}}</td>
-                                <td>{{nextpass.duration}}</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="text-center">
-                                    <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </div>
+                    <tbody ng-show="!isScheduling">
+                        <tr ng-repeat="nextpass in nextpassesDisplay">
+                            <td>{{nextpass.tle.name}}</td>
+                            <td>{{nextpass.riseTime}}</td>
+                            <td>{{nextpass.setTime}}</td>
+                            <td>{{nextpass.duration}}</td>
+                        </tr>
+                    </tbody>
                     <tbody ng-show="isScheduling">
                         <tr>
                             <td colspan="4" align="center">Scheduling...</td>
                         </tr>
                     </tbody>
-
-
+                    <tfoot ng-show="!isScheduling">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <div class="col-sm-4 ">
                 <label style="margin-left:10px; margin-bottom: 10px "> Current Missions: </label>
                 <table st-table="missionsDisplay " st-safe-src="missions" ng-model="mission " class="table table-striped ">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Priority</th>
+                        <tr class="sortable">
+                            <th st-sort="name" st-sort-default="true">Name</th>
+                            <th st-sort="status">Status</th>
+                            <th st-sort="priority">Priority</th>
                             <th>Delete</th>
                         </tr>
                     </thead>

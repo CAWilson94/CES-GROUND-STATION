@@ -125,7 +125,8 @@ class MissionView(APIView):
         passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
         
         if(len(passes) < 10 
-            or len(Mission.objects.all().filter(status="NEW"))>0 
+            or len(Mission.objects.all().filter(status="NEW")) > 0 
+            or len(Mission.objects.all().filter(status="SCHEDULING")) > 0 
             or len(Mission.objects.all()) == 0):
             #scheduler = MOTSimpleHC()
             #scheduler = MOTSteepestHC()
@@ -142,7 +143,7 @@ class MissionView(APIView):
         if Services.makeMissions(request.data):
             name = request.data.get("name")
             pr = request.data.get("priority")
-            ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
+            #ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
             scheduler = MOTRuleBased()
             SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
             return HttpResponse(status=201)

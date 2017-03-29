@@ -16,7 +16,6 @@ scheduler
      */
      $scope.isSchedulingFn = function() {
         console.log("updating")
-
         var config = {
           headers: {
             'Content-Type': 'application/json',
@@ -26,12 +25,10 @@ scheduler
 
         $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
           .then(function successCallback(response, data) {
-            console.log(response.data)
             if(response.data == "True")
               $scope.isScheduling = true
             else
               $scope.isScheduling = false
-            console.log($scope.isScheduling);
           }, function errorCallback(response) {
             console.log(response.status)
         });
@@ -189,7 +186,7 @@ scheduler
       } catch (err) {
         alert("you must first select a satellite and a priority")
       }
-
+      $scope.isScheduling = true;
     };
 
 
@@ -235,7 +232,7 @@ scheduler
               console.log(response.status + " : " + response.statusText);
             }
           );
-        $scope.isSchedulingFn();
+        $scope.isScheduling = true;
     };
 
 
