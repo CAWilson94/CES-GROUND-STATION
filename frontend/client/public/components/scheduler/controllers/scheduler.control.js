@@ -1,5 +1,5 @@
 scheduler
-  .controller('SchedulerController', function($scope, TLE, AZEL, Mission, $timeout, $http) {
+  .controller('SchedulerController', function($scope, TLE, AZEL, Mission, $timeout,$interval, $http) {
 
     $scope.tle = null;
     $scope.tles = null;
