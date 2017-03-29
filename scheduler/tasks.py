@@ -35,9 +35,9 @@ def SchedulerThread(schedulerQ):
 
 
 @shared_task()
-def RotatorsThread():
+def RotatorsThread(nextPass):
 	print ("Starting Rotators") 
-	arduinoRotator = rotator_controller()
+	arduinoRotator = rotator_controller(nextPass)
 	while(1):
 		arduinoRotator.sketchy_arduino_move()
 		sleep(2)

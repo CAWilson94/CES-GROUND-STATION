@@ -14,15 +14,14 @@ class rotator_controller():
                     contains TLE object and start and end times of the pass
         """
 
-
     def __init__(self, nextPass):
         super(rotator_controller, self).__init__()
         self.nextPass = nextPass
 
 
-    ser = serial.Serial('COM6', baudrate=9600, timeout=2)
+    ser = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=2)
     #changed to COM8 for Robbies Laptop
-
+    #/dev/ttyACM0 for linux
 
     def moveRotators(tleEntry):
         """
@@ -32,6 +31,9 @@ class rotator_controller():
 
         azel = Services.getAzElForPeriod(self, tleEntry, nextPass.riseTime,
                                          nextPass.setTime, nextPass.period)
+
+        #azel.elevation="45"
+        #azel.azimuth="120"
         for item in azel:
             sleep(1)
             rs.set_position(item.elevation, item.azimuth)
@@ -53,10 +55,10 @@ class rotator_controller():
 
         for item in azelList:
             sleep(1)
-            write_az_and_el(item.azimuth, item.elevation)
+            self.write_az_and_el(item.azimuth, item.elevation)
 
 
-    def write_az_and_el(az, el):
+    def write_az_and_el(self,az, el):
         """
         Write Azimuth and Elevation
         Values can not be more than 180 because rotator's range is 0-180
@@ -72,8 +74,8 @@ class rotator_controller():
         # Use a loop that waights whrites the as and el values until it gets an "answer" from the ardurino.
         # A few times it failed to send the values over to the Ardurino side, that's why I use a loop.
         while 1:
-            ser.write(pack('BB', az, el))
-            line = ser.readline()
+            self.ser.write(pack('BB', az, el))
+            line = self.ser.readline()
             print(line)
             if (line == b'end'):
                 print("break")
