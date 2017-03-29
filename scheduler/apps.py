@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 from scheduler.schedulerQueue import SchedulerQ
-from scheduler.tasks import repeatingTask
-from cesGroundStation.celery import app
+#from scheduler.tasks import repeatingTask
+#from cesGroundStation.celery import app
 
 
 print("HELLO FROM APPS!")
@@ -15,7 +15,7 @@ class SchedulerConfig(AppConfig):
 	def ready(self):
 		if(not self.threadsStarted):
 			self.threadsStarted = True
-			app.control.purge()
+			#app.control.purge()
 			#print("Starting repeating task")
 			#repeatingTask.delay()
 			# schedulerQ = SchedulerQ()

@@ -24,12 +24,12 @@ from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 from scheduler.MOT.ruleBased import MOTRuleBased
 
-from scheduler.tasks import repeatingTask
+#from scheduler.tasks import repeatingTask
 
 
 print("HELLO FROM VIEWS!")
-print("Starting repeating task")
-repeatingTask.delay()
+#print("Starting repeating task")
+#repeatingTask.delay()
 
 class TestingScheduler():
 
@@ -57,8 +57,8 @@ class TestingScheduler():
 
 
     def threadTask(request):
-        print("Starting repeating task")
-        repeatingTask.delay()
+        # print("Starting repeating task")
+        # repeatingTask.delay()
         return HttpResponse("Started task")
 
     def schedule(request):
@@ -119,7 +119,7 @@ class MissionView(APIView):
         passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
         for p in passes: 
             print(p.tle.name + ": " + str(p.riseTime))
-        if(len(passes) < 10):
+        if(len(passes) < 10 or Mission.objects.all().filter(status="NEW")):
             #scheduler = MOTSimpleHC()
             #scheduler = MOTSteepestHC()
             #scheduler = MOTStochasticHC()

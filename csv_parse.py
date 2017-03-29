@@ -1,4 +1,4 @@
-from scheduler.models import Mission
+from scheduler.models import Mission, NextPass
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
 import csv

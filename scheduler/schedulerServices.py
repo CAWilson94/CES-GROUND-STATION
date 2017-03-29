@@ -6,15 +6,26 @@ class SchedulerServices():
 
 	def scheduleAndSavePasses(self, scheduler, usefulTime):
 		missions = Mission.objects.all().exclude(status="PAUSED")
-
+		print("Got missions, setting statuses...")
+		for m in missions: 
+			m.status = "SCHEDULING"
+			m.save()
+		print("Done.")
+		print("Scheduling...")
 		passes = scheduler.find(missions, usefulTime)
-		print("Scheduling " + str(len(passes)) + " passes.")
+		print("Scheduled " + str(len(passes)) + " passes.")
 		print("Removing previous passes...")
 		NextPass.objects.all().delete()
-		print("Done. Saving new passes...")
+		print("Done.")
+		print("Saving new passes...")
 		for p in passes: 
 			p.save()
 		passes = []
+		print("Done.")
+		print("Got missions, setting statuses...")
+		for m in missions: 
+			m.status = "SCHEDULING"
+			m.save()
 		print("Done.")
 
 		return NextPass.objects.all()
