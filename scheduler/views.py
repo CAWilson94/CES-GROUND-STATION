@@ -24,6 +24,9 @@ from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 from scheduler.MOT.ruleBased import MOTRuleBased
 
+
+from scheduler.tweet import ground_station
+
 #from scheduler.tasks import repeatingTask
 
 
@@ -133,6 +136,7 @@ class MissionView(APIView):
 
     def post(self, request):
         if Services.makeMissions(request.data):
+            #ground_station(request.data)
             return HttpResponse(status=201)
         return HttpResponse(status=500)
 
