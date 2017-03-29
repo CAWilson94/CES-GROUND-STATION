@@ -52,7 +52,8 @@
                             <th>Duration</th>
                         </tr>
                     </thead>
-                    <tbody>
+
+                    <tbody ng-show="isScheduling">
                         <tr ng-repeat="nextpass in nextpassesDisplay">
                             <td>{{nextpass.tle.name}}</td>
                             <td>Rise Time: {{nextpass.riseTime}}</td>
@@ -60,6 +61,13 @@
                             <td>{{nextpass.duration}}</td>
                         </tr>
                     </tbody>
+
+                    <tbody ng-show="!isScheduling">
+                        <tr colspan="3">
+                            <td>Scheduling</td>
+                        </tr>
+                    </tbody>
+
                     <tfoot>
                         <tr>
                             <td colspan="4" class="text-center">
