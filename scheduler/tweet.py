@@ -51,8 +51,9 @@ class tweet:
         api.update_status(something)
 
 
-def ground_station():
+def ground_station(outputString):
     """ update status of rotators when used: e.g. CUTE-1 is
          now being tracked at (AZEL value) """
-    tweet("This is a test")
+    tweet(outputString)
+
 
