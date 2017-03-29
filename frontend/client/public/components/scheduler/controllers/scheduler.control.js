@@ -5,7 +5,8 @@ scheduler
     $scope.tles = null;
 
     $scope.nextpass = null;
-    $scope.nextpasses = null;
+    $scope.nextpasses = [];
+    $scope.nextpassesDisplay=[];
 
     /**
      * Load in TLE data from Django side
@@ -73,6 +74,8 @@ scheduler
 
 
           //console.log($scope.nextpass)
+
+          $scope.nextpassesDisplay= [].concat($scope.nextpasses);
 
         }, function errorCallback(response) {
           // called asynchronously if an error occurs

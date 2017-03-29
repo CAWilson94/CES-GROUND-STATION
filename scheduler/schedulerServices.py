@@ -24,7 +24,7 @@ class SchedulerServices():
 		print("Done.")
 		print("Got missions, setting statuses...")
 		for m in missions: 
-			m.status = "SCHEDULING"
+			m.status = "SCHEDULED"
 			m.save()
 		print("Done.")
 
