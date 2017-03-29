@@ -43,14 +43,6 @@
             <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
         </div>
 
-        <style>
-            .sortable {  cursor: pointer;}
-            .st-sort-ascent,.st-sort-descent {  padding-left: 4px;}
-            .st-sort-default:before {content: '\25B1'}
-            .st-sort-ascent:before {content: '\25B2'}
-            .st-sort-descent:before {content: '\25BC'}
-        </style>
-
         <div class="row">
             <div class="col-sm-5">
                 <label style="margin-left:10px; margin-bottom: 10px "> Next Scheduled Passes: </label>
@@ -100,9 +92,9 @@
                         <tr ng-repeat="mission in missionsDisplay ">
                             <td>{{ mission.name }}</td>
                             <td>{{ mission.status }}</td>
-                            <td align="center ">{{ mission.priority }}</td>
-                            <td>
-                                <button style="display: block; text-align: center; margin-right: 15px;" type="button " class="close " ng-click="deleteMission(mission)" ng-disabled="isScheduling">&times;</button>
+                            <td align="center">{{ mission.priority }}</td>
+                            <td align="center">
+                                <button  type="button " style="display: block; margin-right:20px;text-align: center" class="close" ng-click="deleteMission(mission)" ng-disabled="isScheduling">&times;</button>
                             </td>
                         </tr>
                     </tbody>
@@ -119,6 +111,15 @@
         </div>
     </div>
     </div>
+
+
+    <style>
+        .sortable {  cursor: pointer;}
+        .st-sort-ascent,.st-sort-descent {  padding-left: 4px;}
+        .st-sort-default:before {content: '\25B1'}
+        .st-sort-ascent:before {content: '\25B2'}
+        .st-sort-descent:before {content: '\25BC'}
+    </style>
 </body>
 
 </html>
