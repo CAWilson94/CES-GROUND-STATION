@@ -70,7 +70,7 @@ scheduler
           // this callback will be called asynchronously
           // when the response is available
           $scope.nextpasses = response.data;
-          console.log($scope.nextpass)
+          console.log($scope.nextpasses)
 
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
@@ -195,7 +195,7 @@ scheduler
     }
 
 
-     $interval($scope.loadNextPasses, 5000);
+     //$interval($scope.loadNextPasses, 5000);
 
 
     // End of controller please leave it alone.
