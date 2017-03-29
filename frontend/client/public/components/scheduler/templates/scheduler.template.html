@@ -59,9 +59,15 @@
                         <td>{{nextpass.duration}}</td>
                     </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
-            
             <div class="col-sm-4 ">
                 <label style="margin-left:10px; margin-bottom: 10px "> Current Missions: </label>
                 <table st-table="missions " ng-model="mission " class="table table-striped ">

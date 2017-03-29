@@ -82,6 +82,8 @@ scheduler
 
     $scope.loadNextPasses()
 
+    $scope.itemsByPage=15;
+
     /**
      * priorities: should default at 2 in dropdown 
      * @type {Array}
