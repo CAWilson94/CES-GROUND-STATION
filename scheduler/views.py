@@ -14,13 +14,14 @@ from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
 from csv_parse import export_csv 
 
-from scheduler.tasks import repeatingTask
+from scheduler.tasks import SchedulerThread
 from scheduler.schedulerServices import SchedulerServices
 
 
 print("HELLO FROM VIEWS!")
 print("Starting repeating task")
-repeatingTask.delay()
+#repeatingTask.delay()
+SchedulerThread.delay()
 
 class TestingScheduler():
 

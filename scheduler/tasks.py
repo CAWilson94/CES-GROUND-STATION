@@ -4,6 +4,7 @@ from celery.decorators import periodic_task
 from time import sleep
 from scheduler.schedulerQueue import SchedulerQ
 from random import randint
+from django.db import models
 #from scheduler.missionServices import mission_services as ms
 
 #from scheduler.services import pollForNew
@@ -17,13 +18,13 @@ def SchedulerThread():
 	while(1):
 		print ( "Polling for new")
 		try:
-			mission_list = ms.findMissionsByStatus("New")
+			mission_list = models.mission_list.objects.filter(status="New")
 			for i in mission_list:
 				i.status = ("Waiting")
 				print("Count = %r" %i)
 				pass
-		except TLE.DoesNotExist as e:
-			print("Already exists")	 
+		except:
+			print("Nope")	 
 		sleep(2)
 	print("Exiting Scheduler")
 	
