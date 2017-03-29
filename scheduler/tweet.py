@@ -31,7 +31,7 @@ and other relevant information, will be sent to a twitter feed.
 '''
 
 import tweepy
-
+from scheduler.models import NextPass
 
 class tweet:
 
@@ -43,7 +43,7 @@ class tweet:
         CONSUMER_SECRET = 'SlL3yWL0KUYiLXOjjqK08fSQBfqGhAlNcSgNdxEax91cX2fQ6m'
         # keep the quotes, replace this with your access token
         ACCESS_KEY = '846791513573089281-xia7pUhmibfvyN506XkIE53WWq1tBah'
-        # keep the quotes, replace this with your access token secret
+        # keep the quotes, replce this with your access token secret
         ACCESS_SECRET = 'UHsaektsXLsbTTYhhQyyaXtLriWL1k0IJnbURL1TCYfJ8'
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -57,3 +57,15 @@ def ground_station(outputString):
     tweet(outputString)
 
 
+def tweet_on_rotator_start():
+    queryset = NextPass.objects.all()
+
+    rtfull = queryset[0].riseTime
+    stfull = queryset[0].setTime
+    rt = rtfull.strftime('%H:%M:%S')
+    st = stfull.strftime('%H:%M:%S')
+    dur = queryset[0].duration
+    nm = queryset[0].tle.name
+    tweetStr = ("Now tracking: " + str(nm) + " rise time: " +
+     str(rt) + "set time: " + str(st) + " for duration: " + str(dur)) 
+    tweet(tweetStr)
