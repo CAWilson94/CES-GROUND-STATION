@@ -28,4 +28,4 @@ class SchedulerServices():
 			m.save()
 		print("Done.")
 
-		return NextPass.objects.all()
+		return NextPass.objects.all().order_by("riseTime")
