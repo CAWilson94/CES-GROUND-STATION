@@ -175,6 +175,7 @@ scheduler
       }, (function(resp) {
         console.log(resp);
         removeA($scope.missions, mission)
+        $scope.loadNextPasses()
       }))
 
     };
@@ -192,6 +193,9 @@ scheduler
       }
       return arr;
     }
+
+
+     $interval($scope.loadNextPasses, 5000);
 
 
     // End of controller please leave it alone.
