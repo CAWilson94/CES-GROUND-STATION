@@ -56,6 +56,3 @@ def ground_station():
          now being tracked at (AZEL value) """
     tweet("This is a test")
 
-
-""" Testing output to cube sat tracker twitter """
-ground_station()
