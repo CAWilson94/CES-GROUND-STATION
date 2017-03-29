@@ -31,7 +31,7 @@ from scheduler.tasks import RotatorsThread
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
-RotatorsThread(NextPass())
+RotatorsThread.delay((NextPass()))
 
 class TestingScheduler():
 
