@@ -75,10 +75,10 @@ class TestingScheduler():
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        #print("Updating TLE data...")
-        #Services.updateTLE()
-        #print("...TLE data updated")
-        pass
+        if(len(TLE.objects.all()) < 1): 
+            print("Updating TLE data...")
+            Services.updateTLE()
+            print("...TLE data updated")
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
     queryset = TLE.objects.all()
@@ -135,6 +135,9 @@ class MissionView(APIView):
         if Services.makeMissions(request.data):
             return HttpResponse(status=201)
         return HttpResponse(status=500)
+
+    def delete(self, request):
+        print("DELETINGGG")
 
 
 class CSVParseView(APIView):
