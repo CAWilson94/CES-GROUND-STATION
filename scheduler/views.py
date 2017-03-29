@@ -149,9 +149,10 @@ class MissionView(APIView):
         return HttpResponse(status=500)
 
     def delete(self, request, pk):
-        print("pk: " + pk)
+        print("deleting: " + str(pk))
         missionToDelete = Mission.objects.filter(id=pk)
-        missionToDelete.delete()
+        deleted = missionToDelete.delete()
+        print("Deleted: " + str(deleted))
         #print(missionToDelete[0].name)
         scheduler = MOTRuleBased()
         SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
@@ -164,7 +165,6 @@ class SchedulerView(APIView):
         isScheduling = False
         if(len(Mission.objects.filter(status="SCHEDULING")) > 0):
             isScheduling = True
-        print("Is Scheduling: " + str(isScheduling))
         return HttpResponse(isScheduling)
 
 

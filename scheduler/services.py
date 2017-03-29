@@ -139,7 +139,6 @@ class Services():
 		Saves user chosen satellites in the mission object and then saves that in db
 		"""
 		#Change every mission's status to NEW if new mission comes in?
-		print(chosenSat)
 		success=False
 		#for name in chosenSatsList:
 		newName = chosenSat.get("name")
@@ -152,9 +151,9 @@ class Services():
 				tle = TLE.objects.get(name=newName)
 			except TLE.DoesNotExist as e:
 				#print(e)
-				print("Attempted to CubeSat '{}' but it does not exist in the DB".format(newName))
+				print("Attempted to find CubeSat '{}' but it does not exist in the DB".format(newName))
 				#somehow asked to schedule a satellite that isn't in the database
-				success = False
+				return False
 			newMission = Mission(name=newName,TLE=tle,status="NEW",priority=newPriority)
 			newMission.save()
 			success = True

@@ -8,6 +8,37 @@ scheduler
     $scope.nextpasses = [];
     $scope.nextpassesDisplay = [];
 
+
+    
+    /**
+     * Getting true or false if scheduling: to show table load message
+     * @type {Object}
+     */
+     $scope.isSchedulingFn = function() {
+        console.log("updating")
+
+        var config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+
+        $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
+          .then(function successCallback(response, data) {
+            console.log(response.data)
+            if(response.data == "True")
+              $scope.isScheduling = true
+            else
+              $scope.isScheduling = false
+            console.log($scope.isScheduling);
+          }, function errorCallback(response) {
+            console.log(response.status)
+        });
+     }
+
+     $interval($scope.isSchedulingFn, 3000, 0, true);
+
     /**
      * Load in TLE data from Django side
      * @return {[type]} [description]
@@ -118,6 +149,7 @@ scheduler
      * @return void 
      */
     $scope.updateTable = function() {
+      $scope.isScheduling = true;
 
       $scope.loadNextPasses();
       // Each mission requires a sat name and a priority
@@ -158,28 +190,7 @@ scheduler
         alert("you must first select a satellite and a priority")
       }
 
-
     };
-
-    /**
-     * Getting true or false if scheduling: to show table load message
-     * @type {Object}
-     */
-    var config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    }
-
-    $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
-      .then(function successCallback(response, data) {
-        $scope.isScheduling = response.data;
-        console.log(response.data);
-      }, function errorCallback(response) {
-        console.log(response.status)
-      });
-
 
 
     //MISSSION TABLE
@@ -191,6 +202,7 @@ scheduler
 
     $scope.deleteMission = function(mission) {
       $scope.missionid = mission.id;
+      $scope.isScheduling = true;
       /*Mission.delete({
         id: $scope.missionid
       }, (function(resp) {
@@ -223,7 +235,7 @@ scheduler
               console.log(response.status + " : " + response.statusText);
             }
           );
-
+        $scope.isSchedulingFn();
     };
 
 
