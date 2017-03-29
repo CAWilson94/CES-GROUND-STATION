@@ -137,13 +137,21 @@ class MissionView(APIView):
         if Services.makeMissions(request.data):
             name = request.data.get("name")
             pr = request.data.get("priority")
-            ground_station(name + " Priority: " + str(pr))
+            ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
             return HttpResponse(status=201)
         return HttpResponse(status=500)
 
     def delete(self, request):
         print("DELETINGGG")
 
+
+class SchedulerView(APIView):
+
+    def get(self, request):
+        isScheduling = False
+        if Mission.objects.filter(status="SCHEDULING"):
+            isScheduling = True
+        return HttpResponse(isScheduling)
 
 class CSVParseView(APIView):
     """view for exporting as csv"""

@@ -21,8 +21,9 @@ urlpatterns = [
     url(r'^tles/(?P<pk>[0-9]+)/azel/?$', PyephemData.as_view()),
     url(r'^save/mission/?$', MissionView.as_view()),
     #url(r'^nextpass/?$', MissionView.as_view()),
-    url(r'missions/(?P<pk>[0-9]+)/?$', MissionView.as_view()),
+    #url(r'missions/(?P<pk>[0-9]+)/?$', MissionView.as_view()),
     #url(r'^missions/?$', MissionView.as_view()),
     url(r'csv/missions/?$', CSVParseView.as_view()),
     url(r'^schedulemissiontest/?$', MissionView.as_view()),
+    url(r'^scheduler/isscheduling?$', MissionView.as_view()),
 ]

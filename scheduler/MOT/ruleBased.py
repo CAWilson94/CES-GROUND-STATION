@@ -9,7 +9,7 @@ CONFLICT_PADDING = timedelta(minutes=1)
 # minimum lengh of pass to fill in the conflict window once a sat is chosen.
 MIN_SUB_PASS_LEN = timedelta(minutes=3)
 
-DEBUG = True
+DEBUG = False
 
 DEBUG_LEVEL = 1
 
