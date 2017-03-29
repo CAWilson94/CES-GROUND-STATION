@@ -6,7 +6,7 @@ scheduler
 
     $scope.nextpass = null;
     $scope.nextpasses = [];
-    $scope.nextpassesDisplay=[];
+    $scope.nextpassesDisplay = [];
 
     /**
      * Load in TLE data from Django side
@@ -75,7 +75,7 @@ scheduler
 
           //console.log($scope.nextpass)
 
-          $scope.nextpassesDisplay= [].concat($scope.nextpasses);
+          $scope.nextpassesDisplay = [].concat($scope.nextpasses);
 
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
@@ -161,13 +161,24 @@ scheduler
 
     };
 
-
-
     /**
-     *
-     * while there is nothing populating the table: show output as animation loader
-     * 
+     * Getting true or false if scheduling: to show table load message
+     * @type {Object}
      */
+    var config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }
+
+    $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
+      .then(function successCallback(response, data) {
+        $scope.isScheduling = response.data;
+        console.log(response.data);
+      }, function errorCallback(response) {
+        console.log(response.status)
+      });
 
 
 
