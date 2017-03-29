@@ -57,5 +57,3 @@ def ground_station():
     tweet("This is a test")
 
 
-""" Testing output to cube sat tracker twitter """
-ground_station()

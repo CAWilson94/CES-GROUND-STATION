@@ -20,7 +20,8 @@ def __init__(self, nextPass):
     self.nextPass = nextPass
 
 
-ser = serial.Serial('COM3', baudrate=9600, timeout=2)
+ser = serial.Serial('COM8', baudrate=9600, timeout=2)
+#changed to COM8 for Robbies Laptop
 
 
 def moveRotators(tleEntry):
