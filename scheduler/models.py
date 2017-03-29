@@ -53,7 +53,7 @@ class Mission(models.Model):
     priority = models.IntegerField()
 
     def __str__(self):
-        return str(self.__dict__)
+        return "id: " + str(self.id) + ", name: " + self.name  + ", status: " + self.status + ", priority: " + str(self.priority)
 
 
 class NextPass(models.Model):

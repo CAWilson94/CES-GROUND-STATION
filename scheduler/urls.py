@@ -20,6 +20,7 @@ urlpatterns = [
 	url(r'^thread/?$', TestingScheduler.threadTask, name="thread"),
     url(r'^tles/(?P<pk>[0-9]+)/azel/?$', PyephemData.as_view()),
     url(r'^save/mission/?$', MissionView.as_view()),
+    url(r'^delete/mission/(?P<pk>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$', MissionView.as_view()),
     #url(r'^nextpass/?$', MissionView.as_view()),
     #url(r'missions/(?P<pk>[0-9]+)/?$', MissionView.as_view()),
     #url(r'^missions/?$', MissionView.as_view()),

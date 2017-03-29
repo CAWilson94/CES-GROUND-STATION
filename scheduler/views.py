@@ -89,8 +89,11 @@ class TLEViewSet(viewsets.ModelViewSet):
 
 
 class MissionViewSet(viewsets.ModelViewSet):
-	queryset = Mission.objects.all()
-	serializer_class = MissionSerializer
+    try:
+    	queryset = Mission.objects.all()
+    	serializer_class = MissionSerializer
+    except OperationalError:
+        print("MissionViewSet couldn't be loaded yet")
 
 def schedulerQ():
 	queue = getSchedulerQ.delay()
@@ -145,8 +148,14 @@ class MissionView(APIView):
             return HttpResponse(status=201)
         return HttpResponse(status=500)
 
-    def delete(self, request):
-        print("DELETINGGG")
+    def delete(self, request, pk):
+        print("pk: " + pk)
+        missionToDelete = Mission.objects.filter(id=pk)
+        missionToDelete.delete()
+        #print(missionToDelete[0].name)
+        scheduler = MOTRuleBased()
+        SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+        return HttpResponse(status=200)
 
 
 class SchedulerView(APIView):
@@ -157,6 +166,8 @@ class SchedulerView(APIView):
             isScheduling = True
         print("Is Scheduling: " + str(isScheduling))
         return HttpResponse(isScheduling)
+
+
 
 class CSVParseView(APIView):
     """view for exporting as csv"""

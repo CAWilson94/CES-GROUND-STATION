@@ -6,7 +6,8 @@
 </head>
 
 <body ng-app="scheduler">
-    <div class="table_drop_down" style="margin-left: 30px">
+    <div  ng-style="{'background-color':'#fff'}">
+    <div class="row" style="margin-left: 30px">
         <div class="drop-down" layout="row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="">
             <div layout="column" layout-align="start start" style="margin-top: 50px">
                 <md-input-container>
@@ -19,7 +20,7 @@
             <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
                 <md-input-container>
                     <label>Priority</label>
-                    <md-select ng-init="priority=priorities[1]" placeholder="Priority Number" ng-model="priority">
+                    <md-select ng-init="priority=priorities[1]" placeholder="Priority Number" ng-model="priority" style="min-width: 100px;">
                         <md-option ng-value="priority" ng-repeat="priority in priorities">{{ priority.name }} : {{ priority.priority }}</md-option>
                     </md-select>
                 </md-input-container>
@@ -71,7 +72,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="4" class="text-center">
-                                <div st-pagination="" st-items-by-page="6" st-displayed-pages="10"></div>
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
                             </td>
                         </tr>
                     </tfoot>
@@ -79,7 +80,7 @@
             </div>
             <div class="col-sm-4 ">
                 <label style="margin-left:10px; margin-bottom: 10px "> Current Missions: </label>
-                <table st-table="missions " ng-model="mission " class="table table-striped ">
+                <table st-table="missionsDisplay " st-safe-src="missions" ng-model="mission " class="table table-striped ">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -89,19 +90,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="mission in missions ">
+                        <tr ng-repeat="mission in missionsDisplay ">
                             <td>{{ mission.name }}</td>
                             <td>{{ mission.status }}</td>
                             <td align="center ">{{ mission.priority }}</td>
                             <td>
-                                <button style="display: block; text-align: center; margin-right: 15px; " type="button " class="close " ng-click="deleteMission(mission) ">&times;</button>
+                                <button style="display: block; text-align: center; margin-right: 15px; " type="button " class="close " ng-click="deleteMission(mission)">&times;</button>
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <!-- end of tables row -->
         </div>
+    </div>
+    </div>
 </body>
 
 </html>

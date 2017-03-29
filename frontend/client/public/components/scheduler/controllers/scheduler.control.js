@@ -72,7 +72,6 @@ scheduler
           // when the response is available
           $scope.nextpasses = response.data;
 
-
           //console.log($scope.nextpass)
 
           $scope.nextpassesDisplay = [].concat($scope.nextpasses);
@@ -143,6 +142,7 @@ scheduler
                 $scope.missions = data;
               });
 
+              $scope.missionsDisplay = [].concat($scope.missions);
               console.log(response)
             },
             function errorCallBack(response) {
@@ -188,7 +188,46 @@ scheduler
       $scope.missions = data;
     });
 
+
     $scope.deleteMission = function(mission) {
+      $scope.missionid = mission.id;
+      /*Mission.delete({
+        id: $scope.missionid
+      }, (function(resp) {
+        console.log(resp);
+        removeA($scope.missions, mission)
+        $scope.loadNextPasses()
+      }))*/
+
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }
+
+      // delete can't send params back to server, so still calling old delete stuff above ^ 
+      $http.delete('http://127.0.0.1:8000/api/delete/mission/' + $scope.missionid, config)
+          .then(function successCallBack(response) {
+              
+              $scope.missions = Mission.get().$promise.then(function(data) {
+                $scope.missions = data;
+              });
+
+              $scope.missionsDisplay = [].concat($scope.missions);
+
+              $scope.loadNextPasses()
+              console.log(response)
+            },
+            function errorCallBack(response) {
+              console.log(response.status + " : " + response.statusText);
+            }
+          );
+
+    };
+
+
+    /*$scope.deleteMission = function(mission) {
       id = mission.id;
       Mission.delete({
         id: id
@@ -197,7 +236,6 @@ scheduler
         removeA($scope.missions, mission)
         $scope.loadNextPasses()
       }))
-    };
 
     function removeA(arr) {
       //What is this?!
@@ -211,7 +249,7 @@ scheduler
         }
       }
       return arr;
-    }
+    }*/
 
 
     //$interval($scope.reload, 5000);
