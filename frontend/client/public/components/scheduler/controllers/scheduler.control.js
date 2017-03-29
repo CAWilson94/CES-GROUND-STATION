@@ -70,7 +70,9 @@ scheduler
           // this callback will be called asynchronously
           // when the response is available
           $scope.nextpasses = response.data;
-          console.log($scope.nextpass)
+
+
+          //console.log($scope.nextpass)
 
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
@@ -82,7 +84,7 @@ scheduler
 
     $scope.loadNextPasses()
 
-    $scope.itemsByPage=15;
+    $scope.itemsByPage = 15;
 
     /**
      * priorities: should default at 2 in dropdown 
@@ -118,10 +120,14 @@ scheduler
       $scope.loadNextPasses();
       // Each mission requires a sat name and a priority
 
-      $scope.mission = {
-        name: $scope.tle.name,
-        priority: $scope.priority.priority
-      };
+      try {
+        $scope.mission = {
+          name: $scope.tle.name,
+          priority: $scope.priority.priority
+        };
+      } catch (err) {
+        console.log('nothing selected');
+      }
 
 
       try {
@@ -154,8 +160,6 @@ scheduler
 
 
 
-
-
     /**
      *
      * while there is nothing populating the table: show output as animation loader
@@ -178,6 +182,8 @@ scheduler
         console.log(resp);
         removeA($scope.missions, mission)
       }))
+
+      $scope.loadNextPasses()
 
     };
 
