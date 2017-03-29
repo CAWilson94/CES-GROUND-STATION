@@ -193,11 +193,10 @@ scheduler
       Mission.delete({
         id: id
       }, (function(resp) {
-          console.log(resp);
-          removeA($scope.missions, mission)
-        },
-        $scope.loadNextPasses()
-      ))
+        console.log(resp);
+        removeA($scope.missions, mission)
+        //$scope.loadNextPasses()
+      }))
     };
 
     function removeA(arr) {
