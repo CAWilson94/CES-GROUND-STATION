@@ -65,32 +65,22 @@ scheduler
         }
       }
 
-
-
-      
-        // Grab TLE from Django 
-
       $http.get('http://127.0.0.1:8000/api/schedulemissiontest', config)
-        .then(function successCallback(response) {
+        .then(function successCallback(response, data) {
           // this callback will be called asynchronously
           // when the response is available
-          $scope.nextpass = data;
-          alert('booptiy')
-          console.log("someshit")
-          console.log("SOMETHING MIGHT BE HERE" + data)
+          $scope.nextpasses = response.data;
+          console.log($scope.nextpass)
+
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
           console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
         });
-
-
     }
 
 
-    $scope.boop = function() {
-      console.log("SOMETHING IS HAPPENING")
-    }
+    $scope.loadNextPasses()
 
     /**
      * priorities: should default at 2 in dropdown 
@@ -159,6 +149,9 @@ scheduler
 
 
     };
+
+
+
 
 
     /**
