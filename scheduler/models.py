@@ -72,7 +72,7 @@ class NextPass(models.Model):
     #LOS Az
     setAzimuth = models.CharField(max_length=15)
 
-    tle = models.CharField(max_length=20)#models.ForeignKey(TLE, on_delete=models.CASCADE)
+    tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
     mission=models.ForeignKey(Mission, default="mission", on_delete=models.CASCADE)
 
     def __str__(self):
