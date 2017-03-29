@@ -23,7 +23,7 @@ class SchedulerServices():
 		passes = []
 		print("Done.")
 		print("Got missions, setting statuses...")
-		for m in missions: 
+		for m in Mission.objects.all().exclude(status="PAUSED"): 
 			m.status = "SCHEDULED"
 			m.save()
 		print("Done.")

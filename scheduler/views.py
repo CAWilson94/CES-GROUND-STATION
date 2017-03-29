@@ -120,8 +120,8 @@ class MissionView(APIView):
 
     def get(self, request):
         passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
-       
-        if(len(passes) < 10 or Mission.objects.all().filter(status="NEW")):
+        
+        if(len(passes) < 10 or len(Mission.objects.all().filter(status="NEW"))>0):
             #scheduler = MOTSimpleHC()
             #scheduler = MOTSteepestHC()
             #scheduler = MOTStochasticHC()
