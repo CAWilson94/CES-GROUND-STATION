@@ -149,8 +149,9 @@ class SchedulerView(APIView):
 
     def get(self, request):
         isScheduling = False
-        if Mission.objects.filter(status="SCHEDULING"):
+        if(len(Mission.objects.filter(status="SCHEDULING")) > 0):
             isScheduling = True
+        print("Is Scheduling: " + str(isScheduling))
         return HttpResponse(isScheduling)
 
 class CSVParseView(APIView):
