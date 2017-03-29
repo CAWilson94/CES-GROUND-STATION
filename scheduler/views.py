@@ -136,7 +136,9 @@ class MissionView(APIView):
 
     def post(self, request):
         if Services.makeMissions(request.data):
-            #ground_station(request.data)
+            name = request.data.get("name")
+            pr = request.data.get("priority")
+            ground_station(name + " Priority: " + str(pr))
             return HttpResponse(status=201)
         return HttpResponse(status=500)
 
