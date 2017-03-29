@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <label style="margin-left:10px; margin-bottom: 10px "> Next Scheduled Passes: </label>
-                <table st-table="nextpass " ng-model="nextpass " class="table table-striped ">
+                <table st-table="nextpass" st-safe-src="nextpasses" ng-model="nextpass " class="smart-table table table-striped">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -52,20 +52,26 @@
                             <th>Duration</th>
                         </tr>
                     </thead>
-                    <tr ng-repeat="nextpass in nextpasses ">
-                        <td>{{nextpass.tle.name}}</td>
-                        <td>Rise Time: {{nextpass.riseTime}}</td>
-                        <td>Set Time: {{nextpass.setTime}}</td>
-                        <td>{{nextpass.duration}}</td>
-                    </tr>
+                    <tbody>
+                        <tr ng-repeat="nextpass in nextpasses ">
+                            <td>{{nextpass.tle.name}}</td>
+                            <td>Rise Time: {{nextpass.riseTime}}</td>
+                            <td>Set Time: {{nextpass.setTime}}</td>
+                            <td>{{nextpass.duration}}</td>
+                        </tr>
                     </tbody>
                     <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="5" colspan="4"></td>
+                        </tr>
+                    </tfoot>
+                    <!-- <tfoot>
                         <tr>
                             <td colspan="5" class="text-center">
                                 <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
                             </td>
                         </tr>
-                    </tfoot>
+                    </tfoot> -->
                 </table>
             </div>
             <div class="col-sm-4 ">
