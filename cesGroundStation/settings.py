@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     #'scheduler.apps.SchedulerConfig',
     'corsheaders',
     'scheduler',
-    #'djcelery',
-    #'kombu.transport.django',
+    'djcelery',
+    'kombu.transport.django',
 ]
 
 

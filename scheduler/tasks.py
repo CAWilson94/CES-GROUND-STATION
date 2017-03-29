@@ -7,7 +7,7 @@ from scheduler.schedulerQueue import SchedulerQ
 
 from random import randint
 
-from scheduler.rotatorController import sketchy_arduino_move
+from scheduler.rotatorController import rotator_controller
 
 
 schedulerQ = SchedulerQ()
@@ -37,8 +37,9 @@ def SchedulerThread(schedulerQ):
 @shared_task()
 def RotatorsThread():
 	print ("Starting Rotators") 
+	arduinoRotator = rotator_controller()
 	while(1):
-		sketchy_arduino_move()
+		arduinoRotator.sketchy_arduino_move()
 		sleep(2)
 	print("Exiting Rotators")
 
