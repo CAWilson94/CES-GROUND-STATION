@@ -2,7 +2,7 @@
 Created on 13 Feb 2016
 @author: Charlotte Alexandra Wilson
 
-Last revision: 28 March 2017
+Last revision: 29 March 2017
 see bitbucket for details:
 https://CharlotteWilson@bitbucket.org/CharlotteWilson/dnnpd.git
 ---------------------------------------------------------------
@@ -33,6 +33,7 @@ and other relevant information, will be sent to a twitter feed.
 import tweepy
 from scheduler.models import NextPass
 
+
 class tweet:
 
     def __init__(self, something):
@@ -53,11 +54,20 @@ class tweet:
 
 def ground_station(outputString):
     """ update status of rotators when used: e.g. CUTE-1 is
-         now being tracked at (AZEL value) """
+        now being tracked at (AZEL value)
+    """
+
     tweet(outputString)
 
 
 def tweet_on_rotator_start():
+    """
+    Intended for use with rotator status updates:
+    currently for proof of concept as there is no
+    guarantee there will be a sat pass during the
+    trade show: hence picking the first int the
+    scheduled next pass list and outputting results.
+    """
     queryset = NextPass.objects.all()
 
     rtfull = queryset[0].riseTime
@@ -66,6 +76,7 @@ def tweet_on_rotator_start():
     st = stfull.strftime('%H:%M:%S')
     dur = queryset[0].duration
     nm = queryset[0].tle.name
-    tweetStr = ("Now tracking: " + str(nm) + " rise time: " +
-     str(rt) + "set time: " + str(st) + " for duration: " + str(dur)) 
+    tweetStr = (
+        "Now tracking: " + str(nm) + " rise time: " +
+        str(rt) + "set time: " + str(st) + " for duration: " + str(dur))
     tweet(tweetStr)
