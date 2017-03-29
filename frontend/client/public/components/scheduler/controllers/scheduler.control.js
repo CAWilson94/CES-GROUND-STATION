@@ -70,7 +70,7 @@ scheduler
           // this callback will be called asynchronously
           // when the response is available
           $scope.nextpasses = response.data;
-          console.log($scope.nextpass)
+          console.log($scope.nextpasses)
 
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
@@ -175,6 +175,7 @@ scheduler
       }, (function(resp) {
         console.log(resp);
         removeA($scope.missions, mission)
+        $scope.loadNextPasses()
       }))
 
     };
