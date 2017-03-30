@@ -32,6 +32,7 @@ and other relevant information, will be sent to a twitter feed.
 
 import tweepy
 from datetime import datetime 
+import random
 from scheduler.models import NextPass
 
 
@@ -71,14 +72,17 @@ def tweet_on_rotator_start():
     """
     queryset = NextPass.objects.all()
 
+
     if len(queryset)>0:
-        print("tweeting")
-        rtfull = queryset[0].riseTime
-        stfull = queryset[0].setTime
+
+        #num = random.choice(queryset)
+        num = random.randint(0,len(queryset)-1)
+        rtfull = queryset[num].riseTime
+        stfull = queryset[num].setTime
         rt = rtfull.strftime('%H:%M:%S')
         st = stfull.strftime('%H:%M:%S')
-        dur = queryset[0].duration
-        nm = queryset[0].tle.name
+        dur = queryset[num].duration
+        nm = queryset[num].tle.name
         tweetStr = (
             "[" + datetime.now().strftime('%H:%M:%S') + "] " +
             "Now tracking: " + str(nm) + " rise time: " + str(rt) +
