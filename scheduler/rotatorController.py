@@ -18,8 +18,10 @@ class rotator_controller():
         super(rotator_controller, self).__init__()
         self.nextPass = nextPass
 
-
-    ser = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=2)
+    try:
+        ser = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=2)
+    except:
+        print("Port Not Detected")
     #changed to COM8 for Robbies Laptop
     #/dev/ttyACM0 for linux
 
