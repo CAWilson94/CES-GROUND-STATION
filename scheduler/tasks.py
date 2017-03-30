@@ -3,6 +3,7 @@ from celery import shared_task
 from celery.decorators import periodic_task
 from time import sleep
 from scheduler.schedulerQueue import SchedulerQ
+from scheduler.tweet import tweet_on_rotator_start
 #from scheduler.models import TLE
 
 from random import randint
@@ -39,6 +40,7 @@ def RotatorsThread(nextPass):
 	print ("Starting Rotators") 
 	arduinoRotator = rotator_controller(nextPass)
 	while(1):
+		tweet_on_rotator_start()
 		arduinoRotator.sketchy_arduino_move()
 		sleep(2)
 	print("Exiting Rotators")
