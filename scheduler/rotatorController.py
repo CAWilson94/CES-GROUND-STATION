@@ -20,7 +20,7 @@ class rotator_controller():
 
 
     try:
-        ser = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=2)
+    ser = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=2)
     except:
         print("Port Not Detected. Please connect rotators.")
     #changed to COM8 for Robbies Laptop
@@ -65,7 +65,7 @@ class rotator_controller():
         Values can not be more than 180 because rotator's range is 0-180
         Therefore, if the value is more than 180 write it's modulo
         """
-        ser = serial.Serial(port="COM6", baudrate=9600, timeout=2)
+        #ser = serial.Serial(port="COM6", baudrate=9600, timeout=2)
 
         print("Actual input - " + str(az) + " : " + str(el))
         if (az > 180):
@@ -84,5 +84,5 @@ class rotator_controller():
                 #ser.close()
                 break
 
-        ser.close()
+        #ser.close()
 
