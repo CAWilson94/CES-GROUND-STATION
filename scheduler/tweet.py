@@ -59,7 +59,6 @@ def ground_station(outputString):
 
     tweet(outputString)
 
-
 def tweet_on_rotator_start():
     """
     Intended for use with rotator status updates:
@@ -80,3 +79,4 @@ def tweet_on_rotator_start():
         "Now tracking: " + str(nm) + " rise time: " +
         str(rt) + "set time: " + str(st) + " for duration: " + str(dur))
     tweet(tweetStr)
+
