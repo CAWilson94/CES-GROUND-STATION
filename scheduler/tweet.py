@@ -70,13 +70,16 @@ def tweet_on_rotator_start():
     """
     queryset = NextPass.objects.all()
 
-    rtfull = queryset[0].riseTime
-    stfull = queryset[0].setTime
-    rt = rtfull.strftime('%H:%M:%S')
-    st = stfull.strftime('%H:%M:%S')
-    dur = queryset[0].duration
-    nm = queryset[0].tle.name
-    tweetStr = (
-        "Now tracking: " + str(nm) + " rise time: " +
-        str(rt) + "set time: " + str(st) + " for duration: " + str(dur))
-    tweet(tweetStr)
+    if len(queryset>0):
+
+        rtfull = queryset[0].riseTime
+        stfull = queryset[0].setTime
+        rt = rtfull.strftime('%H:%M:%S')
+        st = stfull.strftime('%H:%M:%S')
+        dur = queryset[0].duration
+        nm = queryset[0].tle.name
+        tweetStr = (
+            "[" + datetime.now().strftime('%H:%M:%S') + "] " +
+            "Now tracking: " + str(nm) + " rise time: " + str(rt) +
+            "set time: " + str(st) + " for duration: " + str(dur))
+        tweet(tweetStr)
