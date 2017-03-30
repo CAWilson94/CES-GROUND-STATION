@@ -361,8 +361,10 @@ class MOTRuleBased(MOT):
     def find(self, missions, usefulTime):
 
         # Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers.
-
+        orderOfPasses = []
+        passes = []
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
+        print("Passes: " + str(len(passes)))
         # Sort from earliest first
         passes.sort(key=lambda x: x.riseTime, reverse=False)
 

@@ -98,10 +98,9 @@ scheduler
         .then(function successCallback(response, data) {
           // this callback will be called asynchronously
           // when the response is available
+          console.log("Refreshed nextpasses")
+
           $scope.nextpasses = response.data;
-
-          //console.log($scope.nextpass)
-
           $scope.nextpassesDisplay = [].concat($scope.nextpasses);
 
         }, function errorCallback(response) {
@@ -113,8 +112,6 @@ scheduler
 
 
     $scope.loadNextPasses()
-
-    $scope.itemsByPage = 15;
 
     /**
      * priorities: should default at 2 in dropdown 
@@ -148,9 +145,7 @@ scheduler
     $scope.updateTable = function() {
       $scope.isScheduling = true;
 
-      $scope.loadNextPasses();
       // Each mission requires a sat name and a priority
-
       try {
         $scope.mission = {
           name: $scope.tle.name,
@@ -172,7 +167,7 @@ scheduler
               });
 
               $scope.missionsDisplay = [].concat($scope.missions);
-              console.log(response)
+              $scope.loadNextPasses();
             },
             function errorCallBack(response) {
               // called asynchronously if an error occurs
@@ -226,7 +221,6 @@ scheduler
               $scope.missionsDisplay = [].concat($scope.missions);
 
               $scope.loadNextPasses()
-              console.log(response)
             },
             function errorCallBack(response) {
               console.log(response.status + " : " + response.statusText);

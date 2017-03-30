@@ -12,11 +12,21 @@ class SchedulerServices():
 			m.save()
 		print("Done.")
 		print("Scheduling...")
+		print("Removing previous passes...")
+		passes = NextPass.objects.all()
+		for p in passes:
+			p.delete()
+		print("Done.")		
 		passes = scheduler.find(missions, usefulTime)
 		print("Scheduled " + str(len(passes)) + " passes.")
-		print("Removing previous passes...")
-		NextPass.objects.all().delete()
-		print("Done.")
+		
+		missions = Mission.objects.all()
+		for p in passes:
+			if(p.mission not in missions):
+				p.delete()
+
+		print("Scheduled " + str(len(passes)) + " passes.")
+		
 		print("Saving new passes...")
 		for p in passes: 
 			p.save()

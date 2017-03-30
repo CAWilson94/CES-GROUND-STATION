@@ -14,7 +14,6 @@ class SchedulerHelper():
 		i = 0
 		for m in missions:
 			i += 1
-			print("Finding passes for the next 36 hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
 
 			tleEntry = m.TLE
 			try:
@@ -29,6 +28,8 @@ class SchedulerHelper():
 						
 					except ValueError: 
 						break
+
+				print("Finding passes for the next 36 hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
 			except ValueError: 
 					print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
 		return passes
