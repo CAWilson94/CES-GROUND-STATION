@@ -2,7 +2,7 @@
 Created on 13 Feb 2016
 @author: Charlotte Alexandra Wilson
 
-Last revision: 28 March 2017
+Last revision: 29 March 2017
 see bitbucket for details:
 https://CharlotteWilson@bitbucket.org/CharlotteWilson/dnnpd.git
 ---------------------------------------------------------------
@@ -31,6 +31,7 @@ and other relevant information, will be sent to a twitter feed.
 '''
 
 import tweepy
+from scheduler.models import NextPass
 
 
 class tweet:
@@ -43,7 +44,7 @@ class tweet:
         CONSUMER_SECRET = 'SlL3yWL0KUYiLXOjjqK08fSQBfqGhAlNcSgNdxEax91cX2fQ6m'
         # keep the quotes, replace this with your access token
         ACCESS_KEY = '846791513573089281-xia7pUhmibfvyN506XkIE53WWq1tBah'
-        # keep the quotes, replace this with your access token secret
+        # keep the quotes, replce this with your access token secret
         ACCESS_SECRET = 'UHsaektsXLsbTTYhhQyyaXtLriWL1k0IJnbURL1TCYfJ8'
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -53,7 +54,29 @@ class tweet:
 
 def ground_station(outputString):
     """ update status of rotators when used: e.g. CUTE-1 is
-         now being tracked at (AZEL value) """
+        now being tracked at (AZEL value)
+    """
+
     tweet(outputString)
 
 
+def tweet_on_rotator_start():
+    """
+    Intended for use with rotator status updates:
+    currently for proof of concept as there is no
+    guarantee there will be a sat pass during the
+    trade show: hence picking the first int the
+    scheduled next pass list and outputting results.
+    """
+    queryset = NextPass.objects.all()
+
+    rtfull = queryset[0].riseTime
+    stfull = queryset[0].setTime
+    rt = rtfull.strftime('%H:%M:%S')
+    st = stfull.strftime('%H:%M:%S')
+    dur = queryset[0].duration
+    nm = queryset[0].tle.name
+    tweetStr = (
+        "Now tracking: " + str(nm) + " rise time: " +
+        str(rt) + "set time: " + str(st) + " for duration: " + str(dur))
+    tweet(tweetStr)
