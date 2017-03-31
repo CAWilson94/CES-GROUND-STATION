@@ -23,12 +23,11 @@ SatPass:
 """
 
 import datetime
-import time
 import random
 import operator
 from random import randint
 
-CROSSOVER_RATE = 10
+CROSSOVER_RATE = 7
 FITNESS_CMP = operator.attrgetter("fitness")
 START_TIME_CMP = operator.attrgetter("startTime")
 CHROMO_LENGTH = 10
@@ -369,7 +368,7 @@ def GA(population):
 
 
 
-
+print("Starting GA")
 boop = generatePopulation()
 GA(boop)
 
