@@ -1,1 +1,5 @@
-Ground Station software to track and communicate with cube satellites.
+CES-GSS is a satellite tracking and mission planning application.  It tracks up to three days worth of satellite passes for user defined missions: where a user mission is a group of selected satellite passes each with their own priority for tracking. The system asks the user to select one satellite at a time and give it a priority or leave the priority at default ( neither low nor high priority). Once the user has met the selection criteria, the satellite passes are scheduled using one of three scheduling algorithms. These passes are displayed on the "next passes" table along with the missions currently selected shown on the "missions" table. Each mission may be deleted from within the table which results in the satellites being rescheduled and the new schedule displayed. There is also an output to csv for the current schedule for use in reporting or use with other software.
+
+Contributers: 
+
+Adam Kidd, Baldeep Singh, Charlotte Wilson, Hristo Hristov, Robbie Hamill.
