@@ -367,9 +367,9 @@ def test():
 
 
 boop = generatePopulation()
-# GA(boop)
+GA(boop)
 
 # rents = randomParents(boop)
-tournie(boop)
+#tournie(boop)
 
 print("semi.. worked")
