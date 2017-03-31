@@ -7,19 +7,18 @@ from . import GA as ga
 from scheduler.models import Mission
 
 
-class MOTRuleBased(MOT):
+class MOTGA(MOT):
 
-missions = Mission.objects.all()
-        # Returns a list of passes with no conflicts
+    """
+       Returns a list of passes with no conflicts
+       """
+
     def find(self, missions, usefulTime):
-        """
-
-        Find a list of passes with no conflicts
-        """
 
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
         print("Passes: " + str(len(passes)))
 
         return orderOfPasses
 
-find(missions, 100)
+missions = Mission.objects.all()
+MOTRuleBased.find(self,missions, 100)
