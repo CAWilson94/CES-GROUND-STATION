@@ -85,7 +85,17 @@ cube_e = satPass("cube_e", (datetime.datetime(2017, 12, 4, 11, 10)), (datetime.d
 cube_f = satPass("cube_f", (datetime.datetime(2017, 12, 4, 11, 30)), (datetime.datetime(2017, 12, 4, 11, 50)));
 cube_g = satPass("cube_g", (datetime.datetime(2017, 12, 4, 12, 0)), (datetime.datetime(2017, 12, 4, 12, 30)));
 
-TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g]
+
+cube_h = satPass("cube_h", (datetime.datetime(2017, 12, 4, 10, 0)), (datetime.datetime(2017, 12, 4, 11, 0)));
+cube_i = satPass("cube_i", (datetime.datetime(2017, 12, 4, 10, 20)), (datetime.datetime(2017, 12, 4, 10, 40)));
+cube_j = satPass("cube_j", (datetime.datetime(2017, 12, 4, 11, 20)), (datetime.datetime(2017, 12, 4, 11, 40)));
+cube_k = satPass("cube_k", (datetime.datetime(2017, 12, 4, 11, 0)), (datetime.datetime(2017, 12, 4, 12, 20)));
+cube_l = satPass("cube_l", (datetime.datetime(2017, 12, 4, 12, 10)), (datetime.datetime(2017, 12, 4, 12, 40)));
+cube_m = satPass("cube_m", (datetime.datetime(2017, 12, 4, 12, 30)), (datetime.datetime(2017, 12, 4, 12, 50)));
+cube_n = satPass("cube_n", (datetime.datetime(2017, 12, 4, 13, 0)), (datetime.datetime(2017, 12, 4, 13, 30)));
+
+TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g,cube_h,
+                  cube_i, cube_j,cube_k, cube_l,cube_m,cube_n]
 
 chromsomeOne = Chromosome(cube_b)
 chromsomeTwo = Chromosome(cube_c)
@@ -193,13 +203,14 @@ def tournie(population):
     i = 0
     while len(crossed) != len(population):
         newGen = randomParents(population)
-        printPopulation(newGen)
-        i = random.randint(0, 10)
+        #printPopulation(newGen)
+        i = random.randint(0, 7)
         if i < CROSSOVER_RATE:
+            #print("crossing over!")
             tempIndiList = crossover(newGen[0], newGen[1])
-            printPopulation(tempIndiList)
+            #printPopulation(tempIndiList)
             crossed.extend(tempIndiList)
-            printPopulation(crossed)
+            #printPopulation(crossed)
             newGen = []
 
     return crossed
@@ -248,6 +259,7 @@ def randomChromosome(chromosome):
                     orderedPassList.append(conflictList[randint(0, len(conflictList) - 1)])
                 else:
                     orderedPassList.append(chromosome[i])
+
                 conflictList = []
                 i = j - 1
                 break
@@ -341,29 +353,21 @@ def GA(population):
         gen += 1
         setFitness(population)  # check this
         population = sortByFitness(population)
-        best.append(population[
-                        -1])  # this is for the case of variety fitness where largest is fittest: others should be opposite
-        if (gen > 100):  # since there is no definitive stopping value. i.e. if fitness was 0
+        best.append(population[-1])  # this is for the case of variety fitness where largest is fittest: others should be opposite
+        # since there is no definitive stopping value. i.e. if fitness was 0
+        tournie(population)
+        if (gen > 100):
             best = sortByFitness(best)
             print("best fitness: %s" % best[0].fitness)
             print("best order is:")
             for item in best[0].satPassList:
                 print(item.name)
             return
-            tournie(population)
+
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
 
-def test():
-    boop = generatePopulation()
-    populateshit = setFitness(boop)
-    printPopulation(populateshit)
-
-    print("shit happening\n")
-    population = sortByFitness(populateshit)
-    printPopulation(population)
-    print(population[-1].fitness)
 
 
 boop = generatePopulation()
