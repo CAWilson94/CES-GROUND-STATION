@@ -15,10 +15,15 @@ class MOTGA(MOT):
 
     def find(self, missions, usefulTime):
 
+    	print("hello")
+
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
         print("Passes: " + str(len(passes)))
 
-        return orderOfPasses
+        #return orderOfPasses
+
+
 
 missions = Mission.objects.all()
-MOTRuleBased.find(self,missions, 100)
+m = MOTGA()
+m.find(missions=missions, usefulTime=5)
