@@ -68,7 +68,7 @@ class Chromosome:
         fitness         The fitness of the chromosome
 
     """
-    fitness = 0;
+    fitness = 0
 
     def __init__(self, satPassList):
         self.satPassList = satPassList
@@ -76,25 +76,39 @@ class Chromosome:
 
 
 ' ---------------------- Testing Data ---------------------- '
-cube_a = satPass("cube_a", (datetime.datetime(2017, 12, 4, 9, 0)), (datetime.datetime(2017, 12, 4, 10, 0)));
-cube_b = satPass("cube_b", (datetime.datetime(2017, 12, 4, 9, 20)), (datetime.datetime(2017, 12, 4, 9, 40)));
-cube_c = satPass("cube_c", (datetime.datetime(2017, 12, 4, 10, 20)), (datetime.datetime(2017, 12, 4, 10, 40)));
-cube_d = satPass("cube_d", (datetime.datetime(2017, 12, 4, 11, 0)), (datetime.datetime(2017, 12, 4, 11, 20)));
-cube_e = satPass("cube_e", (datetime.datetime(2017, 12, 4, 11, 10)), (datetime.datetime(2017, 12, 4, 11, 40)));
-cube_f = satPass("cube_f", (datetime.datetime(2017, 12, 4, 11, 30)), (datetime.datetime(2017, 12, 4, 11, 50)));
-cube_g = satPass("cube_g", (datetime.datetime(2017, 12, 4, 12, 0)), (datetime.datetime(2017, 12, 4, 12, 30)));
+cube_a = satPass("cube_a", (datetime.datetime(2017, 12, 4, 9, 0)),
+                 (datetime.datetime(2017, 12, 4, 10, 0)))
+cube_b = satPass("cube_b", (datetime.datetime(2017, 12, 4, 9, 20)),
+                 (datetime.datetime(2017, 12, 4, 9, 40)))
+cube_c = satPass("cube_c", (datetime.datetime(2017, 12, 4, 10, 20)),
+                 (datetime.datetime(2017, 12, 4, 10, 40)))
+cube_d = satPass("cube_d", (datetime.datetime(2017, 12, 4, 11, 0)),
+                 (datetime.datetime(2017, 12, 4, 11, 20)))
+cube_e = satPass("cube_e", (datetime.datetime(2017, 12, 4, 11, 10)),
+                 (datetime.datetime(2017, 12, 4, 11, 40)))
+cube_f = satPass("cube_f", (datetime.datetime(2017, 12, 4, 11, 30)),
+                 (datetime.datetime(2017, 12, 4, 11, 50)))
+cube_g = satPass("cube_g", (datetime.datetime(2017, 12, 4, 12, 0)),
+                 (datetime.datetime(2017, 12, 4, 12, 30)))
 
 
-cube_h = satPass("cube_h", (datetime.datetime(2017, 12, 4, 10, 0)), (datetime.datetime(2017, 12, 4, 11, 0)));
-cube_i = satPass("cube_i", (datetime.datetime(2017, 12, 4, 10, 20)), (datetime.datetime(2017, 12, 4, 10, 40)));
-cube_j = satPass("cube_j", (datetime.datetime(2017, 12, 4, 11, 20)), (datetime.datetime(2017, 12, 4, 11, 40)));
-cube_k = satPass("cube_k", (datetime.datetime(2017, 12, 4, 11, 0)), (datetime.datetime(2017, 12, 4, 12, 20)));
-cube_l = satPass("cube_l", (datetime.datetime(2017, 12, 4, 12, 10)), (datetime.datetime(2017, 12, 4, 12, 40)));
-cube_m = satPass("cube_m", (datetime.datetime(2017, 12, 4, 12, 30)), (datetime.datetime(2017, 12, 4, 12, 50)));
-cube_n = satPass("cube_n", (datetime.datetime(2017, 12, 4, 13, 0)), (datetime.datetime(2017, 12, 4, 13, 30)));
+cube_h = satPass("cube_h", (datetime.datetime(2017, 12, 4, 10, 0)),
+                 (datetime.datetime(2017, 12, 4, 11, 0)))
+cube_i = satPass("cube_i", (datetime.datetime(2017, 12, 4, 10, 20)),
+                 (datetime.datetime(2017, 12, 4, 10, 40)))
+cube_j = satPass("cube_j", (datetime.datetime(2017, 12, 4, 11, 20)),
+                 (datetime.datetime(2017, 12, 4, 11, 40)))
+cube_k = satPass("cube_k", (datetime.datetime(2017, 12, 4, 11, 0)),
+                 (datetime.datetime(2017, 12, 4, 12, 20)))
+cube_l = satPass("cube_l", (datetime.datetime(2017, 12, 4, 12, 10)),
+                 (datetime.datetime(2017, 12, 4, 12, 40)))
+cube_m = satPass("cube_m", (datetime.datetime(2017, 12, 4, 12, 30)),
+                 (datetime.datetime(2017, 12, 4, 12, 50)))
+cube_n = satPass("cube_n", (datetime.datetime(2017, 12, 4, 13, 0)),
+                 (datetime.datetime(2017, 12, 4, 13, 30)))
 
-TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g,cube_h,
-                  cube_i, cube_j,cube_k, cube_l,cube_m,cube_n]
+TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g, cube_h,
+                  cube_i, cube_j, cube_k, cube_l, cube_m, cube_n]
 
 chromsomeOne = Chromosome(cube_b)
 chromsomeTwo = Chromosome(cube_c)
@@ -156,7 +170,7 @@ def setFitness(population):
 
 def fitness(chromosome):
     """ The smallest time is the winner basically """
-    total = 0;
+    total = 0
     for y, z in zip(chromosome.satPassList[1:], chromosome.satPassList):
         # print(y.name,z.name)
         # print(y.startTime, z.endTime)
@@ -164,7 +178,7 @@ def fitness(chromosome):
         # diff=(datetime.datetime.strptime(str(y.startTime),"%H:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%H:%M:%S"))
         # print("%s" %diff)
         total += abs(int(diff.total_seconds()))
-    fitness = total;
+    fitness = total
     y.fitness = fitness  # want fitness to be for the orders so create individual from this
     return fitness
 
@@ -202,14 +216,14 @@ def tournie(population):
     i = 0
     while len(crossed) != len(population):
         newGen = randomParents(population)
-        #printPopulation(newGen)
+        # printPopulation(newGen)
         i = random.randint(0, 7)
         if i < CROSSOVER_RATE:
             #print("crossing over!")
             tempIndiList = crossover(newGen[0], newGen[1])
-            #printPopulation(tempIndiList)
+            # printPopulation(tempIndiList)
             crossed.extend(tempIndiList)
-            #printPopulation(crossed)
+            # printPopulation(crossed)
             newGen = []
 
     return crossed
@@ -255,7 +269,8 @@ def randomChromosome(chromosome):
 
                 if (conflictList):
                     d[len(orderedPassList)] = conflictList
-                    orderedPassList.append(conflictList[randint(0, len(conflictList) - 1)])
+                    orderedPassList.append(
+                        conflictList[randint(0, len(conflictList) - 1)])
                 else:
                     orderedPassList.append(chromosome[i])
 
@@ -310,6 +325,20 @@ def generateChromosome():
     return chromosome
 
 
+def nextPassChromosome(passes):
+    """
+    Take in next pass objects and output chromosomes
+    """
+    chromosomeSatPasses = []
+    for item in passes:
+        chromosomeSatPasses.append(item)
+    chromosome = Chromosome(chromosomeSatPasses)
+    chromosome.fitness = fitness(chromosome)
+    chromosome.satPassList = sorted(chromosome.satPassList, key=START_TIME_CMP)
+    return chromosome
+
+
+
 def testChromosome(satPassList):
     chromosome = Chromosome(satPassList)
     chromosome.fitness = fitness(chromosome)
@@ -347,12 +376,14 @@ def generatePopulation():
 def GA(population):
     """ Genetic algorithm for finding best suited order of sats """
     best = []  # Keep a list of the recent best solutions
-    gen = 0;
+    gen = 0
     while (1):
         gen += 1
         setFitness(population)  # check this
         population = sortByFitness(population)
-        best.append(population[-1])  # this is for the case of variety fitness where largest is fittest: others should be opposite
+        # this is for the case of variety fitness where largest is fittest:
+        # others should be opposite
+        best.append(population[-1])
         # since there is no definitive stopping value. i.e. if fitness was 0
         tournie(population)
         if (gen > 100):
@@ -367,12 +398,11 @@ def GA(population):
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
 
-
 print("Starting GA")
 boop = generatePopulation()
 GA(boop)
 
 # rents = randomParents(boop)
-#tournie(boop)
+# tournie(boop)
 
 print("semi.. worked")
