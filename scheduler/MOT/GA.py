@@ -53,13 +53,6 @@ class satPass:
         self.duration = (endTime.minute - startTime.minute)
 
 
-class Population:
-    ' Class representing population: a population contains chromosomes hurrah!'
-
-    def __init__(self, chromosome):
-        self.chromosome = chromosome
-
-
 class Chromosome:
     """ Class representing a chromosome: where a chromosome is basically a random ordered list of sat passes
 
