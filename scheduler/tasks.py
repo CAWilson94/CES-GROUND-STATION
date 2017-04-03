@@ -4,10 +4,8 @@ from celery.decorators import periodic_task
 from time import sleep
 from scheduler.schedulerQueue import SchedulerQ
 from scheduler.tweet import tweet_on_rotator_start
-#from scheduler.models import TLE
-
+from scheduler.models import TLE, AzEl, NextPass, Mission
 from random import randint
-
 from scheduler.rotatorController import rotator_controller
 
 
@@ -20,18 +18,20 @@ from celery.signals import celeryd_init
 def configure_worker1(sender=None, conf=None, **kwargs):
     print("Init celery")
 
+
 @shared_task()
-def SchedulerThread(schedulerQ):
+def SchedulerThread():
 	print ("Starting Scheduler") 
-	counter = 0
-	while(1):
-		counter += 1
-		if(counter > 100):
-			counter = 0
-		schedulerQ.setItem(counter)
-		print("In Scheduler thread - " + str(counter))
-		sleep(2)
+	try:
+		mission_list = Mission.objects.filter(status="NEW")
+	except Mission.DoesNotExist as e:
+		print("No Missions")
+		mission_list = None
+	for i in mission_list:
+		print(i.name)
 	print("Exiting Scheduler")
+	return mission_list
+	
 	
 
 

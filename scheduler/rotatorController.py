@@ -6,6 +6,7 @@ from scheduler.models import NextPass, TLE, AzEl
 from time import sleep
 import serial
 from struct import *
+from django import db
 
 
 class rotator_controller():
@@ -18,7 +19,7 @@ class rotator_controller():
         super(rotator_controller, self).__init__()
         self.nextPass = nextPass
 
-
+    ser = None
     try:
         ser = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=2)
     except:

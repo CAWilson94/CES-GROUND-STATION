@@ -16,6 +16,7 @@ import os
 #djcelery.setup_loader()
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672'
+result_backend = 'db+sqlite:///results.sqlite'
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

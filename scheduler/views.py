@@ -27,11 +27,13 @@ from scheduler.MOT.ruleBased import MOTRuleBased
 
 from scheduler.tweet import ground_station
 from scheduler.tasks import RotatorsThread
+from scheduler.tasks import SchedulerThread
 
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
-RotatorsThread.delay((NextPass()))
+SchedulerThread.delay()
+#RotatorsThread.delay((NextPass()))
 
 class TestingScheduler():
 
