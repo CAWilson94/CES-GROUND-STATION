@@ -1,11 +1,6 @@
-from random import randint
-from datetime import timedelta
-from scheduler.models import NextPass
 from scheduler.schedulerHelper import SchedulerHelper
 from scheduler.MOT.schedulerInterface import MOT
 from . import GA as ga
-from . GA import Chromosome, satPass
-from scheduler.models import Mission
 
 
 class MOTGA(MOT):
@@ -14,27 +9,20 @@ class MOTGA(MOT):
        """
 
     def find(self, missions, usefulTime):
-
-        print("	SCHEDULING SHIT ----------------------------")
         """
-        'Finds' a list of next passes for a certain amount of hours, 
-        or days, for which conflicts have been either ignored or 
+        'Finds' a list of next passes for a certain amount of hours,
+        or days, for which conflicts have been either ignored or
         resolved using a GA.
         """
-
-        """ Getting aw those next passes"""
+        orderOfPasses = []
+        passes = []
+        print("HALLO-------------------------------------------")
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
-        query = Mission.objects.all()
-
-        # for item in passes:
-        #   print(item.mission.name + " start time: " +
-        #        str(item.riseTime) + " end time: " + str(item.setTime))
-
         untouchedChromosome = ga.nextPassChromosome(passes)
         print("\n" + str(untouchedChromosome.fitness))
-
         population = ga.generatePopulation(chromosome=untouchedChromosome)
         # ga.printPopulation(population)
-        ga.GA(population)
-
+        chromosomeWinner = ga.GA(population)
+        ''' instead of chromosome object you want to return the satpasslist'''
+        orderOfPasses = chromosomeWinner.satPassList
         return orderOfPasses

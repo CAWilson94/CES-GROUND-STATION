@@ -22,7 +22,7 @@ from scheduler.MOT.simpleHC import MOTSimpleHC
 from scheduler.MOT.steepestHC import MOTSteepestHC
 from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
-#from scheduler.MOT.ruleBased import MOTRuleBased
+from scheduler.MOT.ruleBased import MOTRuleBased
 from scheduler.MOT.GAScheduler import MOTGA
 
 
@@ -124,6 +124,7 @@ class MissionsViewSet(viewsets.ModelViewSet):
 class MissionView(APIView):
 
     def get(self, request):
+        print("WHAT IS THIS SHIT -----------------------===========> GET")
         passes = NextPass.objects.filter(
             setTime__gte=datetime.now()).order_by("riseTime")
 
@@ -136,7 +137,6 @@ class MissionView(APIView):
             #scheduler = MOTStochasticHC()
             #scheduler = MOTRandomRestartHC()
             #scheduler = MOTRuleBased()
-            print("IS ANTYHING HAPPENING HERE????")
             scheduler = MOTGA()
             #lis = Services.scheduleMissions(self, missionList, scheduler, 0)
             passes = SchedulerServices.scheduleAndSavePasses(
@@ -146,28 +146,30 @@ class MissionView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        print("WHAT IS THIS SHIT -----------------------===========> POST")
         if Services.makeMissions(request.data):
             name = request.data.get("name")
             pr = request.data.get("priority")
             #ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
             #scheduler = MOTRuleBased()
-            scheduler = MOTGA
+            scheduler = MOTGA()
             #scheduler = MOTSimpleHC()
-            SchedulerServices.scheduleAndSavePasses(self, scheduler, usefulTime=6)
+            SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
             return HttpResponse(status=201)
-        SchedulerServices.scheduleAndSavePasses(self, scheduler, usefulTime=6)
+        SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         return HttpResponse(status=500)
 
     def delete(self, request, pk):
+        print("WHAT IS THIS SHIT -----------------------===========> DELETE")
         print("deleting: " + str(pk))
         missionToDelete = Mission.objects.filter(id=pk)
         deleted = missionToDelete.delete()
         print("Deleted: " + str(deleted))
         # print(missionToDelete[0].name)
         #scheduler = MOTRuleBased()
-        scheduler = MOTGA
+        scheduler = MOTGA()
         #scheduler = MOTSimpleHC()
-        SchedulerServices.scheduleAndSavePasses(self, scheduler, usefulTime=6)
+        SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         return HttpResponse(status=200)
 
 

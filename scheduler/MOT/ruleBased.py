@@ -360,7 +360,7 @@ class MOTRuleBased(MOT):
     # Returns a list of passes with no conflicts
     def find(self, missions, usefulTime):
 
-        # Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers.
+        '''Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers'''
         orderOfPasses = []
         passes = []
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
