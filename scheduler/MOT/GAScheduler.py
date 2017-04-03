@@ -14,6 +14,8 @@ class MOTGA(MOT):
        """
 
     def find(self, missions, usefulTime):
+
+        print("	SCHEDULING SHIT ----------------------------")
         """
         'Finds' a list of next passes for a certain amount of hours, 
         or days, for which conflicts have been either ignored or 
@@ -32,12 +34,7 @@ class MOTGA(MOT):
         print("\n" + str(untouchedChromosome.fitness))
 
         population = ga.generatePopulation(chromosome=untouchedChromosome)
-        #ga.printPopulation(population)
+        # ga.printPopulation(population)
         ga.GA(population)
 
-        # return orderOfPasses
-
-
-missions = Mission.objects.all()
-m = MOTGA()
-m.find(missions=missions, usefulTime=5)
+        return orderOfPasses

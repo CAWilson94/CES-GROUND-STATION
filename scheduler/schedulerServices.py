@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from scheduler.MOT.ruleBased import MOTRuleBased
 from scheduler.models import TLE, Mission, NextPass
+from scheduler.MOT.GAScheduler import MOTGA
+
 
 class SchedulerServices():
 

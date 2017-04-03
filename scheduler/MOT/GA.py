@@ -414,7 +414,7 @@ def GA(population):
             print("best order is:")
             for item in best[0].satPassList:
                 print(item.tle.name)
-            return
+            return best[0]
 
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
