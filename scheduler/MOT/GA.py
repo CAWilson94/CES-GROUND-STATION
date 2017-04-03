@@ -212,6 +212,7 @@ def fitnessVariety_sum(chromosome):
     # print("fitness: ", fitness)
     return fitness
 
+
 def nextPass_fitnessVariety_sum(chromosome):
     """  want different sats and not just any.. """
     diffNames = 0
@@ -418,4 +419,37 @@ def GA(population):
 
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
+
+
+def getNeighbours(chromosome):
+
+
+
+def HC(startChromosome):
+    ''' Hill climber simple '''
+    bestSoFar = startChromosome
+    bestSoFar.fitness = setFitness(bestSoFar)
+    while(bestSoFar.fitness is not 0):
+        neighbours = getNeighbours(bestSoFar)
+        neighbours = sortByFitness(neighbours)
+        if(neighbours[0].fitness < bestSoFar.fitness):
+            bestSoFar = neighbours[0]
+        if(neighbours[0].fitness > bestSoFar.fitness):
+            return bestSoFar
+    return bestSoFar
+
+
+def randomRestart(passes):
+    startChromosome = nextPassChromosome(passes)
+    gen = 0
+    while(1):
+        solution = HC(startChromosome)
+        if(gen>100):
+            return 
+        startChromosome = nextPassChromosome(passes)
+
+
+        
+
+
 
