@@ -30,6 +30,7 @@ from random import randint
 CROSSOVER_RATE = 7
 FITNESS_CMP = operator.attrgetter("fitness")
 START_TIME_CMP = operator.attrgetter("startTime")
+RISE_TIME_CMP = operator.attrgetter("riseTime")
 CHROMO_LENGTH = 10
 POPULATION_SIZE = 10
 passNames = ["cube_a", "cube_b", "cube_c", "cube_d"]
@@ -103,9 +104,6 @@ cube_n = satPass("cube_n", (datetime.datetime(2017, 12, 4, 13, 0)),
 TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g, cube_h,
                   cube_i, cube_j, cube_k, cube_l, cube_m, cube_n]
 
-chromsomeOne = Chromosome(cube_b)
-chromsomeTwo = Chromosome(cube_c)
-
 
 def crossover(chromoOne, chromoTwo):
     """crossover function: crosses over pass lists while keeping them in order wrt to time."""
@@ -126,7 +124,7 @@ def crossover(chromoOne, chromoTwo):
 
 def randomParents(population):
     """ Select Parents for tournament function"""
-    tempList = []  # Temporary population List
+    tempList = []
     parents = []
     for index in range(1):
         # Two random int's from range 0 - population length
@@ -173,6 +171,19 @@ def fitness(chromosome):
         total += abs(int(diff.total_seconds()))
     fitness = total
     y.fitness = fitness  # want fitness to be for the orders so create individual from this
+    return fitness
+
+
+def nextPassFitness(chromosome):
+    """
+    Fitness specific to nextpass lists
+    """
+    total = 0
+    for y, z in zip(chromosome.satPassList[1:], chromosome.satPassList):
+        diff = (y.riseTime - z.setTime)
+        total += abs(int(diff.total_seconds()))
+    fitness = total
+    y.fitness = fitness
     return fitness
 
 
@@ -326,10 +337,9 @@ def nextPassChromosome(passes):
     for item in passes:
         chromosomeSatPasses.append(item)
     chromosome = Chromosome(chromosomeSatPasses)
-    chromosome.fitness = fitness(chromosome)
-    chromosome.satPassList = sorted(chromosome.satPassList, key=START_TIME_CMP)
+    chromosome.fitness = nextPassFitness(chromosome)
+    chromosome.satPassList = sorted(chromosome.satPassList, key=RISE_TIME_CMP)
     return chromosome
-
 
 
 def testChromosome(satPassList):

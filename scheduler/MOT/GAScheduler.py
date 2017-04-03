@@ -23,9 +23,11 @@ class MOTGA(MOT):
         """ Getting aw those next passes"""
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
         query = Mission.objects.all()
-        for item in passes:
-            print(item.mission.name + " start time: " +
-                  str(item.riseTime) + " end time: " + str(item.setTime))
+        
+
+        #for item in passes:
+         #   print(item.mission.name + " start time: " +
+          #        str(item.riseTime) + " end time: " + str(item.setTime))
 
         """
         Need to get a population which is a list of chromosomes here
@@ -34,9 +36,12 @@ class MOTGA(MOT):
         (1) list of sat passes 
         (2) fitness
         """
-        ga.nextPassChromosome(passes) 
+        untouchedChromosome = ga.nextPassChromosome(passes) 
+        print ("\n"  + str(untouchedChromosome.fitness))
 
-        ga.GA()
+
+
+  #      ga.GA()
 
         # return orderOfPasses
 
