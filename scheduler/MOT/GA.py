@@ -113,10 +113,10 @@ def crossover(chromoOne, chromoTwo):
     childOne = Chromosome(child1satPassList)
     childTwo = Chromosome(child2satPassList)
     # Could probably create a "package Chromosome" function..
-    childOne.fitness = fitness(childOne)
-    childTwo.fitness = fitness(childTwo)
-    childOne.satPassList = sorted(childOne.satPassList, key=START_TIME_CMP)
-    childTwo.satPassList = sorted(childTwo.satPassList, key=START_TIME_CMP)
+    childOne.fitness = nextPassFitness(childOne)
+    childTwo.fitness = nextPassFitness(childTwo)
+    childOne.satPassList = sorted(childOne.satPassList, key=RISE_TIME_CMP)
+    childTwo.satPassList = sorted(childTwo.satPassList, key=RISE_TIME_CMP)
     childList = [childOne, childTwo]
 
     return childList
@@ -154,7 +154,7 @@ def setFitness(population):
         returns a population of chromosomes with fitnesses :O 
     """
     for chromosome in population:
-        chromosome.fitness = fitnessVariety_sum(chromosome)
+        chromosome.fitness = nextPass_fitnessVariety_sum(chromosome)
 
     return population
 
@@ -205,6 +205,23 @@ def fitnessVariety_sum(chromosome):
         # print(satPass.name, " duration: ", duration)
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
+            diffNames += 1
+
+    # print(diffNames, "diffNames: ", diffNames)
+    fitness = duration * diffNames
+    # print("fitness: ", fitness)
+    return fitness
+
+def nextPass_fitnessVariety_sum(chromosome):
+    """  want different sats and not just any.. """
+    diffNames = 0
+    satLookedat = []
+    duration = 0
+    for satPass in chromosome.satPassList:
+        duration += (satPass.setTime - satPass.riseTime).total_seconds()
+        # print(satPass.name, " duration: ", duration)
+        if satPass.tle.name not in satLookedat:
+            satLookedat.append(satPass.tle.name)
             diffNames += 1
 
     # print(diffNames, "diffNames: ", diffNames)
@@ -352,6 +369,8 @@ def testChromosome(satPassList):
 def printPopulation(populateshit):
     for chromosome in populateshit:
         stringName = ""
+        print("MORE CHROMOSOMES\n")
+        print("FITNESS: " + str(nextPassFitness(chromosome)))
         for item in chromosome.satPassList:
             stringName += item.tle.name + " "
         print(chromosome.fitness, stringName)
@@ -394,7 +413,7 @@ def GA(population):
             print("best fitness: %s" % best[0].fitness)
             print("best order is:")
             for item in best[0].satPassList:
-                print(item.name)
+                print(item.tle.name)
             return
 
     print("generation: " + gen + "best: " + population[

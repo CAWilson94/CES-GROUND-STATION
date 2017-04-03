@@ -32,8 +32,8 @@ class MOTGA(MOT):
         print("\n" + str(untouchedChromosome.fitness))
 
         population = ga.generatePopulation(chromosome=untouchedChromosome)
-        ga.printPopulation(population)
-        #ga.GA()
+        #ga.printPopulation(population)
+        ga.GA(population)
 
         # return orderOfPasses
 
