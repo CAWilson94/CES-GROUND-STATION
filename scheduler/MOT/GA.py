@@ -240,7 +240,7 @@ def sortByFitness(population):
 
 
 def conflictSingle(satPassB, passAendTime):
-    if (satPassB.startTime < passAendTime):
+    if (satPassB.riseTime < passAendTime):
         return True
     else:
         return False
@@ -256,7 +256,7 @@ def randomChromosome(chromosome):
     d = {}
 
     while i < len(chromosome):
-        windowEnd = chromosome[i].endTime
+        windowEnd = chromosome[i].setTime
 
         for j in range(i + 1, len(chromosome)):
 
@@ -267,8 +267,8 @@ def randomChromosome(chromosome):
                 if chromosome[j] not in conflictList:
                     conflictList.append(chromosome[j])
 
-                if chromosome[j].endTime > chromosome[i].endTime:
-                    windowEnd = chromosome[j].endTime
+                if chromosome[j].setTime > chromosome[i].setTime:
+                    windowEnd = chromosome[j].setTime
             else:
 
                 if (conflictList):
@@ -353,13 +353,13 @@ def printPopulation(populateshit):
     for chromosome in populateshit:
         stringName = ""
         for item in chromosome.satPassList:
-            stringName += item.name + " "
+            stringName += item.tle.name + " "
         print(chromosome.fitness, stringName)
 
 
-def generatePopulation():
+def generatePopulation(chromosome):
     # chromo = generateChromosome()
-    chromosome = testChromosome(TEST_PASS_LIST)
+    #chromosome = testChromosome(TEST_PASS_LIST)
     populationList = []
 
     # print("list without conflicts: \n")
@@ -400,12 +400,3 @@ def GA(population):
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
-
-print("Starting GA")
-boop = generatePopulation()
-GA(boop)
-
-# rents = randomParents(boop)
-# tournie(boop)
-
-print("semi.. worked")
