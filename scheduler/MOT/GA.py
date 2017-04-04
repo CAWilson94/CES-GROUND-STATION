@@ -420,13 +420,13 @@ def GA(population):
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
+'''
 
 def getNeighbours(chromosome):
 
 
 
 def HC(startChromosome):
-    ''' Hill climber simple '''
     bestSoFar = startChromosome
     bestSoFar.fitness = setFitness(bestSoFar)
     while(bestSoFar.fitness is not 0):
@@ -448,7 +448,7 @@ def randomRestart(passes):
             return 
         startChromosome = nextPassChromosome(passes)
 
-
+'''
         
 
 
