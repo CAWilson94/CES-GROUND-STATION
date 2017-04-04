@@ -3,6 +3,7 @@ from datetime import timedelta
 from scheduler.models import NextPass
 from scheduler.schedulerHelper import SchedulerHelper
 from scheduler.MOT.schedulerInterface import MOT
+import time
 
 # mins added to the end of the conflict period
 CONFLICT_PADDING = timedelta(minutes=1)
@@ -361,6 +362,7 @@ class MOTRuleBased(MOT):
     def find(self, missions, usefulTime):
 
         '''Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers'''
+        start = time.clock()
         orderOfPasses = []
         passes = []
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
@@ -434,6 +436,8 @@ class MOTRuleBased(MOT):
 
         if(DEBUG and DEBUG_LEVEL >= 1):
             print("Num of conflicts resolved: " + str(conflictsNum))
-
+        stop = time.clock()
+        run_time = float(stop - start)
+        print("RB TIME: " + str(run_time) + " - -------------------")
         return orderOfPasses
 #
