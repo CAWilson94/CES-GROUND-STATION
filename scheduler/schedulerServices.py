@@ -1,6 +1,7 @@
 '''from scheduler.MOT.ruleBased import MOTRuleBased'''
 from scheduler.models import Mission, NextPass
 import time
+from scheduler.MOT.testingSchedulers import test
 '''from scheduler.MOT.GAScheduler import MOTGA'''
 
 
@@ -43,6 +44,7 @@ class SchedulerServices():
         stop = time.clock()
         run_time = float(stop - start)
         print("RUN TIME: " + str(run_time) + "---------------------------")
+        test(NextPass.objects.all().order_by("riseTime"))
         return NextPass.objects.all().order_by("riseTime")
 
 
