@@ -1,6 +1,7 @@
 from scheduler.schedulerHelper import SchedulerHelper
 from scheduler.MOT.schedulerInterface import MOT
 from . import GA as ga
+import time
 
 
 class MOTGA(MOT):
@@ -14,9 +15,10 @@ class MOTGA(MOT):
         or days, for which conflicts have been either ignored or
         resolved using a GA.
         """
+        start = time.clock()
         orderOfPasses = []
         passes = []
-        print("HALLO-------------------------------------------")
+        print("--------GA STARTING --------")
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
         untouchedChromosome = ga.nextPassChromosome(passes)
         print("\n" + str(untouchedChromosome.fitness))
@@ -25,4 +27,7 @@ class MOTGA(MOT):
         chromosomeWinner = ga.GA(population)
         ''' instead of chromosome object you want to return the satpasslist'''
         orderOfPasses = chromosomeWinner.satPassList
+        stop = time.clock()
+        run_time = float(stop - start)
+        print("GA TIME: " + str(run_time) + " - -------------------")
         return orderOfPasses
