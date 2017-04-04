@@ -449,7 +449,3 @@ def randomRestart(passes):
         startChromosome = nextPassChromosome(passes)
 
 '''
-        
-
-
-

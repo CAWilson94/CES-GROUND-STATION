@@ -7,7 +7,8 @@ def test(passes):
 
     total_contact_time = 0
     for item in passes:
-        total_contact_time += item.duration.seconds
+    	if item.duration is not None:
+	        total_contact_time += item.duration.seconds
 
     total_non_contact_time = duration.seconds - total_contact_time
 
