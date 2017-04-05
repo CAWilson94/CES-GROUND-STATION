@@ -377,10 +377,11 @@ def GA(population):
         gen += 1
         setFitness(population)
         population = sortByFitness(population)
-        best.append(population[-1])
-        tournie(population)
-        if (gen > 100) or (levelOff(population[-1], best)):
-            best = sortByFitness(best)
+        bestFromPop = population[-1]
+        best.append(bestFromPop)
+        population = tournie(population)
+        best = sortByFitness(best)
+        if (gen > 100) or (levelOff(bestFromPop, best)):
             print("best fitness: %s" % best[0].fitness)
             print("best order for gen " + str(gen) + " is: ")
             for item in best[0].satPassList:
@@ -392,8 +393,7 @@ def GA(population):
 
 
 def levelOff(current, bestsofar):
-    print("CALLING THINGS")
-    ten_percent_range = abs((10 / current.fitness) * 100)
+    ten_percent_range = abs((current.fitness / 10))
     i = 0
     for item in bestsofar:
         if abs(current.fitness - item.fitness) <= ten_percent_range:
@@ -402,6 +402,8 @@ def levelOff(current, bestsofar):
         return True
 
 
+def test():
+    levelOff(90, [99, 88, 86, 98, 88, 100])
 
 """
 def getNeighbours(chromosome):
