@@ -288,11 +288,15 @@ def randomChromosome(chromosome):
             orderedPassList.append(chromosome[i])
         i += 1
 
-    '''
+    randomChromosome = Chromosome(orderedPassList)
+
+    return randomChromosome
+
+    """
     print("\nRandom chromosome")
 
-    for item in orderedList:
-        print(item.name)
+    for item in orderedPassList:
+        print(item.tle.name)
 
     print("Dictionary: \n")
 
@@ -300,13 +304,10 @@ def randomChromosome(chromosome):
 
         stringName = ""
         for item in v:
-            stringName+=item.name + " "
+            stringName += item.tle.name + " "
 
-        print(k,stringName)
-        '''
-    randomChromosome = Chromosome(orderedPassList)
-
-    return randomChromosome
+        print(k, stringName)
+    """
 
 
 def genPasses():
