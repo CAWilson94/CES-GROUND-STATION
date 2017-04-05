@@ -404,15 +404,21 @@ def GA(population):
         gen += 1
         setFitness(population)  # check this
         population = sortByFitness(population)
+        print("population fitness: ----------------------------")
+        for item in population:
+            print(item.fitness)
         # this is for the case of variety fitness where largest is fittest:
         # others should be opposite
         best.append(population[-1])
+        print("best list fitness: ----------------------------")
+        for item in best:
+            print(item.fitness)
         # since there is no definitive stopping value. i.e. if fitness was 0
         tournie(population)
-        if (gen > 100):
+        if (gen > 100) or (levelOff(population[-1], best)):
             best = sortByFitness(best)
             print("best fitness: %s" % best[0].fitness)
-            print("best order is:")
+            print("best order for gen " + str(gen) + " is: ")
             for item in best[0].satPassList:
                 print(item.tle.name)
             return best[0]
@@ -420,6 +426,17 @@ def GA(population):
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
+
+def levelOff(current, bestsofar):
+    print("CALLING THINGS")
+    ten_percent_range = abs((10 / current.fitness) * 100)
+    i = 0
+    for item in bestsofar:
+        if abs(current.fitness - item.fitness) <= ten_percent_range:
+            i += 1
+    if i == 5:
+        print("LEVELLING OFF ---------------------------------------")
+        return True
 
 
 '''
