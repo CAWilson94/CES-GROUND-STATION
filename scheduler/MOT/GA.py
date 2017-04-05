@@ -420,6 +420,8 @@ def GA(population):
     print("generation: " + gen + "best: " + population[
         0].chromosomeString)  # TODO: chromosomeString should be Gene string.
 
+
+
 '''
 
 def getNeighbours(chromosome):
