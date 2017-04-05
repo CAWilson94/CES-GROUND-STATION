@@ -255,9 +255,7 @@ def randomChromosome(chromosome):
     chromosome = chromosome.satPassList
     orderedPassList = []
     i = 0
-
     d = {}
-
     while i < len(chromosome):
         windowEnd = chromosome[i].setTime
 
@@ -289,7 +287,6 @@ def randomChromosome(chromosome):
         i += 1
 
     randomChromosome = Chromosome(orderedPassList)
-
     return randomChromosome
 
     """
