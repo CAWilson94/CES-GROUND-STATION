@@ -13,7 +13,7 @@ class MOTStochasticHC(MOT):
 		if it is better."""
 
 		print(" Starting stochastic hillclimbing")
-		maxIterations = 2000
+		maxIterations = 8000
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
@@ -43,7 +43,7 @@ class MOTStochasticHC(MOT):
 			else:
 				i+=1
 			
-			if i%(maxIterations/10)==0:
+			if (i%(maxIterations/10))==0:
 				print(".")
 
 		if i==maxIterations:

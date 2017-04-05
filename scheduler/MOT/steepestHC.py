@@ -22,17 +22,9 @@ class MOTSteepestHC(MOT):
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
-			n=0
-			for neighbour in generatorOfAllNeighboursIncItself:
-				if n==maxNeighbours:
-					break
-				listOfNearestNeighboursAndItself.append(list(neighbour))
-				n+=1
-
-			listOfNearestNeighbours = listOfNearestNeighboursAndItself[1:]
 
 			oldNeighbourScore=sys.maxsize
-			for neighbour in listOfNearestNeighbours:
+			for neighbour in generatorOfAllNeighboursIncItself:
 
 				newNeighbourScore,nextPassList  = _Helper.fitnessFunction(self,neighbour,usefulTime)
 
@@ -51,7 +43,7 @@ class MOTSteepestHC(MOT):
 				i+=1
 			#print(newScore)
 
-			if i%maxIterations/10:
+			if (i%(maxIterations/10))==0:
 				print(".")
 				
 		if i==maxIterations:

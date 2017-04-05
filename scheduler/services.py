@@ -113,10 +113,13 @@ class Services():
 			return "Format of TLEEntry is incorrect (getNextPass)"
 
 		details = observer.next_pass(sat)
-
+		
 		riseTime = _Helper.roundMicrosecond(details[0])
 		setTime = _Helper.roundMicrosecond(details[4])
 		duration  = setTime - riseTime
+		if(duration<timedelta(0)):
+			print ("not my fault")
+
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
 			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleEntry)

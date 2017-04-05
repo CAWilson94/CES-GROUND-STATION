@@ -58,7 +58,7 @@ class MissionView(APIView):
         for mission in missions:
             missionList.append(mission)
         # print(missionList)
-        scheduledMissionList = Services.scheduleMissions(self, missionList, MOTSimpleHC)
+        scheduledMissionList = Services.scheduleMissions(self, missionList, MOTRandomRestartHC)
         #print("final List: {}".format(lis))
         scheduledMissionList.sort(key=lambda r: r.riseTime)
         

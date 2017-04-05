@@ -30,10 +30,6 @@ class MOTSimpleHC(MOT):
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
 			n=0
 
-			#print("neighbours used {}".format(n))
-			#Remove the current node from neighbour list
-			listOfNearestNeighbours = listOfNearestNeighboursAndItself[1:]
-
 			oldNeighbourScore=sys.maxsize
 			#Find the first better neighbour with a better score
 

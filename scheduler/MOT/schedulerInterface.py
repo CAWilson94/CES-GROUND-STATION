@@ -5,4 +5,4 @@ class MOT:
 
     def find(self):
         # explicitly set it up so this can't be called directly
-        raise NotImplementedError('Exception raised, ImageFinder is supposed to be an interface / abstract class!')
+        raise NotImplementedError('Exception raised, MOT is supposed to be an interface / abstract class!')

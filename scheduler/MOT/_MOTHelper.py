@@ -28,8 +28,9 @@ class _Helper():
 
 		#print("nextPasses")
 		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime(2017,3,27,16,0,0))
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.now())
 			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime 
 			nextPassList.append(nextPass)
 		
 		#put in priority groups!
@@ -195,6 +196,7 @@ class _Helper():
 							#TODO: fit in some random place in end gap
 							curSatRise = sat.setTime-transactionTime
 							curSatSet = sat.setTime
+							
 							conflicts=False
 						elif frontGap >= transactionTime:
 							#can be fit in start gap
