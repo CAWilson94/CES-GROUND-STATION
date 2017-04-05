@@ -125,18 +125,18 @@ class MissionView(APIView):
     def get(self, request):
         passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
         
-        if(len(passes) < 10 
+        #if(len(passes) < 10 
             #or len(Mission.objects.all().filter(status="NEW")) > 0 
             #or len(Mission.objects.all().filter(status="SCHEDULING")) > 0 
-            or len(Mission.objects.all()) == 0):
+            #or len(Mission.objects.all()) == 0):
             #scheduler = MOTSimpleHC()
             #scheduler = MOTSteepestHC()
             #scheduler = MOTStochasticHC()
             #scheduler = MOTRandomRestartHC()
-            scheduler = MOTRuleBased()
+            #scheduler = MOTRuleBased()
             #lis = Services.scheduleMissions(self, missionList, scheduler, 0)
-            passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
-
+            #passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+        passes = NextPass.objects.all().order_by("riseTime")
         serializer = NextPassSerializer(passes, many=True)
         return Response(serializer.data)
 
@@ -145,11 +145,13 @@ class MissionView(APIView):
             name = request.data.get("name")
             pr = request.data.get("priority")
             #ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
-            scheduler = MOTRuleBased()
+            #scheduler = MOTRuleBased()
             #scheduler = MOTSimpleHC()
-            SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+            NextPass.objects.all().order_by("riseTime")
+            #SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
             return HttpResponse(status=201)
-        SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+        NextPass.objects.all().order_by("riseTime")
+        #SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         return HttpResponse(status=500)
 
     def delete(self, request, pk):
@@ -158,9 +160,10 @@ class MissionView(APIView):
         deleted = missionToDelete.delete()
         print("Deleted: " + str(deleted))
         #print(missionToDelete[0].name)
-        scheduler = MOTRuleBased()
+        #scheduler = MOTRuleBased()
         #scheduler = MOTSimpleHC()
-        SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+        NextPass.objects.all().order_by("riseTime")
+        #SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         return HttpResponse(status=200)
 
 

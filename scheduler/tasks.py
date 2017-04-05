@@ -7,6 +7,7 @@ from scheduler.tweet import tweet_on_rotator_start
 from scheduler.models import TLE, AzEl, NextPass, Mission
 from random import randint
 from scheduler.rotatorController import rotator_controller
+from scheduler import schedulerServices
 
 
 schedulerQ = SchedulerQ()
@@ -21,16 +22,15 @@ def configure_worker1(sender=None, conf=None, **kwargs):
 
 @shared_task()
 def SchedulerThread():
-	print ("Starting Scheduler") 
-	try:
-		mission_list = Mission.objects.filter(status="NEW")
-	except Mission.DoesNotExist as e:
-		print("No Missions")
-		mission_list = None
-	for i in mission_list:
-		print(i.name)
-	print("Exiting Scheduler")
-	return mission_list
+	while(1):
+		print ("Starting Scheduler") 
+		try:
+			schedulerServices.SchedulerServices.scheduleAndSavePasses()
+		except: 
+			print("Scheduler broke.")
+		#passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
+		print("Finished")
+		sleep(10)
 	
 	
 

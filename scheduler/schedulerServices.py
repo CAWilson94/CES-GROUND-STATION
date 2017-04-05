@@ -4,7 +4,16 @@ from scheduler.models import TLE, Mission, NextPass
 
 class SchedulerServices():
 
-	def scheduleAndSavePasses(self, scheduler, usefulTime):
+
+	#scheduler = MOTSimpleHC()
+	#scheduler = MOTSteepestHC()
+	#scheduler = MOTStochasticHC()
+	#scheduler = MOTRandomRestartHC()
+	#scheduler = MOTRuleBased()
+	
+	def scheduleAndSavePasses():
+		scheduler = MOTRuleBased()
+		usefulTime = 0
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
 		for m in missions: 
