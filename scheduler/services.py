@@ -2,9 +2,8 @@ import requests
 from django.db.utils import OperationalError
 from scheduler.missionServices import mission_services as ms
 from scheduler.models import TLE, AzEl, NextPass, Mission
-import math, ephem, threading
+import math, ephem, threading,geocoder
 from datetime import date, datetime, timedelta
-
 
 class rotatorThread (threading.Thread):
 	def __init__(self, threadID, name, counter):
@@ -244,17 +243,19 @@ class _Helper():
 
 	def getObserver(self, datetime):
 		"""
-		Returns glasgow observer
+		Returns the observer pyephem uses as a reference location
+		when calculating the satellite locations
 		"""
+		curLatLng=geocoder.ip('me').latlng
 		observer = ephem.Observer();
-		observer.lat = math.radians(55.8667)
-		observer.long = math.radians(-4.4333)
+		observer.lat = curLatLng[0]
+		observer.long =curLatLng[1]
 		observer.date = ephem.Date(datetime)
 		return observer
 
 	def timeSpan(startTime, endTime, delta):  # timedelta(days=1)):
 		"""
-		Returns (yields) an iterator of timestamps in from start to end 
+		Returns (yields) an iterator of timestamps from start to end 
 		in delta increments
 		"""
 		currentTime = startTime
