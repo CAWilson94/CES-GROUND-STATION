@@ -1,3 +1,12 @@
+"""
+Created on 31 March 2017
+@author: Charlotte Alexandra Wilson
+
+Last revision: 05 April 2017
+---------------------------------------------------------------
+Testing various constants and variables for scheduler output
+"""
+
 import datetime
 import time
 import csv
@@ -28,22 +37,11 @@ def test(passes, run_time):
     total_contact_time = datetime.timedelta(seconds=total_contact_time_seconds)
     total_non_contact_time = duration - total_contact_time
 
-    print(str(duration.seconds) + "----------------------------duration in seconds")
-    print(str(total_non_contact_time) + "---------------- non contact")
-    print(str(total_contact_time) + "---------------- contact")
-
     total_contact_time = time.strftime(
         '%H:%M:%S', time.gmtime(total_contact_time.seconds))
 
     total_non_contact_time = time.strftime(
         '%H:%M:%S', time.gmtime(total_non_contact_time.seconds))
-
-    print("DURATION: ----------------" + str(duration))
-    print("TOTAL CONTACT TIME ======" + str(total_contact_time))
-    print("TOTAL NON CONTACT TIME ======" + str(total_non_contact_time))
-    print("NUMBER OF MISSIONS ======" + str(num_missions))
-
-    print("RUN TIME FOR GA: ===============" + str(run_time))
-
     resultFile.writerow(
-        [num_missions, duration, total_contact_time, total_non_contact_time, str(run_time)])
+        [num_missions, duration, total_contact_time,
+         total_non_contact_time, str(run_time)])

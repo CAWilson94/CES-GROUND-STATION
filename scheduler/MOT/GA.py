@@ -106,7 +106,8 @@ TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g, cube_h
 
 
 def crossover(chromoOne, chromoTwo):
-    """crossover function: crosses over pass lists while keeping them in order wrt to time."""
+    '''crossover function: crosses over pass lists
+    while keeping them in order wrt to time.'''
     child1satPassList = chromoOne.satPassList[:2] + chromoTwo.satPassList[2:]
     child2satPassList = chromoTwo.satPassList[:2] + chromoOne.satPassList[2:]
 
@@ -123,23 +124,20 @@ def crossover(chromoOne, chromoTwo):
 
 
 def randomParents(population):
-    """ Select Parents for tournament function"""
+    ''' Select Parents for tournament function'''
     tempList = []
     parents = []
     for index in range(1):
-        # Two random int's from range 0 - population length
+        '''Two random int's from range 0 - population length'''
         randomint = random.sample(range(len(population)), 2)
-
         tempList.append(population[randomint[0]])  # A single chromosome
         tempList.append(population[randomint[1]])  # A single chromosome
         # Do not really need sort by fitness..
         tempfit = setFitness(tempList)
         temp = sortByFitness(tempfit)
-
-        # List with two chromosomes randomly picked from the current population
-        parents = temp  # A list with two
-        # printPopulation(parents)
-        # Clear lists for next cal
+        '''List with two chromosomes randomly picked
+         from the current population'''
+        parents = temp
         tempList = []
         tempfit = []
         temp = []
@@ -147,11 +145,11 @@ def randomParents(population):
 
 
 def setFitness(population):
-    """ set fitness of every chromosome in population so this is only done once in the program: 
-        i.e. instead of setting fitness on chromosome creation and crossover just do it in the 
-        GA function.
-
-        returns a population of chromosomes with fitnesses :O 
+    """ set fitness of every chromosome in population
+        so this is only done once in the program:
+        i.e. instead of setting fitness on chromosome
+        creation and crossover just do it in the GA function.
+        returns a population of chromosomes with fitnesses
     """
     for chromosome in population:
         chromosome.fitness = nextPass_fitnessVariety_sum(chromosome)
@@ -160,24 +158,20 @@ def setFitness(population):
 
 
 def fitness(chromosome):
-    """ The smallest time is the winner basically """
+    ''' The smallest time is the winner basically '''
     total = 0
     for y, z in zip(chromosome.satPassList[1:], chromosome.satPassList):
-        # print(y.name,z.name)
-        # print(y.startTime, z.endTime)
         diff = (y.startTime - z.endTime)
-        # diff=(datetime.datetime.strptime(str(y.startTime),"%H:%M:%S")) - (datetime.datetime.strptime(str(z.endTime),"%H:%M:%S"))
-        # print("%s" %diff)
         total += abs(int(diff.total_seconds()))
     fitness = total
-    y.fitness = fitness  # want fitness to be for the orders so create individual from this
+    y.fitness = fitness
     return fitness
 
 
 def nextPassFitness(chromosome):
-    """
+    '''
     Fitness specific to nextpass lists
-    """
+    '''
     total = 0
     for y, z in zip(chromosome.satPassList[1:], chromosome.satPassList):
         diff = (y.riseTime - z.setTime)
@@ -188,7 +182,8 @@ def nextPassFitness(chromosome):
 
 
 def fitnessPassSum(chromosome):
-    """ Here, the metric for fitness is going to be most contact with sats: so bigger is better"""
+    ''' Here, the metric for fitness is going
+        to be most contact with sats: so bigger is better'''
     fitness = 0
     for satPass in chromosome.satPassList:
         fitness += (satPass.endTime - satPass.startTime)
@@ -196,56 +191,45 @@ def fitnessPassSum(chromosome):
 
 
 def fitnessVariety_sum(chromosome):
-    """  want different sats and not just any.. """
+    ''' Want different sats and not just any.. '''
     diffNames = 0
     satLookedat = []
     duration = 0
     for satPass in chromosome.satPassList:
         duration += (satPass.endTime - satPass.startTime).total_seconds()
-        # print(satPass.name, " duration: ", duration)
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
             diffNames += 1
-
-    # print(diffNames, "diffNames: ", diffNames)
     fitness = duration * diffNames
-    # print("fitness: ", fitness)
     return fitness
 
 
 def nextPass_fitnessVariety_sum(chromosome):
-    """  want different sats and not just any.. """
+    ''' Want different sats and not just any.. '''
     diffNames = 0
     satLookedat = []
     duration = 0
     for satPass in chromosome.satPassList:
         duration += (satPass.setTime - satPass.riseTime).total_seconds()
-        # print(satPass.name, " duration: ", duration)
         if satPass.tle.name not in satLookedat:
             satLookedat.append(satPass.tle.name)
             diffNames += 1
 
-    # print(diffNames, "diffNames: ", diffNames)
     fitness = duration * diffNames
-    # print("fitness: ", fitness)
     return fitness
 
 
 def tournie(population):
-    """Tournament to generate new generation"""
+    '''Tournament to generate new generation'''
     newGen = []
     crossed = []
     i = 0
     while len(crossed) != len(population):
         newGen = randomParents(population)
-        # printPopulation(newGen)
         i = random.randint(0, 7)
         if i < CROSSOVER_RATE:
-            #print("crossing over!")
             tempIndiList = crossover(newGen[0], newGen[1])
-            # printPopulation(tempIndiList)
             crossed.extend(tempIndiList)
-            # printPopulation(crossed)
             newGen = []
 
     return crossed
@@ -265,7 +249,8 @@ def conflictSingle(satPassB, passAendTime):
 
 
 def randomChromosome(chromosome):
-    """ Generates random chromosome with random non conflicting sat passes: i.e. picks from conflicting windows"""
+    ''' Generates random chromosome with random non conflicting sat passes:
+        i.e. picks from conflicting windows'''
     conflictList = []
     chromosome = chromosome.satPassList
     orderedPassList = []
@@ -303,7 +288,7 @@ def randomChromosome(chromosome):
             orderedPassList.append(chromosome[i])
         i += 1
 
-    """
+    '''
     print("\nRandom chromosome")
 
     for item in orderedList:
@@ -314,13 +299,12 @@ def randomChromosome(chromosome):
     for k, v in d.items():
 
         stringName = ""
-        for item in v: 
+        for item in v:
             stringName+=item.name + " "
 
         print(k,stringName)
-        """
+        '''
     randomChromosome = Chromosome(orderedPassList)
-    # randomChromosome.fitness = fitness(randomChromosome)
 
     return randomChromosome
 
@@ -348,9 +332,9 @@ def generateChromosome():
 
 
 def nextPassChromosome(passes):
-    """
+    '''
     Take in next pass objects and output chromosomes
-    """
+    '''
     chromosomeSatPasses = []
     for item in passes:
         chromosomeSatPasses.append(item)
@@ -378,42 +362,22 @@ def printPopulation(populateshit):
 
 
 def generatePopulation(chromosome):
-    # chromo = generateChromosome()
-    #chromosome = testChromosome(TEST_PASS_LIST)
     populationList = []
-
-    # print("list without conflicts: \n")
-    # for item in chromosome.satPassList:
-    # print(item.name + " : %s" % str(item.startTime) + " : %s" % str(item.endTime))
-
     for i in range(POPULATION_SIZE):
         chromo = randomChromosome(chromosome)
         populationList.append(chromo)
-        # print("list of conflicts: \n")
-        # for item in chromo.satPassList:
-        # print(item.name + " : %s" % str(item.startTime) + " : %s" % str(item.endTime))
-
     return populationList
 
 
 def GA(population):
-    """ Genetic algorithm for finding best suited order of sats """
+    ''' Genetic algorithm for finding best suited order of sats '''
     best = []  # Keep a list of the recent best solutions
     gen = 0
     while (1):
         gen += 1
-        setFitness(population)  # check this
+        setFitness(population)
         population = sortByFitness(population)
-        print("population fitness: ----------------------------")
-        for item in population:
-            print(item.fitness)
-        # this is for the case of variety fitness where largest is fittest:
-        # others should be opposite
         best.append(population[-1])
-        print("best list fitness: ----------------------------")
-        for item in best:
-            print(item.fitness)
-        # since there is no definitive stopping value. i.e. if fitness was 0
         tournie(population)
         if (gen > 100) or (levelOff(population[-1], best)):
             best = sortByFitness(best)
@@ -424,7 +388,7 @@ def GA(population):
             return best[0]
 
     print("generation: " + gen + "best: " + population[
-        0].chromosomeString)  # TODO: chromosomeString should be Gene string.
+        0].chromosomeString)
 
 
 def levelOff(current, bestsofar):
@@ -435,12 +399,11 @@ def levelOff(current, bestsofar):
         if abs(current.fitness - item.fitness) <= ten_percent_range:
             i += 1
     if i == 5:
-        print("LEVELLING OFF ---------------------------------------")
         return True
 
 
-'''
 
+"""
 def getNeighbours(chromosome):
 
 
@@ -467,4 +430,4 @@ def randomRestart(passes):
             return 
         startChromosome = nextPassChromosome(passes)
 
-'''
+"""
