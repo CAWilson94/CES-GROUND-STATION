@@ -16,11 +16,14 @@ DEBUG_LEVEL = 1
 
 orderOfPasses = []
 
+
 class MOTRuleBased(MOT):
 
+    run_time_glob = 0
+
     def _passAsStr(self, nextPass):
-        return (nextPass.tle.name + "(" + str(nextPass.mission.priority) + "): "  
-            + str(nextPass.riseTime.strftime('%H:%M:%S')) + " -> " + str(nextPass.setTime.strftime('%H:%M:%S')))
+        return (nextPass.tle.name + "(" + str(nextPass.mission.priority) + "): "
+                + str(nextPass.riseTime.strftime('%H:%M:%S')) + " -> " + str(nextPass.setTime.strftime('%H:%M:%S')))
 
     def _lastIndex(self, list, value):
         index = 0
@@ -30,6 +33,12 @@ class MOTRuleBased(MOT):
                 return len(temp) - index
             index += 1
         return -1
+
+
+    def ga_runTime(self):
+        ''' Filthy function for getting  GLOBAL value for 
+        the run time of the find function'''
+        return run_time_glob
 
     # def _getPassesFromMissions(self, missions):
     #     passes = []
@@ -60,9 +69,9 @@ class MOTRuleBased(MOT):
     #                     passes.append(nextPass)
     #                     if(DEBUG and DEBUG_LEVEL >= 4):
     #                         print(nextPass.__str__() + "\n")
-    #                 except ValueError: 
+    #                 except ValueError:
     #                     break
-    #         except ValueError: 
+    #         except ValueError:
     #                 print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
     #     return passes
 
@@ -73,31 +82,29 @@ class MOTRuleBased(MOT):
         else:
             return False
 
-
     # Rule 1
     # Filter out low priority
     def _filterPriority(self, conflicting):
         if(conflicting):
             highestPriority = conflicting[0].mission.priority
-            #print("Highest Priority: " + str(highestPriority))
+            # print("Highest Priority: " + str(highestPriority))
             filtered = []
 
             for sat in conflicting:
                 if(sat.mission.priority == highestPriority):
                     filtered.append(sat)
-                    #print("Added " + sat.())
+                    # print("Added " + sat.())
 
                 if(sat.mission.priority > highestPriority):
                     filtered = []
                     highestPriority = sat.mission.priority
                     filtered.append(sat)
-                    #print("Found new highest: " + str())
+                    # print("Found new highest: " + str())
 
             if(filtered):
                 return filtered
 
         return conflicting
-
 
     # Rule 2
     # Pick ones which haven't been picked yet
@@ -116,7 +123,6 @@ class MOTRuleBased(MOT):
                 return neverPicked
 
         return None
-
 
     # Rule 3
     # Pick the oldest one
@@ -178,8 +184,9 @@ class MOTRuleBased(MOT):
                 apply original Rule 4
             
     """
+
     def _findNext(self, conflicting, startTime, endTime):
-        #print("There were : " + str(len(conflicting)) + " conflicts found:")
+        # print("There were : " + str(len(conflicting)) + " conflicts found:")
         if(conflicting):
             temp = conflicting
             chosen = temp[0]
@@ -279,7 +286,7 @@ class MOTRuleBased(MOT):
                 duration = end - start
 
                 return NextPass(tle=bestFit.tle, mission=bestFit.mission, riseTime=start, setTime=end, duration=duration,
-                                    maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
+                                maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
             else:
                 if(DEBUG and DEBUG_LEVEL >= 2):
                     print("Nothing found before")
@@ -331,7 +338,7 @@ class MOTRuleBased(MOT):
                 duration = end - start
 
                 return NextPass(tle=bestFit.tle, mission=bestFit.mission, riseTime=start, setTime=end, duration=duration,
-                                    maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
+                                maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
             else:
                 if(DEBUG and DEBUG_LEVEL >= 2):
                     print("Nothing found after")
@@ -360,7 +367,6 @@ class MOTRuleBased(MOT):
 
     # Returns a list of passes with no conflicts
     def find(self, missions, usefulTime):
-
         '''Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers'''
         start = time.clock()
         orderOfPasses = []
@@ -414,10 +420,11 @@ class MOTRuleBased(MOT):
                 nextPass = self._findNext(conflicting, periodStart, periodEnd)
 
                 filledWindow = self._fillConflictWindow(conflicting, nextPass)
-                #nextPass = findNextRandomly(conflicting)
+                # nextPass = findNextRandomly(conflicting)
                 if(DEBUG and DEBUG_LEVEL >= 1):
                     for sat in filledWindow:
-                        print("Added: " + self._passAsStr(sat) + " from conflict res.")
+                        print("Added: " + self._passAsStr(sat) +
+                              " from conflict res.")
                 # append to the order
                 for sat in filledWindow:
                     orderOfPasses.append(sat)
@@ -438,6 +445,9 @@ class MOTRuleBased(MOT):
             print("Num of conflicts resolved: " + str(conflictsNum))
         stop = time.clock()
         run_time = float(stop - start)
+        global run_time_glob
+        run_time_glob = run_time
         print("RB TIME: " + str(run_time) + " - -------------------")
         return orderOfPasses
-#
+
+       
