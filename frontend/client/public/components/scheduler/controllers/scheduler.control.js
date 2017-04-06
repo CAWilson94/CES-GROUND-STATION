@@ -1,11 +1,67 @@
 scheduler
-  .controller('SchedulerController', function($scope, TLE, AZEL, Mission, $timeout, $http) {
+  .controller('SchedulerController', function($scope, TLE, AZEL, Mission, $timeout,$interval, $http) {
 
     $scope.tle = null;
     $scope.tles = null;
 
     $scope.nextpass = null;
-    $scope.nextpasses = null;
+    $scope.nextpasses = [];
+    $scope.nextpassesDisplay = [];
+
+    $scope.missionsDisplay = [];
+
+
+    
+    /**
+     * Getting true or false if scheduling: to show table load message
+     * @type {Object}
+     */
+     $scope.isSchedulingFn = function() {
+        console.log("updating")
+        var config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+
+        $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
+          .then(function successCallback(response, data) {
+            if(response.data == "True")
+              $scope.isScheduling = true
+            else
+              $scope.isScheduling = false
+          }, function errorCallback(response) {
+            console.log(response.status)
+        });
+     }
+
+     $scope.updateTables = function(){
+        var config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+
+        $http.get('http://127.0.0.1:8000/api/nextpass/get', config)
+          .then(function successCallback(response, data) {
+              $scope.nextpassesDisplay = response.data;
+          }, function errorCallback(response) {
+            console.log(response.status)
+        });
+
+        $http.get('http://127.0.0.1:8000/api/mission/get', config)
+          .then(function successCallback(response, data) {
+              $scope.missionsDisplay = response.data;
+          }, function errorCallback(response) {
+            console.log(response.status)
+        });
+     }
+
+     $interval($scope.isSchedulingFn, 3000, 0, true);
+
+     //$interval($scope.updateTables, 3000, 0, true);
 
     /**
      * Load in TLE data from Django side
@@ -65,32 +121,24 @@ scheduler
         }
       }
 
-
-
-      
-        // Grab TLE from Django 
-
-      $http.get('http://127.0.0.1:8000/api/schedulemissiontest', config)
-        .then(function successCallback(response) {
+      $http.get('http://127.0.0.1:8000/api/nextpass/get', config)
+        .then(function successCallback(response, data) {
           // this callback will be called asynchronously
           // when the response is available
-          $scope.nextpass = data;
-          alert('booptiy')
-          console.log("someshit")
-          console.log("SOMETHING MIGHT BE HERE" + data)
+          console.log("Refreshed nextpasses")
+
+          $scope.nextpasses = response.data;
+          $scope.nextpassesDisplay = [].concat($scope.nextpasses);
+
         }, function errorCallback(response) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
-          console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+          console.log("Failed to get scheduled passes")
         });
-
-
     }
 
 
-    $scope.boop = function() {
-      console.log("SOMETHING IS HAPPENING")
-    }
+    $scope.loadNextPasses()
 
     /**
      * priorities: should default at 2 in dropdown 
@@ -122,14 +170,17 @@ scheduler
      * @return void 
      */
     $scope.updateTable = function() {
+      $scope.isScheduling = true;
 
-      $scope.loadNextPasses();
       // Each mission requires a sat name and a priority
-
-      $scope.mission = {
-        name: $scope.tle.name,
-        priority: $scope.priority.priority
-      };
+      try {
+        $scope.mission = {
+          name: $scope.tle.name,
+          priority: $scope.priority.priority
+        };
+      } catch (err) {
+        console.log('nothing selected');
+      }
 
 
       try {
@@ -142,7 +193,8 @@ scheduler
                 $scope.missions = data;
               });
 
-              console.log(response)
+              $scope.missionsDisplay = [].concat($scope.missions);
+              $scope.loadNextPasses();
             },
             function errorCallBack(response) {
               // called asynchronously if an error occurs
@@ -156,17 +208,8 @@ scheduler
       } catch (err) {
         alert("you must first select a satellite and a priority")
       }
-
-
+      $scope.isScheduling = true;
     };
-
-
-    /**
-     *
-     * while there is nothing populating the table: show output as animation loader
-     * 
-     */
-
 
 
     //MISSSION TABLE
@@ -175,16 +218,54 @@ scheduler
       $scope.missions = data;
     });
 
+
     $scope.deleteMission = function(mission) {
+      $scope.missionid = mission.id;
+      $scope.isScheduling = true;
+      /*Mission.delete({
+        id: $scope.missionid
+      }, (function(resp) {
+        console.log(resp);
+        removeA($scope.missions, mission)
+        $scope.loadNextPasses()
+      }))*/
+
+      var config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }
+
+      // delete can't send params back to server, so still calling old delete stuff above ^ 
+      $http.delete('http://127.0.0.1:8000/api/delete/mission/' + $scope.missionid, config)
+          .then(function successCallBack(response) {
+              
+              $scope.missions = Mission.get().$promise.then(function(data) {
+                $scope.missions = data;
+              });
+
+              $scope.missionsDisplay = [].concat($scope.missions);
+
+              $scope.loadNextPasses()
+            },
+            function errorCallBack(response) {
+              console.log(response.status + " : " + response.statusText);
+            }
+          );
+        $scope.isScheduling = true;
+    };
+
+
+    /*$scope.deleteMission = function(mission) {
       id = mission.id;
       Mission.delete({
         id: id
       }, (function(resp) {
         console.log(resp);
         removeA($scope.missions, mission)
+        $scope.loadNextPasses()
       }))
-
-    };
 
     function removeA(arr) {
       //What is this?!
@@ -198,7 +279,10 @@ scheduler
         }
       }
       return arr;
-    }
+    }*/
+
+
+    //$interval($scope.reload, 5000);
 
     // End of controller please leave it alone.
   });

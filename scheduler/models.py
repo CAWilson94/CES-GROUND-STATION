@@ -53,27 +53,32 @@ class Mission(models.Model):
     priority = models.IntegerField()
     #delete=models.CharField(max_length=30)
     def __str__(self):
-        return str(self.name)
+
+        #return str(self.name)
+        return "id: " + str(self.id) + ", name: " + self.name  + ", status: " + self.status + ", priority: " + str(self.priority)
 
 
 class NextPass(models.Model):
-    # leaves an empty table :(
-    #tle = models.ForeignKey(TLE.name, on_delete=models.CASCADE)
     #AOS
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
+    tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
+
+    mission=models.ForeignKey(Mission, on_delete=models.CASCADE)
+
     riseTime = models.DateTimeField()
-    #LOS
+    
     setTime = models.DateTimeField()
-    duration = models.DurationField()  
+
+    duration = models.DurationField() 
+
     maxElevation = models.CharField(max_length=15)
     #AOS Az
     riseAzimuth = models.CharField(max_length=15)
     #LOS Az
     setAzimuth = models.CharField(max_length=15)
 
-    tle = models.CharField(max_length=20)#models.ForeignKey(TLE, on_delete=models.CASCADE)
-    mission=models.ForeignKey(Mission, on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return str(self.__dict__)

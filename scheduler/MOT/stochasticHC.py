@@ -7,13 +7,14 @@ import sys
 
 class MOTStochasticHC(MOT):
 
-	def find(self,satList,usefulTime):
+	def find(self,satList):
 		""" does not examine any neighbors before deciding how to move. 
 		Rather, it selects a neighbor at random, and moves to that one
 		if it is better."""
 
+		usefulTime=6
 		print(" Starting stochastic hillclimbing")
-		maxIterations = 2000
+		maxIterations = 8000
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
@@ -43,7 +44,7 @@ class MOTStochasticHC(MOT):
 			else:
 				i+=1
 			
-			if i%(maxIterations/10)==0:
+			if (i%(maxIterations/10))==0:
 				print(".")
 
 		if i==maxIterations:

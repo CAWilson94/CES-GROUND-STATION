@@ -3,4 +3,7 @@ django-cors-headers==2.0.2
 djangorestframework==3.5.3
 pyephem==3.7.6.0
 pyserial==3.2.1
-requests==2.12.3
+
+python-memcached==
+celery==3.1.18
+django-celery-results==1.0.1

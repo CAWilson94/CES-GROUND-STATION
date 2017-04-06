@@ -9,8 +9,15 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
+from __future__ import absolute_import, unicode_literals
 
 import os
+#import djcelery
+#djcelery.setup_loader()
+
+BROKER_URL = 'amqp://guest:guest@localhost:5672'
+result_backend = 'db+sqlite:///results.sqlite'
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,9 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'scheduler.apps.SchedulerConfig',
+    #'scheduler.apps.SchedulerConfig',
     'corsheaders',
+    'scheduler',
+    'djcelery',
+    'kombu.transport.django',
 ]
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -117,7 +128,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

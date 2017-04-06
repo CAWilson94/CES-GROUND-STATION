@@ -6,7 +6,8 @@
 </head>
 
 <body ng-app="scheduler">
-    <div class="table_drop_down" style="margin-left: 30px">
+    <div  ng-style="{'background-color':'#fff'}">
+    <div class="row" style="margin-left: 30px">
         <div class="drop-down" layout="row" style="margin-bottom: 20px ; margin-left:12px" ng-cloak="">
             <div layout="column" layout-align="start start" style="margin-top: 50px">
                 <md-input-container>
@@ -19,72 +20,106 @@
             <div layout="column" layout-align="start start" style="padding-left: 50px; margin-top: 50px">
                 <md-input-container>
                     <label>Priority</label>
-                    <md-select ng-init="priority=priorities[1]" placeholder="Priority Number" ng-model="priority">
+                    <md-select ng-init="priority=priorities[1]" placeholder="Priority Number" ng-model="priority" style="min-width: 100px;">
                         <md-option ng-value="priority" ng-repeat="priority in priorities">{{ priority.name }} : {{ priority.priority }}</md-option>
                     </md-select>
                 </md-input-container>
             </div>
             <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
-                <md-button class="md-raised" ng-click=updateTable() style="margin-top: 48px;">
+                <md-button class="md-raised" ng-click=updateTable()  style="margin-top: 48px;">
                     <!--<i class="material-icons" layout-align="bottom">add</i>-->
                     Schedule
                 </md-button>
                 <md-tooltip md-direction="" bottom>
-                    Add new Mission to Scheduler
+                    Add new Mission to Scheduler & reschedule passes
                 </md-tooltip>
             </div>
             <div layout="column" layout-align="center bottom" style="padding-left: 50px">
-                <md-button class="md-raised" ng-click=downloadCSV() style="margin-top: 48px;">CSV</md-button>
+                <md-button class="md-raised" ng-click=downloadCSV() ng-disabled="isScheduling" style="margin-top: 48px;">CSV</md-button>
                 <md-tooltip md-direction="" bottom>
                     Export Scheduled Passes to CSV
                 </md-tooltip>
             </div>
             <!--<p class="md-caption">You have picked cubesat  {{ tle ? tle.name : ' ? ' }}  with priority  {{ priority ? priority : ' ? ' }} </p>-->
         </div>
+
         <div class="row">
-            <div class="col-sm-4" md-on-open="loadNextPasses()">
-                <label style="margin-left:10px; margin-bottom: 10px"> Next Scheduled Passes: </label>
-                <table st-table="yermaw" ng-model="nextpass" class="table table-striped">
+            <div class="col-sm-5">
+                <label style="margin-left:10px; margin-bottom: 10px "> Next Scheduled Passes: </label>
+                <table st-table="nextpassesDisplay" st-safe-src="nextpasses" ng-model="nextpass" class="table table-striped">
                     <thead>
-                    <tr>
-                            <th>Name</th>
-                            <th>Next Pass</th>
-                            <th>Duration</th>
+                        <tr class="sortable"> <!-- add this to skip default when sorting st-skip-natural="true" -->
+                            <th st-sort="tle.name">Name</th>
+                            <th st-sort-default="true" st-sort="riseTime">Rise Time</th>
+                            <th st-sort="setTime">Set Time</th>
+                            <th st-sort="duration">Duration</th>
                         </tr>
                     </thead>
-                        <tr ng-repeat="nextpass in nextpasses">
-                            <td>{{row.name}}</td>
-                            <td>{{row.nextPass}}</td>
-                            <td>{{row.Duration}}</td>
+                    <tbody ng-show="!isScheduling">
+                        <tr ng-repeat="nextpass in nextpassesDisplay">
+                            <td>{{nextpass.tle.name}}</td>
+                            <td>{{nextpass.riseTime}}</td>
+                            <td>{{nextpass.setTime}}</td>
+                            <td>{{nextpass.duration}}</td>
                         </tr>
-                        </tbody>
+                    </tbody>
+                    <tbody ng-show="isScheduling">
+                        <tr>
+                            <td colspan="4" align="center">Scheduling...</td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-show="!isScheduling">
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
-            <div class="col-sm-4">
-                <label style="margin-left:10px; margin-bottom: 10px"> Current Missions: </label>
-                <table st-table="missions" ng-model="mission" class="table table-striped">
+            <div class="col-sm-4 ">
+                <label style="margin-left:10px; margin-bottom: 10px "> Current Missions: </label>
+                <table st-table="missionsDisplay " st-safe-src="missions" ng-model="mission " class="table table-striped ">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Priority</th>
+                        <tr class="sortable">
+                            <th st-sort="name" st-sort-default="true">Name</th>
+                            <th st-sort="status">Status</th>
+                            <th st-sort="priority">Priority</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="mission in missions">
-                            <td align="center">{{ mission.name }}</td>
-                            <td align="center">{{ mission.status }}</td>
+                        <tr ng-repeat="mission in missionsDisplay ">
+                            <td>{{ mission.name }}</td>
+                            <td>{{ mission.status }}</td>
                             <td align="center">{{ mission.priority }}</td>
-                            <td>
-                                <button style="display: block; text-align: center; margin-right: 15px;" type="button" class="close" ng-click="deleteMission(mission)">&times;</button>
+                            <td align="center">
+                                <button  type="button " style="display: block; margin-right:20px;text-align: center" class="close" ng-click="deleteMission(mission)" >&times;</button>
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <!-- end of tables row -->
         </div>
+    </div>
+    </div>
+
+
+    <style>
+        .sortable {  cursor: pointer;}
+        .st-sort-ascent,.st-sort-descent {  padding-left: 4px;}
+        .st-sort-default:before {content: '\25B1'}
+        .st-sort-ascent:before {content: '\25B2'}
+        .st-sort-descent:before {content: '\25BC'}
+    </style>
 </body>
 
 </html>

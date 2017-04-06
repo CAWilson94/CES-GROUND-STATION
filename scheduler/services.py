@@ -1,69 +1,12 @@
 import requests
 from django.db.utils import OperationalError
-from scheduler.missionServices import mission_services as ms
-from scheduler.models import TLE, AzEl, NextPass, Mission
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
-
-class rotatorThread (threading.Thread):
-	def __init__(self, threadID, name, counter):
-		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
-		self.couner = counter
-	def run(self):
-		print ("Starting " + self.name) 
-		try:
-		#rs.hi()
-			Services.polling()
-		#rs.get_position()
-		except OperationalError:
-			print("RotatorThread - Could not find table (try makemigrations and migrate again)")
-		print("Exiting "+ self.name)
-
-class schedulerThread (threading.Thread):
-	def __init__(self, threadID, name, counter):
-		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
-		self.couner = counter
-	def run(self):
-		print ("Starting " + self.name) 
-		print("Polling for new now")
-		try:
-			Services.pollForNew()
-		# ts.removeTLEById(180)
-
-		except OperationalError:
-			print("SchedulerThread - Could not find table (try makemigrations and migrate again)")
-		print("Exiting "+ self.name)
+from scheduler.missionServices import mission_services as ms
+from scheduler.models import TLE, AzEl, NextPass, Mission
 
 class Services():
-
-	def pollForNew():
-		print ( "Polling for new")
-		try:
-			mission_list = ms.findMissionsByStatus("New")
-			for i in mission_list:
-				i.status = ("Waiting")
-				print("Count = %r" %i)
-				pass
-		except TLE.DoesNotExist as e:
-			print("Already exists")	 
-
-	def pollQueue():
-		count = 0
-		while (count < 10):
-			try:
-				mission_list = ms.findMissionsByStatus("Ready")
-				for i in mission_list:
-					i.status = ("Tracked")
-				print("Count = %r" %count)
-				count+=1
-				pass
-			except TLE.DoesNotExist as e:
-				print("Already exists")	 
 
 	def getAzElTLE(self, tleEntry, dateTime):
 		"""
@@ -101,11 +44,10 @@ class Services():
 		return azelProgress
 
 
-	def getNextPass(self,tleName, mission, dateTime):
+	def getNextPass(self,tleEntry, mission, dateTime):
 		"""
 		Returns a next pass object of the satellite after the date given
 		"""
-		tleEntry = mission.TLE
 		
 		observer = _Helper.getObserver(self, dateTime);
 		try:
@@ -120,14 +62,13 @@ class Services():
 		duration  = setTime - riseTime
 				#riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		return NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
-			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleName)
+			riseAzimuth=details[1],setAzimuth=details[5], mission=mission, tle=tleEntry)
 
 	def makeMissions(chosenSat): #, priorityList
 		"""
 		Saves user chosen satellites in the mission object and then saves that in db
 		"""
 		#Change every mission's status to NEW if new mission comes in?
-		print(chosenSat)
 		success=False
 		#for name in chosenSatsList:
 		newName = chosenSat.get("name")
@@ -140,9 +81,9 @@ class Services():
 				tle = TLE.objects.get(name=newName)
 			except TLE.DoesNotExist as e:
 				#print(e)
-				print("Attempted to CubeSat '{}' but it does not exist in the DB".format(newName))
+				print("Attempted to find CubeSat '{}' but it does not exist in the DB".format(newName))
 				#somehow asked to schedule a satellite that isn't in the database
-				success = False
+				return False
 			newMission = Mission(name=newName,TLE=tle,status="NEW",priority=newPriority)
 			newMission.save()
 			success = True
@@ -158,13 +99,15 @@ class Services():
 		return success
 
 	def scheduleMissions(self, missions, MOT): 
+		#for testing purposes
 		#schedulerPasses
-		score,bestNextPassList = MOT.find(self, missions, 6)
+		score,bestNextPassList = MOT.find(self, missions)
 		#print(bestNextPassList)
 		#print(score)
 		return bestNextPassList
 
 	def updateTLE():
+
 		"""
 		Retrieves TLE data from external source, checks format and places in db
 		"""

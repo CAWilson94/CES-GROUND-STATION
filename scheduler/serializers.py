@@ -17,9 +17,12 @@ class MissionSerializer(serializers.ModelSerializer):
 		fields = ('id','name','TLE','status','priority')
 
 class NextPassSerializer(serializers.ModelSerializer):
+	
+	tle = TLESerializer()
+
 	class Meta:
 		model = NextPass
-		fields = ('__all__')
+		fields = ("id", "tle", "mission", "riseTime", "setTime", "duration", "maxElevation", "riseAzimuth", "setAzimuth")
 
 # class CompositeObjectSerializer(serializers.Serializer):
 #     id = serializers.IntegerField()
