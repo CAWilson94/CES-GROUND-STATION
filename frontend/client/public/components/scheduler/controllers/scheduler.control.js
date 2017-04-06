@@ -200,6 +200,5 @@ scheduler
       return arr;
     }
 
-
     // End of controller please leave it alone.
   });
