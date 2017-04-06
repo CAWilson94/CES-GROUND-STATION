@@ -241,6 +241,7 @@ def nextPass_fitnessVariety_sum(chromosome):
             diffNames += 1
 
     fitness = duration * diffNames * priority_summation(chromosome)
+    print("FITNESS IS: " + str(fitness))
     return fitness
 
 
