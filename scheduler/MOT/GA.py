@@ -128,7 +128,7 @@ def crossover(chromoOne, chromoTwo):
 
     childOne = Chromosome(child1satPassList)
     childTwo = Chromosome(child2satPassList)
-    # Could probably create a "package Chromosome" function..
+
     childOne.fitness = nextPassFitness(childOne)
     childTwo.fitness = nextPassFitness(childTwo)
     childOne.satPassList = sorted(childOne.satPassList, key=RISE_TIME_CMP)
@@ -226,6 +226,7 @@ def priority_summation(chromosome):
     priority_sum = 0
     for item in chromosome.satPassList:
         priority_sum += item.mission.priority
+        print("PRIORITY IS: " + str(priority_sum))
     return priority_sum
 
 
@@ -240,7 +241,10 @@ def nextPass_fitnessVariety_sum(chromosome):
             satLookedat.append(satPass.tle.name)
             diffNames += 1
 
-    fitness = duration * diffNames * priority_summation(chromosome)
+    priority_summed = priority_summation(chromosome)
+    fitness = duration * diffNames * priority_summed
+    print("DURATION: " + str(duration) + "diff names: " + str(diffNames)
+          + "prioritySum" + str(priority_summed))
     print("FITNESS IS: " + str(fitness))
     return fitness
 
@@ -429,7 +433,7 @@ def levelOff(current, bestsofar):
 def test():
     levelOff(90, [99, 88, 86, 98, 88, 100])
 
-"""
+'''
 def getNeighbours(chromosome):
 
 
@@ -456,4 +460,4 @@ def randomRestart(passes):
             return 
         startChromosome = nextPassChromosome(passes)
 
-"""
+'''

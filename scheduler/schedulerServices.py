@@ -50,7 +50,5 @@ class SchedulerServices():
 
         next_pass_test = ga.nextPassChromosome(
             NextPass.objects.all().order_by("riseTime"))
-        
-        ga.nextPass_fitnessVariety_sum(next_pass_test
-                                       )
+        ga.nextPass_fitnessVariety_sum(next_pass_test)
         return NextPass.objects.all().order_by("riseTime")
