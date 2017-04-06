@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< HEAD
+
+
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -12,7 +13,6 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.5.2 (C:\Users\ADMIN\AppData\Local\Programs\Python\Python35\python.exe)" project-jdk-type="Python SDK" />
-=======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.5.2 (C:\Users\charl\Anaconda3\python.exe)" project-jdk-type="Python SDK" />
->>>>>>> remotes/origin/GA
+
 </project>

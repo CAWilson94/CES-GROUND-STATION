@@ -3,6 +3,7 @@ from datetime import timedelta
 from scheduler.models import NextPass
 from scheduler.schedulerHelper import SchedulerHelper
 from scheduler.MOT.schedulerInterface import MOT
+import time
 
 # mins added to the end of the conflict period
 CONFLICT_PADDING = timedelta(minutes=1)
@@ -15,10 +16,12 @@ DEBUG_LEVEL = 0
 
 orderOfPasses = []
 
+
 class MOTRuleBased(MOT):
 
+    run_time_glob = 0
+
     def _passAsStr(self, nextPass):
-        return (nextPass.tle.name + "(" + str(nextPass.mission.priority) + "): "  
             + str(nextPass.riseTime.strftime('%H:%M:%S')) + " -> " + str(nextPass.setTime.strftime('%H:%M:%S')))
 
     def _lastIndex(self, list, value):
@@ -30,13 +33,18 @@ class MOTRuleBased(MOT):
             index += 1
         return -1
 
+
+    def ga_runTime(self):
+        ''' Filthy function for getting  GLOBAL value for 
+        the run time of the find function'''
+        return run_time_glob
+
     # General checking if the pass is within conflicting time period
     def _conflicts(self, periodStart, periodEnd, passToCheck):
         if(passToCheck.riseTime >= periodStart and passToCheck.riseTime <= periodEnd):
             return True
         else:
             return False
-
 
     # Rule 1
     # Filter out low priority
@@ -49,19 +57,18 @@ class MOTRuleBased(MOT):
             for sat in conflicting:
                 if(sat.mission.priority == highestPriority):
                     filtered.append(sat)
-                    #print("Added " + sat.())
+         
 
                 if(sat.mission.priority > highestPriority):
                     filtered = []
                     highestPriority = sat.mission.priority
                     filtered.append(sat)
-                    #print("Found new highest: " + str())
+                 
 
             if(filtered):
                 return filtered
 
         return conflicting
-
 
     # Rule 2
     # Pick ones which haven't been picked yet
@@ -80,7 +87,6 @@ class MOTRuleBased(MOT):
                 return neverPicked
 
         return None
-
 
     # Rule 3
     # Pick the oldest one
@@ -131,6 +137,7 @@ class MOTRuleBased(MOT):
             add it to the order
 
     """
+
     def _findNext(self, conflicting, startTime, endTime):
         #print("There were : " + str(len(conflicting)) + " conflicts found:")
         if(conflicting):
@@ -232,7 +239,7 @@ class MOTRuleBased(MOT):
                 duration = end - start
 
                 return NextPass(tle=bestFit.tle, mission=bestFit.mission, riseTime=start, setTime=end, duration=duration,
-                                    maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
+                                maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
             else:
                 if(DEBUG and DEBUG_LEVEL >= 3):
                     print("Nothing found before")
@@ -284,7 +291,7 @@ class MOTRuleBased(MOT):
                 duration = end - start
 
                 return NextPass(tle=bestFit.tle, mission=bestFit.mission, riseTime=start, setTime=end, duration=duration,
-                                    maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
+                                maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
             else:
                 if(DEBUG and DEBUG_LEVEL >= 3):
                     print("Nothing found after")
@@ -313,12 +320,11 @@ class MOTRuleBased(MOT):
 
     # Returns a list of passes with no conflicts
     def find(self, missions, usefulTime):
-
         # Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers.
+        start = time.clock()
         orderOfPasses = []
         passes = []
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
-
         if(DEBUG and DEBUG_LEVEL < 1):
             print("Passes: " + str(len(passes)))
 
@@ -388,6 +394,11 @@ class MOTRuleBased(MOT):
 
         if(DEBUG and DEBUG_LEVEL <= 1):
             print("Num of conflicts resolved: " + str(conflictsNum))
-
+        stop = time.clock()
+        run_time = float(stop - start)
+        global run_time_glob
+        run_time_glob = run_time
+        print("RB TIME: " + str(run_time) + " - -------------------")
         return orderOfPasses
-#
+
+       

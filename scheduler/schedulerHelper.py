@@ -5,6 +5,8 @@ from scheduler.models import TLE, Mission, NextPass
 
 class SchedulerHelper():
 
+	TIME_HOURS = 72
+
 	def getPassesFromMissions(self, missions):
 		passes = []
 
@@ -20,7 +22,7 @@ class SchedulerHelper():
 				nextPass = Services.getNextPass(self, tleEntry, m, dateNow)
 				passes.append(nextPass)
 			
-				while(nextPass.setTime < (dateNow + timedelta(hours=36))):
+				while(nextPass.setTime < (dateNow + timedelta(hours=SchedulerHelper.TIME_HOURS))):
 					time = nextPass.setTime + timedelta(minutes=1)
 					try:
 						nextPass = Services.getNextPass(self, tleEntry, m, time)

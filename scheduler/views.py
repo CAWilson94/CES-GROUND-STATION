@@ -5,7 +5,7 @@ from django.db.utils import OperationalError
 #from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status, viewsets #, generics
+from rest_framework import status, viewsets  # , generics
 from rest_framework.decorators import api_view
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import StaticHTMLRenderer
@@ -23,6 +23,7 @@ from scheduler.MOT.steepestHC import MOTSteepestHC
 from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 from scheduler.MOT.ruleBased import MOTRuleBased
+from scheduler.MOT.GAScheduler import MOTGA
 
 
 from scheduler.tweet import ground_station
@@ -33,6 +34,7 @@ print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
 #SchedulerThread.delay()
 #RotatorsThread.delay((NextPass()))
+
 
 class TestingScheduler():
 
@@ -47,17 +49,16 @@ class TestingScheduler():
         tles = TLE.objects.all()
         sats = ""
         for i in range(10):
-            tle = tles[randint(0, len(tles) -1 )]
+            tle = tles[randint(0, len(tles) - 1)]
             while tle in picked:
-                tle = tles[randint(0, len(tles) -1 )]
+                tle = tles[randint(0, len(tles) - 1)]
             picked.append(tle)
             name = tle.name
             priority = randint(0, 2)
-            Mission(name=name,TLE=tle,status="NEW",priority=priority).save()
+            Mission(name=name, TLE=tle, status="NEW", priority=priority).save()
             sats += tle.name + ", "
             print("Made mission with sat: " + tle.name)
         return HttpResponse("Missions Added: " + sats)
-
 
     def threadTask(request):
         # print("Starting repeating task")
@@ -69,10 +70,10 @@ class TestingScheduler():
         services.scheduleAndSavePasses()
 
         string = ""
-        for p in NextPass.objects.all(): 
-            string += (p.tle.name + "(" + str(p.mission.priority) + "): "  
-                + str(p.riseTime.strftime('%H:%M:%S')) + " -> " + str(p.setTime.strftime('%H:%M:%S')) + "\n\n")
-        
+        for p in NextPass.objects.all():
+            string += (p.tle.name + "(" + str(p.mission.priority) + "): "
+                       + str(p.riseTime.strftime('%H:%M:%S')) + " -> " + str(p.setTime.strftime('%H:%M:%S')) + "\n\n")
+
         return HttpResponse(string)
 
     def schedulerQ():
@@ -81,7 +82,7 @@ class TestingScheduler():
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        if(len(TLE.objects.all()) < 1): 
+        if(len(TLE.objects.all()) < 1):
             print("Updating TLE data...")
             Services.updateTLE()
             print("...TLE data updated")
@@ -93,11 +94,22 @@ class TLEViewSet(viewsets.ModelViewSet):
 
 class MissionViewSet(viewsets.ModelViewSet):
     try:
-    	queryset = Mission.objects.all()
-    	serializer_class = MissionSerializer
+        queryset = Mission.objects.all()
+        serializer_class = MissionSerializer
     except OperationalError:
         print("MissionViewSet couldn't be loaded yet")
 
+<<<<<<< .mine
+
+
+
+
+=======
+
+def schedulerQ():
+    queue = getSchedulerQ.delay()
+    return HttpResponse("Your list: " + queue)
+>>>>>>> .theirs
 
 
 class PyephemData(APIView):
@@ -123,6 +135,7 @@ class MissionsViewSet(viewsets.ModelViewSet):
 class MissionView(APIView):
 
     def get(self, request):
+<<<<<<< .mine
         try:
             #passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
         
@@ -130,15 +143,38 @@ class MissionView(APIView):
             #or len(Mission.objects.all().filter(status="NEW")) > 0 
             #or len(Mission.objects.all().filter(status="SCHEDULING")) > 0 
             #or len(Mission.objects.all()) == 0):
+
+=======
+        print("WHAT IS THIS SHIT -----------------------===========> GET")
+        passes = NextPass.objects.filter(
+            setTime__gte=datetime.now()).order_by("riseTime")
+
+        if(len(passes) < 10
+                # or len(Mission.objects.all().filter(status="NEW")) > 0
+                # or len(Mission.objects.all().filter(status="SCHEDULING")) > 0
+                or len(Mission.objects.all()) == 0):
+>>>>>>> .theirs
             #scheduler = MOTSimpleHC()
             #scheduler = MOTSteepestHC()
             #scheduler = MOTStochasticHC()
             #scheduler = MOTRandomRestartHC()
+<<<<<<< .mine
             #scheduler = MOTRuleBased()
+
+=======
+            #scheduler = MOTRuleBased()
+            scheduler = MOTGA()
+>>>>>>> .theirs
             #lis = Services.scheduleMissions(self, missionList, scheduler, 0)
+<<<<<<< .mine
             #passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         #passes = NextPass.objects.all().order_by("riseTime")
             #serializer = NextPassSerializer(passes, many=True)
+=======
+            passes = SchedulerServices.scheduleAndSavePasses(
+                self, scheduler, 6)
+
+>>>>>>> .theirs
 
             missions = Mission.objects.all()
             serializer = MissionSerializer(missions, many=True)
@@ -149,11 +185,18 @@ class MissionView(APIView):
             return HttpResponse(status=500)
 
     def post(self, request):
+        print("WHAT IS THIS SHIT -----------------------===========> POST")
         if Services.makeMissions(request.data):
             #name = request.data.get("name")
             #pr = request.data.get("priority")
             #ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
+<<<<<<< .mine
             #scheduler = MOTRuleBased()
+
+=======
+            #scheduler = MOTRuleBased()
+            scheduler = MOTGA()
+>>>>>>> .theirs
             #scheduler = MOTSimpleHC()
             SchedulerTask.delay()
             #NextPass.objects.all().order_by("riseTime")
@@ -165,12 +208,20 @@ class MissionView(APIView):
         return HttpResponse(status=500)
 
     def delete(self, request, pk):
+        print("WHAT IS THIS SHIT -----------------------===========> DELETE")
         print("deleting: " + str(pk))
         missionToDelete = Mission.objects.filter(id=pk)
         deleted = missionToDelete.delete()
         print("Deleted: " + str(deleted))
+<<<<<<< .mine
         #print(missionToDelete[0].name)
         #scheduler = MOTRuleBased()
+
+=======
+        # print(missionToDelete[0].name)
+        #scheduler = MOTRuleBased()
+        scheduler = MOTGA()
+>>>>>>> .theirs
         #scheduler = MOTSimpleHC()
         SchedulerTask.delay()
         #NextPass.objects.all().order_by("riseTime")
@@ -188,6 +239,7 @@ class SchedulerView(APIView):
 
 class NextPassView(APIView):
 
+<<<<<<< .mine
     def get(self, request):
         try:
             passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
@@ -197,6 +249,17 @@ class NextPassView(APIView):
             print("Couldn't get next passes: " + str(e)) 
             return HttpResponse(status=500)
 
+=======
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
 class CSVParseView(APIView):
     """view for exporting as csv"""
 
