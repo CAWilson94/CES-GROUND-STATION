@@ -34,14 +34,21 @@ def test(passes, run_time):
             total_contact_time_seconds += item.duration.seconds
 
     """convert total contact time to date time object """
-    total_contact_time = datetime.timedelta(seconds=total_contact_time_seconds)
-    total_non_contact_time = duration - total_contact_time
+    total_contact_time_int = datetime.timedelta(
+        seconds=total_contact_time_seconds)
+    total_non_contact_time = duration - total_contact_time_int
 
     total_contact_time = time.strftime(
-        '%H:%M:%S', time.gmtime(total_contact_time.seconds))
+        '%H:%M:%S', time.gmtime(total_contact_time_int.seconds))
 
-    total_non_contact_time = time.strftime(
-        '%H:%M:%S', time.gmtime(total_non_contact_time.seconds))
     resultFile.writerow(
         [num_missions, duration, total_contact_time,
          total_non_contact_time, str(run_time)])
+    print("TOTAL DURAITON: " + str(duration) +
+          "=======================================")
+    print("TOTAL CONTACT TIME: " + str(total_contact_time) +
+          "=======================================")
+    print("TOTAL NON CONTACT TIME: " + str(total_non_contact_time) +
+          "=======================================")
+    print("ACTUAL NON CONTACT: " + str(duration - total_contact_time_int) +
+          "=======================================")

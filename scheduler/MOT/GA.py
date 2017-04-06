@@ -105,11 +105,26 @@ TEST_PASS_LIST = [cube_a, cube_d, cube_b, cube_e, cube_f, cube_c, cube_g, cube_h
                   cube_i, cube_j, cube_k, cube_l, cube_m, cube_n]
 
 
+def crossover_point(chromoLength):
+    """ check for odd or even chromosome length to cut in two"""
+
+    if(chromoLength % 2 == 0):
+        crossover_point = int(chromoLength / 2)
+    else:
+        crossover_point = int(chromoLength / 2 + 1)
+    return crossover_point
+
+
 def crossover(chromoOne, chromoTwo):
     '''crossover function: crosses over pass lists
     while keeping them in order wrt to time.'''
-    child1satPassList = chromoOne.satPassList[:2] + chromoTwo.satPassList[2:]
-    child2satPassList = chromoTwo.satPassList[:2] + chromoOne.satPassList[2:]
+
+    CROSSOVER_POINT = crossover_point(len(chromoOne.satPassList))
+
+    child1satPassList = chromoOne.satPassList[
+        :CROSSOVER_POINT] + chromoTwo.satPassList[CROSSOVER_POINT:]
+    child2satPassList = chromoTwo.satPassList[
+        :CROSSOVER_POINT] + chromoOne.satPassList[CROSSOVER_POINT:]
 
     childOne = Chromosome(child1satPassList)
     childTwo = Chromosome(child2satPassList)
