@@ -191,7 +191,7 @@ def fitnessPassSum(chromosome):
 
 
 def fitnessVariety_sum(chromosome):
-    ''' Want different sats and not just any.. '''
+    ''' contact time, variety and priority summation '''
     diffNames = 0
     satLookedat = []
     duration = 0
@@ -200,12 +200,21 @@ def fitnessVariety_sum(chromosome):
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
             diffNames += 1
-    fitness = duration * diffNames
+    fitness = duration * diffNames * priority_summation(chromosome)
     return fitness
 
 
+def priority_summation(chromosome):
+    ''' Retrieve priority of each pass in the sat pass list
+        sum these priorities and return
+    '''
+    priority_sum = 0
+    for item in chromosome.satPassList:
+        priority_sum += item.mission.priority
+
+
 def nextPass_fitnessVariety_sum(chromosome):
-    ''' Want different sats and not just any.. '''
+    ''' contact time, variety and priority summation '''
     diffNames = 0
     satLookedat = []
     duration = 0
@@ -215,7 +224,7 @@ def nextPass_fitnessVariety_sum(chromosome):
             satLookedat.append(satPass.tle.name)
             diffNames += 1
 
-    fitness = duration * diffNames
+    fitness = duration * diffNames * priority_summation(chromosome)
     return fitness
 
 
