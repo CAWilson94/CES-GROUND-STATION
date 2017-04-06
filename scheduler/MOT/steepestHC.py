@@ -7,7 +7,7 @@ import sys
 
 class MOTSteepestHC(MOT):
 
-	def find(self,satList, ):
+	def find(self,satList):
 		""" In simple hill climbing, the first closer node is chosen"""
 		
 		usefulTime=6

@@ -19,7 +19,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTSimpleHC()
+		scheduler = MOTGA()
 		usefulTime = 6
 		
 		missions = Mission.objects.all().exclude(status="PAUSED")
@@ -34,7 +34,7 @@ class SchedulerServices():
 		NextPass.objects.all().delete()
 		print("Done.")
 
-		passes = scheduler.find(missions, usefulTime)
+		passes = scheduler.find(missions)
 		print("Scheduled " + str(len(passes)) + " passes.")
 		
 		print("Saving new passes...")

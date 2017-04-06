@@ -8,7 +8,7 @@ import sys
 
 class MOTRandomRestartHC(MOT):
 
-	def find(self,satList,):
+	def find(self,satList):
 			print(" Starting hillclimbing with random restart")
 
 			usefulTime=6
