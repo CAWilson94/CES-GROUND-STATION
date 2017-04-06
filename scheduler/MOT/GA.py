@@ -211,6 +211,7 @@ def priority_summation(chromosome):
     priority_sum = 0
     for item in chromosome.satPassList:
         priority_sum += item.mission.priority
+    return priority_sum
 
 
 def nextPass_fitnessVariety_sum(chromosome):
