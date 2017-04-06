@@ -8,6 +8,8 @@ scheduler
     $scope.nextpasses = [];
     $scope.nextpassesDisplay = [];
 
+    $scope.missionsDisplay = [];
+
 
     
     /**
@@ -34,7 +36,32 @@ scheduler
         });
      }
 
+     $scope.updateTables = function(){
+        var config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+
+        $http.get('http://127.0.0.1:8000/api/nextpass/get', config)
+          .then(function successCallback(response, data) {
+              $scope.nextpassesDisplay = response.data;
+          }, function errorCallback(response) {
+            console.log(response.status)
+        });
+
+        $http.get('http://127.0.0.1:8000/api/mission/get', config)
+          .then(function successCallback(response, data) {
+              $scope.missionsDisplay = response.data;
+          }, function errorCallback(response) {
+            console.log(response.status)
+        });
+     }
+
      $interval($scope.isSchedulingFn, 3000, 0, true);
+
+     //$interval($scope.updateTables, 3000, 0, true);
 
     /**
      * Load in TLE data from Django side
@@ -94,7 +121,7 @@ scheduler
         }
       }
 
-      $http.get('http://127.0.0.1:8000/api/schedulemissiontest', config)
+      $http.get('http://127.0.0.1:8000/api/nextpass/get', config)
         .then(function successCallback(response, data) {
           // this callback will be called asynchronously
           // when the response is available

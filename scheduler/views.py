@@ -124,7 +124,7 @@ class MissionView(APIView):
 
     def get(self, request):
         try:
-            passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
+            #passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
         
         #if(len(passes) < 10 
             #or len(Mission.objects.all().filter(status="NEW")) > 0 
@@ -138,7 +138,11 @@ class MissionView(APIView):
             #lis = Services.scheduleMissions(self, missionList, scheduler, 0)
             #passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         #passes = NextPass.objects.all().order_by("riseTime")
-            serializer = NextPassSerializer(passes, many=True)
+            #serializer = NextPassSerializer(passes, many=True)
+
+            missions = Mission.objects.all()
+            serializer = MissionSerializer(missions, many=True)
+
             return Response(serializer.data)
         except OperationalError as e: 
             print("Couldn't get next passes: " + str(e)) 
@@ -182,7 +186,16 @@ class SchedulerView(APIView):
             isScheduling = True
         return HttpResponse(isScheduling)
 
+class NextPassView(APIView):
 
+    def get(self, request):
+        try:
+            passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
+            serializer = NextPassSerializer(passes, many=True)
+            return Response(serializer.data)
+        except OperationalError as e: 
+            print("Couldn't get next passes: " + str(e)) 
+            return HttpResponse(status=500)
 
 class CSVParseView(APIView):
     """view for exporting as csv"""

@@ -22,7 +22,7 @@ class SchedulerServices():
 		print("Done.")
 		print("Scheduling...")
 		print("Removing previous passes...")
-		passes = NextPass.objects.all()
+		passes = NextPass.objects.all().delete()
 		for p in passes:
 			p.delete()
 		print("Done.")		
@@ -30,9 +30,9 @@ class SchedulerServices():
 		print("Scheduled " + str(len(passes)) + " passes.")
 		
 		missions = Mission.objects.all()
-		for p in passes:
-			if(p.mission not in missions):
-				p.delete()
+		# for p in passes:
+		# 	if(p.mission not in missions):
+		# 		p.delete()
 
 		print("Scheduled " + str(len(passes)) + " passes.")
 		

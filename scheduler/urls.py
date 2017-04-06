@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from scheduler import views
-from scheduler.views import TLEViewSet, PyephemData, MissionView, MissionsViewSet, CSVParseView, TestingScheduler, SchedulerView
+from scheduler.views import TLEViewSet, PyephemData, MissionView, NextPassView, MissionsViewSet, CSVParseView, TestingScheduler, SchedulerView
 from rest_framework.routers import DefaultRouter
 
 
@@ -26,5 +26,7 @@ urlpatterns = [
     #url(r'^missions/?$', MissionView.as_view()),
     url(r'csv/missions/?$', CSVParseView.as_view()),
     url(r'^schedulemissiontest/?$', MissionView.as_view()),
-    url(r'^scheduler/isscheduling?$', SchedulerView.as_view()),
+    url(r'^scheduler/isscheduling/?$', SchedulerView.as_view()),
+    url(r'^nextpass/get/?$', NextPassView.as_view()),
+    url(r'^mission/get/?$', MissionView.as_view())
 ]
