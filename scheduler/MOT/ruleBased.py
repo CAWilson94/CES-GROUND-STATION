@@ -320,7 +320,7 @@ class MOTRuleBased(MOT):
 		return localSchedule
 
 	# Returns a list of passes with no conflicts
-	def find(self, missions, usefulTime):
+	def find(self, missions):
 		# Useful time not needed in rulebased, however kept for easy change to Hill Climber schedulers.
 		start = time.clock()
 		orderOfPasses = []

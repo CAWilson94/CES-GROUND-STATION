@@ -19,8 +19,9 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTSimpleHC()
-		usefulTime = 6
+		scheduler = MOTGA()
+		#scheduler = MOTSimpleHC()
+		#usefulTime = 6
 		
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
@@ -34,10 +35,11 @@ class SchedulerServices():
 		NextPass.objects.all().delete()
 		print("Done.")
 
-		passes = scheduler.find(missions, usefulTime)
+		passes = scheduler.find(missions)
 		print("Scheduled " + str(len(passes)) + " passes.")
 		
 		print("Saving new passes...")
+		print(passes)
 		NextPass.objects.bulk_create(passes)
 		passes = []
 		print("Done.")

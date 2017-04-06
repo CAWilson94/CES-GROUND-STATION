@@ -11,7 +11,7 @@ class MOTGA(MOT):
 
     run_time_glob = 0
 
-    def find(self, missions, usefulTime):
+    def find(self, missions):
         """
         'Finds' a list of next passes for a certain amount of hours,
         or days, for which conflicts have been either ignored or
