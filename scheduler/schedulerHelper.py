@@ -10,7 +10,7 @@ class SchedulerHelper():
 	def getPassesFromMissions(self, missions):
 		passes = []
 
-		dateNow = datetime.now()
+		dateNow = datetime.utcnow()
 
 		print("Total missions: " + str(len(missions)))
 		i = 0

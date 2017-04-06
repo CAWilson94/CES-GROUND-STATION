@@ -4,6 +4,7 @@ import time
 from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
 from scheduler.MOT.GAScheduler import MOTGA
+from scheduler.MOT.simpleHC import MOTSimpleHC
 
 
 class SchedulerServices():
@@ -18,7 +19,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTGA()
+		scheduler = MOTSimpleHC()
 		usefulTime = 6
 		
 		missions = Mission.objects.all().exclude(status="PAUSED")

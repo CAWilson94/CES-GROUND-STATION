@@ -100,19 +100,19 @@ class MissionViewSet(viewsets.ModelViewSet):
 		print("MissionViewSet couldn't be loaded yet")
 
 
-class PyephemData(APIView):
+# class PyephemData(APIView):
 
-	def get_object(self, pk):
-		try:
-			return TLE.objects.get(pk=pk)
-		except Snippet.DoesNotExist:
-			raise Http404
+# 	def get_object(self, pk):
+# 		try:
+# 			return TLE.objects.get(pk=pk)
+# 		except Snippet.DoesNotExist:
+# 			raise Http404
 
-	def get(self, request, pk, format=None):
-		tle = self.get_object(pk)
-		azel = Services.getAzElTLENow(self, tle)  # pass in object?
-		serializer = AZELSerializer(azel)
-		return Response(serializer.data)
+# 	def get(self, request, pk, format=None):
+# 		tle = self.get_object(pk)
+# 		azel = Services.getAzElTLENow(self, tle)  # pass in object?
+# 		serializer = AZELSerializer(azel)
+# 		return Response(serializer.data)
 
 
 class MissionsViewSet(viewsets.ModelViewSet):

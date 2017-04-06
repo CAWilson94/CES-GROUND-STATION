@@ -9,13 +9,12 @@ class MOT:
 
     	Inputs: 
 		missions   : a list of Mission models for which for which future passes need to be scheduled
-		usefulTime : an integer value used to configure the Hill Climber
 
 		Outputs:
 		passes[] : a list of NextPass models, which are in order of riseTime, and not conflicting.
 
     """
 
-    def find(self, missions, usefulTime):
+    def find(self, missions):
         # explicitly set it up so this can't be called directly
-        raise NotImplementedError('Exception raised, ImageFinder is supposed to be an interface / abstract class!')
+        raise NotImplementedError('Exception raised, MOT is supposed to be an interface class!')
