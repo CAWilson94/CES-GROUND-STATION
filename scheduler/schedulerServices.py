@@ -18,7 +18,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTRuleBased()
+		scheduler = MOTGA()
 		usefulTime = 6
 		
 		missions = Mission.objects.all().exclude(status="PAUSED")
