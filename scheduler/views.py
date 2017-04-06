@@ -26,13 +26,12 @@ from scheduler.MOT.ruleBased import MOTRuleBased
 
 
 from scheduler.tweet import ground_station
-from scheduler.tasks import RotatorsThread
-from scheduler.tasks import SchedulerThread
+from scheduler.tasks import RotatorsThread, SchedulerThread, SchedulerTask
 
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
-SchedulerThread.delay()
+#SchedulerThread.delay()
 #RotatorsThread.delay((NextPass()))
 
 class TestingScheduler():
@@ -76,6 +75,9 @@ class TestingScheduler():
         
         return HttpResponse(string)
 
+    def schedulerQ():
+        queue = getSchedulerQ.delay()
+        return HttpResponse("Your list: " + queue)
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
@@ -96,9 +98,7 @@ class MissionViewSet(viewsets.ModelViewSet):
     except OperationalError:
         print("MissionViewSet couldn't be loaded yet")
 
-def schedulerQ():
-	queue = getSchedulerQ.delay()
-	return HttpResponse("Your list: " + queue)
+
 
 class PyephemData(APIView):
 
@@ -123,7 +123,8 @@ class MissionsViewSet(viewsets.ModelViewSet):
 class MissionView(APIView):
 
     def get(self, request):
-        passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
+        try:
+            passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
         
         #if(len(passes) < 10 
             #or len(Mission.objects.all().filter(status="NEW")) > 0 
@@ -136,21 +137,26 @@ class MissionView(APIView):
             #scheduler = MOTRuleBased()
             #lis = Services.scheduleMissions(self, missionList, scheduler, 0)
             #passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
-        passes = NextPass.objects.all().order_by("riseTime")
-        serializer = NextPassSerializer(passes, many=True)
-        return Response(serializer.data)
+        #passes = NextPass.objects.all().order_by("riseTime")
+            serializer = NextPassSerializer(passes, many=True)
+            return Response(serializer.data)
+        except OperationalError as e: 
+            print("Couldn't get next passes: " + str(e)) 
+            return HttpResponse(status=500)
 
     def post(self, request):
         if Services.makeMissions(request.data):
-            name = request.data.get("name")
-            pr = request.data.get("priority")
+            #name = request.data.get("name")
+            #pr = request.data.get("priority")
             #ground_station("[" + datetime.now().strftime('%H:%M:%S') + "] " + name + " Priority: " + str(pr))
             #scheduler = MOTRuleBased()
             #scheduler = MOTSimpleHC()
-            NextPass.objects.all().order_by("riseTime")
+            SchedulerTask.delay()
+            #NextPass.objects.all().order_by("riseTime")
             #SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
             return HttpResponse(status=201)
-        NextPass.objects.all().order_by("riseTime")
+        SchedulerTask.delay()
+        #NextPass.objects.all().order_by("riseTime")
         #SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         return HttpResponse(status=500)
 
@@ -162,7 +168,8 @@ class MissionView(APIView):
         #print(missionToDelete[0].name)
         #scheduler = MOTRuleBased()
         #scheduler = MOTSimpleHC()
-        NextPass.objects.all().order_by("riseTime")
+        SchedulerTask.delay()
+        #NextPass.objects.all().order_by("riseTime")
         #SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
         return HttpResponse(status=200)
 

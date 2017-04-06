@@ -13,7 +13,7 @@ class SchedulerServices():
 	
 	def scheduleAndSavePasses():
 		scheduler = MOTRuleBased()
-		usefulTime = 0
+		usefulTime = 6
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
 		for m in missions: 

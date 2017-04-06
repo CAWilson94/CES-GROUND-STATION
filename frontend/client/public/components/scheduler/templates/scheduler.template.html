@@ -26,7 +26,7 @@
                 </md-input-container>
             </div>
             <div layout="column" layout-align="center bottom" layout-wrap="" style="padding-left: 50px">
-                <md-button class="md-raised" ng-click=updateTable() ng-disabled="isScheduling" style="margin-top: 48px;">
+                <md-button class="md-raised" ng-click=updateTable()  style="margin-top: 48px;">
                     <!--<i class="material-icons" layout-align="bottom">add</i>-->
                     Schedule
                 </md-button>
@@ -94,7 +94,7 @@
                             <td>{{ mission.status }}</td>
                             <td align="center">{{ mission.priority }}</td>
                             <td align="center">
-                                <button  type="button " style="display: block; margin-right:20px;text-align: center" class="close" ng-click="deleteMission(mission)" ng-disabled="isScheduling">&times;</button>
+                                <button  type="button " style="display: block; margin-right:20px;text-align: center" class="close" ng-click="deleteMission(mission)" >&times;</button>
                             </td>
                         </tr>
                     </tbody>

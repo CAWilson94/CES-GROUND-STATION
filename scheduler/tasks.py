@@ -2,15 +2,11 @@ from celery.task.schedules import crontab
 from celery import shared_task
 from celery.decorators import periodic_task
 from time import sleep
-from scheduler.schedulerQueue import SchedulerQ
 from scheduler.tweet import tweet_on_rotator_start
 from scheduler.models import TLE, AzEl, NextPass, Mission
 from random import randint
 from scheduler.rotatorController import rotator_controller
-from scheduler import schedulerServices
-
-
-schedulerQ = SchedulerQ()
+from scheduler.schedulerServices import SchedulerServices
 
 
 from celery.signals import celeryd_init
@@ -25,14 +21,20 @@ def SchedulerThread():
 	while(1):
 		print ("Starting Scheduler") 
 		try:
-			schedulerServices.SchedulerServices.scheduleAndSavePasses()
+			SchedulerServices.scheduleAndSavePasses()
 		except: 
 			print("Scheduler broke.")
 		#passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
 		print("Finished")
 		sleep(10)
 	
-	
+
+@shared_task()
+def SchedulerTask():
+	try:
+		SchedulerServices.scheduleAndSavePasses()
+	except Exception as e:
+		print("Scheduler failed with exception: " + str(e))
 
 
 @shared_task()
@@ -61,10 +63,4 @@ def repeatingTask():
 	#print("Got TLE: " + tle[index].name)
 	print("Ended task: " + str(myId))
 
-@shared_task()
-def setSchedulerQ(schedulerQueue):
-	schedulerQ = schedulerQueue
 
-@shared_task()
-def getSchedulerQ():
-	return schedulerQ

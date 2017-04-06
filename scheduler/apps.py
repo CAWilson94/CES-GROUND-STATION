@@ -1,5 +1,4 @@
 from django.apps import AppConfig
-from scheduler.schedulerQueue import SchedulerQ
 #from scheduler.tasks import repeatingTask
 #from cesGroundStation.celery import app
 
