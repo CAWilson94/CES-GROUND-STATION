@@ -11,7 +11,7 @@ MIN_SUB_PASS_LEN = timedelta(minutes=3)
 
 DEBUG = False
 
-DEBUG_LEVEL = 1
+DEBUG_LEVEL = 0
 
 orderOfPasses = []
 
@@ -29,41 +29,6 @@ class MOTRuleBased(MOT):
                 return len(temp) - index
             index += 1
         return -1
-
-    # def _getPassesFromMissions(self, missions):
-    #     passes = []
-
-    #     dateNow = datetime.now()
-
-    #     print("Total missions: " + str(len(missions)))
-    #     i = 0
-    #     for m in missions:
-    #         i += 1
-    #         print("Finding passes for the next 36 hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
-
-    #         tleEntry = m.TLE
-    #         try:
-    #             nextPass = Services.getNextPass(self, tleEntry, dateNow)
-    #             nextPass.tle = tleEntry
-    #             nextPass.mission = m
-    #             passes.append(nextPass)
-    #             if(DEBUG and DEBUG_LEVEL >= 4):
-    #                 print(nextPass.__str__() + "\n")
-
-    #             while(nextPass.setTime < (dateNow + timedelta(hours=36))):
-    #                 time = nextPass.setTime + timedelta(minutes=1)
-    #                 try:
-    #                     nextPass = Services.getNextPass(self, tleEntry, time)
-    #                     nextPass.tle = tleEntry
-    #                     nextPass.mission = m
-    #                     passes.append(nextPass)
-    #                     if(DEBUG and DEBUG_LEVEL >= 4):
-    #                         print(nextPass.__str__() + "\n")
-    #                 except ValueError: 
-    #                     break
-    #         except ValueError: 
-    #                 print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
-    #     return passes
 
     # General checking if the pass is within conflicting time period
     def _conflicts(self, periodStart, periodEnd, passToCheck):
@@ -148,13 +113,10 @@ class MOTRuleBased(MOT):
             4. The one that comes first chronologically
             5. Randomly chosen
 
-        
         Rule 1: Filter by priority
             if only one is found with a higher priority
                 add to order
             if more than one are found of the higher priority
-                apply rule 2
-            if none are found
                 apply rule 2
         Rule 2: Filter by whether it has been picked at all. 
             if only one hasn't been picked before
@@ -168,14 +130,6 @@ class MOTRuleBased(MOT):
         Rule 4: Choose a radom one
             add it to the order
 
-        Later change Rule 4 to:
-        Rule 4.1: Find the one which leaves the lagest gap between the 
-                  start or the end of the pass
-            if one found
-                add it to the order
-            else 
-                apply original Rule 4
-            
     """
     def _findNext(self, conflicting, startTime, endTime):
         #print("There were : " + str(len(conflicting)) + " conflicts found:")
@@ -234,7 +188,7 @@ class MOTRuleBased(MOT):
                 return returning
 
         if(DEBUG and DEBUG_LEVEL >= 3):
-            print("*** Returning first item in conflicts ***")
+            print("Returning first item in conflicts")
         return conflicting[0]
 
     # Looks for passes before the chosen one to fill the window
@@ -280,11 +234,11 @@ class MOTRuleBased(MOT):
                 return NextPass(tle=bestFit.tle, mission=bestFit.mission, riseTime=start, setTime=end, duration=duration,
                                     maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
             else:
-                if(DEBUG and DEBUG_LEVEL >= 2):
+                if(DEBUG and DEBUG_LEVEL >= 3):
                     print("Nothing found before")
                 return None
         else:
-            if(DEBUG and DEBUG_LEVEL >= 2):
+            if(DEBUG and DEBUG_LEVEL >= 3):
                 print("Nothing found before")
             return None
 
@@ -332,11 +286,11 @@ class MOTRuleBased(MOT):
                 return NextPass(tle=bestFit.tle, mission=bestFit.mission, riseTime=start, setTime=end, duration=duration,
                                     maxElevation=bestFit.maxElevation, riseAzimuth=bestFit.riseAzimuth, setAzimuth=bestFit.setAzimuth)
             else:
-                if(DEBUG and DEBUG_LEVEL >= 2):
+                if(DEBUG and DEBUG_LEVEL >= 3):
                     print("Nothing found after")
                 return None
         else:
-            if(DEBUG and DEBUG_LEVEL >= 2):
+            if(DEBUG and DEBUG_LEVEL >= 3):
                 print("Nothing found after")
             return None
 
@@ -364,18 +318,18 @@ class MOTRuleBased(MOT):
         orderOfPasses = []
         passes = []
         passes = SchedulerHelper.getPassesFromMissions(self, missions)
-        print("Passes: " + str(len(passes)))
+
+        if(DEBUG and DEBUG_LEVEL < 1):
+            print("Passes: " + str(len(passes)))
+
         # Sort from earliest first
         passes.sort(key=lambda x: x.riseTime, reverse=False)
 
-        if(DEBUG and DEBUG_LEVEL >= 2):
+        if(DEBUG and DEBUG_LEVEL >= 4):
             print("Passes: " + str(len(passes)))
             print("Sorted list")
             for aPass in passes:
                 print(self._passAsStr(aPass))
-
-        if(DEBUG and DEBUG_LEVEL >= 1):
-            print("")
 
         i = 0
         conflictsNum = 0
@@ -432,7 +386,7 @@ class MOTRuleBased(MOT):
 
                 i = i + 1
 
-        if(DEBUG and DEBUG_LEVEL >= 1):
+        if(DEBUG and DEBUG_LEVEL <= 1):
             print("Num of conflicts resolved: " + str(conflictsNum))
 
         return orderOfPasses

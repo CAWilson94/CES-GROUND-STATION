@@ -6,77 +6,7 @@ from datetime import date, datetime, timedelta
 from scheduler.missionServices import mission_services as ms
 from scheduler.models import TLE, AzEl, NextPass, Mission
 
-class rotatorThread (threading.Thread):
-	def __init__(self, threadID, name, counter):
-		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
-		self.couner = counter
-	def run(self):
-		print ("Starting " + self.name) 
-		try:
-		#rs.hi()
-			Services.polling()
-		#rs.get_position()
-		except OperationalError:
-			print("RotatorThread - Could not find table (try makemigrations and migrate again)")
-		print("Exiting "+ self.name)
-
-class schedulerThread (threading.Thread):
-	def __init__(self, threadID, name, counter):
-		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
-		self.couner = counter
-	def run(self):
-		print ("Starting " + self.name) 
-		print("Polling for new now")
-		try:
-			Services.pollForNew()
-		# ts.removeTLEById(180)
-
-		except OperationalError:
-			print("SchedulerThread - Could not find table (try makemigrations and migrate again)")
-		print("Exiting "+ self.name)
-
 class Services():
-
-#	def pollForNew():
-#		print ( "Polling for new")
-#		try:
-#			mission_list = ms.findMissionsByStatus("New")
-#			for i in mission_list:
-#				i.status = ("Waiting")
-#				print("Count = %r" %i)
-#				pass
-#		except TLE.DoesNotExist as e:
-#			print("Already exists")	 
-#
-#	def pollQueue():
-#		count = 0
-#		while (count < 10):
-#			try:
-#				mission_list = ms.findMissionsByStatus("Ready")
-#				for i in mission_list:
-#					i.status = ("Tracked")
-#				print("Count = %r" %count)
-#				count+=1
-#				pass
-#			except TLE.DoesNotExist as e:
-#				print("Already exists")
-
-#	def run_once(f):
-#		def wrapper(*args, **kwargs):
-#			if not wrapper.has_run:
-#				wrapper.has_run = True
-#				return f(*args, **kwargs)
-#		wrapper.has_run = False
-#		return wrapper
-#
-#	@run_once
-#	def test():
-#		print("hiya")
-
 
 	def getAzElTLE(self, tleEntry, dateTime):
 		"""
@@ -167,23 +97,6 @@ class Services():
 			mission.save()
 			success = True
 		return success
-
-	def getScheduledPasses(): 
-		# passes = NextPass.objects.filter(riseTime > datetime.now()).order_by("riseTime")
-		# if(len(passes) < 10):
-		# 	#scheduler = MOTSimpleHC()
-		# 	#scheduler = MOTSteepestHC()
-		# 	#scheduler = MOTStochasticHC()
-		# 	#scheduler = MOTRandomRestartHC()
-		# 	scheduler = MOTRuleBased()
-		# 	#lis = Services.scheduleMissions(self, missionList, scheduler, 0)
-		# 	passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
-		# passes = NextPass.objects.order_by("riseTime")
-		#score,bestNextPassList = MOT.find(self, missions, 3)
-		#bestNextPassList = MOT.find(missions, usefulTime)
-		#print(bestNextPassList)
-		#print(score)
-		return passes
 
 	def updateTLE():
 
