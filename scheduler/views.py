@@ -21,16 +21,15 @@ from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 
 class TLEViewSet(viewsets.ModelViewSet):
+    try:
+        Services.updateTLE()
+    except OperationalError:
+        print("Views.TLEViewSet - could not update TLE")
     queryset = TLE.objects.all()
     serializer_class = TLESerializer
 
 
 class PyephemData(APIView):
-
-    # try:
-    #     Services.updateTLE()
-    # except OperationalError:
-    #     print("Views.TLEViewSet - could not update TLE")
 
     def get_object(self, pk):
         try:

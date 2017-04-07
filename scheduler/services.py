@@ -251,8 +251,8 @@ class _Helper():
 		"""
 		curLatLng=geocoder.ip('me').latlng
 		observer = ephem.Observer();
-		observer.lat = curLatLng[0]
-		observer.long =curLatLng[1]
+		observer.lat = math.radians(curLatLng[0])
+		observer.long = math.radians(curLatLng[1])
 		observer.date = ephem.Date(datetime)
 		return observer
 
