@@ -7,17 +7,17 @@ import sys
 class _Helper():
 
 
-	def fitnessFunction(self, missionList,usefulTime):
+	def fitnessFunction(self, nextPassList,usefulTime):
 		"""Calling all the necessary parts in order
 			and checking the priority is in order
 			ensuring the order of the list"""
 
-		nextPassList=[]
-		try:
-			prevMission=missionList[0]
-		except IndexError  as e:
-			#print("return this {} list with this {} score".format([],0))
-			return [0,[]]
+		# nextPassList=[]
+		# try:
+		# 	prevMission=missionList[0]
+		# except IndexError  as e:
+		# 	#print("return this {} list with this {} score".format([],0))
+		# 	return [0,[]]
 
 
 		

@@ -2,6 +2,7 @@ from scheduler.MOT.schedulerInterface import MOT
 from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
+from ..services import Services
 import itertools
 import sys
 import math
@@ -52,12 +53,15 @@ class MOTSimpleHC(MOT):
 
 		#print("nextPasses")
 
+		#print(missionList)
 
 		nextPassList=[]
 		for mission in missionList:
 			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
 			#print(nextPass)
-			#dur=nextPass.setTime - nextPass.riseTime 
+			dur=nextPass.setTime - nextPass.riseTime
+			if(dur<timedelta(0)):
+				print(nextPass.tle.name)
 			nextPassList.append(nextPass)
 
 		curOrder=list(nextPassList)
