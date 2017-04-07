@@ -89,7 +89,7 @@ class TLEViewSet(viewsets.ModelViewSet):
 			print("...TLE data updated")
 	except OperationalError:
 		print("Views.TLEViewSet - could not update TLE")
-	queryset = TLE.objects.all()
+	queryset = TLE.objects.all().order_by("name")
 	serializer_class = TLESerializer
 
 class MissionViewSet(viewsets.ModelViewSet):
