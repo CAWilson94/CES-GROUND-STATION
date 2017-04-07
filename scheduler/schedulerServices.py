@@ -9,6 +9,9 @@ import time
 from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
 
+from scheduler.MOT.steepestHC import MOTSteepestHC
+from scheduler.MOT.stochasticHC import MOTStochasticHC
+from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 class SchedulerServices():
 
@@ -22,7 +25,7 @@ class SchedulerServices():
 		start = time.clock()
 
 		scheduler = MOTGA()
-		
+				
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
 		for m in missions: 
@@ -58,4 +61,5 @@ class SchedulerServices():
 		next_pass_test = ga.nextPassChromosome(NextPass.objects.all().order_by("riseTime"))
 		
 		ga.nextPass_fitnessVariety_sum(next_pass_test)
+
 		return NextPass.objects.all().order_by("riseTime")
