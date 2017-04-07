@@ -2,12 +2,13 @@ from scheduler.MOT.schedulerInterface import MOT
 from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
+from ..services import Services
 import itertools
 import sys
 
 class MOTStochasticHC(MOT):
 
-	def find(self,satList,usefulTime):
+	def find(self,missionList,usefulTime):
 		""" does not examine any neighbors before deciding how to move. 
 		Rather, it selects a neighbor at random, and moves to that one
 		if it is better."""
@@ -18,7 +19,16 @@ class MOTStochasticHC(MOT):
 		oldScore = sys.maxsize  
 		newOrder=[]
 		bestNextPassList=[]
-		curOrder=satList
+		nextPassListStart=[]
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime
+			if(dur<timedelta(0)):
+				print(nextPass.tle.name)
+			nextPassListStart.append(nextPass)
+
+		curOrder=list(nextPassListStart)
 		while i<maxIterations:
 			
 			#swap two random elements

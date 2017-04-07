@@ -7,7 +7,7 @@ import sys
 class _Helper():
 
 
-	def fitnessFunction(self, nextPassList,usefulTime):
+	def fitnessFunction(self,nextPassList,usefulTime):
 		"""Calling all the necessary parts in order
 			and checking the priority is in order
 			ensuring the order of the list"""

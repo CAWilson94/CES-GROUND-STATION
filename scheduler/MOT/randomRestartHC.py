@@ -3,15 +3,25 @@ from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 import itertools
+from ..services import Services
 import sys
 
 
 class MOTRandomRestartHC(MOT):
 
-	def find(self,satList,usefulTime):
+	def find(self,missionList,usefulTime):
 			print(" Starting hillclimbing with random restart")
 
-			curOrder=satList
+			nextPassListStart=[]
+			for mission in missionList:
+				nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+				#print(nextPass)
+				dur=nextPass.setTime - nextPass.riseTime
+				if(dur<timedelta(0)):
+					print(nextPass.tle.name)
+					nextPassListStart.append(nextPass)
+
+			curOrder=list(nextPassListStart)
 			i=0
 			maxIterations = 50
 			newScore=0

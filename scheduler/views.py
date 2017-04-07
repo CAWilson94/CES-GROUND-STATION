@@ -21,16 +21,16 @@ from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 
 class TLEViewSet(viewsets.ModelViewSet):
-    try:
-        #Services.updateTLE()
-        pass
-    except OperationalError:
-        print("Views.TLEViewSet - could not update TLE")
     queryset = TLE.objects.all()
     serializer_class = TLESerializer
 
 
 class PyephemData(APIView):
+
+    # try:
+    #     Services.updateTLE()
+    # except OperationalError:
+    #     print("Views.TLEViewSet - could not update TLE")
 
     def get_object(self, pk):
         try:
@@ -64,11 +64,14 @@ class MissionView(APIView):
         
         serializer = NextPassSerializer(scheduledMissionList, many=True)
         return Response(serializer.data)
-
+        
     def post(self, request):
         if Services.makeMissions(request.data):
-            return HttpResponse(status=201)
-        return HttpResponse(status=500)
+            content = {'data accepted': 'saved to DB'}
+            return Response(content, status=status.HTTP_202_ACCEPTED)
+
+        content = {'data accepted': "but couldn't save to DB"}   
+        return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CSVParseView(APIView):

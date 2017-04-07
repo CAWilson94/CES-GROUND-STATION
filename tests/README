@@ -1,0 +1,16 @@
+In theory this would work. 
+
+We have the test files floating about in the root directory. Which Django says is normal practise, would make more sense to have the test files in the app but whatever,
+
+Call "python runtests.py test" to run tests.
+
+This means we can have the test folder in a nice ish place and break it up into multiple files without bothering the main code.
+
+However python imports are messy, I can't get them to work and you have to redefine everything that django already does in manage.py in runtests.py. 
+
+Life is too short.
+
+However, you can use "python ../manage.py test" to benefit from having all the tests here away from the main code but not having to re write stuff
+Downside, the command is a little annoying.
+
+
