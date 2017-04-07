@@ -28,16 +28,25 @@ class FitnessFunctionTests(TestCase):
 		exoAOS=datetime(2017,1,26,0,53,0)
 		exoLOS = datetime(2017,1,26,1,1,0)
 
-		catTLE = TLE(0,"cat","line1","line2")
-		sixtysevenCTLE = TLE(1,"sixtysevenC","line1","line2")
-		sixtysevenDTLE= TLE(1,"sixtysevenD","line1","line2")
-		aistTLE= TLE(1,"aist","line1","line2")
-		beesatTLE= TLE(1,"beesat","line1","line2")
-		briteTLE= TLE(1,"brite","line1","line2")
-		cubebugTLE= TLE(1,"cubebug","line1","line2")
-		sailTLE= TLE(1,"sail","line1","line2")
+		catTLE = TLE(name="cat",line1="line1",line2="line2")
+		sixtysevenCTLE = TLE(name="sixtysevenC",line1="line1",line2="line2")
+		sixtysevenDTLE= TLE(name="sixtysevenD",line1="line1",line2="line2")
+		aistTLE= TLE(name="aist",line1="line1",line2="line2")
+		beesatTLE= TLE(name="beesat",line1="line1",line2="line2")
+		briteTLE= TLE(name="brite",line1="line1",line2="line2")
+		cubebugTLE= TLE(name="cubebug",line1="line1",line2="line2")
+		sailTLE= TLE(name="sail",line1="line1",line2="line2")
 
-		Mission()
+		mis1=Mission(priority=2)
+		mis2=Mission(priority=2)
+		mis3=Mission(priority=2)
+		mis4=Mission(priority=2)
+		mis5=Mission(priority=2)
+		mis6=Mission(priority=2)
+		mis7=Mission(priority=2)
+		mis8=Mission(priority=2)
+		mis9=Mission(priority=2)
+
 		date1 = datetime(2017, 1, 1, 12, 0, 0)
 			# id, tle, riseTime, setTime, duration, maxElevation, riseAzimuth, setAzimuth
 		# cat = NextPass(0,catTLE, catAOS, catLOS, 0,0,0,0)
@@ -49,15 +58,25 @@ class FitnessFunctionTests(TestCase):
 		# cubebug = NextPass(6,cubebugTLE,cubebugAOS, cubebugLOS,date1,date1,date1,date1)
 		# sail = NextPass(7,sailTLE,sailAOS, sailLOS,date1,date1,date1,date1)
 		
-		redfern = NextPass(riseTime=datetime(2017, 3, 27, 16, 24, 50),setTime=datetime(2017, 3, 27, 16, 37, 33),tle="LEMUR-2-REDFERN-GOES")	
-		eye= NextPass(riseTime=datetime(2017, 3, 27, 19, 31, 16),setTime=datetime(2017, 3, 27, 19, 37, 35),tle="EYESAT-1 (AO-27)")
-		trutna = NextPass(riseTime=datetime(2017, 3, 27, 19, 32, 41),setTime=datetime(2017, 3, 27, 19, 39, 8),tle="LEMUR-2-TRUTNA")
-		tech= NextPass(riseTime=datetime(2017, 3, 27, 19, 15, 21),setTime=datetime(2017, 3, 27, 19, 20),tle="TECHEDSAT 5")
-		seventyeight= NextPass(riseTime=datetime(2017, 3, 27, 18, 53, 36),setTime=datetime(2017, 3, 27, 19, 2, 5),tle="FLOCK 3P-78")
-		seventyfour= NextPass(riseTime=datetime(2017, 3, 27, 18, 53, 45),setTime=datetime(2017, 3, 27, 19, 2, 14),tle="FLOCK 3P-74")
-		prime= NextPass(riseTime=datetime(2017, 3, 27, 17, 25, 57),setTime=datetime(2017, 3, 27, 17, 36, 57),tle="M-CUBED & EXP-1 PRIME")
-		aus= NextPass(riseTime=datetime(2017, 3, 27, 19, 33, 45),setTime=datetime(2017, 3, 27, 19, 40, 15),tle="LEMUR-2-AUSTINTACIOUS")
-		twentyone= NextPass(riseTime=datetime(2017, 3, 27, 19, 1, 46),setTime=datetime(2017, 3, 27, 19, 10, 40),tle="FLOCK 3P-21")
+		redfernTLE = TLE(name="LEMUR-2-REDFERN-GOES",line1="line1",line2="line2")
+		eyeTLE = TLE(name="EYESAT-1 (AO-27)",line1="line1",line2="line2")
+		trutnaTLE= TLE(name="LEMUR-2-TRUTNA",line1="line1",line2="line2")
+		techTLE= TLE(name="TECHEDSAT 5",line1="line1",line2="line2")
+		seventyeightTLE= TLE(name="FLOCK 3P-78",line1="line1",line2="line2")
+		seventyfourTLE= TLE(name="FLOCK 3P-74",line1="line1",line2="line2")
+		primeTLE= TLE(name="M-CUBED & EXP-1 PRIME",line1="line1",line2="line2")
+		ausTLE= TLE(name="LEMUR-2-AUSTINTACIOUS",line1="line1",line2="line2")
+		twentyoneTLE= TLE(name="FLOCK 3P-21",line1="line1",line2="line2")
+
+		redfern = NextPass(riseTime=datetime(2017, 3, 27, 16, 24, 50),setTime=datetime(2017, 3, 27, 16, 37, 33),tle=redfernTLE, mission=mis1)	
+		eye= NextPass(riseTime=datetime(2017, 3, 27, 19, 31, 16),setTime=datetime(2017, 3, 27, 19, 37, 35),tle=eyeTLE, mission=mis2)
+		trutna = NextPass(riseTime=datetime(2017, 3, 27, 19, 32, 41),setTime=datetime(2017, 3, 27, 19, 39, 8),tle=trutnaTLE, mission=mis3)
+		tech= NextPass(riseTime=datetime(2017, 3, 27, 19, 15, 21),setTime=datetime(2017, 3, 27, 19, 20),tle=techTLE, mission=mis4)
+		seventyeight= NextPass(riseTime=datetime(2017, 3, 27, 18, 53, 36),setTime=datetime(2017, 3, 27, 19, 2, 5),tle=seventyeightTLE, mission=mis5)
+		seventyfour= NextPass(riseTime=datetime(2017, 3, 27, 18, 53, 45),setTime=datetime(2017, 3, 27, 19, 2, 14),tle=seventyfourTLE, mission=mis6)
+		prime= NextPass(riseTime=datetime(2017, 3, 27, 17, 25, 57),setTime=datetime(2017, 3, 27, 17, 36, 57),tle=primeTLE, mission=mis7)
+		aus= NextPass(riseTime=datetime(2017, 3, 27, 19, 33, 45),setTime=datetime(2017, 3, 27, 19, 40, 15),tle=ausTLE, mission=mis8)
+		twentyone= NextPass(riseTime=datetime(2017, 3, 27, 19, 1, 46),setTime=datetime(2017, 3, 27, 19, 10, 40),tle=twentyoneTLE, mission=mis9)
 
 # nextPasses
 # '-718d-4b6e-ab15-5aa60c91dbcd'), 'duration': datetime.timedelta(0, 387), '_mission_cache': <Mission: {'_TLE_cache': <TLE: {'name': 'LEMUR-2-REDFERN-GOES', 'line1': '1 42059U 98067LA  17085.97055905  .00013820  00000-0  20634-3 0  9993', '_state': <django.db.models.base.ModelState object at 0x7fed2a1b6be0>, 'id': UUID('0a841237-754e-47fd-8d62-bfb11f56716b'), 'line2': '2 42059  51.6415  87.9898 0009449 356.8621   3.2311 15.55306862  3206'}>, 'name': 'LEMUR-2-REDFERN-GOES', 'status': 'NEW', 'TLE_id': UUID('0a841237-754e-47fd-8d62-bfb11f56716b'), '_state': <django.db.models.base.ModelState object at 0x7fed2a1adc18>, 'id': UUID('84690422-62cf-4f41-94c9-e93d61cd246f'), 'priority': 2}>, 'riseAzimuth': 2.975374221801758, 'setAzimuth': 1.69297456741333, 'tle': 'LEMUR-2-REDFERN-GOES'}
@@ -80,92 +99,92 @@ class FitnessFunctionTests(TestCase):
 		#threepseven=NextPass(tle="3p-78",riseTime=threepsevenAOS,setTime=threepsevenLOS)
 
 		#satList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail]
-		nextPassList = [redfern,eye,trutna,tech,seventyeight,seventyfour,prime,aus,twentyone]
-		usefulTime=3
+		#nextPassList = [redfern,eye,trutna,tech,seventyeight,seventyfour,prime,aus,twentyone]
+		nextPassList = [seventyeight,seventyfour]
+		#usefulTime=3
 
-		conflictGroups,nonConflictGroups = _Helper._findConflictingGroups(nextPassList)	
+		conflictGroups = _Helper._findConflictingGroups(nextPassList)	
 
+		print(conflictGroups)
 
-
-
-		mergedGroups = _Helper._mergeLists(conflictGroups)
-
-
-		noConflictList=[]
-		for Pass in nextPassList:
-			notInGroup=True
-			for group in mergedGroups:
-				if Pass in group:
-					notInGroup=False
-			if notInGroup:
-				noConflictList.append(Pass)
-
-		print("No")
-		print(noConflictList)
-
-		score,processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
-		print("conf")
-		print(processedNextPassList)
+# 		mergedGroups = _Helper._mergeLists(conflictGroups)
 
 
+# 		noConflictList=[]
+# 		for Pass in nextPassList:
+# 			notInGroup=True
+# 			for group in mergedGroups:
+# 				if Pass in group:
+# 					notInGroup=False
+# 			if notInGroup:
+# 				noConflictList.append(Pass)
 
-		score = len(nextPassList)-len(processedNextPassList)
-		print(score)
-		steepestHC = MOTSteepestHC()
-		#shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
-		#print(order)
-		cat = NextPass(tle="catTLE", riseTime=catAOS,setTime= catLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		sixtysevenC = NextPass(tle="sixtysevenCTLE",riseTime=sixtysevenCAOS, setTime=sixtysevenCLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		sixtysevenD = NextPass(tle="sixtysevenDTLE",riseTime=sixtysevenDAOS, setTime=sixtysevenDLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		aist = NextPass(tle="aistTLE",riseTime=aistAOS, setTime=aistLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		beesat = NextPass(tle="beesatTLE",riseTime=beesatAOS, setTime=beesatLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		brite = NextPass(tle="briteTLE",riseTime=briteAOS, setTime=briteLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		cubebug = NextPass(tle="cubebugTLE",riseTime=cubebugAOS, setTime=cubebugLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		sail = NextPass(tle="sailTLE",riseTime=sailAOS, setTime=sailLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
-		exo = NextPass(tle="exo",riseTime=exoAOS,setTime=exoLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission())
+# 		print("No")
+# 		print(noConflictList)
+
+# 		score,processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+# 		print("conf")
+# 		print(processedNextPassList)
+
+
+
+# 		score = len(nextPassList)-len(processedNextPassList)
+# 		print(score)
+# 		steepestHC = MOTSteepestHC()
+# 		#shouldBe,nextPassList=MOTSteepestHC().find(satList,usefulTime)
+# 		#print(order)
+# 		cat = NextPass(tle="catTLE", riseTime=catAOS,setTime= catLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		sixtysevenC = NextPass(tle="sixtysevenCTLE",riseTime=sixtysevenCAOS, setTime=sixtysevenCLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		sixtysevenD = NextPass(tle="sixtysevenDTLE",riseTime=sixtysevenDAOS, setTime=sixtysevenDLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		aist = NextPass(tle="aistTLE",riseTime=aistAOS, setTime=aistLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		beesat = NextPass(tle="beesatTLE",riseTime=beesatAOS, setTime=beesatLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		brite = NextPass(tle="briteTLE",riseTime=briteAOS, setTime=briteLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		cubebug = NextPass(tle="cubebugTLE",riseTime=cubebugAOS, setTime=cubebugLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		sail = NextPass(tle="sailTLE",riseTime=sailAOS, setTime=sailLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
+# 		exo = NextPass(tle="exo",riseTime=exoAOS,setTime=exoLOS,duration=0,riseAzimuth=0,setAzimuth=0,mission=Mission(priority=2))
 		
-		# NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
-		# 	riseAzimuth=details[1],setAzimuth=detailsduration=[5], mission=mission, tle=tleName)
-		# nextPassList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,exo]
-		# usefulTime=3
-		# MOT = MOTSteepestHC()
-		#shouldBe,nextPassList=MOT.find(satList,usefulTime)
+# 		# NextPass(riseTime=riseTime, setTime=setTime, duration=duration, maxElevation=details[3],
+# 		# 	riseAzimuth=details[1],setAzimuth=detailsduration=[5], mission=mission, tle=tleName)
+# 		# nextPassList=[cat,sixtysevenC,sixtysevenD,aist,beesat,brite,cubebug,sail,exo]
+# 		# usefulTime=3
+# 		# MOT = MOTSteepestHC()
+# 		#shouldBe,nextPassList=MOT.find(satList,usefulTime)
 		
 
-# sat1 = NextPass(riseTime=datetime(2017, 3, 25, 22, 39, 3), setTime=datetime(2017, 3, 25, 22, 48, 39), duration=timedelta(0, 576), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat1")
-		# sat2 = NextPass(riseTime=datetime(2017, 3, 26, 5, 1, 12), setTime=datetime(2017, 3, 26, 5, 13, 53), duration=timedelta(0, 761), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat2")
-		# sat3 = NextPass(riseTime=datetime(2017, 3, 26, 2, 6, 51), setTime=datetime(2017, 3, 26, 2, 19, 33), duration=timedelta(0, 762), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat3")
-		# sat4 = NextPass(riseTime=datetime(2017, 3, 25, 23, 57, 18), setTime=datetime(2017, 3, 25, 0, 7, 10), duration=timedelta(0,608), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat4")
-		# sat5 = NextPass(riseTime=datetime(2017, 3, 26, 4, 29, 32), setTime=datetime(2017, 3, 26, 4, 39, 40), duration=timedelta(0, 608), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat5")
-		# sat6 = NextPass(riseTime=datetime(2017, 3, 25, 23, 24, 42), setTime=datetime(2017, 3, 25, 23, 26, 9), duration=timedelta(0, 87), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat6")
-		# sat7 = NextPass(riseTime=datetime(2017, 3, 25, 22, 36, 45), setTime=datetime(2017, 3, 25, 22, 47, 4), duration=timedelta(0, 619), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat7")
+# # sat1 = NextPass(riseTime=datetime(2017, 3, 25, 22, 39, 3), setTime=datetime(2017, 3, 25, 22, 48, 39), duration=timedelta(0, 576), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat1")
+# 		# sat2 = NextPass(riseTime=datetime(2017, 3, 26, 5, 1, 12), setTime=datetime(2017, 3, 26, 5, 13, 53), duration=timedelta(0, 761), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat2")
+# 		# sat3 = NextPass(riseTime=datetime(2017, 3, 26, 2, 6, 51), setTime=datetime(2017, 3, 26, 2, 19, 33), duration=timedelta(0, 762), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat3")
+# 		# sat4 = NextPass(riseTime=datetime(2017, 3, 25, 23, 57, 18), setTime=datetime(2017, 3, 25, 0, 7, 10), duration=timedelta(0,608), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat4")
+# 		# sat5 = NextPass(riseTime=datetime(2017, 3, 26, 4, 29, 32), setTime=datetime(2017, 3, 26, 4, 39, 40), duration=timedelta(0, 608), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat5")
+# 		# sat6 = NextPass(riseTime=datetime(2017, 3, 25, 23, 24, 42), setTime=datetime(2017, 3, 25, 23, 26, 9), duration=timedelta(0, 87), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat6")
+# 		# sat7 = NextPass(riseTime=datetime(2017, 3, 25, 22, 36, 45), setTime=datetime(2017, 3, 25, 22, 47, 4), duration=timedelta(0, 619), maxElevation=0,riseAzimuth=0,setAzimuth=0,tle="sat7")
 
-
-		
-		#print(nextPassList)
-		conflictGroups = _Helper._findConflictingGroups(nextPassList)
-		mergedGroups = _Helper._mergeLists(conflictGroups)
-		#print(order)
-		print("mergedgroups")
-		print(mergedGroups)
-
-		noConflictList=[]
-		for Pass in nextPassList:
-			notInGroup=True
-			for group in mergedGroups:
-				if Pass in group:
-					notInGroup=False
-			if notInGroup:
-				noConflictList.append(Pass)
-		print("noconflicts")
-		print(noConflictList)
 
 		
-		score,processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+# 		#print(nextPassList)
+# 		conflictGroups = _Helper._findConflictingGroups(nextPassList)
+# 		mergedGroups = _Helper._mergeLists(conflictGroups)
+# 		#print(order)
+# 		print("mergedgroups")
+# 		print(mergedGroups)
 
-		#willitalwaysbefour?
-		#self.assertIs(shouldBe == 0,True)
+# 		noConflictList=[]
+# 		for Pass in nextPassList:
+# 			notInGroup=True
+# 			for group in mergedGroups:
+# 				if Pass in group:
+# 					notInGroup=False
+# 			if notInGroup:
+# 				noConflictList.append(Pass)
+# 		print("noconflicts")
+# 		print(noConflictList)
 
-		print("processed")
-		print(processedNextPassList)
-		print(score)
+		
+# 		score,processedNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+
+# 		#willitalwaysbefour?
+# 		#self.assertIs(shouldBe == 0,True)
+
+# 		print("processed")
+# 		print(processedNextPassList)
+# 		print(score)

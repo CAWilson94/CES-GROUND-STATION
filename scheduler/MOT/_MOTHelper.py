@@ -19,19 +19,7 @@ class _Helper():
 			#print("return this {} list with this {} score".format([],0))
 			return [0,[]]
 
-		for mission in missionList:
-			if mission.priority > prevMission.priority:
-				#print ("bad priority")
-				return [sys.maxsize,[]]
-			else:
-				prevMission = mission
 
-		#print("nextPasses")
-		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.now())
-			#print(nextPass)
-			dur=nextPass.setTime - nextPass.riseTime 
-			nextPassList.append(nextPass)
 		
 		#put in priority groups!
 			
@@ -100,9 +88,18 @@ class _Helper():
 					#they conflict
 					#print('{} conflicts with {}'.format(satList[i],satList[j]))
 					if satList[i] and satList[j] not in conflicts:
-						conflicts.append(satList[i])
-						conflicts.append(satList[j])
-
+						# print(satList[i])
+						# print(satList[i].mission)
+						# print(satList[i].mission.priority)
+						if satList[i].mission.priority >  satList[j].mission.priority:
+							conflicts.append(satList[i])
+						elif satList[i].mission.priority <  satList[j].mission.priority:
+							conflicts.append(satList[j])
+						else:
+							conflicts.append(satList[i])
+							conflicts.append(satList[j])
+						# conflicts.append(satList[i])
+						# conflicts.append(satList[j])
 			if len(conflicts)>0:
 				satListConflicts.append(list(set(conflicts)))
 

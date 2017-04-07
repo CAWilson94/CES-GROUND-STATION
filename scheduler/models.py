@@ -73,7 +73,9 @@ class NextPass(models.Model):
     setAzimuth = models.CharField(max_length=15)
 
     tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
-    mission=models.ForeignKey(Mission, default="mission", on_delete=models.CASCADE)
+    # c787cec6-dc97-44be-9286-b22e450511e0
+    # 00000000-0000-0000-0000-000000000000
+    mission=models.ForeignKey(Mission, default="00000000-0000-0000-0000-000000000000", on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.__dict__)
