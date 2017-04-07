@@ -5,7 +5,9 @@ from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
 from scheduler.MOT.GAScheduler import MOTGA
 from scheduler.MOT.simpleHC import MOTSimpleHC
-
+from scheduler.MOT.steepestHC import MOTSteepestHC
+from scheduler.MOT.stochasticHC import MOTStochasticHC
+from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 class SchedulerServices():
 
@@ -21,6 +23,9 @@ class SchedulerServices():
 
 		scheduler = MOTGA()
 		#scheduler = MOTSimpleHC()
+		#scheduler = MOTSteepestHC()
+		#scheduler = MOTStochasticHC()
+		#scheduler = MOTRandomRestartHC()
 		#usefulTime = 6
 		
 		missions = Mission.objects.all().exclude(status="PAUSED")

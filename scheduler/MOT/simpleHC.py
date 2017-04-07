@@ -1,6 +1,7 @@
 from scheduler.MOT.schedulerInterface import MOT
 from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
+from ..services import Services
 from random import shuffle,randint
 import itertools
 import sys
@@ -23,8 +24,16 @@ class MOTSimpleHC(MOT):
 		newOrder=[] 
 		maxN=0
 
-		#Mission
-		curOrder=missionList
+		nextPassList=[]
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime
+			# if(dur<timedelta(0)):
+			# 	print(nextPass.tle.name)
+			nextPassList.append(nextPass)
+
+		curOrder=list(nextPassList)
 
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]

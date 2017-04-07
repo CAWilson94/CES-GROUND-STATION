@@ -2,13 +2,14 @@ from scheduler.MOT.schedulerInterface import MOT
 from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
+from ..services import Services
 import itertools
 import sys
 
 class MOTSteepestHC(MOT):
 
-	def find(self,satList):
-		""" In simple hill climbing, the first closer node is chosen"""
+	def find(self,missionList):
+		""" In steepest hill climbing, the neighbour that has the best score is used"""
 		
 		usefulTime=6
 		bestNextPassList=[]
@@ -19,7 +20,18 @@ class MOTSteepestHC(MOT):
 		oldScore = sys.maxsize
 		newScore=0
 		newOrder=[]
-		curOrder=satList
+
+		nextPassListStart=[]
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime
+			# if(dur<timedelta(0)):
+			# 	print(nextPass.tle.name)
+			nextPassListStart.append(nextPass)
+
+		curOrder=list(nextPassListStart)
+
 
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
@@ -49,7 +61,7 @@ class MOTSteepestHC(MOT):
 				print(".")
 				
 		if i==maxIterations:
-			print(" Simple HillClimbing finished with the order ")
+			print("Steepest HillClimbing finished with the order ")
 			# for n in curOrder:
 			# 	pass
 			# 	print(n)
