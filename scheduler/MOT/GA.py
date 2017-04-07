@@ -426,7 +426,7 @@ def levelOff(current, bestsofar):
     for item in bestsofar:
         if abs(current.fitness - item.fitness) <= ten_percent_range:
             i += 1
-    if i == 5:
+    if i == 10:
         return True
 
 
