@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^missions/(?P<pk>[0-9]+)/?$', MissionView.as_view()),
     #url(r'^missions/?$', MissionView.as_view()),
     url(r'csv/missions/?$', CSVParseView.as_view()),
-    url(r'^schedulemissiontest/?$', MissionView.as_view()),
+    #url(r'^schedulemissiontest/?$', MissionView.as_view()),
     url(r'^scheduler/isscheduling/?$', SchedulerView.as_view()),
     url(r'^nextpass/get/?$', NextPassView.as_view()),
     url(r'^mission/get/?$', MissionView.as_view())

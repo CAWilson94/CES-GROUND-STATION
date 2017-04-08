@@ -14,8 +14,8 @@ class MOTSteepestHC(MOT):
 		usefulTime=6
 		bestNextPassList=[]
 		print(" Starting steepest hillclimbing")
-		maxIterations = 50
-		#maxNeighbours=5000
+		maxIterations = 25
+		maxNeighbours=1500
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
@@ -46,7 +46,9 @@ class MOTSteepestHC(MOT):
 					curOrder=neighbour
 					oldNeighbourScore=newNeighbourScore
 					newScore=newNeighbourScore
-					break;
+				if n==maxNeighbours: 					
+					break; 				
+				n+=1
 
 			if newScore < oldScore:
 				oldScore=newScore
