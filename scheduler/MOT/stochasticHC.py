@@ -19,14 +19,8 @@ class MOTStochasticHC(MOT):
 		oldScore = sys.maxsize  
 		newOrder=[]
 		bestNextPassList=[]
-		nextPassListStart=[]
-		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-			#print(nextPass)
-			dur=nextPass.setTime - nextPass.riseTime
-			if(dur<timedelta(0)):
-				print(nextPass.tle.name)
-			nextPassListStart.append(nextPass)
+
+		nextPassListStart = _Helper.getNextPass(missionList)
 
 		curOrder=list(nextPassListStart)
 		while i<maxIterations:

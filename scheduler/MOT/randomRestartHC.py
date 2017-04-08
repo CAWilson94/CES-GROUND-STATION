@@ -12,14 +12,7 @@ class MOTRandomRestartHC(MOT):
 	def find(self,missionList,usefulTime):
 			print(" Starting hillclimbing with random restart")
 
-			nextPassListStart=[]
-			for mission in missionList:
-				nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-				#print(nextPass)
-				dur=nextPass.setTime - nextPass.riseTime
-				if(dur<timedelta(0)):
-					print(nextPass.tle.name)
-					nextPassListStart.append(nextPass)
+			nextPassListStart = _Helper.getNextPass(missionList)
 
 			curOrder=list(nextPassListStart)
 			i=0

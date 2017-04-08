@@ -36,14 +36,14 @@ class _Helper():
 		#print("mergegroups")
 		#print (mergedGroups)
 
-		# reorderedConflictGroups=[]
-		# for group in mergedGroups:
-		# 	reordered= [x for x in nextPassList if x in group]
-		# 	reorderedConflictGroups.append(reordered)
+		reorderedConflictGroups=[]
+		for group in mergedGroups:
+			reordered= [x for x in nextPassList if x in group]
+			reorderedConflictGroups.append(reordered)
 
 		scheduledNextPassList=[]
 		
-		scheduledNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+		scheduledNextPassList = _Helper._findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
 		#print("processedNextPassList")
 		#print(processedNextPassList)
@@ -69,6 +69,20 @@ class _Helper():
 		#print("final score = {} - {}".format(len(nextPassList),len(processedNextPassList)))
 		score = len(nextPassList)-len(scheduledNextPassList)
 		return [score,scheduledNextPassList]
+
+	def getNextPass(missionList):
+		nextPassListStart=[]
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime
+			if(dur<timedelta(0)):
+				print(nextPass.tle.name)
+			nextPassListStart.append(nextPass)
+
+		return nextPassListStart
+
+
 
 	def _findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones
@@ -268,3 +282,5 @@ class _Helper():
 		# for satList in unScheduledSats:
 		# 	score +=len(satList)
 		return nextPassList
+
+
