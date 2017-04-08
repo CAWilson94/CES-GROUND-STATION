@@ -34,12 +34,17 @@ class MOTStochasticHC(MOT):
 			#swap two random elements
 			i1 = randint(0,len(curOrder)-1)
 			i2 = randint(0,len(curOrder)-1)
+
+			print("{} {}".format(curOrder[i1], curOrder[i2]))
+
 			swap1 = curOrder[i1]
 			swap2 = curOrder[i2]
 
 			curOrder[i2]=swap1
 			curOrder[i1]=swap2
 			
+			print ("{} {}".format(curOrder[i1], curOrder[i2]))
+
 			newScore,nextPassList = _Helper.fitnessFunction(self,curOrder,usefulTime)
 
 			

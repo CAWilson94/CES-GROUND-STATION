@@ -12,8 +12,8 @@ class MOTSteepestHC(MOT):
 		""" In simple hill climbing, the first closer node is chosen"""
 		bestNextPassList=[]
 		print(" Starting steepest hillclimbing")
-		maxIterations = 50
-		maxNeighbours=5000
+		maxIterations=25
+		maxNeighbours=1500
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
@@ -30,11 +30,13 @@ class MOTSteepestHC(MOT):
 
 		curOrder=list(nextPassListStart)
 
+		
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
 
 			oldNeighbourScore=sys.maxsize
+			n=0
 			for neighbour in generatorOfAllNeighboursIncItself:
 
 				newNeighbourScore,nextPassList  = _Helper.fitnessFunction(self,neighbour,usefulTime)
@@ -43,8 +45,12 @@ class MOTSteepestHC(MOT):
 					curOrder=neighbour
 					oldNeighbourScore=newNeighbourScore
 					newScore=newNeighbourScore
+
+				if n==maxNeighbours:
 					break;
 
+				n+=1
+				
 			if newScore < oldScore:
 				oldScore=newScore
 				bestOrder = list(curOrder)
@@ -58,7 +64,7 @@ class MOTSteepestHC(MOT):
 				print(".")
 				
 		if i==maxIterations:
-			print(" Simple HillClimbing finished with the order ")
+			print(" Starting HillClimbing finished with the order ")
 			# for n in curOrder:
 			# 	pass
 			# 	print(n)

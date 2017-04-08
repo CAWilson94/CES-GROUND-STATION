@@ -14,13 +14,13 @@ class MOTSimpleHC(MOT):
 
 		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
-		maxIterations = 50
+		maxIterations = 100
 
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
 		newOrder=[] 
-		maxN=0
+		maxN=5000
 
 		#Mission
 		#curOrder=missionList
@@ -81,6 +81,8 @@ class MOTSimpleHC(MOT):
 				n+=1
 				newNeighbourScore,nextPassList = _Helper.fitnessFunction(self, neighbour,usefulTime)
 
+				if(neighbour==nextPassList):
+					print("woop")
 				if(newNeighbourScore < oldNeighbourScore):
 					#Choose this better order
 					curOrder=neighbour

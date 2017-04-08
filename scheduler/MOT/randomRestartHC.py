@@ -52,7 +52,7 @@ class MOTRandomRestartHC(MOT):
 	def _simpleRR(self,satList,usefulTime):
 			""" In simple hill climbing, the first closer node is chosen"""
 			bestNextPassList=[]
-			print(" Starting simple hillclimbing")
+			print(" Starting simple hillclimbing for RR")
 			maxIterations = 50
 			maxNeighbours=200
 			i=0
@@ -89,7 +89,7 @@ class MOTRandomRestartHC(MOT):
 					print(".")
 					
 			if i==maxIterations:
-				print(" Simple HillClimbing finished with the order ")
+				print(" Simple HillClimbing for RR finished with the order ")
 				# for n in curOrder:
 				# 	pass
 				# 	print(n)
