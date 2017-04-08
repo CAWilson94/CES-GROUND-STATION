@@ -36,14 +36,14 @@ class _Helper():
 		#print("mergegroups")
 		#print (mergedGroups)
 
-		# reorderedConflictGroups=[]
-		# for group in mergedGroups:
-		# 	reordered= [x for x in nextPassList if x in group]
-		# 	reorderedConflictGroups.append(reordered)
+		reorderedConflictGroups=[]
+		for group in mergedGroups:
+			reordered= [x for x in nextPassList if x in group]
+			reorderedConflictGroups.append(reordered)
 
 		scheduledNextPassList=[]
 		
-		scheduledNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+		scheduledNextPassList = _Helper._findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
 		#print("processedNextPassList")
 		#print(processedNextPassList)
