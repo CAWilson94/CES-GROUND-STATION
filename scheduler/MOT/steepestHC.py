@@ -8,10 +8,12 @@ import sys
 
 class MOTSteepestHC(MOT):
 
-	def find(self,missionList, usefulTime):
+	def find(self,missionList):
 		""" In steepest hill climbing, the neighbour found to have the best score is chosen"""
 		bestNextPassList=[]
 		print(" Starting steepest hillclimbing")
+		
+		usefulTime=6
 		maxIterations=25
 		maxNeighbours=1500
 		i=0

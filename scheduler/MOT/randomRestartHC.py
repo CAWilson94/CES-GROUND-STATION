@@ -1,5 +1,6 @@
 from scheduler.MOT.schedulerInterface import MOT
 from scheduler.MOT._MOTHelper import _Helper
+from scheduler.MOT.simpleHC import MOTSimpleHC
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 import itertools
@@ -9,27 +10,27 @@ import sys
 
 class MOTRandomRestartHC(MOT):
 
-	def find(self,missionList,usefulTime):
+	def find(self,missionList):
 			print(" Starting hillclimbing with random restart")
 
 			nextPassListStart = _Helper.getNextPass(self,missionList)
-
 			curOrder=list(nextPassListStart)
+			usefulTime=6
 			i=0
 			maxIterations = 50
 			newScore=0
 			oldScore=sys.maxsize
 			bestNextPassList=[]
-			#shuffle(curOrder)
+			#MOT = MOTSimpleHC
+
 			while i<maxIterations:
-				shuffle(curOrder)									# find a different starting point
-				hillclimbing = MOTRandomRestartHC._simpleRR(self,curOrder,usefulTime)		# find best order you can
-				newScore,nextPassList = _Helper.fitnessFunction(self,hillclimbing,usefulTime)	# get the number from that order
+				shuffle(curOrder)									# find a different starting point	
+				newScore,nextPassList = MOTRandomRestartHC._simpleRR(self,curOrder,usefulTime)  # find best order you can
 
 				if(newScore<oldScore):
 					oldScore=newScore
-					curOrder=list(hillclimbing)
-					bestOrder=list(curOrder)
+					#curOrder=list(hillclimbing)
+					#bestOrder=list(curOrder)
 					bestNextPassList=list(nextPassList)
 				i+=1
 
@@ -88,4 +89,4 @@ class MOTRandomRestartHC(MOT):
 				# 	print(n)
 				#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 				print("And a score of {}".format(oldScore))
-				return bestOrder
+				return oldScore, bestOrder

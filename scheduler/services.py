@@ -161,7 +161,7 @@ class Services():
 
 	def scheduleMissions(self, missions, MOT): 
 		#schedulerPasses
-		score,bestNextPassList = MOT.find(self, missions, 6)
+		score,bestNextPassList = MOT.find(self, missions)
 		#print(bestNextPassList)
 		#print(score)
 		return bestNextPassList

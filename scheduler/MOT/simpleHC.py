@@ -9,9 +9,10 @@ import math
 
 class MOTSimpleHC(MOT):
 
-	def find(self,missionList,usefulTime):
+	def find(self,missionList):
 		""" In simple hill climbing, the first closer node is chosen"""
 
+		usefulTime=6
 		bestNextPassList=[]
 		print(" Starting simple hillclimbing")
 		maxIterations = 100
