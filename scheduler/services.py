@@ -39,7 +39,7 @@ class Services():
 		i = 0
 		for timestamp in _Helper.timeSpan(riseTime, setTime, delta=timedelta(seconds=period)):
 			azel = Services.getAzElTLE(self, tleEntry, timestamp)
-			i += 1  # change azel id? AK
+			i += 1  
 			azelProgress.append(azel)
 		return azelProgress
 
