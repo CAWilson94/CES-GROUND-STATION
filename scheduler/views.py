@@ -22,7 +22,8 @@ from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 class TLEViewSet(viewsets.ModelViewSet):
     try:
-        Services.updateTLE()
+        #Services.updateTLE()
+        pass
     except OperationalError:
         print("Views.TLEViewSet - could not update TLE")
     queryset = TLE.objects.all()
@@ -57,7 +58,7 @@ class MissionView(APIView):
         for mission in missions:
             missionList.append(mission)
         # print(missionList)
-        scheduledMissionList = Services.scheduleMissions(self, missionList, MOTSimpleHC)
+        scheduledMissionList = Services.scheduleMissions(self, missionList, MOTRandomRestartHC)
         #print("final List: {}".format(lis))
         scheduledMissionList.sort(key=lambda r: r.riseTime)
         

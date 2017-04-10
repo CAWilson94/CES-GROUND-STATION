@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'scheduler.apps.SchedulerConfig',
     'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

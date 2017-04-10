@@ -14,13 +14,13 @@ class MOTStochasticHC(MOT):
 		if it is better."""
 
 		print(" Starting stochastic hillclimbing")
-		maxIterations = 8000
+		maxIterations = 50
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
 		bestNextPassList=[]
 
-		nextPassListStart = _Helper.getNextPass(missionList)
+		nextPassListStart = _Helper.getNextPass(self,missionList)
 
 		curOrder=list(nextPassListStart)
 		while i<maxIterations:
@@ -29,7 +29,7 @@ class MOTStochasticHC(MOT):
 			i1 = randint(0,len(curOrder)-1)
 			i2 = randint(0,len(curOrder)-1)
 
-			print("{} {}".format(curOrder[i1], curOrder[i2]))
+			#print("{} {}".format(curOrder[i1], curOrder[i2]))
 
 			swap1 = curOrder[i1]
 			swap2 = curOrder[i2]
@@ -37,7 +37,7 @@ class MOTStochasticHC(MOT):
 			curOrder[i2]=swap1
 			curOrder[i1]=swap2
 			
-			print ("{} {}".format(curOrder[i1], curOrder[i2]))
+			#print ("{} {}".format(curOrder[i1], curOrder[i2]))
 
 			newScore,nextPassList = _Helper.fitnessFunction(self,curOrder,usefulTime)
 

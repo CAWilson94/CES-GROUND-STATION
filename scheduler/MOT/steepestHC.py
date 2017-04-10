@@ -9,7 +9,7 @@ import sys
 class MOTSteepestHC(MOT):
 
 	def find(self,missionList, usefulTime):
-		""" In simple hill climbing, the first closer node is chosen"""
+		""" In steepest hill climbing, the neighbour found to have the best score is chosen"""
 		bestNextPassList=[]
 		print(" Starting steepest hillclimbing")
 		maxIterations=25
@@ -19,7 +19,7 @@ class MOTSteepestHC(MOT):
 		newScore=0
 		newOrder=[]
 		
-		nextPassListStart = _Helper.getNextPass(missionList)
+		nextPassListStart = _Helper.getNextPass(self,missionList)
 		curOrder=list(nextPassListStart)
 
 		
@@ -56,7 +56,7 @@ class MOTSteepestHC(MOT):
 				print(".")
 				
 		if i==maxIterations:
-			print(" Starting HillClimbing finished with the order ")
+			print(" Starting steepest HillClimbing finished with the order ")
 			# for n in curOrder:
 			# 	pass
 			# 	print(n)

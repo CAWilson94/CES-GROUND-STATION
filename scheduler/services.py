@@ -251,8 +251,13 @@ class _Helper():
 		"""
 		curLatLng=geocoder.ip('me').latlng
 		observer = ephem.Observer();
-		observer.lat = math.radians(curLatLng[0])
-		observer.long = math.radians(curLatLng[1])
+		try:
+			observer.lat = math.radians(curLatLng[0])
+			observer.long = math.radians(curLatLng[1])
+		except IndexError:
+			print ("Geocoder couldn't get the longlat {}".format(curLatLng))
+			observer.lat = math.radians(55.8642)
+			observer.long = math.radians(-2.2518)
 		observer.date = ephem.Date(datetime)
 		return observer
 

@@ -70,7 +70,7 @@ class _Helper():
 		score = len(nextPassList)-len(scheduledNextPassList)
 		return [score,scheduledNextPassList]
 
-	def getNextPass(missionList):
+	def getNextPass(self,missionList):
 		nextPassListStart=[]
 		for mission in missionList:
 			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())

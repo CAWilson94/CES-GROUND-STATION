@@ -54,7 +54,7 @@ class MOTSimpleHC(MOT):
 		#print("nextPasses")
 
 		#print(missionList)
-		nextPassListStart = _Helper.getNextPass(missionList)
+		nextPassListStart = _Helper.getNextPass(self,missionList)
 
 		curOrder=list(nextPassListStart)
 
