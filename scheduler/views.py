@@ -47,22 +47,26 @@ class TLEViewSet(viewsets.ModelViewSet):
 	queryset = TLE.objects.all().order_by("name")
 	serializer_class = TLESerializer
 
-class MissionViewSet(viewsets.ModelViewSet):
+class MissionsViewSet(viewsets.ModelViewSet):
 	try:
+		if(len(Mission.objects.filter(status="NEW")) > 0
+			or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
+			SchedulerTask.delay()
 		queryset = Mission.objects.all()
 		serializer_class = MissionSerializer
 	except OperationalError:
-		print("MissionViewSet couldn't be loaded yet")
-
-class MissionsViewSet(viewsets.ModelViewSet):
-	queryset = Mission.objects.all()
-	serializer_class = MissionSerializer
+		print("MissionsViewSet couldn't be loaded yet")
 
 
 class MissionView(APIView):
 
 	def get(self, request):
 		try:
+			print("New missions: " + str(len(Mission.objects.filter(status="NEW"))))
+			if(len(Mission.objects.filter(status="NEW")) > 0
+				or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
+				SchedulerTask.delay()
+
 			missions = Mission.objects.all()
 			serializer = MissionSerializer(missions, many=True)
 			return Response(serializer.data)
