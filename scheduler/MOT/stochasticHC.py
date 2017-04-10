@@ -3,6 +3,7 @@ from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 from ..services import Services
+from scheduler.schedulerHelper import SchedulerHelper
 import itertools
 import sys
 
@@ -14,7 +15,7 @@ class MOTStochasticHC(MOT):
 		if it is better."""
 
 		usefulTime=6
-		print(" Starting stochastic hillclimbing")
+
 		maxIterations = 8000
 		i=0
 		oldScore = sys.maxsize  
@@ -22,17 +23,9 @@ class MOTStochasticHC(MOT):
 		bestNextPassList=[]
 		
 
-		nextPassListStart=[]
-		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-			#print(nextPass)
-			dur=nextPass.setTime - nextPass.riseTime
-			# if(dur<timedelta(0)):
-			# 	print(nextPass.tle.name)
-			nextPassListStart.append(nextPass)
-
+		nextPassListStart = SchedulerHelper.getPassesFromMissions(self, missionList)
 		curOrder=list(nextPassListStart)
-
+		print(" Starting stochastic hillclimbing")
 		while i<maxIterations:
 			
 			#swap two random elements

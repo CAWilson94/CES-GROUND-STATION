@@ -3,6 +3,7 @@ from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 from ..services import Services
+from scheduler.schedulerHelper import SchedulerHelper
 import itertools
 import sys
 
@@ -13,7 +14,7 @@ class MOTSteepestHC(MOT):
 		
 		usefulTime=6
 		bestNextPassList=[]
-		print(" Starting steepest hillclimbing")
+
 		maxIterations = 25
 		maxNeighbours=1500
 		i=0
@@ -21,18 +22,10 @@ class MOTSteepestHC(MOT):
 		newScore=0
 		newOrder=[]
 
-		nextPassListStart=[]
-		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-			#print(nextPass)
-			dur=nextPass.setTime - nextPass.riseTime
-			# if(dur<timedelta(0)):
-			# 	print(nextPass.tle.name)
-			nextPassListStart.append(nextPass)
-
+		nextPassListStart = SchedulerHelper.getPassesFromMissions(self, missionList)
 		curOrder=list(nextPassListStart)
 
-
+		print(" Starting steepest hillclimbing")
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)

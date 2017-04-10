@@ -3,6 +3,7 @@ from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 from ..services import Services
+from scheduler.schedulerHelper import SchedulerHelper
 import itertools
 import sys
 
@@ -10,39 +11,27 @@ import sys
 class MOTRandomRestartHC(MOT):
 
 	def find(self,missionList):
-			print(" Starting hillclimbing with random restart")
+
 
 			usefulTime=6
 
-			
 			i=0
 			maxIterations = 50
 			newScore=0
 			oldScore=sys.maxsize
 			bestNextPassList=[]
-			#shuffle(curOrder)
 
-			nextPassListStart=[]
-			for mission in missionList:
-				nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-				#print(nextPass)
-				dur=nextPass.setTime - nextPass.riseTime
-				# if(dur<timedelta(0)):
-				# 	print(nextPass.tle.name)
-				nextPassListStart.append(nextPass)
 
+			nextPassListStart = SchedulerHelper.getPassesFromMissions(self, missionList)
 			curOrder=list(nextPassListStart)
 
-
+			print(" Starting hillclimbing with random restart")
 			while i<maxIterations:
 				shuffle(curOrder)									# find a different starting point
-				hillclimbing = MOTRandomRestartHC._simpleRR(self,curOrder,usefulTime)		# find best order you can
-				newScore,nextPassList = _Helper.fitnessFunction(self,hillclimbing,usefulTime)	# get the number from that order
-
+				newScore,nextPassList = MOTRandomRestartHC._simpleRR(self,curOrder,usefulTime)		
+				
 				if(newScore<oldScore):
 					oldScore=newScore
-					curOrder=list(hillclimbing)
-					bestOrder=list(curOrder)
 					bestNextPassList=list(nextPassList)
 				i+=1
 

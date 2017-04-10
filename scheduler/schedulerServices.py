@@ -24,7 +24,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTGA()
+		scheduler = MOTSimpleHC()
 				
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
