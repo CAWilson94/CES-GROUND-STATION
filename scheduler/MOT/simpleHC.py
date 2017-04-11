@@ -54,6 +54,7 @@ class MOTSimpleHC(MOT):
 						maxN=n
 					break;
 			
+
 			#Is this better neighbour better than cur node
 			if newScore < oldScore:
 				oldScore=newScore
