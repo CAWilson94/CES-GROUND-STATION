@@ -110,3 +110,11 @@ class MissionView(APIView):
 	def delete(self, request):
 			...
 		return Response({'Deleted Successful':deleted},status=status.HTTP_200_OK)
+
+
+scheduler = MOTSimpleHC()
+scheduler = MOTSteepestHC()
+scheduler = MOTStochasticHC()
+scheduler = MOTRandomRestartHC()
+scheduler = MOTRuleBased()
+scheduler = MOTGA()
