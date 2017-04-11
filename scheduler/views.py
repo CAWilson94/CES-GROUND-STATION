@@ -147,11 +147,6 @@ class TestingScheduler():
             print("Made mission with sat: " + tle.name)
         return HttpResponse("Missions Added: " + sats)
 
-    def threadTask(request):
-        # print("Starting repeating task")
-        # repeatingTask.delay()
-        return HttpResponse("Started task")
-
     def schedule(request):
         services = SchedulerServices()
         services.scheduleAndSavePasses()
@@ -168,12 +163,6 @@ class TestingScheduler():
         return HttpResponse(string)
         return HttpResponse(string)
 
-    def schedulerQ():
-        queue = getSchedulerQ.delay()
-        return HttpResponse("Your list: " + queue)
-    def schedulerQ():
-        queue = getSchedulerQ.delay()
-        return HttpResponse("Your list: " + queue)
 
 
 # class PyephemData(APIView):
