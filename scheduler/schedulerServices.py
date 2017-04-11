@@ -12,8 +12,6 @@ import time
 from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
 
-
-
 class SchedulerServices():
 
 	#scheduler = MOTSimpleHC()
@@ -25,7 +23,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTGA()
+		scheduler = MOTSimpleHC()
 				
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
@@ -39,9 +37,14 @@ class SchedulerServices():
 		NextPass.objects.all().delete()
 		print("Done.")
 
+		start = time.clock()
 		passes = scheduler.find(missions)
+		stop = time.clock()
+
+		run_time = float(stop - start)
 		print("Scheduled " + str(len(passes)) + " passes.")
 		
+
 		print("Saving new passes...")
 		NextPass.objects.bulk_create(passes)
 		passes = []
@@ -56,8 +59,7 @@ class SchedulerServices():
 		stop = time.clock()
 		run_time = float(stop - start)
 		print("RUN TIME: " + str(run_time) + "---------------------------")
-		running_time_ga = scheduler.ga_runTime()
-		test(NextPass.objects.all().order_by("riseTime"), running_time_ga)
+		test(NextPass.objects.all().order_by("riseTime"), run_time)
 
 		next_pass_test = ga.nextPassChromosome(NextPass.objects.all().order_by("riseTime"))
 		
