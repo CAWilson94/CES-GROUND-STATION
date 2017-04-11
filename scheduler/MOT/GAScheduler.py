@@ -1,4 +1,5 @@
-from scheduler.schedulerHelper import SchedulerHelper
+#from scheduler.schedulerHelper import SchedulerHelper
+from scheduler.MOT._MOTHelper import _Helper
 from scheduler.MOT.schedulerInterface import MOT
 from . import GA as ga
 import time
@@ -21,7 +22,7 @@ class MOTGA(MOT):
         orderOfPasses = []
         passes = []
         print("--------GA STARTING --------")
-        passes = SchedulerHelper.getPassesFromMissions(self, missions)
+        passes = _Helper.getPassesFromMissions(self, missions)
         untouchedChromosome = ga.nextPassChromosome(passes)
         print("\n" + str(untouchedChromosome.fitness))
         population = ga.generatePopulation(chromosome=untouchedChromosome)

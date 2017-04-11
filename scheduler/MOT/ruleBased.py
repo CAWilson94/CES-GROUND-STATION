@@ -1,8 +1,8 @@
 from random import randint
 from datetime import timedelta
 from scheduler.models import NextPass
-
-from scheduler.schedulerHelper import SchedulerHelper
+from scheduler.MOT._MOTHelper import _Helper
+#from scheduler.schedulerHelper import SchedulerHelper
 from scheduler.MOT.schedulerInterface import MOT
 import time
 
@@ -326,7 +326,7 @@ class MOTRuleBased(MOT):
 		start = time.clock()
 		orderOfPasses = []
 		passes = []
-		passes = SchedulerHelper.getPassesFromMissions(self, missions)
+		passes = _Helper.getPassesFromMissions(self, missions)
 		if(DEBUG and DEBUG_LEVEL < 1):
 			print("Passes: " + str(len(passes)))
 
