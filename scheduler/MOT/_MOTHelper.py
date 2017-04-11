@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 from ..services import Services
-from ..models import NextPass
+from ..models import  TLE, Mission, NextPass
 import sys
 
 class _Helper():
@@ -60,7 +60,42 @@ class _Helper():
 		return [score,scheduledNextPassList]
 
 
+
+	def getPassesFromMissions(self, missions):
+
+		TIME_HOURS = 72
+		
+		passes = []
+
+		dateNow = datetime.utcnow()
+
+		print("Total missions: " + str(len(missions)))
+		i = 0
+		for m in missions:
+			i += 1
+
+			tleEntry = m.TLE
+			try:
+				nextPass = Services.getNextPass(self, tleEntry, m, dateNow)
+				passes.append(nextPass)
+			
+				while(nextPass.setTime < (dateNow + timedelta(hours=TIME_HOURS))):
+					time = nextPass.setTime + timedelta(minutes=1)
+					try:
+						nextPass = Services.getNextPass(self, tleEntry, m, time)
+						passes.append(nextPass)
+						
+					except ValueError: 
+						break
+
+				print("Finding passes for the next 36 hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
+			except ValueError: 
+					print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
+		return passes
+
+
 	def getNextPass(self,missionList):
+		"""Gets a single pass for each mission"""
 		nextPassListStart=[]
 		for mission in missionList:
 			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())

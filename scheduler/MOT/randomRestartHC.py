@@ -3,7 +3,6 @@ from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 from ..services import Services
-from scheduler.schedulerHelper import SchedulerHelper
 import itertools
 import sys
 
@@ -22,7 +21,7 @@ class MOTRandomRestartHC(MOT):
 			bestNextPassList=[]
 
 
-			nextPassListStart = SchedulerHelper.getPassesFromMissions(self, missionList)
+			nextPassListStart = _Helper.getPassesFromMissions(self, missionList)
 			curOrder=list(nextPassListStart)
 
 			print(" Starting hillclimbing with random restart")

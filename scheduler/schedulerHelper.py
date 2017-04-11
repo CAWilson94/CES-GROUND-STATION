@@ -8,6 +8,9 @@ class SchedulerHelper():
 	TIME_HOURS = 72
 
 	def getPassesFromMissions(self, missions):
+
+		TIME_HOURS = 72
+		
 		passes = []
 
 		dateNow = datetime.utcnow()

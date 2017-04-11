@@ -3,15 +3,16 @@ from scheduler.models import Mission, NextPass
 from scheduler.MOT.ruleBased import MOTRuleBased
 from scheduler.MOT.GAScheduler import MOTGA
 from scheduler.MOT.simpleHC import MOTSimpleHC
+from scheduler.MOT.steepestHC import MOTSteepestHC
+from scheduler.MOT.stochasticHC import MOTStochasticHC
+from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
 ## imports for comparison of schedulers
 import time
 from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
 
-from scheduler.MOT.steepestHC import MOTSteepestHC
-from scheduler.MOT.stochasticHC import MOTStochasticHC
-from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
+
 
 class SchedulerServices():
 
@@ -24,7 +25,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTRandomRestartHC()
+		scheduler = MOTStochasticHC()
 				
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")

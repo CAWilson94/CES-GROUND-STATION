@@ -24,7 +24,7 @@ class MOTSimpleHC(MOT):
 		newOrder=[] 
 		maxN=0
 
-		nextPassListStart=SchedulerHelper.getPassesFromMissions(self, missionList)
+		nextPassListStart=_Helper.getPassesFromMissions(self, missionList)
 		curOrder=list(nextPassListStart)
 
 		print(" Starting simple hillclimbing")
