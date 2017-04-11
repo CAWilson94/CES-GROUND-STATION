@@ -16,7 +16,7 @@ class MOTRandomRestartHC(MOT):
 			usefulTime=6
 
 			i=0
-			maxIterations = 50
+			maxIterations = 3
 			newScore=0
 			oldScore=sys.maxsize
 			bestNextPassList=[]
@@ -33,7 +33,9 @@ class MOTRandomRestartHC(MOT):
 				if(newScore<oldScore):
 					oldScore=newScore
 					bestNextPassList=list(nextPassList)
-				i+=1
+					i=0
+				else:
+					i+=1
 
 			if i==maxIterations:
 				print(" Random Restart HillClimbing finished with the order ")
@@ -41,7 +43,7 @@ class MOTRandomRestartHC(MOT):
 				# 	print(" {}".format(n.tle))
 				#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 				print("And a score of {}".format(oldScore))
-				return oldScore, bestNextPassList
+				return bestNextPassList
 
 
 	def _simpleRR(self,satList,usefulTime):
@@ -90,4 +92,4 @@ class MOTRandomRestartHC(MOT):
 				# 	print(n)
 				#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 				print("And a score of {}".format(oldScore))
-				return bestOrder
+				return oldScore,bestNextPassList

@@ -15,21 +15,21 @@ class MOTSteepestHC(MOT):
 		usefulTime=6
 		bestNextPassList=[]
 
-		maxIterations = 25
-		maxNeighbours=1500
+		maxIterations = 5
+		maxNeighbours=5
 		i=0
 		oldScore = sys.maxsize
 		newScore=0
 		newOrder=[]
 
-		nextPassListStart = SchedulerHelper.getPassesFromMissions(self, missionList)
+		nextPassListStart=SchedulerHelper.getPassesFromMissions(self, missionList)
 		curOrder=list(nextPassListStart)
 
 		print(" Starting steepest hillclimbing")
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
-
+			n=0
 			oldNeighbourScore=sys.maxsize
 			for neighbour in generatorOfAllNeighboursIncItself:
 
@@ -62,5 +62,5 @@ class MOTSteepestHC(MOT):
 			# 	print(n)
 			#print("{} curOrder could be global maxima with a score of {}".format(curOrder,oldScore))		
 			print("And a score of {}".format(oldScore))
-			return oldScore,bestNextPassList
+			return bestNextPassList
 

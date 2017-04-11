@@ -24,7 +24,7 @@ class MOTSimpleHC(MOT):
 		newOrder=[] 
 		maxN=0
 
-		nextPassListStart = SchedulerHelper.getPassesFromMissions(self, missionList)
+		nextPassListStart=SchedulerHelper.getPassesFromMissions(self, missionList)
 		curOrder=list(nextPassListStart)
 
 		print(" Starting simple hillclimbing")
@@ -67,9 +67,10 @@ class MOTSimpleHC(MOT):
 				print(".")
 				
 		if i==maxIterations:
-			print(" Simple HillClimbing finished with the order {}".format(bestNextPassList))
+			#print(" Simple HillClimbing finished with the order {}".format(bestNextPassList))
+			print ("simple finished")
 			print("And a score of {}".format(oldScore))
 			print("neighbours used {}".format(maxN))
 
-			return [oldScore,bestNextPassList]
+			return bestNextPassList
 

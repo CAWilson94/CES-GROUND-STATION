@@ -129,7 +129,8 @@ class Services():
 
 		# remove errant empty entry
 		if tleArray[len(tleArray) - 1] == '':
-			del tleArray[len(tleArray) - 1]
+			#del tleArray[len(tleArray) - 1]
+			del tleArray[-1]
 		if len(tleArray) % 3 != 0:
 			print("major error")  # TODO: raisemassive error AK
 			# cause some entry(s) don't have three entries

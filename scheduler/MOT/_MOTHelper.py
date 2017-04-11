@@ -12,17 +12,6 @@ class _Helper():
 			and checking the priority is in order
 			ensuring the order of the list"""
 
-		# nextPassList=[]
-		# try:
-		# 	prevMission=missionList[0]
-		# except IndexError  as e:
-		# 	#print("return this {} list with this {} score".format([],0))
-		# 	return [0,[]]
-
-
-		
-		#put in priority groups!
-			
 		conflictGroups = _Helper._findConflictingGroups(nextPassList)
 
 		if len(conflictGroups)==0:
@@ -69,6 +58,20 @@ class _Helper():
 		#print("final score = {} - {}".format(len(nextPassList),len(processedNextPassList)))
 		score = len(nextPassList)-len(scheduledNextPassList)
 		return [score,scheduledNextPassList]
+
+
+	def getNextPass(self,missionList):
+		nextPassListStart=[]
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime
+			if(dur<timedelta(0)):
+				print(nextPass.tle.name)
+			nextPassListStart.append(nextPass)
+
+		return nextPassListStart
+
 
 	def _findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones

@@ -16,7 +16,7 @@ class MOTStochasticHC(MOT):
 
 		usefulTime=6
 
-		maxIterations = 8000
+		maxIterations = 50
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
@@ -49,6 +49,7 @@ class MOTStochasticHC(MOT):
 				i=0
 			else:
 				i+=1
+				#print(i)
 			
 			if (i%(maxIterations/10))==0:
 				print(".")
@@ -56,5 +57,5 @@ class MOTStochasticHC(MOT):
 		if i==maxIterations:
 			print(" Stochastic HillClimbing finished with the order ")
 			print("And a score of {}".format(oldScore))
-			return oldScore, bestNextPassList
+			return bestNextPassList
 
