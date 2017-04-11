@@ -14,24 +14,24 @@ class SchedulerHelper():
 
 		print("Total missions: " + str(len(missions)))
 		i = 0
-		for m in missions:
+		for mission in missions:
 			i += 1
 
-			tleEntry = m.TLE
+			tleEntry = mission.TLE
 			try:
-				nextPass = Services.getNextPass(self, tleEntry, m, dateNow)
+				nextPass = Services.getNextPass(self, tleEntry, mission, dateNow)
 				passes.append(nextPass)
 			
 				while(nextPass.setTime < (dateNow + timedelta(hours=SchedulerHelper.TIME_HOURS))):
 					time = nextPass.setTime + timedelta(minutes=1)
 					try:
-						nextPass = Services.getNextPass(self, tleEntry, m, time)
+						nextPass = Services.getNextPass(self, tleEntry, mission, time)
 						passes.append(nextPass)
 						
 					except ValueError: 
 						break
 
-				print("Finding passes for the next 36 hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
+				print("Finding passes for the next 36 hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + mission.TLE.name)
 			except ValueError: 
-					print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
+				print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
 		return passes
