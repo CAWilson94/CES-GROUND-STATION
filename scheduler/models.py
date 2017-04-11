@@ -51,6 +51,7 @@ class Mission(models.Model):
     TLE = models.ForeignKey(TLE, on_delete=models.CASCADE)
     status = models.CharField(max_length=30)
     priority = models.IntegerField()
+    #timestamp = models.DateTimeField()
     #delete=models.CharField(max_length=30)
     def __str__(self):
 

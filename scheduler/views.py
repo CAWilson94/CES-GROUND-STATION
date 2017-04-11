@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.http import Http404
-# from django.shortcuts import get_list_or_404, get_object_or_404
+#from django.shortcuts import get_list_or_404, get_object_or_404
 from django.db.utils import OperationalError
-# from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, viewsets  # , generics
@@ -31,140 +31,148 @@ from scheduler.tasks import RotatorsThread, SchedulerThread, SchedulerTask
 
 
 print("HELLO FROM VIEWS!")
-# print("Starting repeating task")
-# SchedulerThread.delay()
-# RotatorsThread.delay((NextPass()))
-
+#print("Starting repeating task")
+#SchedulerThread.delay()
+#RotatorsThread.delay((NextPass()))
 
 class TLEViewSet(viewsets.ModelViewSet):
 
-    try:
-        if(len(TLE.objects.all()) < 1):
-            print("Updating TLE data...")
-            Services.updateTLE()
-            print("...TLE data updated")
-    except OperationalError:
-        print("Views.TLEViewSet - could not update TLE")
-    queryset = TLE.objects.all().order_by("name")
-    serializer_class = TLESerializer
-
+	try:
+		if(len(TLE.objects.all()) < 1):
+			print("Updating TLE data...")
+			Services.updateTLE()
+			print("...TLE data updated")
+	except OperationalError:
+		print("Views.TLEViewSet - could not update TLE")
+	queryset = TLE.objects.all().order_by("name")
+	serializer_class = TLESerializer
 
 class MissionsViewSet(viewsets.ModelViewSet):
-    try:
-        if(len(Mission.objects.filter(status="NEW")) > 0
-                or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
-            SchedulerTask.delay()
-        queryset = Mission.objects.all()
-        serializer_class = MissionSerializer
-    except OperationalError:
-        print("MissionsViewSet couldn't be loaded yet")
+	try:
+		if(len(Mission.objects.filter(status="NEW")) > 0
+			or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
+			SchedulerTask.delay()
+		queryset = Mission.objects.all()
+		serializer_class = MissionSerializer
+	except OperationalError:
+		queryset = []
+		serializer_class = MissionSerializer
+		print("MissionsViewSet couldn't be loaded yet")
 
+class MissionViewSet(viewsets.ModelViewSet):
+	queryset = Mission.objects.all()
+	serializer_class = MissionSerializer
 
 class MissionView(APIView):
 
-    def get(self, request):
-        try:
-            print("New missions: " + str(len(Mission.objects.filter(status="NEW"))))
-            if(len(Mission.objects.filter(status="NEW")) > 0
-                    or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
-                SchedulerTask.delay()
+	def get(self, request):
+		try:
+			print("New missions: " + str(len(Mission.objects.filter(status="NEW"))))
+			if(len(Mission.objects.filter(status="NEW")) > 0
+				or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
+				SchedulerTask.delay()
 
-            missions = Mission.objects.all()
-            serializer = MissionSerializer(missions, many=True)
-            return Response(serializer.data)
-        except OperationalError as e:
-            print("Couldn't retrieve missions: " + str(e))
-            return Response({'Database Error': "Couldn't retrieve missions"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+			missions = Mission.objects.all()
+			serializer = MissionSerializer(missions, many=True)
+			return Response(serializer.data)
+		except OperationalError as e:
+			print("Couldn't retrieve missions: " + str(e))
+			return Response({'Database Error': "Couldn't retrieve missions"} ,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def post(self, request):
-        if Services.makeMissions(request.data):
-            SchedulerTask.delay()
-            return Response({'Creation Successful': request.data.get("name")}, status=status.HTTP_201_CREATED)
-        SchedulerTask.delay()
-        return Response({'Database Error': "Couldn't save mission"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+	def post(self, request):
+		if Services.makeMissions(request.data):
+			SchedulerTask.delay()
+			return Response({'Creation Successful': request.data.get("name")} ,status=status.HTTP_201_CREATED)
+		SchedulerTask.delay()
+		return Response({'Database Error': "Couldn't save mission"} ,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def delete(self, request, pk):
-        print("deleting: " + str(pk))
-        missionToDelete = Mission.objects.filter(id=pk)
-        deleted = missionToDelete.delete()
-        print("Deleted: " + str(deleted))
-        SchedulerTask.delay()
-        return Response({'Deleted Successful': deleted}, status=status.HTTP_200_OK)
+	def delete(self, request, pk):
+		print("deleting: " + str(pk))
+		missionToDelete = Mission.objects.filter(id=pk)
+		deleted = missionToDelete.delete()
+		print("Deleted: " + str(deleted))
+		SchedulerTask.delay()
+		return Response({'Deleted Successful':deleted},status=status.HTTP_200_OK)
 
 
 class SchedulerView(APIView):
 
-    def get(self, request):
-        isScheduling = False
-        if(len(Mission.objects.filter(status="SCHEDULING")) > 0):
-            isScheduling = True
-        # return Response({'isScheduling':'true'}, status=status.HTTP_200_OK)
-        return HttpResponse(isScheduling)
-
+	def get(self, request):
+		isScheduling = False
+		if(len(Mission.objects.filter(status="SCHEDULING")) > 0):
+			isScheduling = True
+		#return Response({'isScheduling':'true'}, status=status.HTTP_200_OK)
+		return HttpResponse(isScheduling)
 
 class NextPassView(APIView):
 
-    def get(self, request):
-        try:
-            passes = NextPass.objects.filter(
-                setTime__gte=datetime.now()).order_by("riseTime")
-            serializer = NextPassSerializer(passes, many=True)
-            return Response(serializer.data)
-        except OperationalError as e:
-            print("Couldn't get next passes: " + str(e))
-            return Response({'Database Error': "Couldn't retrieve next passes"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+	def get(self, request):
+		try:
+			passes = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")
+			serializer = NextPassSerializer(passes, many=True)
+			return Response(serializer.data)
+		except OperationalError as e: 
+			print("Couldn't get next passes: " + str(e))
+			return Response({'Database Error': "Couldn't retrieve next passes"} ,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CSVParseView(APIView):
-    """view for exporting as csv"""
+	"""view for exporting as csv"""
 
-    def get(self, request):
-        return export_csv(request)
+	def get(self, request):
+		return export_csv(request)
+
 
 
 """Testing Views"""
 
-
 class TestingScheduler():
 
-    def makeMissions(request):
-        from random import randint
+	def makeMissions(request):
+		from random import randint
 
-        print("Updating TLE data...")
-        Services.updateTLE()
-        print("...TLE data updated")
+		print("Updating TLE data...")
+		Services.updateTLE()
+		print("...TLE data updated")
 
-        picked = []
-        tles = TLE.objects.all()
-        sats = ""
-        for i in range(10):
-            tle = tles[randint(0, len(tles) - 1)]
-            while tle in picked:
-                tle = tles[randint(0, len(tles) - 1)]
-            picked.append(tle)
-            name = tle.name
-            priority = randint(0, 2)
-            Mission(name=name, TLE=tle, status="NEW", priority=priority).save()
-            sats += tle.name + ", "
-            print("Made mission with sat: " + tle.name)
-        return HttpResponse("Missions Added: " + sats)
+		picked = []
+		tles = TLE.objects.all()
+		sats = ""
+		for i in range(10):
+			tle = tles[randint(0, len(tles) - 1)]
+			while tle in picked:
+				tle = tles[randint(0, len(tles) - 1)]
+			picked.append(tle)
+			name = tle.name
+			priority = randint(0, 2)
+			Mission(name=name, TLE=tle, status="NEW", priority=priority).save()
+			sats += tle.name + ", "
+			print("Made mission with sat: " + tle.name)
+		return HttpResponse("Missions Added: " + sats)
 
-    def threadTask(request):
-        # print("Starting repeating task")
-        # repeatingTask.delay()
-        return HttpResponse("Started task")
+	def threadTask(request):
+		# print("Starting repeating task")
+		# repeatingTask.delay()
+		return HttpResponse("Started task")
 
-    def schedule(request):
-        services = SchedulerServices()
-        services.scheduleAndSavePasses()
+	def schedule(request):
+		services = SchedulerServices()
+		services.scheduleAndSavePasses()
 
+		string = ""
+		for p in NextPass.objects.all():
+			string += (p.tle.name + "(" + str(p.mission.priority) + "): "
+					   + str(p.riseTime.strftime('%H:%M:%S')) + " -> " + str(p.setTime.strftime('%H:%M:%S')) + "\n\n")
         string = ""
         for p in NextPass.objects.all():
             string += (p.tle.name + "(" + str(p.mission.priority) + "): "
                        + str(p.riseTime.strftime('%H:%M:%S')) + " -> " + str(p.setTime.strftime('%H:%M:%S')) + "\n\n")
 
+		return HttpResponse(string)
         return HttpResponse(string)
 
+	def schedulerQ():
+		queue = getSchedulerQ.delay()
+		return HttpResponse("Your list: " + queue)
     def schedulerQ():
         queue = getSchedulerQ.delay()
         return HttpResponse("Your list: " + queue)

@@ -320,6 +320,10 @@ class MOTRuleBased(MOT):
 		orderOfPasses = []
 		passes = []
 		passes = _Helper.getPassesFromMissions(self, missions)
+
+		if(len(passes) == 0):
+			return orderOfPasses
+
 		if(DEBUG and DEBUG_LEVEL < 1):
 			print("Passes: " + str(len(passes)))
 
