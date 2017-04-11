@@ -5,7 +5,7 @@ import csv
 
 
 def export_csv(request):
-    queryset = NextPass.objects.all() 
+    queryset = NextPass.objects.all().order_by("riseTime") 
     response = HttpResponse(content_type='text/csv') #should probs be REST response 
     response['Content-Disposition'] = 'attachment; filename="schedule.csv"'
 
