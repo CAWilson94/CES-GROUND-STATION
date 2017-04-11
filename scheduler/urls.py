@@ -1,12 +1,9 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from scheduler import views
-<<<<<<< HEAD
 from scheduler.views import TLEViewSet, MissionView, NextPassView, MissionsViewSet, CSVParseView, TestingScheduler, SchedulerView, SchedulerCompare
-=======
-from scheduler.views import TLEViewSet, MissionView, NextPassView, MissionViewSet, MissionsViewSet, CSVParseView, TestingScheduler, SchedulerView
->>>>>>> 005939fe115bc4c88627abe27b5a604af2f9225d
 from rest_framework.routers import DefaultRouter
+
 
 
 router = DefaultRouter()
