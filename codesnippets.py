@@ -94,3 +94,19 @@ priceStrategy = SalePrice()
 
 price = priceStrategy.cost(10)
 price = 8
+
+
+class MissionView(APIView):
+
+	def get(self, request):
+			...
+		serializer = MissionSerializer(missionList, many=True)         
+		return Response(serializer.data)
+
+	def post(self, request):
+			...
+		return Response({'Creation Successful': request.data.get("name")} ,status=status.HTTP_201_CREATED)
+
+	def delete(self, request):
+			...
+		return Response({'Deleted Successful':deleted},status=status.HTTP_200_OK)
