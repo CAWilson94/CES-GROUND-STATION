@@ -31,10 +31,10 @@ def SchedulerThread():
 
 @shared_task()
 def SchedulerTask():
-	try:
+	#try:
 		SchedulerServices.scheduleAndSavePasses()
-	except Exception as e:
-		print("Scheduler failed with exception: " + str(e))
+	#except Exception as e:
+	#	print("Scheduler failed with exception: " + str(e))
 
 
 @shared_task()

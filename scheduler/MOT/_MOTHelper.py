@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from random import shuffle,randint
 from ..services import Services
-from ..models import NextPass
+from ..models import  TLE, Mission, NextPass
 import sys
 
 class _Helper():
@@ -12,17 +12,6 @@ class _Helper():
 			and checking the priority is in order
 			ensuring the order of the list"""
 
-		# nextPassList=[]
-		# try:
-		# 	prevMission=missionList[0]
-		# except IndexError  as e:
-		# 	#print("return this {} list with this {} score".format([],0))
-		# 	return [0,[]]
-
-
-		
-		#put in priority groups!
-			
 		conflictGroups = _Helper._findConflictingGroups(nextPassList)
 
 		if len(conflictGroups)==0:
@@ -36,14 +25,14 @@ class _Helper():
 		#print("mergegroups")
 		#print (mergedGroups)
 
-		# reorderedConflictGroups=[]
-		# for group in mergedGroups:
-		# 	reordered= [x for x in nextPassList if x in group]
-		# 	reorderedConflictGroups.append(reordered)
+		reorderedConflictGroups=[]
+		for group in mergedGroups:
+			reordered= [x for x in nextPassList if x in group]
+			reorderedConflictGroups.append(reordered)
 
 		scheduledNextPassList=[]
 		
-		scheduledNextPassList = _Helper._findSchedulableSatellites(mergedGroups,usefulTime)
+		scheduledNextPassList = _Helper._findSchedulableSatellites(reorderedConflictGroups,usefulTime)
 
 		#print("processedNextPassList")
 		#print(processedNextPassList)
@@ -69,6 +58,55 @@ class _Helper():
 		#print("final score = {} - {}".format(len(nextPassList),len(processedNextPassList)))
 		score = len(nextPassList)-len(scheduledNextPassList)
 		return [score,scheduledNextPassList]
+
+
+
+	def getPassesFromMissions(self, missions):
+
+		TIME_HOURS = 72
+		
+		passes = []
+
+		dateNow = datetime.utcnow()
+
+		print("Total missions: " + str(len(missions)))
+		i = 0
+		for m in missions:
+			i += 1
+
+			tleEntry = m.TLE
+			try:
+				nextPass = Services.getNextPass(self, tleEntry, m, dateNow)
+				passes.append(nextPass)
+			
+				while(nextPass.setTime < (dateNow + timedelta(hours=TIME_HOURS))):
+					time = nextPass.setTime + timedelta(minutes=1)
+					try:
+						nextPass = Services.getNextPass(self, tleEntry, m, time)
+						passes.append(nextPass)
+						
+					except ValueError: 
+						break
+
+				print("Finding passes for the next " + str(TIME_HOURS) + " hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
+			except ValueError: 
+					print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
+		return passes
+
+
+	def getNextPass(self,missionList):
+		"""Gets a single pass for each mission"""
+		nextPassListStart=[]
+		for mission in missionList:
+			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
+			#print(nextPass)
+			dur=nextPass.setTime - nextPass.riseTime
+			if(dur<timedelta(0)):
+				print(nextPass.tle.name)
+			nextPassListStart.append(nextPass)
+
+		return nextPassListStart
+
 
 	def _findConflictingGroups(satList):
 		""" Compares each satellite with each other to find the ones

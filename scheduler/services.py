@@ -39,7 +39,7 @@ class Services():
 		i = 0
 		for timestamp in _Helper.timeSpan(riseTime, setTime, delta=timedelta(seconds=period)):
 			azel = Services.getAzElTLE(self, tleEntry, timestamp)
-			i += 1  # change azel id? AK
+			i += 1  
 			azelProgress.append(azel)
 		return azelProgress
 
@@ -129,7 +129,8 @@ class Services():
 
 		# remove errant empty entry
 		if tleArray[len(tleArray) - 1] == '':
-			del tleArray[len(tleArray) - 1]
+			#del tleArray[len(tleArray) - 1]
+			del tleArray[-1]
 		if len(tleArray) % 3 != 0:
 			print("major error")  # TODO: raisemassive error AK
 			# cause some entry(s) don't have three entries

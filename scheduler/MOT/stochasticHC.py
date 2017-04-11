@@ -14,25 +14,17 @@ class MOTStochasticHC(MOT):
 		if it is better."""
 
 		usefulTime=6
-		print(" Starting stochastic hillclimbing")
-		maxIterations = 8000
+
+		maxIterations = 50
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]
 		bestNextPassList=[]
 		
 
-		nextPassListStart=[]
-		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-			#print(nextPass)
-			dur=nextPass.setTime - nextPass.riseTime
-			# if(dur<timedelta(0)):
-			# 	print(nextPass.tle.name)
-			nextPassListStart.append(nextPass)
-
+		nextPassListStart = _Helper.getPassesFromMissions(self, missionList)
 		curOrder=list(nextPassListStart)
-
+		print(" Starting stochastic hillclimbing")
 		while i<maxIterations:
 			
 			#swap two random elements
@@ -56,6 +48,7 @@ class MOTStochasticHC(MOT):
 				i=0
 			else:
 				i+=1
+				#print(i)
 			
 			if (i%(maxIterations/10))==0:
 				print(".")
@@ -63,5 +56,5 @@ class MOTStochasticHC(MOT):
 		if i==maxIterations:
 			print(" Stochastic HillClimbing finished with the order ")
 			print("And a score of {}".format(oldScore))
-			return oldScore, bestNextPassList
+			return bestNextPassList
 

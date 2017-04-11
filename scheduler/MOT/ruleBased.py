@@ -1,7 +1,8 @@
 from random import randint
 from datetime import timedelta
 from scheduler.models import NextPass
-from scheduler.schedulerHelper import SchedulerHelper
+from scheduler.MOT._MOTHelper import _Helper
+#from scheduler.schedulerHelper import SchedulerHelper
 from scheduler.MOT.schedulerInterface import MOT
 import time
 
@@ -19,8 +20,6 @@ orderOfPasses = []
 
 class MOTRuleBased(MOT):
 
-	run_time_glob = 0
-
 	def _passAsStr(self, nextPass):
 		return (nextPass.name + " (" + str(nextPass.priority) + "): " +
 			str(nextPass.riseTime.strftime('%H:%M:%S')) + " -> " + str(nextPass.setTime.strftime('%H:%M:%S')))
@@ -34,11 +33,6 @@ class MOTRuleBased(MOT):
 			index += 1
 		return -1
 
-
-	def ga_runTime(self):
-		''' Filthy function for getting  GLOBAL value for 
-		the run time of the find function'''
-		return run_time_glob
 
 	# General checking if the pass is within conflicting time period
 	def _conflicts(self, periodStart, periodEnd, passToCheck):
@@ -325,7 +319,11 @@ class MOTRuleBased(MOT):
 		start = time.clock()
 		orderOfPasses = []
 		passes = []
-		passes = SchedulerHelper.getPassesFromMissions(self, missions)
+		passes = _Helper.getPassesFromMissions(self, missions)
+
+		if(len(passes) == 0):
+			return orderOfPasses
+
 		if(DEBUG and DEBUG_LEVEL < 1):
 			print("Passes: " + str(len(passes)))
 
@@ -395,11 +393,6 @@ class MOTRuleBased(MOT):
 
 		if(DEBUG and DEBUG_LEVEL <= 1):
 			print("Num of conflicts resolved: " + str(conflictsNum))
-		stop = time.clock()
-		run_time = float(stop - start)
-		global run_time_glob
-		run_time_glob = run_time
-		print("RB TIME: " + str(run_time) + " - -------------------")
 		return orderOfPasses
 
 	   

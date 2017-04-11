@@ -3,6 +3,7 @@ from scheduler.MOT._MOTHelper import _Helper
 from datetime import date, datetime, timedelta
 from ..services import Services
 from random import shuffle,randint
+#from scheduler.schedulerHelper import SchedulerHelper
 import itertools
 import sys
 import math
@@ -15,7 +16,6 @@ class MOTSimpleHC(MOT):
 		usefulTime=6
 		
 		bestNextPassList=[]
-		print(" Starting simple hillclimbing")
 		maxIterations = 50
 
 		i=0
@@ -24,16 +24,10 @@ class MOTSimpleHC(MOT):
 		newOrder=[] 
 		maxN=0
 
-		nextPassList=[]
-		for mission in missionList:
-			nextPass = Services.getNextPass(self, mission.TLE ,mission, datetime.utcnow())
-			#print(nextPass)
-			dur=nextPass.setTime - nextPass.riseTime
-			# if(dur<timedelta(0)):
-			# 	print(nextPass.tle.name)
-			nextPassList.append(nextPass)
+		nextPassListStart=_Helper.getPassesFromMissions(self, missionList)
+		curOrder=list(nextPassListStart)
 
-		curOrder=list(nextPassList)
+		print(" Starting simple hillclimbing")
 
 		while i<maxIterations:
 			listOfNearestNeighboursAndItself=[]
@@ -73,9 +67,10 @@ class MOTSimpleHC(MOT):
 				print(".")
 				
 		if i==maxIterations:
-			print(" Simple HillClimbing finished with the order {}".format(bestNextPassList))
+			#print(" Simple HillClimbing finished with the order {}".format(bestNextPassList))
+			print ("simple finished")
 			print("And a score of {}".format(oldScore))
 			print("neighbours used {}".format(maxN))
 
-			return [oldScore,bestNextPassList]
+			return bestNextPassList
 

@@ -30,6 +30,5 @@ class TLE_Services():
 			TLE.objects.get(id = id).delete()
 			pass
 		except TLE.DoesNotExist as e:
-			print ("Unable to remove from db") #TODO: raisemassive error
-
+			print ("Unable to remove from db") 
 	
