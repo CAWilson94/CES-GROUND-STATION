@@ -15,26 +15,12 @@ from celery.signals import celeryd_init
 def configure_worker1(sender=None, conf=None, **kwargs):
     print("Init celery")
 
-
-@shared_task()
-def SchedulerThread():
-	while(1):
-		print ("Starting Scheduler") 
-		try:
-			SchedulerServices.scheduleAndSavePasses()
-		except: 
-			print("Scheduler broke.")
-		#passes = SchedulerServices.scheduleAndSavePasses(self, scheduler, 6)
-		print("Finished")
-		sleep(10)
-	
-
 @shared_task()
 def SchedulerTask():
-	#try:
+	try:
 		SchedulerServices.scheduleAndSavePasses()
-	#except Exception as e:
-	#	print("Scheduler failed with exception: " + str(e))
+	except Exception as e:
+		print("Scheduler failed with exception: " + str(e))
 
 
 @shared_task()

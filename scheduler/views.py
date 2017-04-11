@@ -1,9 +1,9 @@
+#from django.shortcuts import get_list_or_404, get_object_or_404
+#from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.http import Http404
-#from django.shortcuts import get_list_or_404, get_object_or_404
-from django.db.utils import OperationalError
-#from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
+from django.db.utils import OperationalError
 from rest_framework.views import APIView
 from rest_framework import status, viewsets  # , generics
 from rest_framework.decorators import api_view
@@ -27,12 +27,11 @@ from scheduler.MOT.GAScheduler import MOTGA
 
 
 from scheduler.tweet import ground_station
-from scheduler.tasks import RotatorsThread, SchedulerThread, SchedulerTask
+from scheduler.tasks import RotatorsThread, SchedulerTask
 
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
-#SchedulerThread.delay()
 #RotatorsThread.delay((NextPass()))
 
 class TLEViewSet(viewsets.ModelViewSet):
@@ -101,7 +100,6 @@ class SchedulerView(APIView):
 		isScheduling = False
 		if(len(Mission.objects.filter(status="SCHEDULING")) > 0):
 			isScheduling = True
-		#return Response({'isScheduling':'true'}, status=status.HTTP_200_OK)
 		return HttpResponse(isScheduling)
 
 class NextPassView(APIView):
