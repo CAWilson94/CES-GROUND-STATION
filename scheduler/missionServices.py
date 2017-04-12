@@ -71,6 +71,7 @@ class missionServices():
 
 	def saveOrUpdate(mission):
 	 	try:
+	 		# This doesn't work : Error mission is not iterable
 	 		Mission.objects.update_or_create(mission)
 	 		return True
 	 	except Mission.DoesNotExist:

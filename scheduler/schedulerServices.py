@@ -33,15 +33,15 @@ class SchedulerServices():
 			m.save()
 		print("Done.")
 
-		print("Scheduling...")
 		print("Removing previous passes...")
 		NextPass.objects.all().delete()
 		print("Done.")
 
+		print("Scheduling...")
 		start = time.clock()
 		passes = scheduler.find(missions)
 		stop = time.clock()
-
+		
 		run_time = float(stop - start)
 		print("Scheduled " + str(len(passes)) + " passes.")
 		
@@ -52,7 +52,7 @@ class SchedulerServices():
 		print("Done.")
 
 		print("Got missions, setting statuses...")
-		for m in Mission.objects.all().exclude(status="PAUSED"): 
+		for m in missionServices.findMissionsExcludingStatus("PAUSED"): 
 			m.status = "SCHEDULED"
 			m.save()
 		print("Done.")

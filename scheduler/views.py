@@ -33,7 +33,7 @@ from scheduler.tasks import RotatorsThread, SchedulerTask
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
-RotatorsThread.delay((NextPass()))
+#RotatorsThread.delay((NextPass()))
 
 class TLEViewSet(viewsets.ModelViewSet):
 
