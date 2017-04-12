@@ -14,7 +14,7 @@ from scheduler.models import Mission, NextPass
 
 
 def test(passes, run_time):
-
+    print("THIS SHOULD DO A THING --------------- TURTLEESSS")
     csv_name = "scheduler_compare.csv"
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
 

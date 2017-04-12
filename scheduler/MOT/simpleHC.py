@@ -16,7 +16,7 @@ class MOTSimpleHC(MOT):
 		usefulTime=6
 		
 		bestNextPassList=[]
-		maxIterations = 50
+		maxIterations = 20
 
 		i=0
 		oldScore = sys.maxsize

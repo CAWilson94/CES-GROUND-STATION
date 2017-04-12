@@ -23,7 +23,7 @@ class SchedulerServices():
 	def scheduleAndSavePasses():
 		start = time.clock()
 
-		scheduler = MOTGA()
+		scheduler = MOTSimpleHC()
 				
 		missions = Mission.objects.all().exclude(status="PAUSED")
 		print("Got missions, setting statuses...")
@@ -59,11 +59,10 @@ class SchedulerServices():
 		stop = time.clock()
 		run_time = float(stop - start)
 		print("RUN TIME: " + str(run_time) + "---------------------------")
-		if(len(passes) > 0 ):
-			test(NextPass.objects.all().order_by("riseTime"), run_time)
-
-			next_pass_test = ga.nextPassChromosome(NextPass.objects.all().order_by("riseTime"))
-		
-			ga.nextPass_fitnessVariety_sum(next_pass_test)
+		#if(len(passes) > 0 ):
+		test(NextPass.objects.all().order_by("riseTime"), run_time)
+		next_pass_test = ga.nextPassChromosome(NextPass.objects.all().order_by("riseTime"))
+		ga.nextPass_fitnessVariety_sum(next_pass_test)
 
 		return NextPass.objects.all().order_by("riseTime")
+

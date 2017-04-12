@@ -219,7 +219,7 @@ class SchedulerCompare():
         SchedulerCompare.schedule()
 
     def test(request):
-        missions = 100
+        missions = 5
 
         for i in range(1, missions):
             print("I IS --------------> " + str(i))
