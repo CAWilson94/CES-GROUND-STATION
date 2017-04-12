@@ -17,11 +17,7 @@ void loop(){
       degrees[i] = Serial.read();
     }
     AzServo.write(degrees[0]);
-    //Serial.print("Az-");
-    //Serial.println(degrees[0]);
-    //Serial.print("El-");
     ElServo.write(degrees[1]);
-    //Serial.println(degrees[1]);
     Serial.print("end");
   }
 }
