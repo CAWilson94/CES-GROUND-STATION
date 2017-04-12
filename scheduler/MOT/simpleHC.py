@@ -16,7 +16,7 @@ class MOTSimpleHC(MOT):
 		bestNextPassList=[]
 		maxIterations = 20
 		usefulTime=6
-        i=0
+		i=0
 		
 		oldScore = sys.maxsize
 		newScore=0
@@ -29,7 +29,7 @@ class MOTSimpleHC(MOT):
 		print(" Starting simple hillclimbing")
 
 		while i<maxIterations:
-		    n=0
+			n=0
 			#Generator/Iterator of all the neighbours
 
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
