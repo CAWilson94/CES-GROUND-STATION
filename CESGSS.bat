@@ -37,18 +37,34 @@ goto:eof
 start cmd /c "celery -A cesGroundStation purge -f && celery -A cesGroundStation worker -l info"
 start cmd /c "cd frontend/client && node server"
 start cmd /c "python manage.py runserver"
+if "%2" neq "site" goto :eof
 if %2 equ site start "CES-Ground-Station" "http://localhost:8081"
+
 goto :eof
 
 :django
+if %2 equ -c (
+	python manage.py runserver 
+	goto :eof
+)
 start cmd /c "python manage.py runserver"
 goto :eof
 
 :celery
+if %2 equ -c (
+	celery -A cesGroundStation purge -f
+	celery -A cesGroundStation worker -l info
+	goto :eof
+)
 start cmd /c "celery -A cesGroundStation purge -f && celery -A cesGroundStation worker -l info"
 goto :eof
 
 :node
+if %2 equ -c (
+	cd frontend/client
+	node server
+	goto :eof
+)
 start cmd /c "cd frontend/client && node server"
 goto :eof
 

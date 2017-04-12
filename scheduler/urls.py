@@ -29,7 +29,6 @@ urlpatterns = [
     #url(r'^schedulemissiontest/?$', MissionView.as_view()),
     url(r'^makemissions/?$', TestingScheduler.makeMissions, name="makeMissions"),
     url(r'^schedule/?$', TestingScheduler.schedule, name="schedule"),
-    url(r'^thread/?$', TestingScheduler.threadTask, name="thread"),
     url(r'scheduler/comparison/?$', SchedulerCompare.test),
 
 ]
