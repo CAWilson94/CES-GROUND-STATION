@@ -56,26 +56,31 @@ def test(passes, run_time):
 
 
 def stats_each_sat(passes):
-        """
-        the first item with that name, create a new variable named
-        after it? then start a count?
+    """
+    the first item with that name, create a new variable named
+    after it? then start a count?
 
-        """
-        pass_dict = {}
+    """
+    pass_dict = {}
 
-        for item in passes:
-            if item.tle.name not in pass_dict:
-                pass_dict[item.tle.name] = []
-                pass_dict[item.tle.name].append(item)
-            else:
-                pass_dict[item.tle.name].append(item)
+    for item in passes:
+        if item.tle.name not in pass_dict:
+            pass_dict[item.tle.name] = []
+            pass_dict[item.tle.name].append(item)
+        else:
+            pass_dict[item.tle.name].append(item)
 
-        print("Dictionary")
-        for keys, values in pass_dict.items():
-            pass_name = ""
-            number = 0
-            for item in values:
-                pass_name += item.tle.name + " "
-                number += 1
-            print(number, keys, pass_name)
-            print('\n')
+    print("Dictionary")
+    for keys, values in pass_dict.items():
+        pass_name = ""
+        number = 0
+        total_contact_time = 0
+        for item in values:
+            pass_name += item.tle.name + " "
+            total_contact_time += item.duration.seconds
+            number += 1
+        # convert total contact time to datetime...
+        total_contact_time = datetime.timedelta(
+            seconds=total_contact_time)
+        print(number, total_contact_time, keys, pass_name)
+        print('\n')
