@@ -68,7 +68,6 @@ def tweet_on_rotator_start():
     """
     queryset = NextPass.objects.all()
 
-
     if len(queryset)>0:
         rtfull = queryset[0].riseTime
         stfull = queryset[0].setTime
