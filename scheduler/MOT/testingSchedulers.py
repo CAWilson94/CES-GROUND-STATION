@@ -57,7 +57,7 @@ def test(passes, run_time):
     stats_each_sat(passes)
 
 
-def stats_each_sat(passes):
+def stats_each_sat(passes, run_number="unspecified"):
     """
     the first item with that name, create a new variable named
     after it? then start a count?
@@ -66,7 +66,8 @@ def stats_each_sat(passes):
 
     csv_name = "scheduler_compare_stats.csv"
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
-    resultFile.writerow('run number...')
+    resultFile.writerow(['run number ' + run_number])
+    resultFile.writerow(['Num Passes', 'Total Contact Time', 'Satellite Name'])
 
     pass_dict = {}
 
