@@ -10,11 +10,11 @@ Testing various constants and variables for scheduler output
 import datetime
 import time
 import csv
+from itertools import groupby
 from scheduler.models import Mission, NextPass
 
 
 def test(passes, run_time):
-    print("THIS SHOULD DO A THING --------------- TURTLEESSS")
     csv_name = "scheduler_compare.csv"
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
 
@@ -43,7 +43,7 @@ def test(passes, run_time):
 
     resultFile.writerow(
         [num_missions, duration, total_contact_time_int,
-         total_non_contact_time, contact_time_percentage , str(run_time)])
+         total_non_contact_time, contact_time_percentage, str(run_time)])
 
     print("TOTAL DURAITON: " + str(duration) +
           "=======================================")
@@ -53,3 +53,42 @@ def test(passes, run_time):
           "=======================================")
     print("CONTACT TIME PERCENTAGE: " + str(contact_time_percentage) +
           "=======================================")
+
+
+def stats_each_sat(passes, run_number="unspecified"):
+    """
+    the first item with that name, create a new variable named
+    after it? then start a count?
+
+    """
+
+    csv_name = "scheduler_compare_stats.csv"
+    resultFile = csv.writer(open(csv_name, 'a', newline=''))
+    resultFile.writerow(['run number ' + str(run_number)])
+    resultFile.writerow(['Num Passes', 'Total Contact Time', 'Satellite Name'])
+
+    pass_dict = {}
+
+    for item in passes:
+        if item.tle.name not in pass_dict:
+            pass_dict[item.tle.name] = []
+            pass_dict[item.tle.name].append(item)
+        else:
+            pass_dict[item.tle.name].append(item)
+
+    print("Dictionary")
+    for keys, values in pass_dict.items():
+        pass_name = ""
+        number = 0
+        total_contact_time = 0
+        for item in values:
+            pass_name += item.tle.name + " "
+            if item.duration is not None:
+                total_contact_time += item.duration.seconds
+            number += 1
+        # convert total contact time to datetime...
+        total_contact_time = datetime.timedelta(
+            seconds=total_contact_time)
+        print(number, total_contact_time, keys)
+        resultFile.writerow([number, total_contact_time, keys])
+        print('\n')
