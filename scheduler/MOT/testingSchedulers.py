@@ -54,6 +54,8 @@ def test(passes, run_time):
     print("CONTACT TIME PERCENTAGE: " + str(contact_time_percentage) +
           "=======================================")
 
+    stats_each_sat(passes)
+
 
 def stats_each_sat(passes):
     """
@@ -61,6 +63,11 @@ def stats_each_sat(passes):
     after it? then start a count?
 
     """
+
+    csv_name = "scheduler_compare_stats.csv"
+    resultFile = csv.writer(open(csv_name, 'a', newline=''))
+    resultFile.writerow('run number...')
+
     pass_dict = {}
 
     for item in passes:
@@ -82,5 +89,6 @@ def stats_each_sat(passes):
         # convert total contact time to datetime...
         total_contact_time = datetime.timedelta(
             seconds=total_contact_time)
-        print(number, total_contact_time, keys, pass_name)
+        print(number, total_contact_time, keys)
+        resultFile.writerow([number, total_contact_time, keys])
         print('\n')
