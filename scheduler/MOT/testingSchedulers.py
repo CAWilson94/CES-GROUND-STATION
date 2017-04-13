@@ -56,9 +56,26 @@ def test(passes, run_time):
 
 
 def stats_each_sat(passes):
-    for next_pass in passes:
         """
-        the first item with that name, create a new variable named after it? then start a count?
+        the first item with that name, create a new variable named
+        after it? then start a count?
 
         """
-    [len(list(group)) for key in groupby(passes)]
+        pass_dict = {}
+
+        for item in passes:
+            if item.tle.name not in pass_dict:
+                pass_dict[item.tle.name] = []
+                pass_dict[item.tle.name].append(item)
+            else:
+                pass_dict[item.tle.name].append(item)
+
+        print("Dictionary")
+        for keys, values in pass_dict.items():
+            pass_name = ""
+            number = 0
+            for item in values:
+                pass_name += item.tle.name + " "
+                number += 1
+            print(number, keys, pass_name)
+            print('\n')
