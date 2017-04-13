@@ -3,7 +3,7 @@ from django.db.utils import OperationalError
 import math, ephem, threading
 from datetime import date, datetime, timedelta
 
-from scheduler.missionServices import mission_services as ms
+from scheduler.missionServices import missionServices as ms
 from scheduler.models import TLE, AzEl, NextPass, Mission
 
 class Services():

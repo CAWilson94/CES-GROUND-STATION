@@ -1,4 +1,5 @@
 from scheduler.models import Mission, NextPass
+from scheduler.missionServices import missionServices
 
 from scheduler.MOT.ruleBased import MOTRuleBased
 from scheduler.MOT.GAScheduler import MOTGA
@@ -25,22 +26,22 @@ class SchedulerServices():
 
 		scheduler = MOTSimpleHC()
 				
-		missions = Mission.objects.all().exclude(status="PAUSED")
+		missions = missionServices.findMissionsExcludingStatus("PAUSED")
 		print("Got missions, setting statuses...")
 		for m in missions: 
 			m.status = "SCHEDULING"
 			m.save()
 		print("Done.")
 
-		print("Scheduling...")
 		print("Removing previous passes...")
 		NextPass.objects.all().delete()
 		print("Done.")
 
+		print("Scheduling...")
 		start = time.clock()
 		passes = scheduler.find(missions)
 		stop = time.clock()
-
+		
 		run_time = float(stop - start)
 		print("Scheduled " + str(len(passes)) + " passes.")
 		
@@ -51,7 +52,7 @@ class SchedulerServices():
 		print("Done.")
 
 		print("Got missions, setting statuses...")
-		for m in Mission.objects.all().exclude(status="PAUSED"): 
+		for m in missionServices.findMissionsExcludingStatus("PAUSED"): 
 			m.status = "SCHEDULED"
 			m.save()
 		print("Done.")

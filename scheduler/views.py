@@ -15,6 +15,7 @@ from csv_parse import export_csv
 
 from scheduler.models import TLE, Mission, NextPass
 from scheduler.services import Services
+from scheduler.missionServices import missionServices
 from scheduler.schedulerServices import SchedulerServices
 from scheduler.serializers import TLESerializer, AZELSerializer, MissionSerializer, NextPassSerializer
 
@@ -32,7 +33,7 @@ from scheduler.tasks import RotatorsThread, SchedulerTask
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
-RotatorsThread.delay((NextPass()))
+#RotatorsThread.delay((NextPass()))
 
 class TLEViewSet(viewsets.ModelViewSet):
 
