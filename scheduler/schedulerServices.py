@@ -8,62 +8,59 @@ from scheduler.MOT.steepestHC import MOTSteepestHC
 from scheduler.MOT.stochasticHC import MOTStochasticHC
 from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 
-## imports for comparison of schedulers
+# imports for comparison of schedulers
 import time
 from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
 
+
 class SchedulerServices():
 
-	#scheduler = MOTSimpleHC()
-	#scheduler = MOTSteepestHC()
-	#scheduler = MOTStochasticHC()
-	#scheduler = MOTRandomRestartHC()
-	#scheduler = MOTRuleBased()
-	
-	def scheduleAndSavePasses():
-		start = time.clock()
+    #scheduler = MOTSimpleHC()
+    #scheduler = MOTSteepestHC()
+    #scheduler = MOTStochasticHC()
+    #scheduler = MOTRandomRestartHC()
+    #scheduler = MOTRuleBased()
+    #scheduler = MOTGA()
 
-		scheduler = MOTSimpleHC()
-				
-		missions = missionServices.findMissionsExcludingStatus("PAUSED")
-		print("Got missions, setting statuses...")
-		for m in missions: 
-			m.status = "SCHEDULING"
-			m.save()
-		print("Done.")
+    def scheduleAndSavePasses():
+        start = time.clock()
 
-		print("Removing previous passes...")
-		NextPass.objects.all().delete()
-		print("Done.")
+        scheduler = MOTRuleBased()
 
-		print("Scheduling...")
-		start = time.clock()
-		passes = scheduler.find(missions)
-		stop = time.clock()
-		
-		run_time = float(stop - start)
-		print("Scheduled " + str(len(passes)) + " passes.")
-		
+        missions = missionServices.findMissionsExcludingStatus("PAUSED")
+        print("Got missions, setting statuses...")
+        for m in missions:
+            m.status = "SCHEDULING"
+            m.save()
+        print("Done.")
 
-		print("Saving new passes...")
-		NextPass.objects.bulk_create(passes)
-		passes = []
-		print("Done.")
+        print("Removing previous passes...")
+        NextPass.objects.all().delete()
+        print("Done.")
 
-		print("Got missions, setting statuses...")
-		for m in missionServices.findMissionsExcludingStatus("PAUSED"): 
-			m.status = "SCHEDULED"
-			m.save()
-		print("Done.")
+        print("Scheduling...")
+        start = time.clock()
+        passes = scheduler.find(missions)
+        stop = time.clock()
 
-		stop = time.clock()
-		run_time = float(stop - start)
-		print("RUN TIME: " + str(run_time) + "---------------------------")
-		#if(len(passes) > 0 ):
-		test(NextPass.objects.all().order_by("riseTime"), run_time)
-		next_pass_test = ga.nextPassChromosome(NextPass.objects.all().order_by("riseTime"))
-		ga.nextPass_fitnessVariety_sum(next_pass_test)
+        run_time = float(stop - start)
+        print("Scheduled " + str(len(passes)) + " passes.")
 
-		return NextPass.objects.all().order_by("riseTime")
+        print("Saving new passes...")
+        NextPass.objects.bulk_create(passes)
+        passes = []
+        print("Done.")
 
+        print("Got missions, setting statuses...")
+        for m in missionServices.findMissionsExcludingStatus("PAUSED"):
+            m.status = "SCHEDULED"
+            m.save()
+        print("Done.")
+
+        stop = time.clock()
+        run_time = float(stop - start)
+        print("RUN TIME: " + str(run_time) + "---------------------------")
+        # if(len(passes) > 0 ):
+        test(NextPass.objects.all().order_by("riseTime"), run_time)
+        return NextPass.objects.all().order_by("riseTime")

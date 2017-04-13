@@ -12,6 +12,7 @@ import time
 import csv
 from itertools import groupby
 from scheduler.models import Mission, NextPass
+from scheduler.MOT import GA as ga
 
 
 def test(passes, run_time):
@@ -28,6 +29,9 @@ def test(passes, run_time):
     mission = Mission.objects.all()
     num_missions = len(mission)
 
+    next_pass_test = ga.nextPassChromosome(passes)
+    ga.nextPass_fitnessVariety_sum(next_pass_test)
+
     total_contact_time_seconds = 0
     for item in passes:
         if item.duration is not None:
@@ -41,9 +45,14 @@ def test(passes, run_time):
     contact_time_percentage = str(round(
         ((total_contact_time_int / duration) * 100), 2)) + "%"
 
+    resultFile.writerow(['Num Missions', 'Duration', 'Total Contact Time',
+                         'Total Non Contact Time', 'Percentage Contact Time',
+                         'Fitness Score', 'Run Time (seconds)'])
+
     resultFile.writerow(
         [num_missions, duration, total_contact_time_int,
-         total_non_contact_time, contact_time_percentage, str(run_time)])
+         total_non_contact_time, contact_time_percentage,
+         next_pass_test, str(run_time)])
 
     print("TOTAL DURAITON: " + str(duration) +
           "=======================================")
@@ -65,7 +74,8 @@ def stats_each_sat(passes, run_number="unspecified"):
     csv_name = "scheduler_compare_stats.csv"
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
     resultFile.writerow(['run number ' + str(run_number)])
-    resultFile.writerow(['Num Passes', 'Total Contact Time', 'Satellite Name'])
+    resultFile.writerow(['Satellite Name', 'Num Passes',
+                         'Total Contact Time', 'Avg Time per Pass'])
 
     pass_dict = {}
 
@@ -80,15 +90,21 @@ def stats_each_sat(passes, run_number="unspecified"):
     for keys, values in pass_dict.items():
         pass_name = ""
         number = 0
+        avg = 0
         total_contact_time = 0
         for item in values:
             pass_name += item.tle.name + " "
             if item.duration is not None:
                 total_contact_time += item.duration.seconds
             number += 1
+        # Average time per pass
+        if item.duration is not None:
+            avg = item.duration.seconds / number
+            average = datetime.timedelta(
+                seconds=avg)
         # convert total contact time to datetime...
         total_contact_time = datetime.timedelta(
             seconds=total_contact_time)
         print(number, total_contact_time, keys)
-        resultFile.writerow([number, total_contact_time, keys])
+        resultFile.writerow([keys, number, total_contact_time, average])
         print('\n')
