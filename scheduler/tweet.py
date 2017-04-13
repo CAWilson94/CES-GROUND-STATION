@@ -70,10 +70,6 @@ def tweet_on_rotator_start():
 
 
     if len(queryset)>0:
-
-        #num = random.choice(queryset)
-        #num = random.randint(0,len(queryset)-1)
-        
         rtfull = queryset[0].riseTime
         stfull = queryset[0].setTime
         rt = rtfull.strftime('%H:%M:%S')
