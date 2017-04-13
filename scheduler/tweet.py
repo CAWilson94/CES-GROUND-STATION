@@ -38,7 +38,7 @@ from scheduler.models import NextPass
 
 class tweet:
 
-    def __init__(self, something):
+    def __init__(self, string_update):
         # enter the corresponding information from your Twitter application:
         # keep the quotes, replace this with your consumer key
         CONSUMER_KEY = 'IgaWiE746tRu8Zw5CtmxhISit'
@@ -51,7 +51,7 @@ class tweet:
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
         api = tweepy.API(auth)
-        api.update_status(something)
+        api.update_status(string_update)
 
 
 def ground_station(outputString):
