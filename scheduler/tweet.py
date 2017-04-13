@@ -64,11 +64,7 @@ def ground_station(outputString):
 
 def tweet_on_rotator_start():
     """
-    Intended for use with rotator status updates:
-    currently for proof of concept as there is no
-    guarantee there will be a sat pass during the
-    trade show: hence picking the first int the
-    scheduled next pass list and outputting results.
+    Intended for use with rotator status updates
     """
     queryset = NextPass.objects.all()
 
