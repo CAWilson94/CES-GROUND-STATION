@@ -76,13 +76,14 @@ def tweet_on_rotator_start():
     if len(queryset)>0:
 
         #num = random.choice(queryset)
-        num = random.randint(0,len(queryset)-1)
-        rtfull = queryset[num].riseTime
-        stfull = queryset[num].setTime
+        #num = random.randint(0,len(queryset)-1)
+        
+        rtfull = queryset[0].riseTime
+        stfull = queryset[0].setTime
         rt = rtfull.strftime('%H:%M:%S')
         st = stfull.strftime('%H:%M:%S')
-        dur = queryset[num].duration
-        nm = queryset[num].tle.name
+        dur = queryset[0].duration
+        nm = queryset[0].tle.name
         tweetStr = (
             "[" + datetime.now().strftime('%H:%M:%S') + "] " +
             "Now tracking: " + str(nm) + " rise time: " + str(rt) +
