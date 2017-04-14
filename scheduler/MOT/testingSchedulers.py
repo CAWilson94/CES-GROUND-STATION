@@ -61,11 +61,6 @@ def test(passes, run_time):
 
 
 def stats_each_sat(passes, run_number="unspecified"):
-    """
-    the first item with that name, create a new variable named
-    after it? then start a count?
-
-    """
 
     csv_name = "scheduler_compare_stats.csv"
     resultFile = csv.writer(open(csv_name, 'a', newline=''))

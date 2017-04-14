@@ -238,4 +238,4 @@ class SchedulerCompare():
         SchedulerCompare.clearMissions()
         SchedulerCompare.clearNextPasses()
         panda_read()
-        return HttpResponse("Hurra you did it! ")
+        return HttpResponse("Scheduler Results Ready")
