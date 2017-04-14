@@ -255,7 +255,7 @@ def total_duration():
     return duration
 
 
-def nextPass_fitness_3(chromosome):
+def nextPass_fitness_3(passes):
     diffNames = 0
     satLookedat = []
     contact_time = 0
