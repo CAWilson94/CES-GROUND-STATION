@@ -215,7 +215,7 @@ def fitnessVariety_sum(chromosome):
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
             diffNames += 1
-    fitness = duration * diffNames * priority_summation(chromosome)
+    fitness = duration + diffNames + priority_summation(chromosome)
     return fitness
 
 
@@ -240,7 +240,8 @@ def nextPass_fitnessVariety_sum(chromosome):
             satLookedat.append(satPass.tle.name)
             diffNames += 1
 
-    fitness = duration * diffNames * priority_summation(chromosome)
+    fitness = round((duration / 60) + (len(chromosome.satPassList) * diffNames) +
+                    priority_summation(chromosome), 3)
     print("FITNESS IS: " + str(fitness))
     return fitness
 

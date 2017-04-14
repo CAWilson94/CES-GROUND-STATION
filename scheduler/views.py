@@ -222,7 +222,7 @@ class SchedulerCompare():
         stats_each_sat(passes, iterations)
 
     def test(request):
-        missions = 100
+        missions = 5
         index = 0
         for i in range(1, missions):
             index += 1

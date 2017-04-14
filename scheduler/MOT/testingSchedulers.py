@@ -30,7 +30,7 @@ def test(passes, run_time):
     num_missions = len(mission)
 
     next_pass_test = ga.nextPassChromosome(passes)
-    ga.nextPass_fitnessVariety_sum(next_pass_test)
+    fitness_score = ga.nextPass_fitnessVariety_sum(next_pass_test)
 
     total_contact_time_seconds = 0
     for item in passes:
@@ -45,14 +45,10 @@ def test(passes, run_time):
     contact_time_percentage = str(round(
         ((total_contact_time_int / duration) * 100), 2)) + "%"
 
-    resultFile.writerow(['Num Missions', 'Duration', 'Total Contact Time',
-                         'Total Non Contact Time', 'Percentage Contact Time',
-                         'Fitness Score', 'Run Time (seconds)'])
-
     resultFile.writerow(
         [num_missions, duration, total_contact_time_int,
          total_non_contact_time, contact_time_percentage,
-         next_pass_test, str(run_time)])
+         fitness_score, str(run_time)])
 
     print("TOTAL DURAITON: " + str(duration) +
           "=======================================")
@@ -102,6 +98,8 @@ def stats_each_sat(passes, run_number="unspecified"):
             avg = item.duration.seconds / number
             average = datetime.timedelta(
                 seconds=avg)
+        else:
+            average = "Data Problem"
         # convert total contact time to datetime...
         total_contact_time = datetime.timedelta(
             seconds=total_contact_time)
