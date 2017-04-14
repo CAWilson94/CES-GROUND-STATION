@@ -255,20 +255,20 @@ def total_duration():
     return duration
 
 
-def nextPass_fitness_3(chromosome):
+def nextPass_fitness_3(passes):
     diffNames = 0
     satLookedat = []
     contact_time = 0
     sats = Mission.objects.all()
     num_sats = len(sats)
 
-    for satPass in chromosome.satPassList:
+    for satPass in passes.satPassList:
         contact_time += (satPass.setTime - satPass.riseTime).total_seconds()
         if satPass.tle.name not in satLookedat:
             satLookedat.append(satPass.tle.name)
             diffNames += 1
 
-    p = priority_summation(chromosome) / (len(chromosome.satPassList) / 3)
+    p = priority_summation(passes) / (len(passes.satPassList) / 3)
     ct = contact_time / total_duration().seconds
     v = diffNames / num_sats
 
