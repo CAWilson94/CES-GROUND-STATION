@@ -12,6 +12,7 @@ from scheduler.MOT.randomRestartHC import MOTRandomRestartHC
 import time
 from scheduler.MOT.testingSchedulers import test
 from scheduler.MOT import GA as ga
+from scheduler.MOT.testingSchedulers import stats_each_sat
 
 
 class SchedulerServices():
@@ -26,7 +27,7 @@ class SchedulerServices():
     def scheduleAndSavePasses():
         start = time.clock()
 
-        scheduler = MOTSimpleHC()
+        scheduler = MOTRuleBased()
 
         missions = missionServices.findMissionsExcludingStatus("PAUSED")
         print("Got missions, setting statuses...")
@@ -63,4 +64,5 @@ class SchedulerServices():
         print("RUN TIME: " + str(run_time) + "---------------------------")
         # if(len(passes) > 0 ):
         test(NextPass.objects.all().order_by("riseTime"), run_time)
+        stats_each_sat(NextPass.objects.all().order_by("riseTime"))
         return NextPass.objects.all().order_by("riseTime")

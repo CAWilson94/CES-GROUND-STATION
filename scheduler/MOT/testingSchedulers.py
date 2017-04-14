@@ -30,7 +30,7 @@ def test(passes, run_time):
     num_missions = len(mission)
 
     next_pass_test = ga.nextPassChromosome(passes)
-    fitness_score = ga.nextPass_fitnessVariety_sum(next_pass_test)
+    fitness_score = ga.nextPass_fitness_3(next_pass_test)
 
     total_contact_time_seconds = 0
     for item in passes:
@@ -71,7 +71,8 @@ def stats_each_sat(passes, run_number="unspecified"):
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
     resultFile.writerow(['run number ' + str(run_number)])
     resultFile.writerow(['Satellite Name', 'Num Passes',
-                         'Total Contact Time', 'Avg Time per Pass'])
+                         'Total Contact Time', 'Avg Time per Pass',
+                         'priority'])
 
     pass_dict = {}
 
@@ -90,6 +91,7 @@ def stats_each_sat(passes, run_number="unspecified"):
         total_contact_time = 0
         for item in values:
             pass_name += item.tle.name + " "
+            priority = item.mission.priority
             if item.duration is not None:
                 total_contact_time += item.duration.seconds
             number += 1
@@ -104,5 +106,6 @@ def stats_each_sat(passes, run_number="unspecified"):
         total_contact_time = datetime.timedelta(
             seconds=total_contact_time)
         print(number, total_contact_time, keys)
-        resultFile.writerow([keys, number, total_contact_time, average])
+        resultFile.writerow(
+            [keys, number, total_contact_time, average, priority])
         print('\n')
