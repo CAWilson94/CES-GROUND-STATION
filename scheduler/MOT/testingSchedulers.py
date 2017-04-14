@@ -13,6 +13,8 @@ import csv
 from itertools import groupby
 from scheduler.models import Mission, NextPass
 from scheduler.MOT import GA as ga
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def test(passes, run_time):
@@ -20,9 +22,7 @@ def test(passes, run_time):
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
 
     first_pass = passes.first().riseTime
-    print("FIRST PASS: " + str(first_pass))
     end_pass = passes.last().setTime
-    print("END PASS: " + str(end_pass))
 
     duration = end_pass - first_pass
 
@@ -69,9 +69,9 @@ def stats_each_sat(passes, run_number="unspecified"):
 
     csv_name = "scheduler_compare_stats.csv"
     resultFile = csv.writer(open(csv_name, 'a', newline=''))
-    resultFile.writerow(['run number ' + str(run_number)])
-    resultFile.writerow(['Satellite Name', 'Num Passes',
-                         'Total Contact Time', 'Avg Time per Pass',
+    resultFile.writerow(['run_number' + str(run_number)])
+    resultFile.writerow(['sat_name', 'num_passes',
+                         'contact_time', 'avg_pass_time',
                          'priority'])
 
     pass_dict = {}
@@ -109,3 +109,29 @@ def stats_each_sat(passes, run_number="unspecified"):
         resultFile.writerow(
             [keys, number, total_contact_time, average, priority])
         print('\n')
+
+
+def graph(total_contact_time, number_missions):
+    csv_name = "scheduler_compare_stats.csv"
+    with open(csv_name, 'r') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        for row in spamreader:
+            print(', '.join(row))
+
+
+def panda_read():
+    csv_name = "scheduler_compare.csv"
+    title = "Run time WRT number of missions: Simple HC"
+    png_name = "graph.png"
+    df = pd.read_csv(csv_name, header=None, skip_blank_lines=True,
+                     error_bad_lines=False)
+    # print(df.head())
+    df.columns = ["num_missions", "duration", "tracking_time",
+                  "non_tracking_time", "tracking_percentage",
+                  "fitness_score", "run_time"]
+    plt.title(title)
+    plt.xlabel('Number of Missions')
+    plt.ylabel('Run Time(s)')
+    plt.xticks(df['num_missions'], df['num_missions'])
+    plt.plot(df['num_missions'], df['run_time'])
+    plt.savefig(png_name)
