@@ -29,6 +29,8 @@ from scheduler.MOT.GAScheduler import MOTGA
 from scheduler.tweet import ground_station
 from scheduler.tasks import RotatorsThread, SchedulerTask
 
+from scheduler.rotatorController import rotator_controller
+
 
 print("HELLO FROM VIEWS!")
 #print("Starting repeating task")
@@ -162,6 +164,14 @@ class TestingScheduler():
 
         return HttpResponse(string)
         return HttpResponse(string)
+
+
+    def rotate(request):
+        nextPass = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")[0]
+        if(nextPass is not None):
+            rs = rotator_controller()
+            rs.moveRotators(nextPass)
+        return HttpResponse("Done")
 
 
 

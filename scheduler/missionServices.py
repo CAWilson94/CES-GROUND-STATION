@@ -46,20 +46,6 @@ class mission_services():
 		except Mission.DoesNotExist:
 			mission_list = None
 		return mission_list    
-	 
-	def findMissionsByCurrentNumberOfPasses(current_num_passes):
-		try:
-			mission_list = Mission.objects.filter(current_num_passes=current_num_passes)
-		except Mission.DoesNotExist:
-			mission_list = None
-		return mission_list
-
-	def findMissionsByMaxNumberOfPasses(max_num_passes):
-		try:
-			mission_list = Mission.objects.filter(max_num_passes=max_num_passes)
-		except Mission.DoesNotExist:
-			mission_list = None
-		return mission_list
 
 	def saveOrUpdate(mission):
 	 	try:
