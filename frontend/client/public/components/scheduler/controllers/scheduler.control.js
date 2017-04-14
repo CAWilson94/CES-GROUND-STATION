@@ -36,6 +36,9 @@ scheduler
         });
      }
 
+
+     
+
      $scope.updateTables = function(){
         var config = {
           headers: {

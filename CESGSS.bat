@@ -1,4 +1,4 @@
-@echo off
+Rem @echo off
 
 TITLE CESGSS
 

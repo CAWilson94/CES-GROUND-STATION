@@ -9,46 +9,69 @@ Mission control code that allows searching for missiont by id,
 name, TLE object, status priority, No. of passes and save or 
 update, can also remove by name"
 """
-class mission_services():
+class missionServices():
 
 	def findMissionById(index):
 		try:
 			mission = Mission.objects.get(id=index)
 		except Mission.DoesNotExist:
-			mission = None
+			mission = []
 		return mission
 
 	def findMissionByName(name):
 		try:
 			mission = Mission.objects.get(name=name) 
 		except Mission.DoesNotExist:  
-			mission = None
+			mission = []
 		return mission
 
 	def findMissionsByTLE(TLE):
 		try:
 			mission_list = Mission.objects.filter(TLE=TLE)
 		except Mission.DoesNotExist:
-			mission_list = None
+			mission_list = []
 		return mission_list   
 	
 	def findMissionsByStatus(status):
 		try:
 			mission_list = Mission.objects.filter(status=status)
 		except Mission.DoesNotExist as e:
-			print("missio didnt work")
-			mission_list = None
+			print("No missions found")
+			mission_list = []
+		return mission_list
+
+	def findMissionsExcludingStatus(status):
+		try:
+			mission_list = Mission.objects.all().exclude(status=status)
+		except Mission.DoesNotExist as e:
+			print("No missions found")
+			mission_list = []
 		return mission_list
 
 	def findMissionsByPriority(priority):
 		try:
 			mission_list = Mission.objects.filter(priority=priority)
 		except Mission.DoesNotExist:
-			mission_list = None
+			mission_list = []
 		return mission_list    
+	 
+	def findMissionsByCurrentNumberOfPasses(current_num_passes):
+		try:
+			mission_list = Mission.objects.filter(current_num_passes=current_num_passes)
+		except Mission.DoesNotExist:
+			mission_list = []
+		return mission_list
+
+	def findMissionsByMaxNumberOfPasses(max_num_passes):
+		try:
+			mission_list = Mission.objects.filter(max_num_passes=max_num_passes)
+		except Mission.DoesNotExist:
+			mission_list = []
+		return mission_list
 
 	def saveOrUpdate(mission):
 	 	try:
+	 		# This doesn't work : Error mission is not iterable
 	 		Mission.objects.update_or_create(mission)
 	 		return True
 	 	except Mission.DoesNotExist:

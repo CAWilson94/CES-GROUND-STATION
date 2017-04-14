@@ -13,10 +13,8 @@ from django import db
 
 
 class rotator_controller():
-	"""Controller for rotators:
-	Take in next pass object which
-					contains TLE object and start and end times of the pass
-		"""
+
+
 
 	# def __init__(self, nextPass):
 	# 	super(rotator_controller, self).__init__()
@@ -30,6 +28,7 @@ class rotator_controller():
 		
 	#changed to COM8 for Robbies Laptop
 	#/dev/ttyACM0 for linux
+
 
 	def normalizeAzEl(self, AzElList):
 		over520 = False

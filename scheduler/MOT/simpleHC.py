@@ -13,15 +13,14 @@ class MOTSimpleHC(MOT):
 	def find(self,missionList):
 		""" In simple hill climbing, the first closer node is chosen"""
 
-		usefulTime=6
-		
 		bestNextPassList=[]
 		maxIterations = 20
-
+		usefulTime=6
 		i=0
+		
 		oldScore = sys.maxsize
 		newScore=0
-		newOrder=[] 
+		
 		maxN=0
 
 		nextPassListStart=_Helper.getPassesFromMissions(self, missionList)
@@ -30,16 +29,13 @@ class MOTSimpleHC(MOT):
 		print(" Starting simple hillclimbing")
 
 		while i<maxIterations:
-			listOfNearestNeighboursAndItself=[]
+			n=0
 			#Generator/Iterator of all the neighbours
 
 			generatorOfAllNeighboursIncItself = itertools.permutations(curOrder)
-			n=0
-
 			oldNeighbourScore=sys.maxsize
 			#Find the first better neighbour with a better score
 
-			#print(listOfNearestNeighboursAndItself)
 			newNeighbourScore=0
 			for neighbour in generatorOfAllNeighboursIncItself:
 				n+=1

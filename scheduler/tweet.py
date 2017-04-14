@@ -38,7 +38,7 @@ from scheduler.models import NextPass
 
 class tweet:
 
-    def __init__(self, something):
+    def __init__(self, string_update):
         # enter the corresponding information from your Twitter application:
         # keep the quotes, replace this with your consumer key
         CONSUMER_KEY = 'IgaWiE746tRu8Zw5CtmxhISit'
@@ -51,7 +51,7 @@ class tweet:
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
         api = tweepy.API(auth)
-        api.update_status(something)
+        api.update_status(string_update)
 
 
 def ground_station(outputString):
@@ -64,25 +64,17 @@ def ground_station(outputString):
 
 def tweet_on_rotator_start():
     """
-    Intended for use with rotator status updates:
-    currently for proof of concept as there is no
-    guarantee there will be a sat pass during the
-    trade show: hence picking the first int the
-    scheduled next pass list and outputting results.
+    Intended for use with rotator status updates
     """
     queryset = NextPass.objects.all()
 
-
     if len(queryset)>0:
-
-        #num = random.choice(queryset)
-        num = random.randint(0,len(queryset)-1)
-        rtfull = queryset[num].riseTime
-        stfull = queryset[num].setTime
+        rtfull = queryset[0].riseTime
+        stfull = queryset[0].setTime
         rt = rtfull.strftime('%H:%M:%S')
         st = stfull.strftime('%H:%M:%S')
-        dur = queryset[num].duration
-        nm = queryset[num].tle.name
+        dur = queryset[0].duration
+        nm = queryset[0].tle.name
         tweetStr = (
             "[" + datetime.now().strftime('%H:%M:%S') + "] " +
             "Now tracking: " + str(nm) + " rise time: " + str(rt) +
