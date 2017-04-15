@@ -11,6 +11,8 @@ from scheduler.schedulerServices import SchedulerServices
 
 from celery.signals import celeryd_init
 
+from scheduler.rotatorController import rotator_controller
+
 @celeryd_init.connect
 def configure_worker1(sender=None, conf=None, **kwargs):
     print("Init celery")

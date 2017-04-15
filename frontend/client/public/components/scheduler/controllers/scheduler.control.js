@@ -27,16 +27,24 @@ scheduler
 
         $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
           .then(function successCallback(response, data) {
-            if(response.data == "True")
+            if(response.data == "True") {
               $scope.isScheduling = true
-            else
+            } else {
+              var changed = false
+              if($scope.isScheduling == true){
+                changed = true
+              }
               $scope.isScheduling = false
+              if(changed){
+                $scope.refreshTables();
+              }
+            }
           }, function errorCallback(response) {
             console.log(response.status)
         });
      }
 
-     $scope.updateTables = function(){
+     $scope.refreshTables = function(){
         var config = {
           headers: {
             'Content-Type': 'application/json',
@@ -46,14 +54,14 @@ scheduler
 
         $http.get('http://127.0.0.1:8000/api/nextpass/get', config)
           .then(function successCallback(response, data) {
-              $scope.nextpassesDisplay = response.data;
+              $scope.nextpasses = response.data;
           }, function errorCallback(response) {
             console.log(response.status)
         });
 
         $http.get('http://127.0.0.1:8000/api/mission/get', config)
           .then(function successCallback(response, data) {
-              $scope.missionsDisplay = response.data;
+              $scope.missions = response.data;
           }, function errorCallback(response) {
             console.log(response.status)
         });
@@ -185,7 +193,6 @@ scheduler
 
       try {
         console.log($scope.mission)
-          // Not sure this try should be here, try for post 
         $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
@@ -197,13 +204,8 @@ scheduler
               $scope.loadNextPasses();
             },
             function errorCallBack(response) {
-              // called asynchronously if an error occurs
-              // or server returns response with an error status.
-              // Error is anything outside of range previously mentioned. 
               console.log(response.status + " : " + response.statusText);
             }
-            // Uncomment for testing output or use django shell to check missions model contents
-            //alert($scope.mission.name + " : " + $scope.mission.priority)
           );
       } catch (err) {
         alert("you must first select a satellite and a priority")

@@ -82,15 +82,15 @@ class NextPass(models.Model):
     
 
     def __str__(self):
-        return str(self.__dict__)
-
+        #return str(self.__dict__)
+        return str(self.tle.name)
     def __eq__(self, other):
-        riseTime = datetime(17, 1, 19, 12, 0, 0)
-        setTime = datetime(17, 1, 19, 12, 0, 0)
-        duration = 0
-        maxElevation = 0
-        riseAzimuth = 0
-        setAzimuth = 0
+        # riseTime = datetime(17, 1, 19, 12, 0, 0)
+        # setTime = datetime(17, 1, 19, 12, 0, 0)
+        # duration = 0
+        # maxElevation = 0
+        # riseAzimuth = 0
+        # setAzimuth = 0
         try:
             #Surely there is a better way but i dunno AK
             riseTime = self.riseTime == other.riseTime

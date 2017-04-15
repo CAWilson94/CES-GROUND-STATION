@@ -26,6 +26,7 @@ import datetime
 import random
 import operator
 from random import randint
+from scheduler.models import Mission, NextPass
 
 CROSSOVER_RATE = 7
 FITNESS_CMP = operator.attrgetter("fitness")
@@ -167,7 +168,7 @@ def setFitness(population):
         returns a population of chromosomes with fitnesses
     """
     for chromosome in population:
-        chromosome.fitness = nextPass_fitnessVariety_sum(chromosome)
+        chromosome.fitness = nextPass_fitness_2(chromosome)
 
     return population
 
@@ -215,7 +216,7 @@ def fitnessVariety_sum(chromosome):
         if satPass.name not in satLookedat:
             satLookedat.append(satPass.name)
             diffNames += 1
-    fitness = duration * diffNames * priority_summation(chromosome)
+    fitness = duration + diffNames + priority_summation(chromosome)
     return fitness
 
 
@@ -240,7 +241,63 @@ def nextPass_fitnessVariety_sum(chromosome):
             satLookedat.append(satPass.tle.name)
             diffNames += 1
 
-    fitness = duration * diffNames * priority_summation(chromosome)
+    fitness = round((duration / 60) + (len(chromosome.satPassList) * diffNames) +
+                    priority_summation(chromosome), 3)
+    print("FITNESS IS: " + str(fitness))
+    return fitness
+
+
+def total_duration():
+    passes = NextPass.objects.all().order_by("riseTime")
+    first_pass = passes.first().riseTime
+    end_pass = passes.last().setTime
+    duration = end_pass - first_pass
+    return duration
+
+
+def nextPass_fitness_3(passes):
+    diffNames = 0
+    satLookedat = []
+    contact_time = 0
+    sats = Mission.objects.all()
+    num_sats = len(sats)
+
+    for satPass in passes.satPassList:
+        contact_time += (satPass.setTime - satPass.riseTime).total_seconds()
+        if satPass.tle.name not in satLookedat:
+            satLookedat.append(satPass.tle.name)
+            diffNames += 1
+
+    p = priority_summation(passes) / (len(passes.satPassList) / 3)
+    ct = contact_time / total_duration().seconds
+    v = diffNames / num_sats
+
+    fitness = (0.4 * p) + (0.4 * ct) + (0.2 * v)
+
+    print("FITNESS IS: " + str(fitness))
+    return fitness
+
+
+def nextPass_fitness_2(chromosome):
+    ' To be used by GA as the nextpass table will have nothing in it until end'
+    diffNames = 0
+    satLookedat = []
+    contact_time = 0
+    sats = Mission.objects.all()
+    num_sats = len(sats)
+
+    for satPass in chromosome.satPassList:
+        contact_time += (satPass.setTime - satPass.riseTime).total_seconds()
+        if satPass.tle.name not in satLookedat:
+            satLookedat.append(satPass.tle.name)
+            diffNames += 1
+
+    p = priority_summation(chromosome) / (len(chromosome.satPassList) / 3)
+    ct = contact_time
+    v = diffNames / num_sats
+
+    fitness = (0.4 * p) + (0.4 * ct) + (0.2 * v)
+
     print("FITNESS IS: " + str(fitness))
     return fitness
 

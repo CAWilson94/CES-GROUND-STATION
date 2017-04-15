@@ -29,6 +29,7 @@ urlpatterns = [
     #url(r'^schedulemissiontest/?$', MissionView.as_view()),
     url(r'^makemissions/?$', TestingScheduler.makeMissions, name="makeMissions"),
     url(r'^schedule/?$', TestingScheduler.schedule, name="schedule"),
+    url(r'^rotate/?$', TestingScheduler.rotate, name="rotate"),
     url(r'scheduler/comparison/?$', SchedulerCompare.test),
 
 ]
