@@ -53,17 +53,18 @@ class TLEViewSet(viewsets.ModelViewSet):
 
 
 class MissionsViewSet(viewsets.ModelViewSet):
-	queryset = Mission.objects.none()
-	serializer_class = MissionSerializer
-	try:
-		if(len(Mission.objects.filter(status="NEW")) > 0
-				or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
-			SchedulerTask.delay()
-		queryset = Mission.objects.all()
-	except OperationalError:
-		print("MissionsViewSet couldn't be loaded yet")
-		
-		
+    try:
+        if(len(Mission.objects.filter(status="NEW")) > 0
+                or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
+            SchedulerTask.delay()
+        queryset = Mission.objects.all()
+        serializer_class = MissionSerializer
+    except OperationalError:
+        queryset = Mission.objects.none()
+        serializer_class = MissionSerializer
+        print("MissionsViewSet couldn't be loaded yet")
+
+
 class MissionViewSet(viewsets.ModelViewSet):
 	queryset = Mission.objects.all()
 	serializer_class = MissionSerializer
