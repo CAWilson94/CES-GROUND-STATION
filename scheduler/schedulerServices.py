@@ -25,6 +25,8 @@ class SchedulerServices():
     #scheduler = MOTGA()
 
     def scheduleAndSavePasses():
+        is_testing = False
+        
         start = time.clock()
 
         scheduler = MOTRuleBased()
@@ -62,7 +64,7 @@ class SchedulerServices():
         stop = time.clock()
         run_time = float(stop - start)
         print("RUN TIME: " + str(run_time) + "---------------------------")
-        # if(len(passes) > 0 ):
-        test(NextPass.objects.all().order_by("riseTime"), run_time)
-        stats_each_sat(NextPass.objects.all().order_by("riseTime"))
+        if(isTesting):
+            test(NextPass.objects.all().order_by("riseTime"), run_time)
+            stats_each_sat(NextPass.objects.all().order_by("riseTime"))
         return NextPass.objects.all().order_by("riseTime")
