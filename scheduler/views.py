@@ -64,20 +64,23 @@ class MissionsViewSet(viewsets.ModelViewSet):
         serializer_class = MissionSerializer
         print("MissionsViewSet couldn't be loaded yet")
 
-
-class MissionViewSet(viewsets.ModelViewSet):
-    queryset = Mission.objects.all()
-    serializer_class = MissionSerializer
-
+class NextPassViewSet(viewsets.ModelViewSet):
+    try:
+        queryset = NextPass.objects.all()
+        serializer_class = NextPassSerializer
+    except OperationalError:
+        queryset = NextPass.objects.none()
+        serializer_class = NextPassSerializer
+        print("NextPassViewSet couldn't be loaded yet")
 
 class MissionView(APIView):
 
     def get(self, request):
         try:
-            print("New missions: " + str(len(Mission.objects.filter(status="NEW"))))
-            if(len(Mission.objects.filter(status="NEW")) > 0
-                    or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
-                SchedulerTask.delay()
+            #print("New missions: " + str(len(Mission.objects.filter(status="NEW"))))
+            #if(len(Mission.objects.filter(status="NEW")) > 0
+            #        or len(NextPass.objects.filter(setTime__gte=datetime.now())) < 20):
+            #    SchedulerTask.delay()
 
             missions = Mission.objects.all()
             serializer = MissionSerializer(missions, many=True)

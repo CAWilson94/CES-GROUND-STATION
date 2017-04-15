@@ -28,11 +28,13 @@ def SchedulerTask():
 @shared_task()
 def RotatorsThread(nextPass):
 	print ("Starting Rotators") 
-	arduinoRotator = rotator_controller(nextPass)
-	while(1):
-		tweet_on_rotator_start()
-		arduinoRotator.sketchy_arduino_move()
-		sleep(2)
+	rc = rotator_controller()
+	rc.moveRotators()
+	#arduinoRotator = rotator_controller(nextPass)
+	# while(1):
+	# 	tweet_on_rotator_start()
+	# 	arduinoRotator.sketchy_arduino_move()
+	# 	sleep(2)
 	print("Exiting Rotators")
 
 

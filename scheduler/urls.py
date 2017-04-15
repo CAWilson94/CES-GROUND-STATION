@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from scheduler import views
-from scheduler.views import TLEViewSet, MissionView, NextPassView, MissionsViewSet, CSVParseView, TestingScheduler, SchedulerView, SchedulerCompare
+from scheduler.views import TLEViewSet, MissionView, NextPassView, MissionsViewSet, NextPassViewSet, CSVParseView, TestingScheduler, SchedulerView, SchedulerCompare
 from rest_framework.routers import DefaultRouter
 
 
@@ -9,6 +9,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(prefix='missions', viewset=MissionsViewSet)
 router.register(prefix='tles', viewset=TLEViewSet)
+router.register(prefix="nextpass", viewset=NextPassViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

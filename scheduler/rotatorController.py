@@ -14,8 +14,6 @@ from django import db
 
 class rotator_controller():
 
-
-
 	# def __init__(self, nextPass):
 	# 	super(rotator_controller, self).__init__()
 	# 	self.nextPass = nextPass
@@ -140,35 +138,28 @@ class rotator_controller():
 		while nextPass == None:
 			nextPass = NextPass.objects.all().filter(riseTime__gte=datetime.now()).filter(riseTime__lte=datetime.now() + timedelta(minutes=15)).first()
 		
-		if(nextPass is not None):
-			print("Pass found, " + nextPass.tle.name + " due at: "  + str(nextPass.riseTime))
-			azel = Services.getAzElForPeriod(self, nextPass.tle, nextPass.riseTime,
-											 nextPass.setTime, 1)
+			if(nextPass is not None):
+				print("Pass found, " + nextPass.tle.name + " due at: "  + str(nextPass.riseTime))
+				azel = Services.getAzElForPeriod(self, nextPass.tle, nextPass.riseTime, nextPass.setTime, 1)
 
-			for item in azel:
-				print(str(item.azimuth))
-			print("---------")
+				AzElList = self.normalizeAzEl(azel)
 
-			AzElList = self.normalizeAzEl(azel)
+				i = 0
+				while datetime.now() != nextPass.riseTime:
+					i = (i + 1)%10
+					if(i = 0):
+						print("Waiting on satellite due at: " + str(nextPass.riseTime))
+					sleep(0.3)
 
+				print("It's high noon!")
 
-			for item in AzElList:
-				print(str(item.azimuth))
+				i = 0
+				for item in AzElList:
+					if(self.ser != None):
+						rs.set_position(item.azimuth, item.elevation)
 
-			i = 0
-			while datetime.now() != nextPass.riseTime:
-				i+= 1
-				if(i >= 20):
-					i = 0
-					print("Waiting to track at: " + nextPass.riseTime.strftime('%H:%M:%S') + ", currently: " + datetime.now().strftime('%H:%M:%S'))
-				sleep(0.3)
-
-			print("It's high noon!")
-
-			i = 0
-			for item in AzElList:
-				if(self.ser != None):
-					rs.set_position(item.azimuth, item.elevation)
+			nextPass = None
+			sleep(1)
 
 
 

@@ -1,7 +1,7 @@
 scheduler
     .factory('NextPass', function($resource) {
         return $resource(
-            'http://localhost:8000/api/schedulemissiontest', // WHATEVER URL SHOULD BE HERE 
+            'http://localhost:8000/api/nextpass/:id/', // WHATEVER URL SHOULD BE HERE 
             {}, {
                 query: {
                     method: 'GET',

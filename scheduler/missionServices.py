@@ -40,13 +40,14 @@ class missionServices():
 			mission_list = []
 		return mission_list
 
-	def findMissionsExcludingStatus(status):
+	def findMissionsToSchedule():
 		try:
-			mission_list = Mission.objects.all().exclude(status=status)
+			mission_list = Mission.objects.all().exclude(status="PAUSED")
 		except Mission.DoesNotExist as e:
 			print("No missions found")
 			mission_list = []
 		return mission_list
+
 
 	def findMissionsByPriority(priority):
 		try:

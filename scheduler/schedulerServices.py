@@ -30,9 +30,11 @@ class SchedulerServices():
         
         start = time.clock()
 
-        scheduler = MOTRuleBased()
+        time.sleep(5)
 
-        missions = missionServices.findMissionsExcludingStatus("PAUSED")
+        scheduler = MOTStochasticHC()
+
+        missions = missionServices.findMissionsToSchedule()
         print("Got missions, setting statuses...")
         for m in missions:
             m.status = "SCHEDULING"
@@ -57,7 +59,7 @@ class SchedulerServices():
         print("Done.")
 
         print("Got missions, setting statuses...")
-        for m in missionServices.findMissionsExcludingStatus("PAUSED"):
+        for m in missionServices.findMissionsByStatus("SCHEDULING"):
             m.status = "SCHEDULED"
             m.save()
         print("Done.")
@@ -66,7 +68,7 @@ class SchedulerServices():
         stop = time.clock()
         run_time = float(stop - start)
         print("RUN TIME: " + str(run_time) + "---------------------------")
-        if(isTesting):
+        if(is_testing):
             test(NextPass.objects.all().order_by("riseTime"), run_time)
             stats_each_sat(NextPass.objects.all().order_by("riseTime"))
         return NextPass.objects.all().order_by("riseTime")
