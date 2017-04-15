@@ -17,15 +17,15 @@ from scheduler.MOT.testingSchedulers import stats_each_sat
 
 class SchedulerServices():
 
-    #scheduler = MOTSimpleHC()
-    #scheduler = MOTSteepestHC()
-    #scheduler = MOTStochasticHC()
-    #scheduler = MOTRandomRestartHC()
-    #scheduler = MOTRuleBased()
-    #scheduler = MOTGA()
+	#scheduler = MOTSimpleHC()
+	#scheduler = MOTSteepestHC()
+	#scheduler = MOTStochasticHC()
+	#scheduler = MOTRandomRestartHC()
+	#scheduler = MOTRuleBased()
+	#scheduler = MOTGA()
 
-    def scheduleAndSavePasses():
-        start = time.clock()
+	def scheduleAndSavePasses():
+		start = time.clock()
 
 
 		scheduler = MOTRuleBased()
@@ -45,25 +45,25 @@ class SchedulerServices():
 		run_time = float(stop - start)
 		print("Scheduled " + str(len(passes)) + " passes.")
 
-        print("Removing previous passes...")
-        NextPass.objects.all().delete()
-        print("Done.")
+		print("Removing previous passes...")
+		NextPass.objects.all().delete()
+		print("Done.")
 
-        print("Saving new passes...")
-        NextPass.objects.bulk_create(passes)
-        passes = []
-        print("Done.")
+		print("Saving new passes...")
+		NextPass.objects.bulk_create(passes)
+		passes = []
+		print("Done.")
 
-        print("Got missions, setting statuses...")
-        for m in missionServices.findMissionsExcludingStatus("PAUSED"):
-            m.status = "SCHEDULED"
-            m.save()
-        print("Done.")
+		print("Got missions, setting statuses...")
+		for m in missionServices.findMissionsExcludingStatus("PAUSED"):
+			m.status = "SCHEDULED"
+			m.save()
+		print("Done.")
 
-        stop = time.clock()
-        run_time = float(stop - start)
-        print("RUN TIME: " + str(run_time) + "---------------------------")
-        # if(len(passes) > 0 ):
-        test(NextPass.objects.all().order_by("riseTime"), run_time)
-        stats_each_sat(NextPass.objects.all().order_by("riseTime"))
-        return NextPass.objects.all().order_by("riseTime")
+		stop = time.clock()
+		run_time = float(stop - start)
+		print("RUN TIME: " + str(run_time) + "---------------------------")
+		# if(len(passes) > 0 ):
+		test(NextPass.objects.all().order_by("riseTime"), run_time)
+		stats_each_sat(NextPass.objects.all().order_by("riseTime"))
+		return NextPass.objects.all().order_by("riseTime")
