@@ -433,3 +433,15 @@ class _Helper():
 					scheduledSats.append(sat)
 					blackList.append(tempTime)
 					newPasses.append(sat)
+
+
+class Mission(models.Model):
+		...
+	tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
+		...
+
+class NextPass(models.Model):
+		...
+    tle = models.ForeignKey(TLE, on_delete=models.CASCADE)
+    mission=models.ForeignKey(Mission, on_delete=models.CASCADE)
+		...
