@@ -60,7 +60,7 @@ class MissionsViewSet(viewsets.ModelViewSet):
         queryset = Mission.objects.all()
         serializer_class = MissionSerializer
     except OperationalError:
-        queryset = []
+        queryset = Mission.objects.none()
         serializer_class = MissionSerializer
         print("MissionsViewSet couldn't be loaded yet")
 

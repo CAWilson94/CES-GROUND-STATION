@@ -90,7 +90,7 @@ class _Helper():
 
 				print("Finding passes for the next " + str(TIME_HOURS) + " hours, found: " + str(len(passes)) + ", now looking at " + str(i) + " : " + m.TLE.name)
 			except ValueError: 
-					print("No pass was found for " + tleEntry.name + " over groundstation in the next 36 hours.")
+					print("No pass was found for " + tleEntry.name + " over groundstation in the next " + str(TIME_HOURS) + " hours.")
 		return passes
 
 
