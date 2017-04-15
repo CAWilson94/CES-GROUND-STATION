@@ -50,7 +50,7 @@ class rotator_controller():
 		firstItem = plus180AzelList[0]
 		lastItem = plus180AzelList[len(plus180AzelList) - 1]
 		thirItem = plus180AzelList[3]
-		if (ephem.degrees(firstItem.azimuth)> ephem.degrees(thirItem.azimuth)):
+		if (ephem.degrees(firstItem.azimuth) < ephem.degrees(thirItem.azimuth)):
 			clockwise = True
 
 		if (over520):
@@ -72,21 +72,61 @@ class rotator_controller():
 		return plus180AzelList
 
 
-	def moveRotators(self, nextPass):
+	def moveRotators(self):
 		"""
 				From the AzelForEachSecond function: send commands to rotators to move them.
 		"""
 		s = Services()
 
-		tleEntry = TLE("1", 'EYESAT-1 (AO-27)',
-                   '1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991',
-                   '2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061', )
+		# tleEntry = TLE("1", 'EYESAT-1 (AO-27)',
+  #                  '1 22825U 93061C   17011.87921041 -.00000014  00000-0  12008-4 0  9991',
+  #                  '2 22825  98.7903 335.7306 0009458  70.2997 289.9204 14.29982572215061', )
 
-   		#azelList = Services.getAzElForPeriod(self, tleEntry, datetime(2017, 4, 14, 1, 13, 59),
-        #                                datetime(2017, 4, 14, 1, 21, 37), 1)
-		
-		azel = Services.getAzElForPeriod(self, nextPass.tle, nextPass.riseTime,
-										 nextPass.setTime, 1)
+		#azelList = Services.getAzElForPeriod(self, tleEntry, datetime(2017, 4, 14, 1, 13, 59),
+		#                                datetime(2017, 4, 14, 1, 21, 37), 1)
+
+		### Azel for clockwise
+		# azel = [AzEl(azimuth=ephem.degrees("349:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("350:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("351:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("352:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("353:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("354:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("355:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("356:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("357:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("358:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("359:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("00:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("01:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("02:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("03:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("04:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("05:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("06:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("07:00:00"), elevation=ephem.degrees("0:00:00")), 
+		# 		AzEl(azimuth=ephem.degrees("08:00:00"), elevation=ephem.degrees("0:00:00")), ]
+
+		azel = [AzEl(azimuth=ephem.degrees("05:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("04:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("03:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("02:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("01:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("00:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("359:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("355:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("350:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("345:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("340:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("339:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("338:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("337:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("336:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("235:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("234:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("333:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("332:00:00"), elevation=ephem.degrees("0:00:00")), 
+				AzEl(azimuth=ephem.degrees("331:00:00"), elevation=ephem.degrees("0:00:00")), ]
 
 		for item in azel:
 			print(str(item.azimuth))
@@ -95,17 +135,41 @@ class rotator_controller():
 		for item in AzElList:
 			print(str(item.azimuth))
 
-		for item in AzElList:
-			sleep(1)
-			if(self.ser != None):
-				while 1:
-					self.ser.write(pack('BB', az, el))
-					line = self.ser.readline()
-					print(line)
-					if (line == b'end'):
-						print("break")
-						#ser.close()
-						break
+
+		nextPass = None
+		while nextPass == None:
+			nextPass = NextPass.objects.all().filter(riseTime__gte=datetime.now()).filter(riseTime__lte=datetime.now() + timedelta(minutes=15)).first()
+		
+		if(nextPass is not None):
+			print("Pass found, " + nextPass.tle.name + " due at: "  + str(nextPass.riseTime))
+			azel = Services.getAzElForPeriod(self, nextPass.tle, nextPass.riseTime,
+											 nextPass.setTime, 1)
+
+			for item in azel:
+				print(str(item.azimuth))
+			print("---------")
+
+			AzElList = self.normalizeAzEl(azel)
+
+
+			for item in AzElList:
+				print(str(item.azimuth))
+
+			i = 0
+			while datetime.now() != nextPass.riseTime:
+				i+= 1
+				if(i >= 20):
+					i = 0
+					print("Waiting to track at: " + nextPass.riseTime.strftime('%H:%M:%S') + ", currently: " + datetime.now().strftime('%H:%M:%S'))
+				sleep(0.3)
+
+			print("It's high noon!")
+
+			i = 0
+			for item in AzElList:
+				if(self.ser != None):
+					rs.set_position(item.azimuth, item.elevation)
+
 
 
 	def sketchy_arduino_move(self):

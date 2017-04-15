@@ -83,21 +83,11 @@ class rotator_services():
         print("writing to COM2")
         ser.flush()
         # Change elevation first
-        rotator_services.write_elevation(el, ser)
+        if(el is not None):
+            rotator_services.write_elevation(el, ser)
         # Change azimuth
-        rotator_services.write_azimuth(az, ser)
+        if(az is not None):
+            rotator_services.write_azimuth(az, ser)
         print("done")
         ser.close()
 
-    def check_azimuth(azimuth):
-        """
-        Change the azimuth or position of azimuth rotator in certain cases
-        """
-        if(azimuth == 0):
-            azimuth = 360
-        return azimuth
-
-    def calibrate_520():
-        """
-        The rotators have a range of 0 - 520 degress: these must be calibrated. 
-        """

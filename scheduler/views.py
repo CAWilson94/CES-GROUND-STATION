@@ -104,7 +104,11 @@ class MissionView(APIView):
 
 class SchedulerView(APIView):
 
-
+    def get(self, request):
+        isScheduling = False
+        if(len(Mission.objects.filter(status="SCHEDULING")) > 0):
+            isScheduling = True
+        return HttpResponse(isScheduling)
 
 
 class NextPassView(APIView):
@@ -170,15 +174,11 @@ class TestingScheduler():
         return HttpResponse(string)
         return HttpResponse(string)
 
-
     def rotate(request):
-        nextPass = NextPass.objects.filter(setTime__gte=datetime.now()).order_by("riseTime")[0]
-        if(nextPass is not None):
-            rs = rotator_controller()
-            rs.moveRotators(nextPass)
+        rs = rotator_controller()
+        rs.moveRotators()
+
         return HttpResponse("Done")
-
-
 
 # class PyephemData(APIView):
 
@@ -238,4 +238,4 @@ class SchedulerCompare():
         SchedulerCompare.clearMissions()
         SchedulerCompare.clearNextPasses()
         panda_read()
-        return HttpResponse("Scheduler Results Ready")
+        return HttpResponse("Hurra you did it! ")

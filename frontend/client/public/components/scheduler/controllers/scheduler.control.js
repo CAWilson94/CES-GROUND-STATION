@@ -27,17 +27,22 @@ scheduler
 
         $http.get('http://127.0.0.1:8000/api/scheduler/isscheduling', config)
           .then(function successCallback(response, data) {
-            if(response.data == "True")
+            if(response.data == "True") {
               $scope.isScheduling = true
-            else
+            } else {
+              var changed = false
+              if($scope.isScheduling == true){
+                changed = true
+              }
               $scope.isScheduling = false
+              if(changed){
+                $scope.updateTables();
+              }
+            }
           }, function errorCallback(response) {
             console.log(response.status)
         });
      }
-
-
-     
 
      $scope.updateTables = function(){
         var config = {
@@ -49,14 +54,14 @@ scheduler
 
         $http.get('http://127.0.0.1:8000/api/nextpass/get', config)
           .then(function successCallback(response, data) {
-              $scope.nextpassesDisplay = response.data;
+              $scope.nextpasses = response.data;
           }, function errorCallback(response) {
             console.log(response.status)
         });
 
         $http.get('http://127.0.0.1:8000/api/mission/get', config)
           .then(function successCallback(response, data) {
-              $scope.missionsDisplay = response.data;
+              $scope.missions = response.data;
           }, function errorCallback(response) {
             console.log(response.status)
         });

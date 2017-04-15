@@ -1,0 +1,230 @@
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,20,3:07:05,0:00:30.650000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,20,3:07:05,0:00:30.650000,2
+CANX-7,25,3:58:34,0:00:31.640000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,20,3:07:05,0:00:30.650000,2
+CANX-7,25,3:58:34,0:00:31.640000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,19,3:07:05,0:00:32.263158,2
+CANX-7,25,3:58:34,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+BEESAT-2,13,1:56:43,0:00:27.692308,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,19,3:07:05,0:00:32.263158,2
+CANX-7,25,3:58:34,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+BEESAT-2,13,1:56:43,0:00:27.692308,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,19,3:07:05,0:00:32.263158,2
+CANX-7,25,3:56:46,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+BEESAT-2,13,1:56:43,0:00:27.692308,2
+3CAT-2,15,1:50:16,0:00:24,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,19,3:07:05,0:00:32.263158,2
+CANX-7,25,3:56:46,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+BEESAT-2,12,1:56:43,0:00:30,2
+3CAT-2,15,1:50:16,0:00:24,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,20,3:18:02,0:00:32.850000,2
+CANX-7,25,3:56:46,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+BEESAT-2,12,1:56:43,0:00:30,2
+3CAT-2,15,1:50:16,0:00:24,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,20,3:18:02,0:00:32.850000,2
+CANX-7,25,3:56:46,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT,33,5:33:12,0:00:13.575758,2
+BEESAT-2,12,1:56:43,0:00:30,2
+EYESAT-1 (AO-27),26,4:45:24,0:00:09.961538,2
+AAUSAT-II,20,3:18:02,0:00:32.850000,2
+CANX-7,25,3:56:46,0:00:31.640000,2
+DUCHIFAT-1,14,2:00:49,0:00:26,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,29,4:40:41,0:00:27.275862,2
+BEESAT-2,12,2:03:31,0:00:30,2
+DUCHIFAT-1,18,2:36:24,0:00:31.277778,2
+EYESAT-1 (AO-27),31,6:03:43,0:00:08.354839,2
+AAUSAT-II,24,3:59:28,0:00:27.375000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,29,4:40:41,0:00:27.275862,2
+BEESAT-2,12,2:03:31,0:00:30,2
+DUCHIFAT-1,18,2:36:24,0:00:31.277778,2
+EYESAT-1 (AO-27),31,6:03:43,0:00:08.354839,2
+BEESAT,16,2:27:38,0:00:13.062500,2
+AAUSAT-II,24,3:59:28,0:00:27.375000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,29,4:40:41,0:00:27.275862,2
+BEESAT-2,12,2:03:31,0:00:30,2
+DUCHIFAT-1,18,2:36:24,0:00:31.277778,2
+EYESAT-1 (AO-27),31,6:03:43,0:00:08.354839,2
+AAUSAT-II,24,3:59:28,0:00:27.375000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,29,4:40:41,0:00:27.275862,2
+BEESAT-2,12,2:03:31,0:00:30,2
+DUCHIFAT-1,18,2:36:24,0:00:31.277778,2
+EYESAT-1 (AO-27),31,6:03:43,0:00:08.354839,2
+BEESAT,16,2:27:38,0:00:13.062500,2
+AAUSAT-II,24,3:59:28,0:00:27.375000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,29,4:42:29,0:00:27.275862,2
+BEESAT-2,15,2:40:45,0:00:24,2
+BEESAT,19,3:06:46,0:00:23.578947,2
+EYESAT-1 (AO-27),31,6:03:43,0:00:08.354839,2
+AAUSAT-II,24,3:59:28,0:00:27.375000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,29,4:42:29,0:00:27.275862,2
+BEESAT-2,15,2:40:45,0:00:24,2
+BEESAT,19,3:06:46,0:00:23.578947,2
+EYESAT-1 (AO-27),31,6:03:43,0:00:08.354839,2
+AAUSAT-II,24,3:59:28,0:00:27.375000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,62,9:39:50,0:00:12.758065,2
+BEESAT-2,36,6:16:00,0:00:10,2
+BEESAT,48,7:39:30,0:00:09.333333,2
+AAUSAT-II,50,8:48:12,0:00:13.140000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,62,9:39:50,0:00:12.758065,2
+BEESAT-2,36,6:16:00,0:00:10,2
+BEESAT,48,7:39:30,0:00:09.333333,2
+AAUSAT-II,50,8:48:12,0:00:13.140000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,31,4:49:55,0:00:25.516129,2
+BEESAT-2,18,3:08:00,0:00:20,2
+BEESAT,24,3:49:45,0:00:18.666667,2
+EYESAT-1 (AO-27),22,3:44:17,0:00:11.772727,2
+AAUSAT-II,25,4:24:06,0:00:26.280000,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,62,9:26:06,0:00:06.338710,2
+BEESAT-2,34,5:51:38,0:00:10.588235,2
+BEESAT,50,8:03:30,0:00:14.400000,2
+EYESAT-1 (AO-27),44,7:28:34,0:00:05.886364,2
+AAUSAT-II,50,8:48:12,0:00:13.140000,2
+EGG,32,4:21:16,0:00:11.531250,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,62,9:26:06,0:00:06.338710,2
+BEESAT-2,34,5:51:38,0:00:10.588235,2
+BEESAT,50,8:03:30,0:00:14.400000,2
+EYESAT-1 (AO-27),44,7:28:34,0:00:05.886364,2
+AAUSAT-II,50,8:48:12,0:00:13.140000,2
+EGG,32,4:21:16,0:00:11.531250,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,31,4:43:03,0:00:12.677419,2
+BEESAT-2,17,2:55:49,0:00:21.176471,2
+BEESAT,25,4:01:45,0:00:28.800000,2
+EYESAT-1 (AO-27),22,3:44:17,0:00:11.772727,2
+AAUSAT-II,25,4:24:06,0:00:26.280000,2
+EGG,16,2:10:38,0:00:23.062500,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,31,4:43:03,0:00:12.677419,2
+BEESAT-2,17,2:55:49,0:00:21.176471,2
+BEESAT,26,4:01:45,0:00:27.692308,2
+AAUSAT-II,25,4:24:06,0:00:26.280000,2
+EGG,16,2:10:38,0:00:23.062500,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,62,9:26:06,0:00:06.338710,2
+SWISSCUBE,64,7:22:12,0:00:05.625000,2
+BEESAT-2,34,5:51:38,0:00:10.588235,2
+BEESAT,52,8:03:30,0:00:13.846154,2
+AAUSAT-II,50,8:48:12,0:00:13.140000,2
+EGG,32,4:21:16,0:00:11.531250,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,62,9:26:06,0:00:06.338710,2
+SWISSCUBE,64,7:22:12,0:00:05.625000,2
+BEESAT-2,34,5:51:38,0:00:10.588235,2
+BEESAT,52,8:03:30,0:00:13.846154,2
+AAUSAT-II,50,8:48:12,0:00:13.140000,2
+EGG,32,4:21:16,0:00:11.531250,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,31,4:43:03,0:00:12.677419,2
+BEESAT-2,17,2:55:49,0:00:21.176471,2
+BEESAT,26,4:01:45,0:00:27.692308,2
+AAUSAT-II,25,4:24:06,0:00:26.280000,2
+EGG,16,2:10:38,0:00:23.062500,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+CANX-7,32,5:17:17,0:00:12.281250,2
+BEESAT-2,17,2:55:49,0:00:21.176471,2
+BEESAT,29,4:31:40,0:00:24.827586,2
+EGG,17,2:21:33,0:00:21.705882,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+AEROCUBE 6B,23,3:51:13,0:00:26.913043,2
+BEESAT-2,17,2:55:49,0:00:21.176471,2
+BEESAT,29,4:31:40,0:00:24.827586,2
+CANX-7,32,5:09:19,0:00:12.281250,2
+EGG,17,2:21:33,0:00:21.705882,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+AEROCUBE 6B,46,7:42:26,0:00:13.456522,2
+BEESAT-2,34,5:51:38,0:00:10.588235,2
+BEESAT,58,9:03:20,0:00:12.413793,2
+ZACUBE-1 (TSHEPISOSAT),42,5:47:24,0:00:13.500000,2
+CANX-7,64,10:18:38,0:00:06.140625,2
+EGG,34,4:43:06,0:00:10.852941,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+AEROCUBE 6B,46,7:42:26,0:00:13.456522,2
+BEESAT-2,34,5:51:38,0:00:10.588235,2
+BEESAT,58,9:03:20,0:00:12.413793,2
+ZACUBE-1 (TSHEPISOSAT),42,5:47:24,0:00:13.500000,2
+CANX-7,64,10:18:38,0:00:06.140625,2
+EGG,34,4:43:06,0:00:10.852941,2
+run_numberunspecified
+sat_name,num_passes,contact_time,avg_pass_time,priority
+BEESAT-2,17,2:55:49,0:00:21.176471,2
+BEESAT,28,4:31:23,0:00:25.714286,2
+AEROCUBE 6B,23,3:38:32,0:00:26.913043,2
+ZACUBE-1 (TSHEPISOSAT),21,2:53:42,0:00:27,2
+CANX-7,31,5:09:19,0:00:12.677419,2
+EGG,17,2:21:33,0:00:21.705882,2
+DELFI-C3 (DO-64),13,1:35:00,0:00:31.615385,2

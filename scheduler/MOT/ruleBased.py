@@ -1,4 +1,4 @@
- from random import randint
+from random import randint
 from datetime import timedelta
 from scheduler.models import NextPass
 from scheduler.MOT._MOTHelper import _Helper
