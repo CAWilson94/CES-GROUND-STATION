@@ -193,7 +193,6 @@ scheduler
 
       try {
         console.log($scope.mission)
-          // Not sure this try should be here, try for post 
         $http.post('http://127.0.0.1:8000/api/save/mission/', $scope.mission)
           .then(function successCallBack(response) {
               // Succeess is anything between 200 and 299
@@ -205,13 +204,8 @@ scheduler
               $scope.loadNextPasses();
             },
             function errorCallBack(response) {
-              // called asynchronously if an error occurs
-              // or server returns response with an error status.
-              // Error is anything outside of range previously mentioned. 
               console.log(response.status + " : " + response.statusText);
             }
-            // Uncomment for testing output or use django shell to check missions model contents
-            //alert($scope.mission.name + " : " + $scope.mission.priority)
           );
       } catch (err) {
         alert("you must first select a satellite and a priority")
