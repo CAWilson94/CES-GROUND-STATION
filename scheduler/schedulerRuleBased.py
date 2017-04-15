@@ -8,11 +8,11 @@ MIN_SUB_PASS_LEN = timedelta(minutes = 3) # minimum lengh of pass to fill in the
 	# 1 day = 1440
 	# 2 days = 2880
 	# 3 days = 4320
-TIMEFRAME_MINS = 240 # total timeframe for passes
-PASS_LEN_MAX = 8 # the longest a pass will be
+TIMEFRAME_MINS = 240 # total timeframe for passes (mins)
+PASS_LEN_MAX = 8 # the longest a pass will be (mins)
 PASS_LEN_MIN = timedelta(minutes = 2)  # the shortest a pass will be 
-PRIORITY_MAX = 2 # The highest priority given to sats (commented out)
-NUM_OF_PASSES = 25 # Max number of passes in initial array
+PRIORITY_MAX = 3 # The highest priority given to sats
+NUM_OF_PASSES = 25 # Max number of passes generated
 
 DEBUG = True
 
