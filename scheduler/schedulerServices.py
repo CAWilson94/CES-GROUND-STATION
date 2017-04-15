@@ -17,53 +17,56 @@ from scheduler.MOT.testingSchedulers import stats_each_sat
 
 class SchedulerServices():
 
-	#scheduler = MOTSimpleHC()
-	#scheduler = MOTSteepestHC()
-	#scheduler = MOTStochasticHC()
-	#scheduler = MOTRandomRestartHC()
-	#scheduler = MOTRuleBased()
-	#scheduler = MOTGA()
-
-	def scheduleAndSavePasses():
-		start = time.clock()
+    #scheduler = MOTSimpleHC()
+    #scheduler = MOTSteepestHC()
+    #scheduler = MOTStochasticHC()
+    #scheduler = MOTRandomRestartHC()
+    #scheduler = MOTRuleBased()
+    #scheduler = MOTGA()
 
 
-		scheduler = MOTRuleBased()
-				
-		missions = missionServices.findMissionsExcludingStatus("PAUSED")
-		print("Got missions, setting statuses...")
-		for m in missions: 
-			m.status = "SCHEDULING"
-			m.save()
-		print("Done.")
+    def scheduleAndSavePasses():
+        is_testing = False
+        
+        start = time.clock()
 
-		print("Scheduling...")
-		start = time.clock()
-		passes = scheduler.find(missions)
-		stop = time.clock()
+        scheduler = MOTRuleBased()
 
-		run_time = float(stop - start)
-		print("Scheduled " + str(len(passes)) + " passes.")
+        missions = missionServices.findMissionsExcludingStatus("PAUSED")
+        print("Got missions, setting statuses...")
+        for m in missions:
+            m.status = "SCHEDULING"
+            m.save()
+        print("Done.")
 
-		print("Removing previous passes...")
-		NextPass.objects.all().delete()
-		print("Done.")
+        print("Removing previous passes...")
+        NextPass.objects.all().delete()
+        print("Done.")
 
-		print("Saving new passes...")
-		NextPass.objects.bulk_create(passes)
-		passes = []
-		print("Done.")
+        print("Scheduling...")
+        start = time.clock()
+        passes = scheduler.find(missions)
+        stop = time.clock()
 
-		print("Got missions, setting statuses...")
-		for m in missionServices.findMissionsExcludingStatus("PAUSED"):
-			m.status = "SCHEDULED"
-			m.save()
-		print("Done.")
+        run_time = float(stop - start)
+        print("Scheduled " + str(len(passes)) + " passes.")
 
-		stop = time.clock()
-		run_time = float(stop - start)
-		print("RUN TIME: " + str(run_time) + "---------------------------")
-		# if(len(passes) > 0 ):
-		test(NextPass.objects.all().order_by("riseTime"), run_time)
-		stats_each_sat(NextPass.objects.all().order_by("riseTime"))
-		return NextPass.objects.all().order_by("riseTime")
+        print("Saving new passes...")
+        NextPass.objects.bulk_create(passes)
+        passes = []
+        print("Done.")
+
+        print("Got missions, setting statuses...")
+        for m in missionServices.findMissionsExcludingStatus("PAUSED"):
+            m.status = "SCHEDULED"
+            m.save()
+        print("Done.")
+
+
+        stop = time.clock()
+        run_time = float(stop - start)
+        print("RUN TIME: " + str(run_time) + "---------------------------")
+        if(isTesting):
+            test(NextPass.objects.all().order_by("riseTime"), run_time)
+            stats_each_sat(NextPass.objects.all().order_by("riseTime"))
+        return NextPass.objects.all().order_by("riseTime")

@@ -224,13 +224,6 @@ scheduler
     $scope.deleteMission = function(mission) {
       $scope.missionid = mission.id;
       $scope.isScheduling = true;
-      /*Mission.delete({
-        id: $scope.missionid
-      }, (function(resp) {
-        console.log(resp);
-        removeA($scope.missions, mission)
-        $scope.loadNextPasses()
-      }))*/
 
       var config = {
         headers: {
@@ -239,7 +232,6 @@ scheduler
         }
       }
 
-      // delete can't send params back to server, so still calling old delete stuff above ^ 
       $http.delete('http://127.0.0.1:8000/api/delete/mission/' + $scope.missionid, config)
           .then(function successCallBack(response) {
               
