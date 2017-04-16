@@ -3,6 +3,8 @@ from scheduler.services import Services
 from datetime import date, datetime, timedelta
 from scheduler.models import NextPass, TLE, AzEl
 
+from scheduler.tweet import tweet_on_rotator_start
+
 import ephem
 
 # from Ardurino_and_Py_demo_files.PTS import write_az_and_el
@@ -58,19 +60,19 @@ class rotator_controller():
 						if ((item.azimuth) > ephem.degrees('360:00:00')):
 							item.azimuth = ephem.degrees(item.azimuth - ephem.degrees('360:00:00'))
 				else:
-				    for i, item in enumerate(plus180AzelList):
+					for i, item in enumerate(plus180AzelList):
 						if (item.azimuth > ephem.degrees('520:00:00')):
 							item.azimuth = ephem.degrees('180:00:00')
 
 			if ((firstItem.azimuth < ephem.degrees('520:00:00')) and (lastItem.azimuth > ephem.degrees('360:00:00'))):
-			    if(clockwise): 
-				    for i, item in enumerate(plus180AzelList):
-					    if (item.azimuth > ephem.degrees('520:00:00')):
-						    item.azimuth = ephem.degrees('180:00:00')
+				if(clockwise): 
+					for i, item in enumerate(plus180AzelList):
+						if (item.azimuth > ephem.degrees('520:00:00')):
+							item.azimuth = ephem.degrees('180:00:00')
 				else:
-				    for i, item in enumerate(plus180AzelList):
-					    if ((item.azimuth) > ephem.degrees('360:00:00')):
-						    item.azimuth = ephem.degrees(item.azimuth - ephem.degrees('360:00:00'))
+					for i, item in enumerate(plus180AzelList):
+						if ((item.azimuth) > ephem.degrees('360:00:00')):
+							item.azimuth = ephem.degrees(item.azimuth - ephem.degrees('360:00:00'))
 
 		return plus180AzelList
 
@@ -142,9 +144,9 @@ class rotator_controller():
 		nextPass = None
 		while nextPass == None:
 			nextPass = NextPass.objects.all().filter(riseTime__gte=datetime.now()).filter(riseTime__lte=datetime.now() + timedelta(minutes=15)).first()
-		
+			
 			if(nextPass is not None):
-				
+				tweet_on_rotator_start(nextPass)
 				print("Pass found, " + nextPass.tle.name + " due at: "  + str(nextPass.riseTime))
 				azel = Services.getAzElForPeriod(self, nextPass.tle, nextPass.riseTime, nextPass.setTime, 1)
 

@@ -62,21 +62,21 @@ def ground_station(outputString):
     tweet(outputString)
 
 
-def tweet_on_rotator_start():
+def tweet_on_rotator_start(nextPass):
     """
     Intended for use with rotator status updates
     """
-    queryset = NextPass.objects.all()
+    
 
-    if len(queryset)>0:
-        rtfull = queryset[0].riseTime
-        stfull = queryset[0].setTime
+    if nextPass is not None:
+        rtfull = nextPass.riseTime
+        stfull = nextPass.setTime
         rt = rtfull.strftime('%H:%M:%S')
         st = stfull.strftime('%H:%M:%S')
-        dur = queryset[0].duration
-        nm = queryset[0].tle.name
+        dur = nextPass.duration
+        nm = nextPass.tle.name
         tweetStr = (
             "[" + datetime.now().strftime('%H:%M:%S') + "] " +
-            "Now tracking: " + str(nm) + " rise time: " + str(rt) +
-            "set time: " + str(st) + " for duration: " + str(dur))
+            "Now tracking: " + str(nm) + " - Rise time: " + str(rt) +
+            ", Set time: " + str(st) + " for duration: " + str(dur))
         tweet(tweetStr)
