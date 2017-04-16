@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register(prefix='missions', viewset=MissionsViewSet)
+router.register(prefix='missions', viewset=MissionsViewSet, base_name="Mission")
 router.register(prefix='tles', viewset=TLEViewSet)
 router.register(prefix="nextpass", viewset=NextPassViewSet)
 
