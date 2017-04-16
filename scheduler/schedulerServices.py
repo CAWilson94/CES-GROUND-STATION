@@ -30,11 +30,9 @@ class SchedulerServices():
         
         start = time.clock()
 
-        time.sleep(5)
-
         scheduler = MOTStochasticHC()
 
-        missions = missionServices.findMissionsToSchedule()
+        missions = missionServices.findMissionsByStatus("NEW")
         print("Got missions, setting statuses...")
         for m in missions:
             m.status = "SCHEDULING"
@@ -47,7 +45,7 @@ class SchedulerServices():
 
         print("Scheduling...")
         start = time.clock()
-        passes = scheduler.find(missions)
+        passes = scheduler.find(missionServices.findMissionsToSchedule())
         stop = time.clock()
 
         run_time = float(stop - start)
@@ -59,7 +57,7 @@ class SchedulerServices():
         print("Done.")
 
         print("Got missions, setting statuses...")
-        for m in missionServices.findMissionsByStatus("SCHEDULING"):
+        for m in missions:
             m.status = "SCHEDULED"
             m.save()
         print("Done.")

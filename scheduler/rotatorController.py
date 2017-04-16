@@ -139,6 +139,7 @@ class rotator_controller():
 			nextPass = NextPass.objects.all().filter(riseTime__gte=datetime.now()).filter(riseTime__lte=datetime.now() + timedelta(minutes=15)).first()
 		
 			if(nextPass is not None):
+				
 				print("Pass found, " + nextPass.tle.name + " due at: "  + str(nextPass.riseTime))
 				azel = Services.getAzElForPeriod(self, nextPass.tle, nextPass.riseTime, nextPass.setTime, 1)
 
@@ -147,13 +148,12 @@ class rotator_controller():
 				i = 0
 				while datetime.now() != nextPass.riseTime:
 					i = (i + 1)%10
-					if(i = 0):
+					if(i == 0):
 						print("Waiting on satellite due at: " + str(nextPass.riseTime))
 					sleep(0.3)
 
 				print("It's high noon!")
-
-				i = 0
+				
 				for item in AzElList:
 					if(self.ser != None):
 						rs.set_position(item.azimuth, item.elevation)
