@@ -57,15 +57,20 @@ class rotator_controller():
 					for i, item in enumerate(plus180AzelList):
 						if ((item.azimuth) > ephem.degrees('360:00:00')):
 							item.azimuth = ephem.degrees(item.azimuth - ephem.degrees('360:00:00'))
-						elif (item.azimuth > ephem.degrees('520:00:00')):
+				else:
+				    for i, item in enumerate(plus180AzelList):
+						if (item.azimuth > ephem.degrees('520:00:00')):
 							item.azimuth = ephem.degrees('180:00:00')
 
 			if ((firstItem.azimuth < ephem.degrees('520:00:00')) and (lastItem.azimuth > ephem.degrees('360:00:00'))):
-				for i, item in enumerate(plus180AzelList):
-					if ((item.azimuth) > ephem.degrees('360:00:00')):
-						item.azimuth = ephem.degrees(item.azimuth - ephem.degrees('360:00:00'))
-					elif (item.azimuth > ephem.degrees('520:00:00')):
-						item.azimuth = ephem.degrees('180:00:00')
+			    if(clockwise): 
+				    for i, item in enumerate(plus180AzelList):
+					    if (item.azimuth > ephem.degrees('520:00:00')):
+						    item.azimuth = ephem.degrees('180:00:00')
+				else:
+				    for i, item in enumerate(plus180AzelList):
+					    if ((item.azimuth) > ephem.degrees('360:00:00')):
+						    item.azimuth = ephem.degrees(item.azimuth - ephem.degrees('360:00:00'))
 
 		return plus180AzelList
 
