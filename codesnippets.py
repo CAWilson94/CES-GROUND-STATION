@@ -88,13 +88,14 @@ class SalePrice(PriceStrategy):
 priceStrategy = NormalPrice()
 
 price = priceStrategy.cost(10)
-price = 10
+print("Price: %s"%(price))
+# Price: 10
 
 priceStrategy = SalePrice()
 
 price = priceStrategy.cost(10)
-price = 8
-
+print("Price: %s"%(price))
+# Price: 8
 
 class MissionView(APIView):
 
