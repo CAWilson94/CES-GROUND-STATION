@@ -1,6 +1,6 @@
 {
   "name": "scheduler-client",
-  "description": "A sample Angular application",
+  "description": "CESGSS: Scheduler",
   "dependencies": {
     "express": "^4.13.4"
   }

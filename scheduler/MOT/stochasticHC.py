@@ -15,7 +15,7 @@ class MOTStochasticHC(MOT):
 
 		usefulTime=6
 
-		maxIterations = 50
+		maxIterations = 10
 		i=0
 		oldScore = sys.maxsize  
 		newOrder=[]

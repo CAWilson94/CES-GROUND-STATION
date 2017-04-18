@@ -14,7 +14,7 @@ class MOTSimpleHC(MOT):
 		""" In simple hill climbing, the first closer node is chosen"""
 
 		bestNextPassList=[]
-		maxIterations = 20
+		maxIterations = 10
 		usefulTime=6
 		i=0
 		

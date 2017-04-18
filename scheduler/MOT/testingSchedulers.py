@@ -111,17 +111,10 @@ def stats_each_sat(passes, run_number="unspecified"):
         print('\n')
 
 
-def graph(total_contact_time, number_missions):
-    csv_name = "scheduler_compare_stats.csv"
-    with open(csv_name, 'r') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-        for row in spamreader:
-            print(', '.join(row))
-
-
-def panda_read():
+def panda_read_plot():
     csv_name = "scheduler_compare.csv"
-    title = "Run time WRT number of missions: Simple HC"
+    algorithm_used = "RB"
+    title = "Run time WRT number of missions: " + str(algorithm_used)
     png_name = "graph.png"
     df = pd.read_csv(csv_name, header=None, skip_blank_lines=True,
                      error_bad_lines=False)
@@ -129,9 +122,12 @@ def panda_read():
     df.columns = ["num_missions", "duration", "tracking_time",
                   "non_tracking_time", "tracking_percentage",
                   "fitness_score", "run_time"]
+
     plt.title(title)
     plt.xlabel('Number of Missions')
     plt.ylabel('Run Time(s)')
-    plt.xticks(df['num_missions'], df['num_missions'])
+    #plt.xticks(df['num_missions'], df['num_missions'])
+    plt.axis([0, df['num_missions'].count(), 0, df['run_time'].max()])
     plt.plot(df['num_missions'], df['run_time'])
+    #plt.show()
     plt.savefig(png_name)

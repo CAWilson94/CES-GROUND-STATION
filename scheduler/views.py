@@ -29,7 +29,7 @@ from scheduler.MOT.GAScheduler import MOTGA
 
 from scheduler.tweet import ground_station
 from scheduler.tasks import RotatorsThread, SchedulerTask
-from scheduler.MOT.testingSchedulers import stats_each_sat, panda_read
+from scheduler.MOT.testingSchedulers import stats_each_sat, panda_read_plot
 
 
 print("HELLO FROM VIEWS!")
@@ -222,7 +222,7 @@ class SchedulerCompare():
         stats_each_sat(passes, iterations)
 
     def test(request):
-        missions = 21
+        missions = 100
         index = 0
         for i in range(1, missions):
             index += 1
@@ -230,5 +230,5 @@ class SchedulerCompare():
             SchedulerCompare.stats_output(index)
         SchedulerCompare.clearMissions()
         SchedulerCompare.clearNextPasses()
-        panda_read()
+        panda_read_plot()
         return HttpResponse("Hurra you did it! ")
